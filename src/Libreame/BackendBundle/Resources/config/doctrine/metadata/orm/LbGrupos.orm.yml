@@ -1,0 +1,34 @@
+LbGrupos:
+    type: entity
+    table: lb_grupos
+    id:
+        ingrupo:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: ''
+            id: true
+            column: inGrupo
+            generator:
+                strategy: IDENTITY
+    fields:
+        ingrunombre:
+            type: string
+            nullable: false
+            length: 100
+            fixed: false
+            comment: ''
+            column: inGruNombre
+        fegrufecha:
+            type: datetime
+            nullable: false
+            comment: ''
+            column: feGruFecha
+        ingrucantmiem:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: 'si cantiad de miembros es cero, significa que es ilimitado.'
+            default: '0'
+            column: inGruCantMiem
+    lifecycleCallbacks: {  }

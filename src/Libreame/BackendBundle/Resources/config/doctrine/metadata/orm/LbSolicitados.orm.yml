@@ -1,0 +1,71 @@
+LbSolicitados:
+    type: entity
+    table: lb_solicitados
+    indexes:
+        fk_lb_solicitados_lb_ejemplares1_idx:
+            columns:
+                - inSolEjemplar
+        fk_lb_solicitados_lb_ofertas1_idx:
+            columns:
+                - inSolOferta
+    id:
+        insolicitado:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: ''
+            id: true
+            column: inSolicitado
+            generator:
+                strategy: IDENTITY
+    fields:
+        insoltransac:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: "La transacción que se desea con el ejemplar\n0:Venta 1:Cambio 2:Ambos"
+            default: '1'
+            column: inSolTransac
+        txsolobservacion:
+            type: string
+            nullable: true
+            length: 100
+            fixed: false
+            comment: ''
+            column: txSolObservacion
+        dbsolvaloferta:
+            type: float
+            nullable: false
+            precision: 10
+            scale: 0
+            comment: ''
+            default: '0'
+            column: dbSolValOferta
+        dbsolvaladic:
+            type: float
+            nullable: false
+            precision: 10
+            scale: 0
+            comment: ''
+            default: '0'
+            column: dbSolValAdic
+    manyToOne:
+        insolejemplar:
+            targetEntity: LbEjemplares
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                inSolEjemplar:
+                    referencedColumnName: inEjemplar
+            orphanRemoval: false
+        insoloferta:
+            targetEntity: LbOfertas
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                inSolOferta:
+                    referencedColumnName: inOferta
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

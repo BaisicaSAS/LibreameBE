@@ -1,0 +1,55 @@
+LbActsesion:
+    type: entity
+    table: lb_actsesion
+    indexes:
+        fk_lb_ActSesion_lb_sesiones1_idx:
+            columns:
+                - inActSesionDisUs
+    id:
+        inactsesion:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: ''
+            id: true
+            column: inActSesion
+            generator:
+                strategy: IDENTITY
+    fields:
+        inactaccion:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: 'Todas las acciones que existan en el sistema enumeradas y quemadas en una tabla o arreglo'
+            default: '0'
+            column: inActAccion
+        txactmensaje:
+            type: string
+            nullable: false
+            length: 50
+            fixed: false
+            comment: ''
+            column: txActMensaje
+        feactfecha:
+            type: datetime
+            nullable: false
+            comment: ''
+            column: feActFecha
+        inactfinalizada:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: '0: no 1:si'
+            default: '0'
+            column: inActFinalizada
+    manyToOne:
+        inactsesiondisus:
+            targetEntity: LbSesiones
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                inActSesionDisUs:
+                    referencedColumnName: inSesion
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

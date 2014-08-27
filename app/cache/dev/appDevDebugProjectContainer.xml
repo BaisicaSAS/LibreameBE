@@ -16,6 +16,7 @@
       <parameter key="AsseticBundle">Symfony\Bundle\AsseticBundle\AsseticBundle</parameter>
       <parameter key="DoctrineBundle">Doctrine\Bundle\DoctrineBundle\DoctrineBundle</parameter>
       <parameter key="SensioFrameworkExtraBundle">Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle</parameter>
+      <parameter key="LibreameBackendBundle">Libreame\BackendBundle\LibreameBackendBundle</parameter>
       <parameter key="AcmeDemoBundle">Acme\DemoBundle\AcmeDemoBundle</parameter>
       <parameter key="WebProfilerBundle">Symfony\Bundle\WebProfilerBundle\WebProfilerBundle</parameter>
       <parameter key="SensioDistributionBundle">Sensio\Bundle\DistributionBundle\SensioDistributionBundle</parameter>
@@ -26,9 +27,9 @@
     <parameter key="database_driver">pdo_mysql</parameter>
     <parameter key="database_host">127.0.0.1</parameter>
     <parameter key="database_port">null</parameter>
-    <parameter key="database_name">symfony</parameter>
+    <parameter key="database_name">mydb</parameter>
     <parameter key="database_user">root</parameter>
-    <parameter key="database_password">null</parameter>
+    <parameter key="database_password">root</parameter>
     <parameter key="mailer_transport">smtp</parameter>
     <parameter key="mailer_host">127.0.0.1</parameter>
     <parameter key="mailer_user">null</parameter>
@@ -431,7 +432,7 @@
     <parameter key="assetic.read_from">C:/xampp/htdocs/LibreameBE/app/../web</parameter>
     <parameter key="assetic.write_to">C:/xampp/htdocs/LibreameBE/app/../web</parameter>
     <parameter key="assetic.variables" type="collection"/>
-    <parameter key="assetic.java.bin">C:\Windows\system32\java.EXE</parameter>
+    <parameter key="assetic.java.bin">C:\Program Files (x86)\Java\jdk1.7.0_40\bin\java.EXE</parameter>
     <parameter key="assetic.node.bin">C:\Program Files\nodejs\\node.EXE</parameter>
     <parameter key="assetic.ruby.bin">/usr/bin/ruby</parameter>
     <parameter key="assetic.sass.bin">/usr/bin/sass</parameter>
@@ -2247,9 +2248,9 @@
         <argument key="driver">pdo_mysql</argument>
         <argument key="host">127.0.0.1</argument>
         <argument key="port">null</argument>
-        <argument key="dbname">symfony</argument>
+        <argument key="dbname">mydb</argument>
         <argument key="user">root</argument>
-        <argument key="password">null</argument>
+        <argument key="password">root</argument>
         <argument key="charset">UTF8</argument>
         <argument key="driverOptions" type="collection"/>
       </argument>
@@ -2307,7 +2308,9 @@
       <argument type="service">
         <service class="Doctrine\ORM\Configuration" public="false">
           <call method="setEntityNamespaces">
-            <argument type="collection"/>
+            <argument type="collection">
+              <argument key="LibreameBackendBundle">Libreame\BackendBundle\Entity</argument>
+            </argument>
           </call>
           <call method="setMetadataCacheImpl">
             <argument type="service">
@@ -2338,7 +2341,19 @@
           </call>
           <call method="setMetadataDriverImpl">
             <argument type="service">
-              <service class="Doctrine\ORM\Mapping\Driver\DriverChain" public="false"/>
+              <service class="Doctrine\ORM\Mapping\Driver\DriverChain" public="false">
+                <call method="addDriver">
+                  <argument type="service">
+                    <service class="Doctrine\ORM\Mapping\Driver\AnnotationDriver" public="false">
+                      <argument type="service" id="annotation_reader"/>
+                      <argument type="collection">
+                        <argument>C:\xampp\htdocs\LibreameBE\src\Libreame\BackendBundle\Entity</argument>
+                      </argument>
+                    </service>
+                  </argument>
+                  <argument>Libreame\BackendBundle\Entity</argument>
+                </call>
+              </service>
             </argument>
           </call>
           <call method="setProxyDir">
@@ -2715,6 +2730,10 @@
       <call method="addPath">
         <argument>C:\xampp\htdocs\LibreameBE\vendor\doctrine\doctrine-bundle\Doctrine\Bundle\DoctrineBundle/Resources/views</argument>
         <argument>Doctrine</argument>
+      </call>
+      <call method="addPath">
+        <argument>C:\xampp\htdocs\LibreameBE\src\Libreame\BackendBundle/Resources/views</argument>
+        <argument>LibreameBackend</argument>
       </call>
       <call method="addPath">
         <argument>C:\xampp\htdocs\LibreameBE\src\Acme\DemoBundle/Resources/views</argument>

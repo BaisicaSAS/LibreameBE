@@ -1,0 +1,58 @@
+LbActividadofertas:
+    type: entity
+    table: lb_actividadofertas
+    indexes:
+        fk_lb_ActividadOfertas_lb_usuarios1_idx:
+            columns:
+                - inActUsuario
+        fk_lb_ActividadOfertas_lb_ofertas1_idx:
+            columns:
+                - inActOferta
+        fk_lb_ActividadOfertas_lb_ActividadOfertas1_idx:
+            columns:
+                - inActPadreAct
+    id:
+        inactividadoferta:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: ''
+            id: true
+            column: inActividadOferta
+            generator:
+                strategy: IDENTITY
+    fields:
+        feactfechahora:
+            type: datetime
+            nullable: false
+            comment: ''
+            column: feActFechaHora
+    manyToOne:
+        inactusuario:
+            targetEntity: LbUsuarios
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                inActUsuario:
+                    referencedColumnName: inUsuario
+            orphanRemoval: false
+        inactoferta:
+            targetEntity: LbOfertas
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                inActOferta:
+                    referencedColumnName: inOferta
+            orphanRemoval: false
+        inactpadreact:
+            targetEntity: LbActividadofertas
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                inActPadreAct:
+                    referencedColumnName: inActividadOferta
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

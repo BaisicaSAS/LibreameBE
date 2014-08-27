@@ -1,0 +1,71 @@
+LbOfrecidos:
+    type: entity
+    table: lb_ofrecidos
+    indexes:
+        fk_lb_ofrecidos_lb_ejemplares1_idx:
+            columns:
+                - inOfrEjemplar
+        fk_lb_ofrecidos_lb_ofertas1_idx:
+            columns:
+                - inOfrOferta
+    id:
+        inofrecido:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: ''
+            id: true
+            column: inOfrecido
+            generator:
+                strategy: IDENTITY
+    fields:
+        inofrtransac:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: "La transacción que se desea con el ejemplar\n0:Venta 1:Cambio 2:Ambos"
+            default: '1'
+            column: inOfrTransac
+        txofrobservacion:
+            type: string
+            nullable: true
+            length: 100
+            fixed: false
+            comment: ''
+            column: txOfrObservacion
+        dbofrvaloferta:
+            type: float
+            nullable: false
+            precision: 10
+            scale: 0
+            comment: ''
+            default: '0'
+            column: dbOfrValOferta
+        dbofrvaladic:
+            type: float
+            nullable: false
+            precision: 10
+            scale: 0
+            comment: ''
+            default: '0'
+            column: dbOfrValAdic
+    manyToOne:
+        inofrejemplar:
+            targetEntity: LbEjemplares
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                inOfrEjemplar:
+                    referencedColumnName: inEjemplar
+            orphanRemoval: false
+        inofroferta:
+            targetEntity: LbOfertas
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                inOfrOferta:
+                    referencedColumnName: inOferta
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

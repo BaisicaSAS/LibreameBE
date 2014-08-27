@@ -1,0 +1,22 @@
+LbGeneros:
+    type: entity
+    table: lb_generos
+    id:
+        ingenero:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: ''
+            id: true
+            column: inGenero
+            generator:
+                strategy: IDENTITY
+    fields:
+        txgennombre:
+            type: string
+            nullable: false
+            length: 45
+            fixed: false
+            comment: ''
+            column: txGenNombre
+    lifecycleCallbacks: {  }

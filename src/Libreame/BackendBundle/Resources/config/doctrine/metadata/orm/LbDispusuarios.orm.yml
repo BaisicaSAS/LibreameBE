@@ -1,0 +1,64 @@
+LbDispusuarios:
+    type: entity
+    table: lb_dispusuarios
+    indexes:
+        fk_lb_dispusuarios_lb_usuarios1_idx:
+            columns:
+                - inDisUsuario
+    id:
+        indispusuario:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: ''
+            id: true
+            column: inDispUsuario
+            generator:
+                strategy: IDENTITY
+    fields:
+        txdisid:
+            type: string
+            nullable: false
+            length: 45
+            fixed: false
+            comment: ''
+            column: txDisID
+        txdisnombre:
+            type: string
+            nullable: true
+            length: 45
+            fixed: false
+            comment: ''
+            column: txDisNombre
+        txdismarca:
+            type: string
+            nullable: true
+            length: 45
+            fixed: false
+            comment: ''
+            column: txDisMarca
+        txdismodelo:
+            type: string
+            nullable: true
+            length: 45
+            fixed: false
+            comment: ''
+            column: txDisModelo
+        txdisso:
+            type: string
+            nullable: true
+            length: 45
+            fixed: false
+            comment: ''
+            column: txDisSO
+    manyToOne:
+        indisusuario:
+            targetEntity: LbUsuarios
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                inDisUsuario:
+                    referencedColumnName: inUsuario
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

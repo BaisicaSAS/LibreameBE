@@ -1,0 +1,40 @@
+LbGenerossolicitados:
+    type: entity
+    table: lb_generossolicitados
+    indexes:
+        fk_lb_generossolicitados_lb_generos1_idx:
+            columns:
+                - inSolGenero
+        fk_lb_generossolicitados_lb_solicitados1_idx:
+            columns:
+                - inSolSolicitado
+    id:
+        ingenerosolicitado:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: ''
+            id: true
+            column: inGeneroSolicitado
+            generator:
+                strategy: IDENTITY
+    manyToOne:
+        insolgenero:
+            targetEntity: LbGeneros
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                inSolGenero:
+                    referencedColumnName: inGenero
+            orphanRemoval: false
+        insolsolicitado:
+            targetEntity: LbSolicitados
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                inSolSolicitado:
+                    referencedColumnName: inSolicitado
+            orphanRemoval: false
+    lifecycleCallbacks: {  }
