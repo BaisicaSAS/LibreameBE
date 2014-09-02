@@ -3,10 +3,12 @@
 namespace Libreame\BackendBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Libreame\BackendBundle\Entity\LbActsesion;
+//use Libreame\BackendBundle\Entity\LbUsuarios;
 use Symfony\Component\Serializer\Encoder\JsonDecode;
-use Symfony\Component\Serializer\Encoder\JsonEncode;
-use Symfony\Component\Serializer\Encoder\JsonDecoder;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
+//use Symfony\Component\Serializer\Encoder\JsonEncode;
+//use Symfony\Component\Serializer\Encoder\JsonDecoder;
+//use Symfony\Component\Serializer\Encoder\JsonEncoder;
 
 /*
  * Controlador que contiene las funciones que validan, controlan y despachan 
@@ -22,6 +24,10 @@ use Symfony\Component\Serializer\Encoder\JsonEncoder;
  */
 class AccesoController extends Controller
 {   
+    var $inFallido =  0; //Proceso fallido por calidad de datos
+    var $inDescone = -1; //Proceso faiilido por conexión de plataforma
+    var $inExitoso =  1; //Proceso existoso
+    
     private $pSession;
     private $pFechaHora;
     private $pDevice;
@@ -29,25 +35,59 @@ class AccesoController extends Controller
     private $pAccion;
     private $pURLAccion;
     private $pUsuario;
+    private $pIDUsuario;
     private $pClave;
+
     /*
-     * Index
+     *  Bloque de getter para los atributos de la clase
      */
-    public function indexAction($name)
-    {
-        return $this->render('LibreameBackendBundle:Default:index.html.twig', array('name' => $name));
+    public function getSession() {
+        return $this->pSession;
     }
+
+    public function getFechaHora() {
+        return $this->pFechaHora;
+    }
+
+    public function getDevice() {
+        return $this->pDevice;
+    }
+
+    public function getIPaddr() {
+        return $this->pIPaddr;
+    }
+
+    public function getAccion() {
+        return $this->pAccion;
+    }
+
+    public function getURLAccion() {
+        return $this->pURLAccion;
+    }
+
+    public function getUsuario() {
+        return $this->pUsuario;
+    }
+
+    public function getIDUsuario() {
+        return $this->pIDUsuario;
+    }
+
+    public function getClave() {
+        return $this->pClave;
+    }
+
     /*
      * Ingresar es la funcion que recibe la información desde el cliente, para revisar y despachar
      * Recibe un JSON, con la estructura definida como default mas los datos especificos de cada opcion.
      * 
      * @TODO: Es la mas importante para la integración con otros sistemas::
      */
-    public function ingresarAction($datos)
+    public function ingresarSistemaAction($datos)
     {
         //Se evalúa si se logró obtener la información de sesion desde el JSON
-        if (descomponerJsonAction($datos) != false) {
-            return $this->render($pURLAccion);
+        if (descomponerJson($datos) != false) {
+            return $this->render($this->pURLAccion);
         } else {
             return false;
         }
@@ -61,11 +101,10 @@ class AccesoController extends Controller
      *  "data":{[]}
      * }
      */
-    public function descomponerJsonAction($datos)
+    private function descomponerJson($datos)
     {
         try {
             $json_datos = JsonDecode($datos);
-
             $this->pSession = $json_datos['idsesion']['idtrx'];
             $this->pFechaHora = $json_datos['idsesion']['fecha'];
             $this->pDevice = $json_datos['idsesion']['device'];
@@ -74,31 +113,41 @@ class AccesoController extends Controller
             $this->pURLAccion = getURLAccion($this->pAccion);
             $this->pUsuario = $json_datos['idsesion']['usuario'];
             $this->pClave = $json_datos['idsesion']['clave'];
-
+            $em = $this->getDoctrine()->getManager();
+            $usuario = $em->getRepository('LibreameBackendBundle:LbUsuarios')->findOneBy(array('txusunommostrar' => $this->pUsuario));
+            if (!$usuario) {
+                $usuario = $em->getRepository('LibreameBackendBundle:LbUsuarios')->findOneBy(array('txusuemail' => $this->pUsuario));
+            }
+            //Valido que todos los datos de SESION son válidos. Aquí es donde efectivamente nos percatamos 
+            //de que estamos siendo requeridos por un usuario válido
+            //if(validaSesion()){
+            // 
+            //      Dispara la funcion que el usuario seleccionó según el parametro "pAccion"
+            //      switch ($this->pAccion){
+            //        case 0: 
+            //        case 0:
+            //      }
+            //}
             return $this;
         } catch (Exception $ex) {
-            return false;
+            if($ex->getMessage() == ''){return $this->inFallido;}    
+            else {return $this->inDescone;}
         }     
     }
+    
     /*
-     * Obtiene la URL que se está tratando de ejecutar.
+     * registro 
+     * Esta es la funcion que genera el registro de un usuario en el sistema
+     * guarda los datos básicos, genera una clave (url) dispara el envío de email de 
+     * Confirmacion, retorna mensaje de exito o fracaso de operacion para el cliente 
+     * y registra en la bitácora.
      */
-    public function getURLAccion($accion)
-    {
-        switch ($accion){
-            case 1: return '/registro/{data}';          //Permite hacer una solicitud de registro en el sistema
-            case 2: return '/login/{data}';             //solicitud de ingreso al sistema y generación de sesión.
-            case 3: return '/editpref/{data}';          //editar preferencias del usuario.
-            case 4: return '/realizarsolicitud/{data}'; //realiza una solicitud de Libros.
-            case 5: return '/ofrecerejemplar/{data}';   //ofrece un ejemplar de un libro que posee
-            case 6: return '/registraactividad/{data}'; //Registra actividad de comentarios dentro de un hilo: Preguntas: respuestas: Negociación
-            case 6: return '/editaactividad/{data}';    //Edita o elimina actividad de comentarios dentro de un hilo: Preguntas: respuestas: Negociación
-            case 6: return '/aceptanegocio/{data}';     //Acepta la oferta generada por un usuario
-            case 6: return '/rechazanegocio/{data}';    //Rechaza la oferta generada por un usuario
-            case 6: return '/recibenotificacion/{data}';//Registra actividad de comentarios dentro de un hilo: Preguntas: respuestas: Negociación
-                
-        }
-            
+    private function registro()
+    {   
+        $tamanos = substr($credenciales, strlen($credenciales)-21);
+        
+        echo $tamanos;
+        
     }
     /*
      * validaSesion 
@@ -108,7 +157,7 @@ class AccesoController extends Controller
      * de los anteriores cada uno con 4 digitos.
      * 
      */
-    public function validaSesionAction($credenciales)
+    private function validaSesion($credenciales)
     {   
         $tamanos = substr($credenciales, strlen($credenciales)-21);
         
@@ -123,7 +172,7 @@ class AccesoController extends Controller
      * Id/nombre dispositivo
      *  
      */
-    public function generaSesionAction($credenciales)
+    private function generaSesion($credenciales)
     {
         return $this->render('LibreameBackendBundle:Default:index.html.twig', array('name' => $credenciales));
     }
@@ -131,7 +180,7 @@ class AccesoController extends Controller
      * eliminaSesion 
      *  Elimina una sesion 
      */
-    public function eliminaSesionAction($credenciales)
+    private function eliminaSesion($credenciales)
     {
         return $this->render('LibreameBackendBundle:Default:index.html.twig', array('name' => $credenciales));
     }
@@ -139,8 +188,29 @@ class AccesoController extends Controller
      * registraBitacora 
      *  registra cada una de las acciones realizadas por un usuario
      */
-    public function registraBitacora()
+    private function registraActSesion()
     {
-        return $this->render('LibreameBackendBundle:Default:index.html.twig', array('name' => $credenciales));
+        try{
+            $em = $this->getDoctrine()->getManager();
+            
+            try{
+                $tabla = new LbActsesion();
+                $tabla->setFeactfecha(TODAY);
+                $tabla->setInactaccion(getAccion());
+                $tabla->setInactfinalizada(TODAY);
+                $tabla->setInactsesiondisus(TODAY);
+
+                $em->persist($tabla);
+                $em->flush();
+                
+                return $this->inExitoso;
+                
+            } catch (Exception $ex) {
+                return $this->inFallido;
+            }     
+           
+        } catch (Exception $ex) {
+            return $this->inDescone;
+        }     
     }
 }

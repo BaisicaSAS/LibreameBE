@@ -53,6 +53,15 @@ class LbUsuarios
      * @var \Libreame\BackendBundle\Entity\LbLugares
      */
     private $inusulugar;
+    /**
+     * @var string
+     */
+    private $txusuvalidacion;
+
+    /**
+     * @var integer
+     */
+    private $inusuestado;
 
 
     /**
@@ -247,5 +256,51 @@ class LbUsuarios
     public function getInusulugar()
     {
         return $this->inusulugar;
+    }
+
+    /**
+     * Set txusuvalidacion
+     *
+     * @param string $txusuvalidacion
+     * @return LbUsuarios
+     */
+    public function setTxusuvalidacion($txusuvalidacion)
+    {
+        $this->txusuvalidacion = $txusuvalidacion;
+
+        return $this;
+    }
+
+    /**
+     * Get txusuvalidacion
+     *
+     * @return string 
+     */
+    public function getTxusuvalidacion()
+    {
+        return $this->txusuvalidacion;
+    }
+    
+    /**
+     * Set inusuestado
+     *
+     * @param integer $inusuestado
+     * @return LbUsuarios
+     */
+    public function setInusuestado($inusuestado)
+    {
+        $this->inusuestado = $inusuestado;
+
+        return $this;
+    }
+
+    /**
+     * Get inusuestado
+     *
+     * @return integer 
+     */
+    public function getInusuestado()
+    {
+        return $this->inusuestado;
     }
 }
