@@ -6,9 +6,11 @@ parameters:
     database_name: mydb
     database_user: root
     database_password: root
-    mailer_transport: smtp
-    mailer_host: 127.0.0.1
-    mailer_user: null
-    mailer_password: null
     locale: en
     secret: ThisTokenIsNotSoSecretChangeIt
+
+    mailer_transport: gmail
+    mailer_host: ~
+    mailer_user: baisicasas
+    mailer_password: b41s1c4s4s
+    #mailer_port: 25

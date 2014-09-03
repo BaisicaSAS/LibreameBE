@@ -4,6 +4,10 @@ namespace Libreame\BackendBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Libreame\BackendBundle\Entity\LbActsesion;
+use Libreame\BackendBundle\Entity\LbUsuarios;
+use Libreame\BackendBundle\Entity\LbSesiones;
+use Libreame\BackendBundle\Entity\LbDispusuarios;
+use Libreame\BackendBundle\Entity\LbMembresias;
 //use Libreame\BackendBundle\Entity\LbUsuarios;
 use Symfony\Component\Serializer\Encoder\JsonDecode;
 //use Symfony\Component\Serializer\Encoder\JsonEncode;
@@ -29,20 +33,26 @@ class AccesoController extends Controller
     var $inExitoso =  1; //Proceso existoso
     
     private $pSession;
+    private $pIDSession;
     private $pFechaHora;
     private $pDevice;
+    private $pIDDevice;
     private $pIPaddr;
     private $pAccion;
-    private $pURLAccion;
     private $pUsuario;
     private $pIDUsuario;
     private $pClave;
+    private $pTelefono;
 
     /*
      *  Bloque de getter para los atributos de la clase
      */
     public function getSession() {
         return $this->pSession;
+    }
+
+    public function getIDSession() {
+        return $this->pIDSession;
     }
 
     public function getFechaHora() {
@@ -53,16 +63,16 @@ class AccesoController extends Controller
         return $this->pDevice;
     }
 
+    public function getIDDevice() {
+        return $this->pIDDevice;
+    }
+
     public function getIPaddr() {
         return $this->pIPaddr;
     }
 
     public function getAccion() {
         return $this->pAccion;
-    }
-
-    public function getURLAccion() {
-        return $this->pURLAccion;
     }
 
     public function getUsuario() {
@@ -77,6 +87,11 @@ class AccesoController extends Controller
         return $this->pClave;
     }
 
+    public function getTelefono() {
+        return $this->pTelefono;
+    }
+
+
     /*
      * Ingresar es la funcion que recibe la información desde el cliente, para revisar y despachar
      * Recibe un JSON, con la estructura definida como default mas los datos especificos de cada opcion.
@@ -87,7 +102,9 @@ class AccesoController extends Controller
     {
         //Se evalúa si se logró obtener la información de sesion desde el JSON
         if (descomponerJson($datos) != false) {
-            return $this->render($this->pURLAccion);
+            switch ($this->getAccion()){
+                case 1: return $this->registroUsuario();
+            }
         } else {
             return false;
         }
@@ -96,7 +113,7 @@ class AccesoController extends Controller
      * Descomponer: 
      * Funcion que extrae la informacion del JSON de ingresar
      * {"idsesion":{["idtrx": "ses", "fecha": "fechahora", "device": "Dispositivo", "ipaddr": "IP Address", 
-     *               "idaccion": "accion", "usuario": "usuario", "idusuario": "clave"]},
+     *               "idaccion": "accion", "usuario": "usuario", "idusuario": "clave", "telefono": "telefono"]},
      * 
      *  "data":{[]}
      * }
@@ -110,15 +127,17 @@ class AccesoController extends Controller
             $this->pDevice = $json_datos['idsesion']['device'];
             $this->pIPaddr = $json_datos['idsesion']['ipaddr'];
             $this->pAccion = $json_datos['idsesion']['idaccion'];
-            $this->pURLAccion = getURLAccion($this->pAccion);
             $this->pUsuario = $json_datos['idsesion']['usuario'];
             $this->pClave = $json_datos['idsesion']['clave'];
+            $this->pTelefono = $json_datos['idsesion']['telefono'];
             $em = $this->getDoctrine()->getManager();
             $usuario = $em->getRepository('LibreameBackendBundle:LbUsuarios')->findOneBy(array('txusunommostrar' => $this->pUsuario));
             if (!$usuario) {
                 $usuario = $em->getRepository('LibreameBackendBundle:LbUsuarios')->findOneBy(array('txusuemail' => $this->pUsuario));
             }
-            //Valido que todos los datos de SESION son válidos. Aquí es donde efectivamente nos percatamos 
+            $this->pIDUsuario = $usuario->getInusuario();
+            
+            //Valido que todos los datos de SESION son correctos. Aquí es donde efectivamente nos percatamos 
             //de que estamos siendo requeridos por un usuario válido
             //if(validaSesion()){
             // 
@@ -142,13 +161,71 @@ class AccesoController extends Controller
      * Confirmacion, retorna mensaje de exito o fracaso de operacion para el cliente 
      * y registra en la bitácora.
      */
-    private function registro()
+    private function registroUsuario()
     {   
-        $tamanos = substr($credenciales, strlen($credenciales)-21);
-        
-        echo $tamanos;
+        $em = $this->getDoctrine()->getManager();
+        $usuario = new LbUsuarios();
+        $device = new LbDispusuarios();
+        $membresia = new LbMembresias();
+        //Lugar por default
+        $Lugar = $em->getRepository('LibreameBackendBundle:LbLugares')->find(1);
+        //Grupo por default
+        $Grupo = $em->getRepository('LibreameBackendBundle:LbGrupos')->find(1);
+        //Valida que el usuario no existe
+        if (!$em->getRepository('LibreameBackendBundle:LbUsuarios')->findOneBy(array('txusuemail' => $this->getUsuario()))){
+            try {
+                //Guarda el usuario
+                $usuario->setTxusuemail($this->getUsuario());  
+                $usuario->setTxusutelefono($this->getTelefono());  
+                $usuario->setTxusunombre($this->getUsuario());  
+                $usuario->setTxusuimagen('DEFAUL IMAGE URL');  
+                $usuario->setInusulugar($Lugar);  
+                $usuario->setTxusuvalidacion('Url para validar');  
+
+                //Guarda el dispositivo
+                $device->setIndisusuario($usuario);
+                $device->setTxdisid($this->getDevice());
+                
+                //Guarda la membresia al grupo default
+                $membresia->setInmemusuario($usuario);
+                $membresia->setInmemgrupo($Grupo);
+                
+                $em->persist($usuario);
+                $em->flush();
+                $em->persist($device);
+                $em->flush();
+                $em->persist($membresia);
+                $em->flush();
+                //Envia email
+                $this->enviaMailRegistro($usuario);
+                return $this->inExitoso;
+            } catch (Exception $ex) {
+                return $this->inDescone;
+            } 
+                
+        } else {
+            //El usuario existe y no es posible registrarlo de nuevo:: el email.
+            return $this->inFallido;
+        }
         
     }
+
+    /*
+     * enviaMailRegistro 
+     * Se encarga de enviar el email con el que el usuario confirmara su registro
+     */
+    private function enviaMailRegistro($usuario)
+    {   
+        $message = \Swift_Message::newInstance()
+                ->setContentType('text/html')
+                ->setSubject('Bienvenido a Libreame '.$this->getUsuario())
+                ->setFrom('baisicasas@gmail.com')
+                ->setTo($this->getUsuario())
+                ->setBody($usuario->gettxusuvalidacion());
+
+        $this->get('mailer')->send($message);
+    }
+    
     /*
      * validaSesion 
      * Valida los datos de la sesion verificando que sea veridica
@@ -157,12 +234,14 @@ class AccesoController extends Controller
      * de los anteriores cada uno con 4 digitos.
      * 
      */
-    private function validaSesion($credenciales)
+    private function validaSesion()
     {   
-        $tamanos = substr($credenciales, strlen($credenciales)-21);
+        $sesion = $em->getRepository('LibreameBackendBundle:LbSesiones')->findBy(array(
+            'txsesnumero' =>  $this->getSession(),
+            'insesdispusuario' => $this->getIDDevice(),
+            'insesactiva' => '1'));
         
-        echo $tamanos;
-        
+        return ($sesion);
     }
     /*
      * GeneraSesion 
@@ -185,7 +264,7 @@ class AccesoController extends Controller
         return $this->render('LibreameBackendBundle:Default:index.html.twig', array('name' => $credenciales));
     }
     /*
-     * registraBitacora 
+     * registraActSesion 
      *  registra cada una de las acciones realizadas por un usuario
      */
     private function registraActSesion()
@@ -196,9 +275,9 @@ class AccesoController extends Controller
             try{
                 $tabla = new LbActsesion();
                 $tabla->setFeactfecha(TODAY);
-                $tabla->setInactaccion(getAccion());
+                $tabla->setInactaccion($this->getAccion());
                 $tabla->setInactfinalizada(TODAY);
-                $tabla->setInactsesiondisus(TODAY);
+                $tabla->setInactsesiondisus($this->getIDUsuario());
 
                 $em->persist($tabla);
                 $em->flush();

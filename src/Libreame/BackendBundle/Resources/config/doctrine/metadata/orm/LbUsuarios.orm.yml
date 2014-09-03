@@ -9,9 +9,6 @@ LbUsuarios:
         txUsuEmail_UNIQUE:
             columns:
                 - txUsuEmail
-        txUsuTelefono_UNIQUE:
-            columns:
-                - txUsuTelefono
     id:
         inusuario:
             type: integer
