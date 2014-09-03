@@ -12,7 +12,7 @@ class LbActsesion
     /**
      * @var integer
      */
-    private $id;
+    private $inactsesion;
 
     /**
      * @var integer
@@ -47,7 +47,7 @@ class LbActsesion
      */
     public function getInactsesion()
     {
-        return $this->id;
+        return $this->inactsesion;
     }
 
     /**

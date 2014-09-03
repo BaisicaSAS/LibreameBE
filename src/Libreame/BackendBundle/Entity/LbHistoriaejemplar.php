@@ -12,7 +12,7 @@ class LbHistoriaejemplar
     /**
      * @var integer
      */
-    private $id;
+    private $inhistejemplar;
 
     /**
      * @var \DateTime
@@ -42,7 +42,7 @@ class LbHistoriaejemplar
      */
     public function getInhistejemplar()
     {
-        return $this->id;
+        return $this->inhistejemplar;
     }
 
     /**

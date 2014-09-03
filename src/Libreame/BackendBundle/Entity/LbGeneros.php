@@ -12,7 +12,7 @@ class LbGeneros
     /**
      * @var integer
      */
-    private $id;
+    private $ingenero;
 
     /**
      * @var string
@@ -27,7 +27,7 @@ class LbGeneros
      */
     public function getIngenero()
     {
-        return $this->id;
+        return $this->ingenero;
     }
 
     /**

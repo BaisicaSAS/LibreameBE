@@ -12,7 +12,7 @@ class LbLibros
     /**
      * @var integer
      */
-    private $id;
+    private $inlibro;
 
     /**
      * @var integer
@@ -92,7 +92,7 @@ class LbLibros
      */
     public function getInlibro()
     {
-        return $this->id;
+        return $this->inlibro;
     }
 
     /**

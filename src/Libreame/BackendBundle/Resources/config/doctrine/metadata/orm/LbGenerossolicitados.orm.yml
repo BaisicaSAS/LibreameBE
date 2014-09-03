@@ -13,7 +13,7 @@ LbGenerossolicitados:
             type: integer
             nullable: false
             unsigned: false
-            comment: ''
+            comment: Id
             id: true
             column: inGeneroSolicitado
             generator:
@@ -35,6 +35,6 @@ LbGenerossolicitados:
             inversedBy: null
             joinColumns:
                 inSolSolicitado:
-                    referencedColumnName: inSolicitado
+                    referencedColumnName: IdSolicitado
             orphanRemoval: false
     lifecycleCallbacks: {  }

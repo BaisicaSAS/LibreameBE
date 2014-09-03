@@ -12,7 +12,7 @@ class LbEjemplares
     /**
      * @var integer
      */
-    private $id;
+    private $inejemplar;
 
     /**
      * @var integer
@@ -47,7 +47,7 @@ class LbEjemplares
      */
     public function getInejemplar()
     {
-        return $this->id;
+        return $this->inejemplar;
     }
 
     /**

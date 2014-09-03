@@ -13,7 +13,7 @@ LbGenerosofrecidos:
             type: integer
             nullable: false
             unsigned: false
-            comment: ''
+            comment: Id
             id: true
             column: inGeneroOfrecido
             generator:

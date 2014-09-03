@@ -16,7 +16,7 @@ LbEjemplares:
             type: integer
             nullable: false
             unsigned: false
-            comment: ''
+            comment: Id
             id: true
             column: inEjemplar
             generator:

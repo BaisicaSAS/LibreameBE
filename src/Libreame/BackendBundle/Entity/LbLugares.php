@@ -12,7 +12,7 @@ class LbLugares
     /**
      * @var integer
      */
-    private $id;
+    private $inlugar;
 
     /**
      * @var string
@@ -37,7 +37,7 @@ class LbLugares
      */
     public function getInlugar()
     {
-        return $this->id;
+        return $this->inlugar;
     }
 
     /**

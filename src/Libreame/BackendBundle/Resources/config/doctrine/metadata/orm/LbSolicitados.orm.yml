@@ -8,14 +8,17 @@ LbSolicitados:
         fk_lb_solicitados_lb_ofertas1_idx:
             columns:
                 - inSolOferta
+        fk_lb_solicitados_lb_libros1_idx:
+            columns:
+                - inSolLibro
     id:
-        insolicitado:
+        idsolicitado:
             type: integer
             nullable: false
             unsigned: false
-            comment: ''
+            comment: Id
             id: true
-            column: inSolicitado
+            column: IdSolicitado
             generator:
                 strategy: IDENTITY
     fields:
@@ -23,7 +26,7 @@ LbSolicitados:
             type: integer
             nullable: false
             unsigned: false
-            comment: "La transacción que se desea con el ejemplar\n0:Venta 1:Cambio 2:Ambos"
+            comment: "La transacción que se desea con el ejemplar\n0:Compra 1:Cambio 2: Cualquiera 3: Alquiler(?)"
             default: '1'
             column: inSolTransac
         txsolobservacion:
@@ -31,14 +34,14 @@ LbSolicitados:
             nullable: true
             length: 100
             fixed: false
-            comment: ''
+            comment: 'Observaciones especificas de la solicitud: No importa el estado, que no este rallado, el de pasta dura...etc.'
             column: txSolObservacion
         dbsolvaloferta:
             type: float
             nullable: false
             precision: 10
             scale: 0
-            comment: ''
+            comment: 'Valor que estoy dispuesto a pagar'
             default: '0'
             column: dbSolValOferta
         dbsolvaladic:
@@ -46,7 +49,7 @@ LbSolicitados:
             nullable: false
             precision: 10
             scale: 0
-            comment: ''
+            comment: 'Valor que estoy dispuesto a pagar adicional al libro que ofrezco'
             default: '0'
             column: dbSolValAdic
     manyToOne:
@@ -67,5 +70,14 @@ LbSolicitados:
             joinColumns:
                 inSolOferta:
                     referencedColumnName: inOferta
+            orphanRemoval: false
+        insollibro:
+            targetEntity: LbLibros
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                inSolLibro:
+                    referencedColumnName: inLibro
             orphanRemoval: false
     lifecycleCallbacks: {  }

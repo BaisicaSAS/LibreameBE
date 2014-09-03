@@ -12,7 +12,7 @@ class LbGenerosofrecidos
     /**
      * @var integer
      */
-    private $id;
+    private $ingeneroofrecido;
 
     /**
      * @var \Libreame\BackendBundle\Entity\LbGeneros
@@ -32,7 +32,7 @@ class LbGenerosofrecidos
      */
     public function getIngeneroofrecido()
     {
-        return $this->id;
+        return $this->ingeneroofrecido;
     }
 
     /**

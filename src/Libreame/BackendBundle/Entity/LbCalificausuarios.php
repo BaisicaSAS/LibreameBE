@@ -12,7 +12,7 @@ class LbCalificausuarios
     /**
      * @var integer
      */
-    private $id;
+    private $incalificacion;
 
     /**
      * @var integer
@@ -47,7 +47,7 @@ class LbCalificausuarios
      */
     public function getIncalificacion()
     {
-        return $this->id;
+        return $this->incalificacion;
     }
 
     /**

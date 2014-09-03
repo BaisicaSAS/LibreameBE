@@ -12,7 +12,7 @@ class LbMembresias
     /**
      * @var integer
      */
-    private $id;
+    private $inmembresia;
 
     /**
      * @var integer
@@ -42,7 +42,7 @@ class LbMembresias
      */
     public function getInmembresia()
     {
-        return $this->id;
+        return $this->inmembresia;
     }
 
     /**

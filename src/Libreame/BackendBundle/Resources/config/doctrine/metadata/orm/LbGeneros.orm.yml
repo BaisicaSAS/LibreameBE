@@ -6,7 +6,7 @@ LbGeneros:
             type: integer
             nullable: false
             unsigned: false
-            comment: ''
+            comment: Id
             id: true
             column: inGenero
             generator:
@@ -17,6 +17,6 @@ LbGeneros:
             nullable: false
             length: 45
             fixed: false
-            comment: ''
+            comment: 'Nombre del genero: NOVELAS.....'
             column: txGenNombre
     lifecycleCallbacks: {  }

@@ -6,7 +6,7 @@ LbGrupos:
             type: integer
             nullable: false
             unsigned: false
-            comment: ''
+            comment: Id
             id: true
             column: inGrupo
             generator:
@@ -17,12 +17,12 @@ LbGrupos:
             nullable: false
             length: 100
             fixed: false
-            comment: ''
+            comment: 'Nombre del grupo'
             column: inGruNombre
         fegrufecha:
             type: datetime
             nullable: false
-            comment: ''
+            comment: 'Fecha de creación del grupo'
             column: feGruFecha
         ingrucantmiem:
             type: integer

@@ -12,7 +12,7 @@ class LbDispusuarios
     /**
      * @var integer
      */
-    private $id;
+    private $indispusuario;
 
     /**
      * @var string
@@ -52,7 +52,7 @@ class LbDispusuarios
      */
     public function getIndispusuario()
     {
-        return $this->id;
+        return $this->indispusuario;
     }
 
     /**

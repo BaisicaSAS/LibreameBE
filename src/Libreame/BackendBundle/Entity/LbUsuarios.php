@@ -12,7 +12,7 @@ class LbUsuarios
     /**
      * @var integer
      */
-    private $id;
+    private $inusuario;
 
     /**
      * @var string
@@ -50,10 +50,6 @@ class LbUsuarios
     private $feusunacimiento;
 
     /**
-     * @var \Libreame\BackendBundle\Entity\LbLugares
-     */
-    private $inusulugar;
-    /**
      * @var string
      */
     private $txusuvalidacion;
@@ -63,6 +59,11 @@ class LbUsuarios
      */
     private $inusuestado;
 
+    /**
+     * @var \Libreame\BackendBundle\Entity\LbLugares
+     */
+    private $inusulugar;
+
 
     /**
      * Get inusuario
@@ -71,7 +72,7 @@ class LbUsuarios
      */
     public function getInusuario()
     {
-        return $this->id;
+        return $this->inusuario;
     }
 
     /**
@@ -236,29 +237,6 @@ class LbUsuarios
     }
 
     /**
-     * Set inusulugar
-     *
-     * @param \Libreame\BackendBundle\Entity\LbLugares $inusulugar
-     * @return LbUsuarios
-     */
-    public function setInusulugar(\Libreame\BackendBundle\Entity\LbLugares $inusulugar = null)
-    {
-        $this->inusulugar = $inusulugar;
-
-        return $this;
-    }
-
-    /**
-     * Get inusulugar
-     *
-     * @return \Libreame\BackendBundle\Entity\LbLugares 
-     */
-    public function getInusulugar()
-    {
-        return $this->inusulugar;
-    }
-
-    /**
      * Set txusuvalidacion
      *
      * @param string $txusuvalidacion
@@ -280,7 +258,7 @@ class LbUsuarios
     {
         return $this->txusuvalidacion;
     }
-    
+
     /**
      * Set inusuestado
      *
@@ -302,5 +280,28 @@ class LbUsuarios
     public function getInusuestado()
     {
         return $this->inusuestado;
+    }
+
+    /**
+     * Set inusulugar
+     *
+     * @param \Libreame\BackendBundle\Entity\LbLugares $inusulugar
+     * @return LbUsuarios
+     */
+    public function setInusulugar(\Libreame\BackendBundle\Entity\LbLugares $inusulugar = null)
+    {
+        $this->inusulugar = $inusulugar;
+
+        return $this;
+    }
+
+    /**
+     * Get inusulugar
+     *
+     * @return \Libreame\BackendBundle\Entity\LbLugares 
+     */
+    public function getInusulugar()
+    {
+        return $this->inusulugar;
     }
 }

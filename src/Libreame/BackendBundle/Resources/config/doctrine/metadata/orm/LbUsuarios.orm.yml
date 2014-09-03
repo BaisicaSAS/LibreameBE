@@ -9,12 +9,15 @@ LbUsuarios:
         txUsuEmail_UNIQUE:
             columns:
                 - txUsuEmail
+        txUsuTelefono_UNIQUE:
+            columns:
+                - txUsuTelefono
     id:
         inusuario:
             type: integer
             nullable: false
             unsigned: false
-            comment: ''
+            comment: Id
             id: true
             column: inUsuario
             generator:
@@ -25,14 +28,14 @@ LbUsuarios:
             nullable: false
             length: 100
             fixed: false
-            comment: ''
+            comment: 'Mail del usuario'
             column: txUsuEmail
         txusutelefono:
             type: string
             nullable: false
             length: 45
             fixed: false
-            comment: ''
+            comment: 'Numero de telefono'
             default: '0'
             column: txUsuTelefono
         txusunombre:
@@ -40,7 +43,7 @@ LbUsuarios:
             nullable: false
             length: 100
             fixed: false
-            comment: ''
+            comment: 'Nombre de usuario, por defecto es el email en el registro'
             column: txUsuNombre
         inusugenero:
             type: integer
@@ -66,18 +69,20 @@ LbUsuarios:
         feusunacimiento:
             type: datetime
             nullable: true
-            comment: ''
+            comment: 'Fecha de nacimiento'
             column: feUsuNacimiento
         txusuvalidacion:
             type: string
             nullable: true
             length: 200
-            comment: ''
+            fixed: false
+            comment: 'Cuando se registra el usuario el sistema genera un código que se envía en el email de confirmación.  Este campo se utiliza tambien en los cambios de clave.'
             column: txUsuValidacion
         inusuestado:
             type: integer
             nullable: false
-            comment: '0: Inactivo 1: Activo 2: Cuarentena'
+            unsigned: false
+            comment: '0: Esperando confirmación 1: Activo 2: Cuarentena 3: Inactivo'
             default: '0'
             column: inUsuEstado
     manyToOne:

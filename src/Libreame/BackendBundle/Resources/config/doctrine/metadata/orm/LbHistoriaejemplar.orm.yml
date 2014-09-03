@@ -13,7 +13,7 @@ LbHistoriaejemplar:
             type: integer
             nullable: false
             unsigned: false
-            comment: ''
+            comment: Id
             id: true
             column: inHistEjemplar
             generator:
@@ -22,13 +22,13 @@ LbHistoriaejemplar:
         inhejfechahora:
             type: datetime
             nullable: false
-            comment: 'Desde cuando el usuario tiene este ejemplar...para lo que lo registran en el sistema aparece la fecha de ese momento, nada'
+            comment: 'Desde cuando el usuario tiene este ejemplar...para lo que lo registran en el sistema aparece la fecha de ese momento'
             column: inHEjFechaHora
         inhejmodo:
             type: integer
             nullable: false
             unsigned: false
-            comment: "Indica:\n0: si es el usuario original\n1: si lo cambió\n2: si lo compró"
+            comment: "Indica:\n0: si es el usuario original (en Libreame)\n1: si lo cambió\n2: si lo compró"
             default: '0'
             column: inHEjModo
     manyToOne:

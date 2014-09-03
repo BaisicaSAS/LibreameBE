@@ -22,7 +22,7 @@ LbDetallestratos:
             type: integer
             nullable: false
             unsigned: false
-            comment: ''
+            comment: Id
             id: true
             column: inDetalleTrato
             generator:
@@ -33,7 +33,7 @@ LbDetallestratos:
             nullable: false
             precision: 10
             scale: 0
-            comment: 'El valor que yo voy a pagar'
+            comment: 'El valor que yo estoy dispuesto a pagar'
             default: '0'
             column: inDetValorUsr
         indetvalorotro:

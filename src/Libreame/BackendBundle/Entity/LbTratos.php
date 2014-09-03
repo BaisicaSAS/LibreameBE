@@ -12,7 +12,7 @@ class LbTratos
     /**
      * @var integer
      */
-    private $id;
+    private $intrato;
 
     /**
      * @var \DateTime
@@ -57,7 +57,7 @@ class LbTratos
      */
     public function getIntrato()
     {
-        return $this->id;
+        return $this->intrato;
     }
 
     /**

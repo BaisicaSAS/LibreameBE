@@ -10,7 +10,7 @@ LbOfertas:
             type: integer
             nullable: false
             unsigned: false
-            comment: ''
+            comment: Id
             id: true
             column: inOferta
             generator:
@@ -19,7 +19,7 @@ LbOfertas:
         feofefecha:
             type: datetime
             nullable: false
-            comment: ''
+            comment: 'Fecha de la oferta'
             column: feOfeFecha
         inofevigencia:
             type: integer

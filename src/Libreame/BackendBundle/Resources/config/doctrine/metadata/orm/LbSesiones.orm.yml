@@ -10,7 +10,7 @@ LbSesiones:
             type: integer
             nullable: false
             unsigned: false
-            comment: ''
+            comment: ID
             id: true
             column: inSesion
             generator:
@@ -21,7 +21,7 @@ LbSesiones:
             nullable: false
             length: 45
             fixed: false
-            comment: ''
+            comment: 'ID o Numero de la sesion'
             column: txSesNumero
         insesactiva:
             type: integer
@@ -33,13 +33,21 @@ LbSesiones:
         fesesfechaini:
             type: datetime
             nullable: false
-            comment: ''
+            comment: 'Fecha de inicio de la sesion'
             column: feSesFechaIni
         fesesfechafin:
             type: datetime
             nullable: true
-            comment: ''
+            comment: 'Fecha de fin de la sesion'
             column: feSesFechaFin
+        txipaddr:
+            type: string
+            nullable: false
+            length: 30
+            fixed: false
+            comment: 'Dirección IP desde donde se genera la sesion'
+            default: 000.000.000.000
+            column: txIPAddr
     manyToOne:
         insesdispusuario:
             targetEntity: LbDispusuarios

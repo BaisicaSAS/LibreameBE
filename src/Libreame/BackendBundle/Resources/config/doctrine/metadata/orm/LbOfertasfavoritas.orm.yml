@@ -13,7 +13,7 @@ LbOfertasfavoritas:
             type: integer
             nullable: false
             unsigned: false
-            comment: ''
+            comment: Id
             id: true
             column: inOfertaFavorita
             generator:
@@ -22,7 +22,7 @@ LbOfertasfavoritas:
         fefavfecha:
             type: datetime
             nullable: false
-            comment: ''
+            comment: 'Fecha en la que la marque como favorita'
             column: feFavFecha
     manyToOne:
         infavusuario:

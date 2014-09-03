@@ -12,7 +12,7 @@ class LbOfertas
     /**
      * @var integer
      */
-    private $id;
+    private $inoferta;
 
     /**
      * @var \DateTime
@@ -47,7 +47,7 @@ class LbOfertas
      */
     public function getInoferta()
     {
-        return $this->id;
+        return $this->inoferta;
     }
 
     /**

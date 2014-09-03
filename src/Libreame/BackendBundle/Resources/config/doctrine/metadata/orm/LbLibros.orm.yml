@@ -10,7 +10,7 @@ LbLibros:
             type: integer
             nullable: false
             unsigned: false
-            comment: ''
+            comment: Id
             id: true
             column: inLibro
             generator:
@@ -20,7 +20,7 @@ LbLibros:
             type: integer
             nullable: false
             unsigned: false
-            comment: "0:Libro\n1:Revista....."
+            comment: "Tipo publicacion\n0:Libro\n1:Revista....."
             default: '0'
             column: txLibTipoPublica
         txlibtitulo:
@@ -28,14 +28,14 @@ LbLibros:
             nullable: false
             length: 200
             fixed: false
-            comment: ''
+            comment: 'Titulo del libro'
             column: txLibTitulo
         txlibautores:
             type: string
             nullable: true
             length: 200
             fixed: false
-            comment: ''
+            comment: 'Autores del libro separados por coma'
             column: txLibAutores
         txlibidioma:
             type: string
@@ -49,28 +49,28 @@ LbLibros:
             nullable: true
             length: 100
             fixed: false
-            comment: ''
+            comment: 'Editorial que imprimió el libro'
             column: txLibEditorial
         txlibedicionanio:
             type: string
             nullable: true
             length: 10
             fixed: false
-            comment: ''
+            comment: 'Año de la edición'
             column: txLibEdicionAnio
         txlibedicionnum:
             type: string
             nullable: true
             length: 10
             fixed: false
-            comment: ''
+            comment: 'Número de la edicion'
             column: txLibEdicionNum
         txlibedicionpais:
             type: string
             nullable: true
             length: 100
             fixed: false
-            comment: ''
+            comment: 'País donde fue editado'
             column: txLibEdicionPais
         txlibcodigoofic:
             type: string
@@ -84,28 +84,28 @@ LbLibros:
             nullable: true
             length: 300
             fixed: false
-            comment: ''
+            comment: 'Muy pequeño Resumen del libro'
             column: txLibResumen
         txlibtomo:
             type: string
             nullable: true
             length: 45
             fixed: false
-            comment: ''
+            comment: 'Tomo o numero del libro'
             column: txLibTomo
         txlibvolumen:
             type: string
             nullable: true
             length: 45
             fixed: false
-            comment: ''
+            comment: 'Volumen del libro'
             column: txLibVolumen
         txpaginas:
             type: string
             nullable: true
             length: 45
             fixed: false
-            comment: ''
+            comment: 'Numero de páginas del libro'
             column: txPaginas
     manyToOne:
         inlibgenero:

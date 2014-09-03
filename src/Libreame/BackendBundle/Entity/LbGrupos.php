@@ -12,7 +12,7 @@ class LbGrupos
     /**
      * @var integer
      */
-    private $id;
+    private $ingrupo;
 
     /**
      * @var string
@@ -37,7 +37,7 @@ class LbGrupos
      */
     public function getIngrupo()
     {
-        return $this->id;
+        return $this->ingrupo;
     }
 
     /**

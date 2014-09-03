@@ -1,3 +1,7 @@
 libreame_backend_homepage:
     pattern:  /hello/{name}
     defaults: { _controller: LibreameBackendBundle:Default:index }
+
+libreame_ingresarSistema:
+    pattern:  /ingreso/{data}
+    defaults: { _controller: LibreameBackendBundle:Acceso:index }

@@ -16,7 +16,7 @@ LbTratos:
             type: integer
             nullable: false
             unsigned: false
-            comment: ''
+            comment: Id
             id: true
             column: inTrato
             generator:
@@ -25,7 +25,7 @@ LbTratos:
         intrafecha:
             type: datetime
             nullable: false
-            comment: ''
+            comment: 'Fecha en la que se cierra el trato (se actualiza cuando cada usuario acepta.)'
             column: inTraFecha
         intraestado:
             type: integer

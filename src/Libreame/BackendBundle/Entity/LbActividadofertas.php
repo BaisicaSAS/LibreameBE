@@ -12,12 +12,22 @@ class LbActividadofertas
     /**
      * @var integer
      */
-    private $id;
+    private $inactividadoferta;
 
     /**
      * @var \DateTime
      */
     private $feactfechahora;
+
+    /**
+     * @var string
+     */
+    private $txactdescripcion;
+
+    /**
+     * @var integer
+     */
+    private $inactestado;
 
     /**
      * @var \Libreame\BackendBundle\Entity\LbUsuarios
@@ -42,7 +52,7 @@ class LbActividadofertas
      */
     public function getInactividadoferta()
     {
-        return $this->id;
+        return $this->inactividadoferta;
     }
 
     /**
@@ -66,6 +76,52 @@ class LbActividadofertas
     public function getFeactfechahora()
     {
         return $this->feactfechahora;
+    }
+
+    /**
+     * Set txactdescripcion
+     *
+     * @param string $txactdescripcion
+     * @return LbActividadofertas
+     */
+    public function setTxactdescripcion($txactdescripcion)
+    {
+        $this->txactdescripcion = $txactdescripcion;
+
+        return $this;
+    }
+
+    /**
+     * Get txactdescripcion
+     *
+     * @return string 
+     */
+    public function getTxactdescripcion()
+    {
+        return $this->txactdescripcion;
+    }
+
+    /**
+     * Set inactestado
+     *
+     * @param integer $inactestado
+     * @return LbActividadofertas
+     */
+    public function setInactestado($inactestado)
+    {
+        $this->inactestado = $inactestado;
+
+        return $this;
+    }
+
+    /**
+     * Get inactestado
+     *
+     * @return integer 
+     */
+    public function getInactestado()
+    {
+        return $this->inactestado;
     }
 
     /**

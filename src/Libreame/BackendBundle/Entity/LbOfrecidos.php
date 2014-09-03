@@ -12,7 +12,7 @@ class LbOfrecidos
     /**
      * @var integer
      */
-    private $id;
+    private $inofrecido;
 
     /**
      * @var integer
@@ -52,7 +52,7 @@ class LbOfrecidos
      */
     public function getInofrecido()
     {
-        return $this->id;
+        return $this->inofrecido;
     }
 
     /**

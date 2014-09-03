@@ -28,10 +28,24 @@ use Symfony\Component\Serializer\Encoder\JsonDecode;
  */
 class AccesoController extends Controller
 {   
+    //Variable globales
     var $inFallido =  0; //Proceso fallido por calidad de datos
     var $inDescone = -1; //Proceso faiilido por conexión de plataforma
     var $inExitoso =  1; //Proceso existoso
+    var $inDatoCer =  0; //Valor cero: Sirve para los datos Inactivo, Cerrado etc del modelo
+    var $inDatoUno =  1; //Valor Uno: Sirve para los datos Activo, Abierto, etc del modelo
+    var $inTamVali =  40; //Tamaño del ID para confirmacion del Registro
+    var $inTamSesi =  15; //Tamaño del id de sesion generado
+    var $txMensaje =  'Solicitud de registro de usuario en Libreame'; //Mensaje estandar para el registro de usuario
     
+    //Acciones de la plataforma
+    var $inAccRegistro =  1; //Accion de registro en el sistema
+    var $inAccConfRegi =  2; //Accion de confirmar registro en el sistema
+    var $inAccRegRedes =  3; //Accion de registrar usuarios de redes sociales
+    var $inAccIngresoS =  4; //Accion de ingresar al sistema
+    var $inAccSalidaSi =  5; //Accion de salida del sistema
+
+    //Atributos
     private $pSession;
     private $pIDSession;
     private $pFechaHora;
@@ -103,11 +117,24 @@ class AccesoController extends Controller
         //Se evalúa si se logró obtener la información de sesion desde el JSON
         if (descomponerJson($datos) != false) {
             switch ($this->getAccion()){
-                case 1: return $this->registroUsuario();
+                case $this->inAccRegistro: return $this->registroUsuario();
             }
         } else {
             return false;
         }
+    }
+    
+    /*
+     * generaRand: 
+     * Funcion que genera un ID aleatorio de la cantidad solicitada en el parámetro
+     */
+    private function generaRand($tamano){
+
+        $patron = "1234567890abcdefghijklmnopqrstuvwxyz+~*-"; 
+        for($i = 0; $i < $tamano; $i++) { 
+            $key .= $patron{rand(0, 39)}; 
+        } 
+        return $key;         
     }
     /*
      * Descomponer: 
@@ -167,6 +194,9 @@ class AccesoController extends Controller
         $usuario = new LbUsuarios();
         $device = new LbDispusuarios();
         $membresia = new LbMembresias();
+        $sesion = new LbSesiones();
+        $actsesion = new LbActsesion();
+        
         //Lugar por default
         $Lugar = $em->getRepository('LibreameBackendBundle:LbLugares')->find(1);
         //Grupo por default
@@ -180,22 +210,28 @@ class AccesoController extends Controller
                 $usuario->setTxusunombre($this->getUsuario());  
                 $usuario->setTxusuimagen('DEFAUL IMAGE URL');  
                 $usuario->setInusulugar($Lugar);  
-                $usuario->setTxusuvalidacion('Url para validar');  
+                $usuario->setTxusuvalidacion($this->generaRand($this->inTamVali));  
+                $em->persist($usuario);
+                $em->flush();
 
                 //Guarda el dispositivo
                 $device->setIndisusuario($usuario);
                 $device->setTxdisid($this->getDevice());
+                $em->persist($device);
+                $em->flush();
                 
                 //Guarda la membresia al grupo default
                 $membresia->setInmemusuario($usuario);
                 $membresia->setInmemgrupo($Grupo);
-                
-                $em->persist($usuario);
-                $em->flush();
-                $em->persist($device);
-                $em->flush();
                 $em->persist($membresia);
                 $em->flush();
+                
+                //Guarda la sesion inactiva
+                $sesion = $this->generaSesion($this->inDatoCero,date(),date(),$device, $this->pIPaddr);
+                        
+                //Guarda la actividad de la sesion
+                $actsesion = $this->generaActSesion($sesion,$this->pAccion,date(),$this->inDatoUno,$this->txMensaje);
+
                 //Envia email
                 $this->enviaMailRegistro($usuario);
                 return $this->inExitoso;
@@ -209,7 +245,7 @@ class AccesoController extends Controller
         }
         
     }
-
+    
     /*
      * enviaMailRegistro 
      * Se encarga de enviar el email con el que el usuario confirmara su registro
@@ -251,9 +287,47 @@ class AccesoController extends Controller
      * Id/nombre dispositivo
      *  
      */
-    private function generaSesion($credenciales)
+    private function generaSesion($pEstado,$pFecIni,$pFecFin,$pDevice,$pIpAdd)
     {
-        return $this->render('LibreameBackendBundle:Default:index.html.twig', array('name' => $credenciales));
+        //Guarda la sesion inactiva
+        try{
+            $em = $this->getDoctrine()->getManager();
+            $sesion->setInsesactiva($pEstado);
+            $sesion->setTxsesnumero($this->generaRand($this->inTamSesi));
+            $sesion->setFesesfechaini($pFecIni);
+            $sesion->setFesesfechafin($pFecFin);
+            $sesion->setInsesdispusuario($pDevice);
+            $sesion->setTxipaddr($pIpAdd);
+            $em->persist($sesion);
+            $em->flush();
+            return $sesion;
+            
+        } catch (Exception $ex) {
+                return $this->inDescone;
+        } 
+    }
+    /*
+     * GeneraActSesion 
+     */
+    private function generaActSesion($pSesion,$pAccion,$pFecha,$pFinalizada,$pMensaje)
+    {
+        //Guarda la sesion inactiva
+        try{
+            $em = $this->getDoctrine()->getManager();
+            
+            $actsesion->setInactsesiondisus($sesion);
+            $actsesion->setInactaccion($this->pAccion);
+            $actsesion->setFeactfecha(date());
+            $actsesion->setInactfinalizada($this->inDatoUno);
+            $actsesion->setTxactmensaje($this->txMensaje);
+            $em->persist($actsesion);
+            $em->flush();
+
+            return $actsesion;
+            
+        } catch (Exception $ex) {
+                return $this->inDescone;
+        } 
     }
     /*
      * eliminaSesion 

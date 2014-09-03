@@ -12,7 +12,7 @@ class LbSolicitados
     /**
      * @var integer
      */
-    private $id;
+    private $idsolicitado;
 
     /**
      * @var integer
@@ -44,15 +44,20 @@ class LbSolicitados
      */
     private $insoloferta;
 
+    /**
+     * @var \Libreame\BackendBundle\Entity\LbLibros
+     */
+    private $insollibro;
+
 
     /**
-     * Get insolicitado
+     * Get idsolicitado
      *
      * @return integer 
      */
-    public function getInsolicitado()
+    public function getIdsolicitado()
     {
-        return $this->id;
+        return $this->idsolicitado;
     }
 
     /**
@@ -191,5 +196,28 @@ class LbSolicitados
     public function getInsoloferta()
     {
         return $this->insoloferta;
+    }
+
+    /**
+     * Set insollibro
+     *
+     * @param \Libreame\BackendBundle\Entity\LbLibros $insollibro
+     * @return LbSolicitados
+     */
+    public function setInsollibro(\Libreame\BackendBundle\Entity\LbLibros $insollibro = null)
+    {
+        $this->insollibro = $insollibro;
+
+        return $this;
+    }
+
+    /**
+     * Get insollibro
+     *
+     * @return \Libreame\BackendBundle\Entity\LbLibros 
+     */
+    public function getInsollibro()
+    {
+        return $this->insollibro;
     }
 }

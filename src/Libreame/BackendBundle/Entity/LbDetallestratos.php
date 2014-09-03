@@ -12,7 +12,7 @@ class LbDetallestratos
     /**
      * @var integer
      */
-    private $id;
+    private $indetalletrato;
 
     /**
      * @var float
@@ -57,7 +57,7 @@ class LbDetallestratos
      */
     public function getIndetalletrato()
     {
-        return $this->id;
+        return $this->indetalletrato;
     }
 
     /**

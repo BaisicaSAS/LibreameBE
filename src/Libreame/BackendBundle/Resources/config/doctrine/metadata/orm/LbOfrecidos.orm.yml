@@ -13,7 +13,7 @@ LbOfrecidos:
             type: integer
             nullable: false
             unsigned: false
-            comment: ''
+            comment: Id
             id: true
             column: inOfrecido
             generator:
@@ -23,7 +23,7 @@ LbOfrecidos:
             type: integer
             nullable: false
             unsigned: false
-            comment: "La transacción que se desea con el ejemplar\n0:Venta 1:Cambio 2:Ambos"
+            comment: "La transacción que se desea con el ejemplar\n0:Venta 1:Cambio 2:Cualquiera 3: Alquiler(?)"
             default: '1'
             column: inOfrTransac
         txofrobservacion:
@@ -31,14 +31,14 @@ LbOfrecidos:
             nullable: true
             length: 100
             fixed: false
-            comment: ''
+            comment: 'Observaciones acerca del ejemplar'
             column: txOfrObservacion
         dbofrvaloferta:
             type: float
             nullable: false
             precision: 10
             scale: 0
-            comment: ''
+            comment: 'Valor que pido por el ejemplar'
             default: '0'
             column: dbOfrValOferta
         dbofrvaladic:
@@ -46,7 +46,7 @@ LbOfrecidos:
             nullable: false
             precision: 10
             scale: 0
-            comment: ''
+            comment: 'Valor que pido por el ejemplar adicionando el libro que solicito.'
             default: '0'
             column: dbOfrValAdic
     manyToOne:

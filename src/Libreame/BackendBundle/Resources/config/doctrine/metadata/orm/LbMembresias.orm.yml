@@ -13,7 +13,7 @@ LbMembresias:
             type: integer
             nullable: false
             unsigned: false
-            comment: ''
+            comment: Id
             id: true
             column: inMembresia
             generator:
@@ -23,14 +23,14 @@ LbMembresias:
             type: integer
             nullable: false
             unsigned: false
-            comment: '0: No - 1: Si'
+            comment: "Indica si el usuario es creador del grupo \n0: No - 1: Si"
             default: '0'
             column: inMemCreador
         inmemactiva:
             type: integer
             nullable: false
             unsigned: false
-            comment: '0: Inactiva - 1:Activa'
+            comment: "Indica si el usuario sigue siendo miembro del grupo, en principio no se tendrá en cuenta este campo\n0: Inactiva - 1:Activa"
             default: '1'
             column: inMemActiva
     manyToOne:

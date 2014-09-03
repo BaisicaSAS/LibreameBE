@@ -10,7 +10,7 @@ LbDispusuarios:
             type: integer
             nullable: false
             unsigned: false
-            comment: ''
+            comment: ID
             id: true
             column: inDispUsuario
             generator:
@@ -21,35 +21,35 @@ LbDispusuarios:
             nullable: false
             length: 45
             fixed: false
-            comment: ''
+            comment: 'Identificacion del dispositivo'
             column: txDisID
         txdisnombre:
             type: string
             nullable: true
             length: 45
             fixed: false
-            comment: ''
+            comment: 'Nombre del dispositivo'
             column: txDisNombre
         txdismarca:
             type: string
             nullable: true
             length: 45
             fixed: false
-            comment: ''
+            comment: 'Marca del dispositivo'
             column: txDisMarca
         txdismodelo:
             type: string
             nullable: true
             length: 45
             fixed: false
-            comment: ''
+            comment: 'Modelo del dispositivo'
             column: txDisModelo
         txdisso:
             type: string
             nullable: true
             length: 45
             fixed: false
-            comment: ''
+            comment: 'Sistema operativo del dispositivo'
             column: txDisSO
     manyToOne:
         indisusuario:

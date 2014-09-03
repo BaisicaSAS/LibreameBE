@@ -10,7 +10,7 @@ LbLugares:
             type: integer
             nullable: false
             unsigned: false
-            comment: ''
+            comment: 'Id Automático'
             id: true
             column: inLugar
             generator:
@@ -21,14 +21,14 @@ LbLugares:
             nullable: false
             length: 45
             fixed: false
-            comment: ''
+            comment: 'Código del lugar: Ejemplo en Colombia DIVIPOLA'
             column: txLugCodigo
         txlugnombre:
             type: string
             nullable: false
             length: 100
             fixed: false
-            comment: ''
+            comment: 'Nombre del lugar, Ciudad, Depto, etc.'
             column: txLugNombre
     manyToOne:
         inlugpadre:

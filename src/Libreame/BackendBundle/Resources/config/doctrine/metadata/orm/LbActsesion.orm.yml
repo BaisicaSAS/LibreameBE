@@ -10,7 +10,7 @@ LbActsesion:
             type: integer
             nullable: false
             unsigned: false
-            comment: ''
+            comment: ID
             id: true
             column: inActSesion
             generator:
@@ -28,12 +28,12 @@ LbActsesion:
             nullable: false
             length: 50
             fixed: false
-            comment: ''
+            comment: 'Mensaje de exito / fallo de la acción'
             column: txActMensaje
         feactfecha:
             type: datetime
             nullable: false
-            comment: ''
+            comment: 'Fecha de la actividad'
             column: feActFecha
         inactfinalizada:
             type: integer

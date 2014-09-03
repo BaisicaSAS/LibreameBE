@@ -12,7 +12,7 @@ class LbGenerossolicitados
     /**
      * @var integer
      */
-    private $id;
+    private $ingenerosolicitado;
 
     /**
      * @var \Libreame\BackendBundle\Entity\LbGeneros
@@ -32,7 +32,7 @@ class LbGenerossolicitados
      */
     public function getIngenerosolicitado()
     {
-        return $this->id;
+        return $this->ingenerosolicitado;
     }
 
     /**

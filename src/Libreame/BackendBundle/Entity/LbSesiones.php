@@ -12,7 +12,7 @@ class LbSesiones
     /**
      * @var integer
      */
-    private $id;
+    private $insesion;
 
     /**
      * @var string
@@ -35,6 +35,11 @@ class LbSesiones
     private $fesesfechafin;
 
     /**
+     * @var string
+     */
+    private $txipaddr;
+
+    /**
      * @var \Libreame\BackendBundle\Entity\LbDispusuarios
      */
     private $insesdispusuario;
@@ -47,7 +52,7 @@ class LbSesiones
      */
     public function getInsesion()
     {
-        return $this->id;
+        return $this->insesion;
     }
 
     /**
@@ -140,6 +145,29 @@ class LbSesiones
     public function getFesesfechafin()
     {
         return $this->fesesfechafin;
+    }
+
+    /**
+     * Set txipaddr
+     *
+     * @param string $txipaddr
+     * @return LbSesiones
+     */
+    public function setTxipaddr($txipaddr)
+    {
+        $this->txipaddr = $txipaddr;
+
+        return $this;
+    }
+
+    /**
+     * Get txipaddr
+     *
+     * @return string 
+     */
+    public function getTxipaddr()
+    {
+        return $this->txipaddr;
     }
 
     /**

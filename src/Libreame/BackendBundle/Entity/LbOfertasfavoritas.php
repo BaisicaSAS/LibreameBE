@@ -12,7 +12,7 @@ class LbOfertasfavoritas
     /**
      * @var integer
      */
-    private $id;
+    private $inofertafavorita;
 
     /**
      * @var \DateTime
@@ -37,7 +37,7 @@ class LbOfertasfavoritas
      */
     public function getInofertafavorita()
     {
-        return $this->id;
+        return $this->inofertafavorita;
     }
 
     /**

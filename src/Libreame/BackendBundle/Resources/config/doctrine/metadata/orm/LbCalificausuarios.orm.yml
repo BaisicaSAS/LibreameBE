@@ -13,7 +13,7 @@ LbCalificausuarios:
             type: integer
             nullable: false
             unsigned: false
-            comment: ''
+            comment: Id
             id: true
             column: inCalificacion
             generator:
@@ -23,14 +23,14 @@ LbCalificausuarios:
             type: integer
             nullable: false
             unsigned: false
-            comment: ''
+            comment: 'Calificación otorgada de 1 a 5'
             column: inCalCalificacion
         txcalobservacion:
             type: string
             nullable: true
             length: 100
             fixed: false
-            comment: ''
+            comment: 'Comentario anexo a la calificacion'
             column: txCalObservacion
         incalreporteabuso:
             type: integer
