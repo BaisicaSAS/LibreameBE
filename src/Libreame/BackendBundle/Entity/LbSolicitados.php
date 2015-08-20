@@ -40,14 +40,14 @@ class LbSolicitados
     private $insolejemplar;
 
     /**
-     * @var \Libreame\BackendBundle\Entity\LbOfertas
-     */
-    private $insoloferta;
-
-    /**
      * @var \Libreame\BackendBundle\Entity\LbLibros
      */
     private $insollibro;
+
+    /**
+     * @var \Libreame\BackendBundle\Entity\LbOfertas
+     */
+    private $insoloferta;
 
 
     /**
@@ -176,29 +176,6 @@ class LbSolicitados
     }
 
     /**
-     * Set insoloferta
-     *
-     * @param \Libreame\BackendBundle\Entity\LbOfertas $insoloferta
-     * @return LbSolicitados
-     */
-    public function setInsoloferta(\Libreame\BackendBundle\Entity\LbOfertas $insoloferta = null)
-    {
-        $this->insoloferta = $insoloferta;
-
-        return $this;
-    }
-
-    /**
-     * Get insoloferta
-     *
-     * @return \Libreame\BackendBundle\Entity\LbOfertas 
-     */
-    public function getInsoloferta()
-    {
-        return $this->insoloferta;
-    }
-
-    /**
      * Set insollibro
      *
      * @param \Libreame\BackendBundle\Entity\LbLibros $insollibro
@@ -219,5 +196,28 @@ class LbSolicitados
     public function getInsollibro()
     {
         return $this->insollibro;
+    }
+
+    /**
+     * Set insoloferta
+     *
+     * @param \Libreame\BackendBundle\Entity\LbOfertas $insoloferta
+     * @return LbSolicitados
+     */
+    public function setInsoloferta(\Libreame\BackendBundle\Entity\LbOfertas $insoloferta = null)
+    {
+        $this->insoloferta = $insoloferta;
+
+        return $this;
+    }
+
+    /**
+     * Get insoloferta
+     *
+     * @return \Libreame\BackendBundle\Entity\LbOfertas 
+     */
+    public function getInsoloferta()
+    {
+        return $this->insoloferta;
     }
 }

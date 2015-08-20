@@ -16,23 +16,27 @@ class LbMembresias
 
     /**
      * @var integer
+     * Indica si el usuario es creador del grupo 
+     * 0: No - 1: Si    
      */
-    private $inmemcreador;
-
+    private $inmemcreador = 0;
+    
     /**
      * @var integer
+     * Indica si el usuario sigue siendo miembro del grupo, en principio no se tendrá en cuenta este campo
+     * 0: Inactiva - 1:Activa
      */
-    private $inmemactiva;
-
-    /**
-     * @var \Libreame\BackendBundle\Entity\LbUsuarios
-     */
-    private $inmemusuario;
+    private $inmemactiva = 1;
 
     /**
      * @var \Libreame\BackendBundle\Entity\LbGrupos
      */
     private $inmemgrupo;
+
+    /**
+     * @var \Libreame\BackendBundle\Entity\LbUsuarios
+     */
+    private $inmemusuario;
 
 
     /**
@@ -92,29 +96,6 @@ class LbMembresias
     }
 
     /**
-     * Set inmemusuario
-     *
-     * @param \Libreame\BackendBundle\Entity\LbUsuarios $inmemusuario
-     * @return LbMembresias
-     */
-    public function setInmemusuario(\Libreame\BackendBundle\Entity\LbUsuarios $inmemusuario = null)
-    {
-        $this->inmemusuario = $inmemusuario;
-
-        return $this;
-    }
-
-    /**
-     * Get inmemusuario
-     *
-     * @return \Libreame\BackendBundle\Entity\LbUsuarios 
-     */
-    public function getInmemusuario()
-    {
-        return $this->inmemusuario;
-    }
-
-    /**
      * Set inmemgrupo
      *
      * @param \Libreame\BackendBundle\Entity\LbGrupos $inmemgrupo
@@ -135,5 +116,28 @@ class LbMembresias
     public function getInmemgrupo()
     {
         return $this->inmemgrupo;
+    }
+
+    /**
+     * Set inmemusuario
+     *
+     * @param \Libreame\BackendBundle\Entity\LbUsuarios $inmemusuario
+     * @return LbMembresias
+     */
+    public function setInmemusuario(\Libreame\BackendBundle\Entity\LbUsuarios $inmemusuario = null)
+    {
+        $this->inmemusuario = $inmemusuario;
+
+        return $this;
+    }
+
+    /**
+     * Get inmemusuario
+     *
+     * @return \Libreame\BackendBundle\Entity\LbUsuarios 
+     */
+    public function getInmemusuario()
+    {
+        return $this->inmemusuario;
     }
 }

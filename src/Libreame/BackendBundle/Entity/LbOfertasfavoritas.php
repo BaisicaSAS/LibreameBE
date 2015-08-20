@@ -20,14 +20,14 @@ class LbOfertasfavoritas
     private $fefavfecha;
 
     /**
-     * @var \Libreame\BackendBundle\Entity\LbUsuarios
-     */
-    private $infavusuario;
-
-    /**
      * @var \Libreame\BackendBundle\Entity\LbOfertas
      */
     private $infavoferta;
+
+    /**
+     * @var \Libreame\BackendBundle\Entity\LbUsuarios
+     */
+    private $infavusuario;
 
 
     /**
@@ -64,29 +64,6 @@ class LbOfertasfavoritas
     }
 
     /**
-     * Set infavusuario
-     *
-     * @param \Libreame\BackendBundle\Entity\LbUsuarios $infavusuario
-     * @return LbOfertasfavoritas
-     */
-    public function setInfavusuario(\Libreame\BackendBundle\Entity\LbUsuarios $infavusuario = null)
-    {
-        $this->infavusuario = $infavusuario;
-
-        return $this;
-    }
-
-    /**
-     * Get infavusuario
-     *
-     * @return \Libreame\BackendBundle\Entity\LbUsuarios 
-     */
-    public function getInfavusuario()
-    {
-        return $this->infavusuario;
-    }
-
-    /**
      * Set infavoferta
      *
      * @param \Libreame\BackendBundle\Entity\LbOfertas $infavoferta
@@ -107,5 +84,28 @@ class LbOfertasfavoritas
     public function getInfavoferta()
     {
         return $this->infavoferta;
+    }
+
+    /**
+     * Set infavusuario
+     *
+     * @param \Libreame\BackendBundle\Entity\LbUsuarios $infavusuario
+     * @return LbOfertasfavoritas
+     */
+    public function setInfavusuario(\Libreame\BackendBundle\Entity\LbUsuarios $infavusuario = null)
+    {
+        $this->infavusuario = $infavusuario;
+
+        return $this;
+    }
+
+    /**
+     * Get infavusuario
+     *
+     * @return \Libreame\BackendBundle\Entity\LbUsuarios 
+     */
+    public function getInfavusuario()
+    {
+        return $this->infavusuario;
     }
 }

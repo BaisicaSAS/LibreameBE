@@ -135,14 +135,9 @@ class appDevUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirectab
 
         }
 
-        // libreame_backend_homepage
-        if (0 === strpos($pathinfo, '/hello') && preg_match('#^/hello/(?P<name>[^/]++)$#s', $pathinfo, $matches)) {
-            return $this->mergeDefaults(array_replace($matches, array('_route' => 'libreame_backend_homepage')), array (  '_controller' => 'Libreame\\BackendBundle\\Controller\\DefaultController::indexAction',));
-        }
-
         // libreame_ingresarSistema
-        if (0 === strpos($pathinfo, '/ingreso') && preg_match('#^/ingreso/(?P<data>[^/]++)$#s', $pathinfo, $matches)) {
-            return $this->mergeDefaults(array_replace($matches, array('_route' => 'libreame_ingresarSistema')), array (  '_controller' => 'Libreame\\BackendBundle\\Controller\\AccesoController::indexAction',));
+        if (0 === strpos($pathinfo, '/ingreso') && preg_match('#^/ingreso/(?P<datos>[^/]++)$#s', $pathinfo, $matches)) {
+            return $this->mergeDefaults(array_replace($matches, array('_route' => 'libreame_ingresarSistema')), array (  '_controller' => 'Libreame\\BackendBundle\\Controller\\AccesoController::ingresarSistemaAction',));
         }
 
         // _welcome

@@ -30,9 +30,9 @@ class LbActividadofertas
     private $inactestado;
 
     /**
-     * @var \Libreame\BackendBundle\Entity\LbUsuarios
+     * @var \Libreame\BackendBundle\Entity\LbActividadofertas
      */
-    private $inactusuario;
+    private $inactpadreact;
 
     /**
      * @var \Libreame\BackendBundle\Entity\LbOfertas
@@ -40,9 +40,9 @@ class LbActividadofertas
     private $inactoferta;
 
     /**
-     * @var \Libreame\BackendBundle\Entity\LbActividadofertas
+     * @var \Libreame\BackendBundle\Entity\LbUsuarios
      */
-    private $inactpadreact;
+    private $inactusuario;
 
 
     /**
@@ -125,26 +125,26 @@ class LbActividadofertas
     }
 
     /**
-     * Set inactusuario
+     * Set inactpadreact
      *
-     * @param \Libreame\BackendBundle\Entity\LbUsuarios $inactusuario
+     * @param \Libreame\BackendBundle\Entity\LbActividadofertas $inactpadreact
      * @return LbActividadofertas
      */
-    public function setInactusuario(\Libreame\BackendBundle\Entity\LbUsuarios $inactusuario = null)
+    public function setInactpadreact(\Libreame\BackendBundle\Entity\LbActividadofertas $inactpadreact = null)
     {
-        $this->inactusuario = $inactusuario;
+        $this->inactpadreact = $inactpadreact;
 
         return $this;
     }
 
     /**
-     * Get inactusuario
+     * Get inactpadreact
      *
-     * @return \Libreame\BackendBundle\Entity\LbUsuarios 
+     * @return \Libreame\BackendBundle\Entity\LbActividadofertas 
      */
-    public function getInactusuario()
+    public function getInactpadreact()
     {
-        return $this->inactusuario;
+        return $this->inactpadreact;
     }
 
     /**
@@ -171,25 +171,25 @@ class LbActividadofertas
     }
 
     /**
-     * Set inactpadreact
+     * Set inactusuario
      *
-     * @param \Libreame\BackendBundle\Entity\LbActividadofertas $inactpadreact
+     * @param \Libreame\BackendBundle\Entity\LbUsuarios $inactusuario
      * @return LbActividadofertas
      */
-    public function setInactpadreact(\Libreame\BackendBundle\Entity\LbActividadofertas $inactpadreact = null)
+    public function setInactusuario(\Libreame\BackendBundle\Entity\LbUsuarios $inactusuario = null)
     {
-        $this->inactpadreact = $inactpadreact;
+        $this->inactusuario = $inactusuario;
 
         return $this;
     }
 
     /**
-     * Get inactpadreact
+     * Get inactusuario
      *
-     * @return \Libreame\BackendBundle\Entity\LbActividadofertas 
+     * @return \Libreame\BackendBundle\Entity\LbUsuarios 
      */
-    public function getInactpadreact()
+    public function getInactusuario()
     {
-        return $this->inactpadreact;
+        return $this->inactusuario;
     }
 }

@@ -1,0 +1,120 @@
+Libreame\BackendBundle\Entity\LbLibros:
+    type: entity
+    table: lb_libros
+    indexes:
+        fk_lb_libros_lb_generos1_idx:
+            columns:
+                - inLibGenero
+    id:
+        inlibro:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: Id
+            id: true
+            column: inLibro
+            generator:
+                strategy: IDENTITY
+    fields:
+        txlibtipopublica:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: "Tipo publicacion\n0:Libro\n1:Revista....."
+            default: '0'
+            column: txLibTipoPublica
+        txlibtitulo:
+            type: string
+            nullable: false
+            length: 200
+            fixed: false
+            comment: 'Titulo del libro'
+            column: txLibTitulo
+        txlibautores:
+            type: string
+            nullable: true
+            length: 200
+            fixed: false
+            comment: 'Autores del libro separados por coma'
+            column: txLibAutores
+        txlibidioma:
+            type: string
+            nullable: false
+            length: 45
+            fixed: false
+            comment: 'Una tabla de idiomas o de parametros'
+            column: txLibIdioma
+        txlibeditorial:
+            type: string
+            nullable: true
+            length: 100
+            fixed: false
+            comment: 'Editorial que imprimió el libro'
+            column: txLibEditorial
+        txlibedicionanio:
+            type: string
+            nullable: true
+            length: 10
+            fixed: false
+            comment: 'Año de la edición'
+            column: txLibEdicionAnio
+        txlibedicionnum:
+            type: string
+            nullable: true
+            length: 10
+            fixed: false
+            comment: 'Número de la edicion'
+            column: txLibEdicionNum
+        txlibedicionpais:
+            type: string
+            nullable: true
+            length: 100
+            fixed: false
+            comment: 'País donde fue editado'
+            column: txLibEdicionPais
+        txlibcodigoofic:
+            type: string
+            nullable: true
+            length: 45
+            fixed: false
+            comment: 'ISBN - ISSN'
+            column: txLibCodigoOfic
+        txlibresumen:
+            type: string
+            nullable: true
+            length: 300
+            fixed: false
+            comment: 'Muy pequeño Resumen del libro'
+            column: txLibResumen
+        txlibtomo:
+            type: string
+            nullable: true
+            length: 45
+            fixed: false
+            comment: 'Tomo o numero del libro'
+            column: txLibTomo
+        txlibvolumen:
+            type: string
+            nullable: true
+            length: 45
+            fixed: false
+            comment: 'Volumen del libro'
+            column: txLibVolumen
+        txpaginas:
+            type: string
+            nullable: true
+            length: 45
+            fixed: false
+            comment: 'Numero de páginas del libro'
+            column: txPaginas
+    manyToOne:
+        inlibgenero:
+            targetEntity: LbGeneros
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                inLibGenero:
+                    referencedColumnName: inGenero
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

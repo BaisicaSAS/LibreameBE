@@ -25,24 +25,24 @@ class LbDetallestratos
     private $indetvalorotro;
 
     /**
-     * @var \Libreame\BackendBundle\Entity\LbTratos
-     */
-    private $indettrato;
-
-    /**
      * @var \Libreame\BackendBundle\Entity\LbEjemplares
      */
     private $indetejemplarusr;
 
     /**
-     * @var \Libreame\BackendBundle\Entity\LbUsuarios
-     */
-    private $indetusuario;
-
-    /**
      * @var \Libreame\BackendBundle\Entity\LbEjemplares
      */
     private $indetejemplarotro;
+
+    /**
+     * @var \Libreame\BackendBundle\Entity\LbTratos
+     */
+    private $indettrato;
+
+    /**
+     * @var \Libreame\BackendBundle\Entity\LbUsuarios
+     */
+    private $indetusuario;
 
     /**
      * @var \Libreame\BackendBundle\Entity\LbUsuarios
@@ -107,29 +107,6 @@ class LbDetallestratos
     }
 
     /**
-     * Set indettrato
-     *
-     * @param \Libreame\BackendBundle\Entity\LbTratos $indettrato
-     * @return LbDetallestratos
-     */
-    public function setIndettrato(\Libreame\BackendBundle\Entity\LbTratos $indettrato = null)
-    {
-        $this->indettrato = $indettrato;
-
-        return $this;
-    }
-
-    /**
-     * Get indettrato
-     *
-     * @return \Libreame\BackendBundle\Entity\LbTratos 
-     */
-    public function getIndettrato()
-    {
-        return $this->indettrato;
-    }
-
-    /**
      * Set indetejemplarusr
      *
      * @param \Libreame\BackendBundle\Entity\LbEjemplares $indetejemplarusr
@@ -153,29 +130,6 @@ class LbDetallestratos
     }
 
     /**
-     * Set indetusuario
-     *
-     * @param \Libreame\BackendBundle\Entity\LbUsuarios $indetusuario
-     * @return LbDetallestratos
-     */
-    public function setIndetusuario(\Libreame\BackendBundle\Entity\LbUsuarios $indetusuario = null)
-    {
-        $this->indetusuario = $indetusuario;
-
-        return $this;
-    }
-
-    /**
-     * Get indetusuario
-     *
-     * @return \Libreame\BackendBundle\Entity\LbUsuarios 
-     */
-    public function getIndetusuario()
-    {
-        return $this->indetusuario;
-    }
-
-    /**
      * Set indetejemplarotro
      *
      * @param \Libreame\BackendBundle\Entity\LbEjemplares $indetejemplarotro
@@ -196,6 +150,52 @@ class LbDetallestratos
     public function getIndetejemplarotro()
     {
         return $this->indetejemplarotro;
+    }
+
+    /**
+     * Set indettrato
+     *
+     * @param \Libreame\BackendBundle\Entity\LbTratos $indettrato
+     * @return LbDetallestratos
+     */
+    public function setIndettrato(\Libreame\BackendBundle\Entity\LbTratos $indettrato = null)
+    {
+        $this->indettrato = $indettrato;
+
+        return $this;
+    }
+
+    /**
+     * Get indettrato
+     *
+     * @return \Libreame\BackendBundle\Entity\LbTratos 
+     */
+    public function getIndettrato()
+    {
+        return $this->indettrato;
+    }
+
+    /**
+     * Set indetusuario
+     *
+     * @param \Libreame\BackendBundle\Entity\LbUsuarios $indetusuario
+     * @return LbDetallestratos
+     */
+    public function setIndetusuario(\Libreame\BackendBundle\Entity\LbUsuarios $indetusuario = null)
+    {
+        $this->indetusuario = $indetusuario;
+
+        return $this;
+    }
+
+    /**
+     * Get indetusuario
+     *
+     * @return \Libreame\BackendBundle\Entity\LbUsuarios 
+     */
+    public function getIndetusuario()
+    {
+        return $this->indetusuario;
     }
 
     /**

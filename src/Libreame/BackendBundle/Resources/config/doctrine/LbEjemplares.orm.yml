@@ -1,0 +1,68 @@
+Libreame\BackendBundle\Entity\LbEjemplares:
+    type: entity
+    table: lb_ejemplares
+    indexes:
+        fk_lb_ejemplares_lb_usuarios1_idx:
+            columns:
+                - inEjeUsuDueno
+        fk_lb_ejemplares_lb_libros1_idx:
+            columns:
+                - inEjeLibro
+        fk_lb_ejemplares_lb_generos1_idx:
+            columns:
+                - inEjeGenero
+    id:
+        inejemplar:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: Id
+            id: true
+            column: inEjemplar
+            generator:
+                strategy: IDENTITY
+    fields:
+        inejecantidad:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: 'En algun momento se va a ctivar la posibilidad de que un usuario pueda publicar varios ejemplares de un mismo libro'
+            default: '1'
+            column: inEjeCantidad
+        dbejeavaluo:
+            type: float
+            nullable: false
+            precision: 10
+            scale: 0
+            comment: 'Valor en el que el usuario avalua su libro'
+            default: '0'
+            column: dbEjeAvaluo
+    manyToOne:
+        inejegenero:
+            targetEntity: LbGeneros
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                inEjeGenero:
+                    referencedColumnName: inGenero
+            orphanRemoval: false
+        inejelibro:
+            targetEntity: LbLibros
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                inEjeLibro:
+                    referencedColumnName: inLibro
+            orphanRemoval: false
+        inejeusudueno:
+            targetEntity: LbUsuarios
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                inEjeUsuDueno:
+                    referencedColumnName: inUsuario
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

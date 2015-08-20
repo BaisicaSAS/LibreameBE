@@ -25,9 +25,9 @@ class LbEjemplares
     private $dbejeavaluo;
 
     /**
-     * @var \Libreame\BackendBundle\Entity\LbUsuarios
+     * @var \Libreame\BackendBundle\Entity\LbGeneros
      */
-    private $inejeusudueno;
+    private $inejegenero;
 
     /**
      * @var \Libreame\BackendBundle\Entity\LbLibros
@@ -35,9 +35,9 @@ class LbEjemplares
     private $inejelibro;
 
     /**
-     * @var \Libreame\BackendBundle\Entity\LbGeneros
+     * @var \Libreame\BackendBundle\Entity\LbUsuarios
      */
-    private $inejegenero;
+    private $inejeusudueno;
 
 
     /**
@@ -97,26 +97,26 @@ class LbEjemplares
     }
 
     /**
-     * Set inejeusudueno
+     * Set inejegenero
      *
-     * @param \Libreame\BackendBundle\Entity\LbUsuarios $inejeusudueno
+     * @param \Libreame\BackendBundle\Entity\LbGeneros $inejegenero
      * @return LbEjemplares
      */
-    public function setInejeusudueno(\Libreame\BackendBundle\Entity\LbUsuarios $inejeusudueno = null)
+    public function setInejegenero(\Libreame\BackendBundle\Entity\LbGeneros $inejegenero = null)
     {
-        $this->inejeusudueno = $inejeusudueno;
+        $this->inejegenero = $inejegenero;
 
         return $this;
     }
 
     /**
-     * Get inejeusudueno
+     * Get inejegenero
      *
-     * @return \Libreame\BackendBundle\Entity\LbUsuarios 
+     * @return \Libreame\BackendBundle\Entity\LbGeneros 
      */
-    public function getInejeusudueno()
+    public function getInejegenero()
     {
-        return $this->inejeusudueno;
+        return $this->inejegenero;
     }
 
     /**
@@ -143,25 +143,25 @@ class LbEjemplares
     }
 
     /**
-     * Set inejegenero
+     * Set inejeusudueno
      *
-     * @param \Libreame\BackendBundle\Entity\LbGeneros $inejegenero
+     * @param \Libreame\BackendBundle\Entity\LbUsuarios $inejeusudueno
      * @return LbEjemplares
      */
-    public function setInejegenero(\Libreame\BackendBundle\Entity\LbGeneros $inejegenero = null)
+    public function setInejeusudueno(\Libreame\BackendBundle\Entity\LbUsuarios $inejeusudueno = null)
     {
-        $this->inejegenero = $inejegenero;
+        $this->inejeusudueno = $inejeusudueno;
 
         return $this;
     }
 
     /**
-     * Get inejegenero
+     * Get inejeusudueno
      *
-     * @return \Libreame\BackendBundle\Entity\LbGeneros 
+     * @return \Libreame\BackendBundle\Entity\LbUsuarios 
      */
-    public function getInejegenero()
+    public function getInejeusudueno()
     {
-        return $this->inejegenero;
+        return $this->inejeusudueno;
     }
 }

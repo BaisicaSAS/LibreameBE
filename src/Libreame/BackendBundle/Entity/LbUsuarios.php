@@ -21,8 +21,9 @@ class LbUsuarios
 
     /**
      * @var string
+     * Modificado para adicionar default '0'
      */
-    private $txusutelefono;
+    private $txusutelefono = '0';
 
     /**
      * @var string
@@ -31,8 +32,9 @@ class LbUsuarios
 
     /**
      * @var integer
+     * Modificado para adicionar default 2: Sin especificar
      */
-    private $inusugenero;
+    private $inusugenero = 2;
 
     /**
      * @var string
@@ -56,8 +58,9 @@ class LbUsuarios
 
     /**
      * @var integer
+     * Moficado para adicionar default 0:  Esperando confirmación
      */
-    private $inusuestado;
+    private $inusuestado = 0;
 
     /**
      * @var \Libreame\BackendBundle\Entity\LbLugares

@@ -2,6 +2,14 @@ parameters:
 #    libreame_backend.example.class: Libreame\BackendBundle\Example
 
 services:
-#    libreame_backend.example:
-#        class: %libreame_backend.example.class%
+    logica_service:
+        class: Libreame\BackendBundle\Helpers\Logica
+#        arguments: [@service_id, "plain_value", %parameter%]
+
+    acceso_service:
+        class: Libreame\BackendBundle\Controller\AccesoController
+#        arguments: [@service_id, "plain_value", %parameter%]
+
+    registro_service:
+        class: Libreame\BackendBundle\Helpers\Registro
 #        arguments: [@service_id, "plain_value", %parameter%]

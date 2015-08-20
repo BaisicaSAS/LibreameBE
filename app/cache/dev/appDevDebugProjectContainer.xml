@@ -31,11 +31,12 @@
     <parameter key="database_user">root</parameter>
     <parameter key="database_password">root</parameter>
     <parameter key="locale">en</parameter>
-    <parameter key="secret">ThisTokenIsNotSoSecretChangeIt</parameter>
+    <parameter key="secret">818540f6bc2c9676a5a44bdb6e65758b9dc2c2f4</parameter>
     <parameter key="mailer_transport">gmail</parameter>
     <parameter key="mailer_host">null</parameter>
     <parameter key="mailer_user">baisicasas</parameter>
     <parameter key="mailer_password">b41s1c4s4s</parameter>
+    <parameter key="database_path">null</parameter>
     <parameter key="controller_resolver.class">Symfony\Bundle\FrameworkBundle\Controller\ControllerResolver</parameter>
     <parameter key="controller_name_converter.class">Symfony\Bundle\FrameworkBundle\Controller\ControllerNameParser</parameter>
     <parameter key="response_listener.class">Symfony\Component\HttpKernel\EventListener\ResponseListener</parameter>
@@ -89,7 +90,7 @@
     <parameter key="debug.stopwatch.class">Symfony\Component\Stopwatch\Stopwatch</parameter>
     <parameter key="debug.container.dump">C:/xampp/htdocs/LibreameBE/app/cache/dev/appDevDebugProjectContainer.xml</parameter>
     <parameter key="debug.controller_resolver.class">Symfony\Component\HttpKernel\Controller\TraceableControllerResolver</parameter>
-    <parameter key="kernel.secret">ThisTokenIsNotSoSecretChangeIt</parameter>
+    <parameter key="kernel.secret">818540f6bc2c9676a5a44bdb6e65758b9dc2c2f4</parameter>
     <parameter key="kernel.http_method_override">true</parameter>
     <parameter key="kernel.trusted_hosts" type="collection"/>
     <parameter key="kernel.trusted_proxies" type="collection"/>
@@ -432,7 +433,7 @@
     <parameter key="assetic.read_from">C:/xampp/htdocs/LibreameBE/app/../web</parameter>
     <parameter key="assetic.write_to">C:/xampp/htdocs/LibreameBE/app/../web</parameter>
     <parameter key="assetic.variables" type="collection"/>
-    <parameter key="assetic.java.bin">C:\Windows\system32\java.EXE</parameter>
+    <parameter key="assetic.java.bin">C:\ProgramData\Oracle\Java\javapath\java.EXE</parameter>
     <parameter key="assetic.node.bin">C:\Program Files\nodejs\\node.EXE</parameter>
     <parameter key="assetic.ruby.bin">/usr/bin/ruby</parameter>
     <parameter key="assetic.sass.bin">/usr/bin/sass</parameter>
@@ -654,7 +655,7 @@
       <argument>C:/xampp/htdocs/LibreameBE/app/Resources</argument>
     </service>
     <service id="uri_signer" class="Symfony\Component\HttpKernel\UriSigner">
-      <argument>ThisTokenIsNotSoSecretChangeIt</argument>
+      <argument>818540f6bc2c9676a5a44bdb6e65758b9dc2c2f4</argument>
     </service>
     <service id="fragment.handler" class="Symfony\Component\HttpKernel\Fragment\FragmentHandler">
       <argument type="collection"/>
@@ -2344,11 +2345,13 @@
               <service class="Doctrine\ORM\Mapping\Driver\DriverChain" public="false">
                 <call method="addDriver">
                   <argument type="service">
-                    <service class="Doctrine\ORM\Mapping\Driver\AnnotationDriver" public="false">
-                      <argument type="service" id="annotation_reader"/>
+                    <service class="Doctrine\ORM\Mapping\Driver\SimplifiedYamlDriver" public="false">
                       <argument type="collection">
-                        <argument>C:\xampp\htdocs\LibreameBE\src\Libreame\BackendBundle\Entity</argument>
+                        <argument key="C:\xampp\htdocs\LibreameBE\src\Libreame\BackendBundle\Resources\config\doctrine">Libreame\BackendBundle\Entity</argument>
                       </argument>
+                      <call method="setGlobalBasename">
+                        <argument>mapping</argument>
+                      </call>
                     </service>
                   </argument>
                   <argument>Libreame\BackendBundle\Entity</argument>
@@ -2426,6 +2429,9 @@
       <argument type="service" id="security.authentication.trust_resolver" on-invalid="null"/>
       <argument type="service" id="security.role_hierarchy" on-invalid="null"/>
     </service>
+    <service id="logica_service" class="Libreame\BackendBundle\Helpers\Logica"/>
+    <service id="acceso_service" class="Libreame\BackendBundle\Controller\AccesoController"/>
+    <service id="registro_service" class="Libreame\BackendBundle\Helpers\Registro"/>
     <service id="twig.extension.acme.demo" class="Acme\DemoBundle\Twig\Extension\DemoExtension" public="false">
       <tag name="twig.extension"/>
       <argument type="service" id="twig.loader"/>

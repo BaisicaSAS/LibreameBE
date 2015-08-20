@@ -32,6 +32,7 @@ class appDevDebugProjectContainer extends Container
         $this->scopes = array('request' => 'container');
         $this->scopeChildren = array('request' => array());
         $this->methodMap = array(
+            'acceso_service' => 'getAccesoServiceService',
             'acme.demo.listener' => 'getAcme_Demo_ListenerService',
             'annotation_reader' => 'getAnnotationReaderService',
             'assetic.asset_factory' => 'getAssetic_AssetFactoryService',
@@ -117,6 +118,7 @@ class appDevDebugProjectContainer extends Container
             'kernel' => 'getKernelService',
             'locale_listener' => 'getLocaleListenerService',
             'logger' => 'getLoggerService',
+            'logica_service' => 'getLogicaServiceService',
             'monolog.handler.console' => 'getMonolog_Handler_ConsoleService',
             'monolog.handler.debug' => 'getMonolog_Handler_DebugService',
             'monolog.handler.main' => 'getMonolog_Handler_MainService',
@@ -132,6 +134,7 @@ class appDevDebugProjectContainer extends Container
             'profiler' => 'getProfilerService',
             'profiler_listener' => 'getProfilerListenerService',
             'property_accessor' => 'getPropertyAccessorService',
+            'registro_service' => 'getRegistroServiceService',
             'request' => 'getRequestService',
             'request_stack' => 'getRequestStackService',
             'response_listener' => 'getResponseListenerService',
@@ -255,6 +258,19 @@ class appDevDebugProjectContainer extends Container
             'swiftmailer.transport' => 'swiftmailer.mailer.default.transport',
             'swiftmailer.transport.real' => 'swiftmailer.mailer.default.transport.real',
         );
+    }
+
+    /**
+     * Gets the 'acceso_service' service.
+     *
+     * This service is shared.
+     * This method always returns the same instance of the service.
+     *
+     * @return Libreame\BackendBundle\Controller\AccesoController A Libreame\BackendBundle\Controller\AccesoController instance.
+     */
+    protected function getAccesoServiceService()
+    {
+        return $this->services['acceso_service'] = new \Libreame\BackendBundle\Controller\AccesoController();
     }
 
     /**
@@ -613,23 +629,26 @@ class appDevDebugProjectContainer extends Container
         $c = new \Doctrine\Common\Cache\ArrayCache();
         $c->setNamespace('sf2orm_default_ba447d131dcfe088394a43785676a2250b7ecdf27aba8e8792cf37ae7a173a48');
 
-        $d = new \Doctrine\ORM\Mapping\Driver\DriverChain();
-        $d->addDriver(new \Doctrine\ORM\Mapping\Driver\AnnotationDriver($this->get('annotation_reader'), array(0 => 'C:\\xampp\\htdocs\\LibreameBE\\src\\Libreame\\BackendBundle\\Entity')), 'Libreame\\BackendBundle\\Entity');
+        $d = new \Doctrine\ORM\Mapping\Driver\SimplifiedYamlDriver(array('C:\\xampp\\htdocs\\LibreameBE\\src\\Libreame\\BackendBundle\\Resources\\config\\doctrine' => 'Libreame\\BackendBundle\\Entity'));
+        $d->setGlobalBasename('mapping');
 
-        $e = new \Doctrine\ORM\Configuration();
-        $e->setEntityNamespaces(array('LibreameBackendBundle' => 'Libreame\\BackendBundle\\Entity'));
-        $e->setMetadataCacheImpl($a);
-        $e->setQueryCacheImpl($b);
-        $e->setResultCacheImpl($c);
-        $e->setMetadataDriverImpl($d);
-        $e->setProxyDir('C:/xampp/htdocs/LibreameBE/app/cache/dev/doctrine/orm/Proxies');
-        $e->setProxyNamespace('Proxies');
-        $e->setAutoGenerateProxyClasses(true);
-        $e->setClassMetadataFactoryName('Doctrine\\ORM\\Mapping\\ClassMetadataFactory');
-        $e->setDefaultRepositoryClassName('Doctrine\\ORM\\EntityRepository');
-        $e->setNamingStrategy(new \Doctrine\ORM\Mapping\DefaultNamingStrategy());
+        $e = new \Doctrine\ORM\Mapping\Driver\DriverChain();
+        $e->addDriver($d, 'Libreame\\BackendBundle\\Entity');
 
-        $this->services['doctrine.orm.default_entity_manager'] = $instance = call_user_func(array('Doctrine\\ORM\\EntityManager', 'create'), $this->get('doctrine.dbal.default_connection'), $e);
+        $f = new \Doctrine\ORM\Configuration();
+        $f->setEntityNamespaces(array('LibreameBackendBundle' => 'Libreame\\BackendBundle\\Entity'));
+        $f->setMetadataCacheImpl($a);
+        $f->setQueryCacheImpl($b);
+        $f->setResultCacheImpl($c);
+        $f->setMetadataDriverImpl($e);
+        $f->setProxyDir('C:/xampp/htdocs/LibreameBE/app/cache/dev/doctrine/orm/Proxies');
+        $f->setProxyNamespace('Proxies');
+        $f->setAutoGenerateProxyClasses(true);
+        $f->setClassMetadataFactoryName('Doctrine\\ORM\\Mapping\\ClassMetadataFactory');
+        $f->setDefaultRepositoryClassName('Doctrine\\ORM\\EntityRepository');
+        $f->setNamingStrategy(new \Doctrine\ORM\Mapping\DefaultNamingStrategy());
+
+        $this->services['doctrine.orm.default_entity_manager'] = $instance = call_user_func(array('Doctrine\\ORM\\EntityManager', 'create'), $this->get('doctrine.dbal.default_connection'), $f);
 
         $this->get('doctrine.orm.default_manager_configurator')->configure($instance);
 
@@ -1402,6 +1421,19 @@ class appDevDebugProjectContainer extends Container
     }
 
     /**
+     * Gets the 'logica_service' service.
+     *
+     * This service is shared.
+     * This method always returns the same instance of the service.
+     *
+     * @return Libreame\BackendBundle\Helpers\Logica A Libreame\BackendBundle\Helpers\Logica instance.
+     */
+    protected function getLogicaServiceService()
+    {
+        return $this->services['logica_service'] = new \Libreame\BackendBundle\Helpers\Logica();
+    }
+
+    /**
      * Gets the 'monolog.handler.console' service.
      *
      * This service is shared.
@@ -1674,6 +1706,19 @@ class appDevDebugProjectContainer extends Container
     protected function getPropertyAccessorService()
     {
         return $this->services['property_accessor'] = new \Symfony\Component\PropertyAccess\PropertyAccessor();
+    }
+
+    /**
+     * Gets the 'registro_service' service.
+     *
+     * This service is shared.
+     * This method always returns the same instance of the service.
+     *
+     * @return Libreame\BackendBundle\Helpers\Registro A Libreame\BackendBundle\Helpers\Registro instance.
+     */
+    protected function getRegistroServiceService()
+    {
+        return $this->services['registro_service'] = new \Libreame\BackendBundle\Helpers\Registro();
     }
 
     /**
@@ -2984,7 +3029,7 @@ class appDevDebugProjectContainer extends Container
      */
     protected function getUriSignerService()
     {
-        return $this->services['uri_signer'] = new \Symfony\Component\HttpKernel\UriSigner('ThisTokenIsNotSoSecretChangeIt');
+        return $this->services['uri_signer'] = new \Symfony\Component\HttpKernel\UriSigner('818540f6bc2c9676a5a44bdb6e65758b9dc2c2f4');
     }
 
     /**
@@ -3451,11 +3496,12 @@ class appDevDebugProjectContainer extends Container
             'database_user' => 'root',
             'database_password' => 'root',
             'locale' => 'en',
-            'secret' => 'ThisTokenIsNotSoSecretChangeIt',
+            'secret' => '818540f6bc2c9676a5a44bdb6e65758b9dc2c2f4',
             'mailer_transport' => 'gmail',
             'mailer_host' => NULL,
             'mailer_user' => 'baisicasas',
             'mailer_password' => 'b41s1c4s4s',
+            'database_path' => NULL,
             'controller_resolver.class' => 'Symfony\\Bundle\\FrameworkBundle\\Controller\\ControllerResolver',
             'controller_name_converter.class' => 'Symfony\\Bundle\\FrameworkBundle\\Controller\\ControllerNameParser',
             'response_listener.class' => 'Symfony\\Component\\HttpKernel\\EventListener\\ResponseListener',
@@ -3509,7 +3555,7 @@ class appDevDebugProjectContainer extends Container
             'debug.stopwatch.class' => 'Symfony\\Component\\Stopwatch\\Stopwatch',
             'debug.container.dump' => 'C:/xampp/htdocs/LibreameBE/app/cache/dev/appDevDebugProjectContainer.xml',
             'debug.controller_resolver.class' => 'Symfony\\Component\\HttpKernel\\Controller\\TraceableControllerResolver',
-            'kernel.secret' => 'ThisTokenIsNotSoSecretChangeIt',
+            'kernel.secret' => '818540f6bc2c9676a5a44bdb6e65758b9dc2c2f4',
             'kernel.http_method_override' => true,
             'kernel.trusted_hosts' => array(
 
@@ -3870,7 +3916,7 @@ class appDevDebugProjectContainer extends Container
             'assetic.variables' => array(
 
             ),
-            'assetic.java.bin' => 'C:\\Windows\\system32\\java.EXE',
+            'assetic.java.bin' => 'C:\\ProgramData\\Oracle\\Java\\javapath\\java.EXE',
             'assetic.node.bin' => 'C:\\Program Files\\nodejs\\\\node.EXE',
             'assetic.ruby.bin' => '/usr/bin/ruby',
             'assetic.sass.bin' => '/usr/bin/sass',

@@ -1,0 +1,72 @@
+Libreame\BackendBundle\Entity\LbActividadofertas:
+    type: entity
+    table: lb_actividadofertas
+    indexes:
+        fk_lb_ActividadOfertas_lb_usuarios1_idx:
+            columns:
+                - inActUsuario
+        fk_lb_ActividadOfertas_lb_ofertas1_idx:
+            columns:
+                - inActOferta
+        fk_lb_ActividadOfertas_lb_ActividadOfertas1_idx:
+            columns:
+                - inActPadreAct
+    id:
+        inactividadoferta:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: ''
+            id: true
+            column: inActividadOferta
+            generator:
+                strategy: IDENTITY
+    fields:
+        feactfechahora:
+            type: datetime
+            nullable: false
+            comment: 'Fecha del movimiento en el hilo'
+            column: feActFechaHora
+        txactdescripcion:
+            type: string
+            nullable: true
+            length: 300
+            fixed: false
+            comment: 'Permite consignar preguntas, contraofertas, responderlas etc.'
+            column: txActDescripcion
+        inactestado:
+            type: integer
+            nullable: true
+            unsigned: false
+            comment: "0: No leido\n1: Leido\n2: Ofensivo/Oculto\n3: Privado\n4: Eliminado del hilo (No se eliminan pero estos no deben aparecer nunca.)\n"
+            default: '0'
+            column: inActEstado
+    manyToOne:
+        inactpadreact:
+            targetEntity: LbActividadofertas
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                inActPadreAct:
+                    referencedColumnName: inActividadOferta
+            orphanRemoval: false
+        inactoferta:
+            targetEntity: LbOfertas
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                inActOferta:
+                    referencedColumnName: inOferta
+            orphanRemoval: false
+        inactusuario:
+            targetEntity: LbUsuarios
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                inActUsuario:
+                    referencedColumnName: inUsuario
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

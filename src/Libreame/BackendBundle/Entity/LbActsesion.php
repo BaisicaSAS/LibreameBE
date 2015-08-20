@@ -15,9 +15,9 @@ class LbActsesion
     private $inactsesion;
 
     /**
-     * @var integer
+     * @var string
      */
-    private $inactaccion;
+    private $txactaccion;
 
     /**
      * @var string
@@ -41,24 +41,24 @@ class LbActsesion
 
 
     /**
-     * Get inactsesion
+     * Get txactsesion
      *
-     * @return integer 
+     * @return string 
      */
-    public function getInactsesion()
+    public function getTxactsesion()
     {
-        return $this->inactsesion;
+        return $this->txactsesion;
     }
 
     /**
-     * Set inactaccion
+     * Set txactaccion
      *
-     * @param integer $inactaccion
+     * @param string $txactaccion
      * @return LbActsesion
      */
-    public function setInactaccion($inactaccion)
+    public function setTxactaccion($txactaccion)
     {
-        $this->inactaccion = $inactaccion;
+        $this->txactaccion = $txactaccion;
 
         return $this;
     }
@@ -68,9 +68,9 @@ class LbActsesion
      *
      * @return integer 
      */
-    public function getInactaccion()
+    public function getTxactaccion()
     {
-        return $this->inactaccion;
+        return $this->txactaccion;
     }
 
     /**
