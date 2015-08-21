@@ -57,10 +57,10 @@ class Logica
     {
         $respuesta = self::inFallido;
         //echo "<script>alert('".$accion."-".$this->txAccRegistro."')</script>";
-        
-        switch ($sesion->getAccion()){
+        $tmpSesion = $sesion->getAccion();
+        switch ($tmpSesion){
             case self::txAccRegistro: {
-                //echo "<script>alert('Antes de entrar a Registro')</script>";
+                //echo "<script>alert('Antes de entrar a Registro-".$tmpSesion."')</script>";
                 $objRegistro = $this->get('registro_service');
                 $respuesta = $objRegistro::registroUsuario($sesion);
             }    

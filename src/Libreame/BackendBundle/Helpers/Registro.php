@@ -82,11 +82,12 @@ class Registro {
                     //echo "<script>alert('Guardó usuario...va a generar sesion ')</script>";
                     setlocale (LC_TIME, "es_CO");
                     $fecha = date('c');
-                    //echo "<script>alert('".$fecha."')</script>";
+                    //echo "<script
+                    //>alert('".$fecha."')</script>";
                     $sesion = $objAcceso::generaSesion(self::inDatoCer,$fecha,$fecha,$device,$pSesion->getIPaddr());
                     //Guarda la actividad de la sesion:: Como finalizada
                     //echo "<script>alert('Guardó usuario...va a generar sesion ')</script>";
-                    $actsesion = $objAcceso::generaActSesion($sesion,self::inDatoUno,self::txMensaje,$pSesion->getAccion());
+                    $actsesion = $objAcceso::generaActSesion($sesion,self::inDatoUno,self::txMensaje,$pSesion->getAccion(),$fecha,$fecha);
                     //echo "<script>alert('Generó actividad de sesion ')</script>";
 
                     //Envia email

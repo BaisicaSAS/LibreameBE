@@ -3863,3 +3863,13 @@ d2265a,::1,GET,http://localhost/LibreameBE/web/app_dev.php/ingreso/TESTB149,1440
 2243fd,::1,GET,http://localhost/LibreameBE/web/app_dev.php/ingreso/TESTB150,1440104966,
 c4b54d,::1,GET,http://localhost/LibreameBE/web/app_dev.php/ingreso/TESTB135,1440104966,180cd6
 180cd6,::1,GET,http://localhost/LibreameBE/web/app_dev.php/ingreso/TESTB135,1440104966,
+da71bb,::1,GET,http://localhost/LibreameBE/web/app_dev.php/ingreso/TESTC2,1440107667,f429b9
+f429b9,::1,GET,http://localhost/LibreameBE/web/app_dev.php/ingreso/TESTC2,1440107667,
+5d82c7,::1,GET,http://localhost/LibreameBE/web/app_dev.php/ingreso/TESTC10,1440107730,216ca4
+216ca4,::1,GET,http://localhost/LibreameBE/web/app_dev.php/ingreso/TESTC10,1440107730,
+e52e57,::1,GET,http://localhost/LibreameBE/web/app_dev.php/ingreso/TESTC1,1440107749,22f4be
+22f4be,::1,GET,http://localhost/LibreameBE/web/app_dev.php/ingreso/TESTC1,1440107749,
+d85ebc,::1,GET,http://localhost/LibreameBE/web/app_dev.php/ingreso/TESTC10,1440108813,58cf7c
+58cf7c,::1,GET,http://localhost/LibreameBE/web/app_dev.php/ingreso/TESTC10,1440108813,
+fb6618,::1,GET,http://localhost/LibreameBE/web/app_dev.php/ingreso/TESTF10,1440108817,6a6f7d
+6a6f7d,::1,GET,http://localhost/LibreameBE/web/app_dev.php/ingreso/TESTF10,1440108817,

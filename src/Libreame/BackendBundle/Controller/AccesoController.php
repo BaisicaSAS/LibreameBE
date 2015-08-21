@@ -175,7 +175,7 @@ class AccesoController extends Controller
     /*
      * GeneraActSesion 
      */
-    public function generaActSesion($pSesion,$pFinalizada,$pMensaje,$pAccion)
+    public function generaActSesion($pSesion,$pFinalizada,$pMensaje,$pAccion,$pFecIni,$pFecFin)
     {
         //Guarda la sesion inactiva
         echo "<script>alert('Ingresa a generar actividad de sesion".$pFecFin."-".$pFecIni."')</script>";

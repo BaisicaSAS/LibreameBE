@@ -22,7 +22,7 @@ class Sesion {
     private $pClave;
     private $pTelefono;
     
-    private $
+    //private $
     
 
     /*
