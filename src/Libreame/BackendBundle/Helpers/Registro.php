@@ -33,7 +33,7 @@ class Registro {
     const inGenMasc =  0; //Genero del usuario: Masculino
     const inTamVali =  40; //Tamaño del ID para confirmacion del Registro
     const inTamSesi =  30; //Tamaño del id de sesion generado
-    const txMensaje =  'Solicitud de registro de usuario en Libreame'; //Mensaje estandar para el registro de usuario
+    const txMensaje =  'Solicitud de registro de usuario en Ex4Read'; //Mensaje estandar para el registro de usuario
 
     public function registroUsuario($pSesion)
     {   

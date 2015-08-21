@@ -70,6 +70,7 @@ class AccesoController extends Controller
                 //echo "<script>alert('".$datos."')</script>";
             }
 
+            //Aquí iniciaría el código en producción, el bloque anterior solo funciona para TEST
             //Se evalúa si se logró obtener la información de sesion desde el JSON
             $jsonValido = $this->descomponerJson($datos);
             //echo "<script>alert('Validación retornó: ".$jsonValido."')</script>"; 
