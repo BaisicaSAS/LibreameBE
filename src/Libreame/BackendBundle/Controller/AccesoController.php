@@ -6,7 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Libreame\BackendBundle\Entity\LbSesiones;
 use Libreame\BackendBundle\Entity\LbActsesion;
-use Libreame\BackendBundle\Helpers\Sesion;
+use Libreame\BackendBundle\Helpers\Solicitud;
 
 
 /*
@@ -33,7 +33,7 @@ class AccesoController extends Controller
     const inGenFeme =  1; //Genero del usuario: Femenino
     const inGenMasc =  0; //Genero del usuario: Masculino
     const inTamVali =  40; //Tamaño del ID para confirmacion del Registro
-    const inTamSesi =  20; //Tamaño del id de sesion generado
+    const inTamSesi =  30; //Tamaño del id de sesion generado
     const txMensaje =  'Solicitud de registro de usuario en Libreame'; //Mensaje estandar para el registro de usuario
 
     var $objSesion;
@@ -63,11 +63,12 @@ class AccesoController extends Controller
             //Este bloque es solo de Prueba
             if ($modo == 'TEST') {
                 //echo "<script>alert('Reconoce prueba')</script>"; 
-                $prueba = array('idsesion' => array ('idtrx' => $idreg.'-123456789012345'.$texto, 'fecha'=> '01/01/2015 11:43:25 PM', 
+                $prueba = array(array('idsesion' => array ('idtrx' => $idreg.'-123456789012345'.$texto, 'fecha'=> '01/01/2015 11:43:25 PM', 
                     'device'=> 'ANDROID001', 'ipaddr'=> '200.000.000.000', 'idaccion' => 'C01', 'usuario' => $idreg.'-alexviatela', 
-                    'clave' => 'clave12345', 'telefono' => $idreg."-".$texto));                
+                    'clave' => 'clave12345', 'telefono' => $idreg."-".$texto)), 
+                    array('idsolicitud' => array('email' => 'alexviatela@gmail.com')));
                 $datos = json_encode($prueba);
-                //echo "<script>alert('".$datos."')</script>";
+                echo "<script>alert('".$datos."')</script>";
             }
 
             //Aquí iniciaría el código en producción, el bloque anterior solo funciona para TEST
@@ -82,7 +83,7 @@ class AccesoController extends Controller
                 //echo "<script>alert('Encontramos un problema con tu registro: ".$this->$objSesion->getSession()."-".$jsonValido."')</script>"; 
                 //@TODO: Debemos revisar que hacer cuando se detecta actividad sospechosa: Cierro sesion?. Bloqueo usuario e informo?
             }
-            //echo "<script>alert('ingresarSistemaAction: ".$respuesta."')</script>"; 
+            echo "<script>alert('RESPUESTA ingresarSistemaAction: ".$respuesta."')</script>"; 
             return $respuesta;
                     
         } catch (Exception $ex) {
@@ -104,19 +105,24 @@ class AccesoController extends Controller
     {   $resp = self::inFallido;
         try {
             $json_datos = json_decode($datos, true);
-            //echo "<script>alert('Inicia a decodificar')</script>"; 
-            $this->objSesion = new Sesion();
-            $this->objSesion->setSession($json_datos['idsesion']['idtrx']);
-            $this->objSesion->setFechaHora($json_datos['idsesion']['fecha']);
-            $this->objSesion->setDevice($json_datos['idsesion']['device']);
-            $this->objSesion->setIPaddr($json_datos['idsesion']['ipaddr']);
-            $this->objSesion->setAccion($json_datos['idsesion']['idaccion']);
-            $this->objSesion->setUsuario($json_datos['idsesion']['usuario']);
-            $this->objSesion->setClave($json_datos['idsesion']['clave']);
-            $this->objSesion->setTelefono($json_datos['idsesion']['telefono']);
-            //echo "<script>alert('SESION: ".$this->pSession.": Finalizó')</script>"; 
+            echo "<script>alert('Inicia a decodificar-----".$json_datos[0]['idsesion']['idtrx']."')</script>"; 
+            $this->objSesion = new Solicitud();
+            $this->objSesion->setSession($json_datos[0]['idsesion']['idtrx']);
+            echo "<script>alert(':::TRANS: ".$json_datos[0]['idsesion']['idtrx']."')</script>"; 
+            $this->objSesion->setFechaHora($json_datos[0]['idsesion']['fecha']);
+            $this->objSesion->setDevice($json_datos[0]['idsesion']['device']);
+            $this->objSesion->setIPaddr($json_datos[0]['idsesion']['ipaddr']);
+            $this->objSesion->setAccion($json_datos[0]['idsesion']['idaccion']);
+            $this->objSesion->setUsuario($json_datos[0]['idsesion']['usuario']);
+            echo "<script>alert(':::USUARIO: ".$json_datos[0]['idsesion']['usuario']."')</script>"; 
+            $this->objSesion->setClave($json_datos[0]['idsesion']['clave']);
+            $this->objSesion->setTelefono($json_datos[0]['idsesion']['telefono']);
+            echo "<script>alert(':::EMAIL: ".$json_datos[1]['idsolicitud']['email']."')</script>"; 
+            $this->objSesion->setEmail($json_datos[1]['idsolicitud']['email']);
+
+            echo "<script>alert('SESION: ".$this->objSesion->getSession().": Finalizó')</script>"; 
             $resp = self::inExitoso;
-            //echo "<script>alert('Decodificó e instació el objeto')</script>"; 
+            echo "<script>alert('Decodificó e instació el objeto')</script>"; 
             return $resp;
         } catch (Exception $ex) {
         } finally {
@@ -152,7 +158,7 @@ class AccesoController extends Controller
     public function generaSesion($pEstado,$pFecIni,$pFecFin,$pDevice,$pIpAdd)
     {
         //Guarda la sesion inactiva
-        //echo "<script>alert('Ingresa a generar sesion".$pFecFin."-".$pFecIni."')</script>";
+        echo "<script>alert('Ingresa a generar sesion".$pFecFin."-".$pFecIni."')</script>";
         try{
             $objLogica = $this->get('logica_service');
             $em = $this->getDoctrine()->getManager();
@@ -170,6 +176,7 @@ class AccesoController extends Controller
             return $sesion;
             
         } catch (Exception $ex) {
+                //echo "<script>alert('Error guardar sesion')</script>";
                 return self::inDescone;
         } 
     }
@@ -183,8 +190,10 @@ class AccesoController extends Controller
         try{
             $em = $this->getDoctrine()->getManager();
             
+            echo "<script>alert('::::Actividad Sesion".$pFecFin."-".$pFecIni."')</script>";
             $actsesion = new LbActsesion();
-            $actsesion->setInactsesiondisus($pSesion->getInsesdispusuario());
+            //$actsesion->setInactsesiondisus($pSesion->getInsesdispusuario());
+            $actsesion->setInactsesiondisus($pSesion);
             $actsesion->setTxactaccion($pAccion);
             $actsesion->setFeactfecha($pSesion->getFesesfechaini());
             $actsesion->setInactfinalizada($pFinalizada);
@@ -234,5 +243,23 @@ class AccesoController extends Controller
         } catch (Exception $ex) {
             return self::inDescone;
         }     
+    }
+    
+    /*
+     * enviaMailRegistro 
+     * Se encarga de enviar el email con el que el usuario confirmara su registro
+     */
+    public function enviaMailRegistro($usuario)
+    {   
+        $message = \Swift_Message::newInstance()
+                ->setContentType('text/html')
+                ->setSubject('Bienvenido a ex4Read '.$usuario->getTxusunombre())
+                ->setFrom('baisicasas@gmail.com')
+                ->setTo($usuario->getTxusuemail())
+                ->setBody($usuario->gettxusuvalidacion());
+
+        $this->get('mailer')->send($message);
+        
+        return 0;
     }
 }

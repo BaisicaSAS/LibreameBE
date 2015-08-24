@@ -56,7 +56,7 @@ class Registro {
             if (!$em->getRepository('LibreameBackendBundle:LbUsuarios')->findOneBy(array('txusuemail' => $pSesion->getUsuario()))){
                 try {
                     //Guarda el usuario
-                    $usuario->setTxusuemail($pSesion->getUsuario());  
+                    $usuario->setTxusuemail($pSesion->getEmail());  
                     $usuario->setTxusutelefono($pSesion->getTelefono());  
                     $usuario->setTxusunombre($pSesion->getUsuario());  
                     $usuario->setTxusuimagen('DEFAUL IMAGE URL');  
@@ -91,7 +91,7 @@ class Registro {
                     //echo "<script>alert('Generó actividad de sesion ')</script>";
 
                     //Envia email
-                    $objAcceso::enviaMailRegistro($usuario);
+                    $mailsent = $objAcceso::enviaMailRegistro($usuario);
                     //echo "<script>alert('Envió mail ')</script>";
                     
                     return self::inExitoso;
@@ -109,19 +109,4 @@ class Registro {
         
     }
     
-    /*
-     * enviaMailRegistro 
-     * Se encarga de enviar el email con el que el usuario confirmara su registro
-     */
-    private function enviaMailRegistro($usuario)
-    {   
-        $message = \Swift_Message::newInstance()
-                ->setContentType('text/html')
-                ->setSubject('Bienvenido a Libreame '.$this->getUsuario())
-                ->setFrom('baisicasas@gmail.com')
-                ->setTo($this->getUsuario())
-                ->setBody($usuario->gettxusuvalidacion());
-
-        $this->get('mailer')->send($message);
-    }
 }
