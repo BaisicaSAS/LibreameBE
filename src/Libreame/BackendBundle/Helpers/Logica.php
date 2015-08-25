@@ -65,7 +65,7 @@ class Logica
                 $respuesta = $objRegistro::registroUsuario($sesion);
             }    
         }
-        //echo "<script>alert('ejecuta Accion: ".$respuesta."')</script>";
+        echo "<script>alert('ejecuta Accion: ".$respuesta."')</script>";
         return $respuesta;
     }
     

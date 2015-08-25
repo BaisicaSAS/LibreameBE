@@ -12,53 +12,25 @@ class Solicitud {
     //@TODO: Reorganizar el encabezado para que contenga solo IDs, y solo la información que identifica la Transaccion. 
     //Todo el resto debe ir ebn el detalle...ejemplo el telefono
     //Atributos para el encabezado: identificado en el tag IDSESION del JSON
-    private $pSession; //Sesion ???? Diferencia con el anterior?
-    private $pIDSession;  //Id de la sesion ???? Diferencia con el anterior?
-    private $pFechaHora; //Fecha y hora de la solicitud
-    private $pDevice; //Nombre Dispositivo
-    private $pIDDevice; // Id del dispositivo
-    private $pIPaddr; //Direccion IP
     private $pAccion; //Accion solicitada
     private $pUsuario; //Nombre de usuario que realiza solicitud
-    private $pIDUsuario; //Id el usuario que realiza solicitud
-    private $pClave; //Clave del usuario
-    private $pTelefono; //Numero telefónico 
+    private $pSession; //Sesion ???? 
+    private $pIPaddr; //Direccion IP
+    private $pDeviceMAC; //MAC del Dispositivo
+    private $pDeviceMarca; // Marca del dispositivo
+    private $pDeviceModelo; //Modelo del dispositivo
+    private $pDeviceSO; //Sistema operativo del dispositivo
 
     //Atributos para el detalle: identificado en el tag IDSOLICITUD del JSON
+    //C01: Registro
     private $pEmail;
+    private $pClave; //Clave del usuario
+    private $pTelefono; //Numero telefónico 
     
-    //private $
-    
-
     /*
      *  Bloque de getter para los atributos de la clase
      */
     
-   
-    public function getSession() {
-        return $this->pSession;
-    }
-
-    public function getIDSession() {
-        return $this->pIDSession;
-    }
-
-    public function getFechaHora() {
-        return $this->pFechaHora;
-    }
-
-    public function getDevice() {
-        return $this->pDevice;
-    }
-
-    public function getIDDevice() {
-        return $this->pIDDevice;
-    }
-
-    public function getIPaddr() {
-        return $this->pIPaddr;
-    }
-
     public function getAccion() {
         return $this->pAccion;
     }
@@ -67,10 +39,34 @@ class Solicitud {
         return $this->pUsuario;
     }
 
-    public function getIDUsuario() {
-        return $this->pIDUsuario;
+    public function getSession() {
+        return $this->pSession;
     }
 
+    public function getIPaddr() {
+        return $this->pIPaddr;
+    }
+
+    public function getDeviceMac() {
+        return $this->pDeviceMAC;
+    }
+
+    public function getDeviceMarca() {
+        return $this->pDeviceMarca;
+    }
+
+    public function getDeviceModelo() {
+        return $this->pDeviceModelo;
+    }
+
+    public function getDeviceSO() {
+        return $this->pDeviceSO;
+    }
+
+    public function getEmail() {
+        return $this->pEmail;
+    }
+    
     public function getClave() {
         return $this->pClave;
     }
@@ -79,43 +75,9 @@ class Solicitud {
         return $this->pTelefono;
     }
     
-    public function getEmail() {
-        return $this->pEmail;
-    }
-    
     /*
      *  Bloque de setter para los atributos de la clase
      */
-    public function setSession($pSesion) {
-        $this->pSession = $pSesion;
-        return $this;
-    }
-
-    public function setIDSession($pIDSession) {
-        $this->pIDSession = $pIDSession;
-        return $this;
-    }
-
-    public function setFechaHora($pFechaHora) {
-        $this->pFechaHora = $pFechaHora;
-        return $this;
-    }
-
-    public function setDevice($pDevice) {
-        $this->pDevice = $pDevice;
-        return $this;
-    }
-
-    public function setIDDevice($pIDDevice) {
-        $this->pIDDevice = $pIDDevice;
-        return $this;
-    }
-
-    public function setIPaddr($pIPaddr) {
-        $this->pIPaddr = $pIPaddr;
-        return $this;
-    }
-
     public function setAccion($pAccion) {
         $this->pAccion = $pAccion;
         return $this;
@@ -126,8 +88,38 @@ class Solicitud {
         return $this;
     }
 
-    public function setIDUsuario($pIDUsuario) {
-        $this->pIDUsuario = $pIDUsuario;
+    public function setSession($pSesion) {
+        $this->pSession = $pSesion;
+        return $this;
+    }
+
+    public function setIPaddr($pIPaddr) {
+        $this->pIPaddr = $pIPaddr;
+        return $this;
+    }
+
+    public function setDeviceMAC($pDeviceMAC) {
+        $this->pDeviceMAC = $pDeviceMAC;
+        return $this;
+    }
+
+    public function setDeviceMarca($pDeviceMarca) {
+        $this->pDeviceMarca = $pDeviceMarca;
+        return $this;
+    }
+
+    public function setDeviceModelo($pDeviceModelo) {
+        $this->pDeviceModelo = $pDeviceModelo;
+        return $this;
+    }
+
+    public function setDeviceSO($pDeviceSO) {
+        $this->pDeviceSO = $pDeviceSO;
+        return $this;
+    }
+    
+    public function setEmail($pEmail) {
+        $this->pEmail = $pEmail;
         return $this;
     }
 
@@ -138,11 +130,6 @@ class Solicitud {
 
     public function setTelefono($pTelefono) {
         $this->pTelefono = $pTelefono;
-        return $this;
-    }
-    
-    public function setEmail($pEmail) {
-        $this->pEmail = $pEmail;
         return $this;
     }
     

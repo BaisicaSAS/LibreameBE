@@ -38,7 +38,7 @@ class AccesoController extends Controller
 
     var $objSesion;
     /*
-     * IngresarSistema es la funcion que recibe la información desde el cliente, para revisar y despachar
+     * IngresarSistema es la UNICA funcion que recibe la información desde el cliente, para revisar y despachar
      * Recibe un JSON, con la estructura definida como default mas los datos especificos de cada opcion.
      * 
      * @TODO: Es la mas importante para la integración con otros sistemas:: 
@@ -63,12 +63,14 @@ class AccesoController extends Controller
             //Este bloque es solo de Prueba
             if ($modo == 'TEST') {
                 //echo "<script>alert('Reconoce prueba')</script>"; 
-                $prueba = array(array('idsesion' => array ('idtrx' => $idreg.'-123456789012345'.$texto, 'fecha'=> '01/01/2015 11:43:25 PM', 
-                    'device'=> 'ANDROID001', 'ipaddr'=> '200.000.000.000', 'idaccion' => 'C01', 'usuario' => $idreg.'-alexviatela', 
-                    'clave' => 'clave12345', 'telefono' => $idreg."-".$texto)), 
-                    array('idsolicitud' => array('email' => 'alexviatela@gmail.com')));
+                $prueba = array(array('idsesion' => array ('idaccion' => 'C01','usuario' => $idreg.'-alexviatela',
+                    'idtrx' => $idreg.'-123456789012345'.$texto, 'ipaddr'=> '200.000.000.000', 
+                    'iddevice'=> 'MACADDRESS', 'marca'=>'LG', 'modelo'=>'G2 Mini', 'so'=>'KITKAT',
+                    )), 
+                    array('idsolicitud' => array('email' => $idreg.'alexviatela@gmail.com',
+                        'clave' => 'clave12345', 'telefono' => $idreg."-".$texto)));
                 $datos = json_encode($prueba);
-                echo "<script>alert('".$datos."')</script>";
+                //echo "<script>alert('".$datos."')</script>";
             }
 
             //Aquí iniciaría el código en producción, el bloque anterior solo funciona para TEST
@@ -83,11 +85,11 @@ class AccesoController extends Controller
                 //echo "<script>alert('Encontramos un problema con tu registro: ".$this->$objSesion->getSession()."-".$jsonValido."')</script>"; 
                 //@TODO: Debemos revisar que hacer cuando se detecta actividad sospechosa: Cierro sesion?. Bloqueo usuario e informo?
             }
-            echo "<script>alert('RESPUESTA ingresarSistemaAction: ".$respuesta."')</script>"; 
-            return $respuesta;
+            //echo "<script>alert('RESPUESTA ingresarSistemaAction: ".$respuesta."')</script>"; 
+            return new RESPONSE("Normal ".$respuesta);
                     
         } catch (Exception $ex) {
-            return $jsonValido;
+            return new RESPONSE("Catch ".$jsonValido);
         }    
              
     }
@@ -95,34 +97,48 @@ class AccesoController extends Controller
     /*
      * Descomponer: 
      * Funcion que extrae la informacion del JSON de ingresar
-     * {"idsesion":{["idtrx": "ses", "fecha": "fechahora", "device": "Dispositivo", "ipaddr": "IP Address", 
-     *               "idaccion": "accion", "usuario": "usuario", "clave": "clave", "telefono": "telefono"]},
+     * 1. Opción Solicitada
+     * 2. Usuario
+     * 3. Sesión
+     * 4. IP
+     * 5. Id del dispositivo: MAC
+     * 6. Marca del dispositivo
+     * 7. Modelo del dispositivo
+     * 8. Sistema operativo del dispositivo 
+     * {"idsesion":{["idaccion": "accion", "usuario": "usuario", "idtrx": "sesion", "ipaddr": "IP Address", 
+     *              "iddevice": "MAC Dispositivo", "marca": "Marca Dispositivo", "modelo": "Modelo Dispositivo", 
+     *              "so": "Sistema operativo Dispositivo"]},
      * 
-     *  "data":{[]}
+     *  "idsolicitud":{[]}
      * }
      */
     private function descomponerJson($datos)
     {   $resp = self::inFallido;
         try {
             $json_datos = json_decode($datos, true);
-            echo "<script>alert('Inicia a decodificar-----".$json_datos[0]['idsesion']['idtrx']."')</script>"; 
+            //echo "<script>alert('Inicia a decodificar-----".$json_datos[0]['idsesion']['idtrx']."')</script>"; 
             $this->objSesion = new Solicitud();
-            $this->objSesion->setSession($json_datos[0]['idsesion']['idtrx']);
-            echo "<script>alert(':::TRANS: ".$json_datos[0]['idsesion']['idtrx']."')</script>"; 
-            $this->objSesion->setFechaHora($json_datos[0]['idsesion']['fecha']);
-            $this->objSesion->setDevice($json_datos[0]['idsesion']['device']);
-            $this->objSesion->setIPaddr($json_datos[0]['idsesion']['ipaddr']);
+            //echo "<script>alert(':::TRANS: ".$json_datos[0]['idsesion']['idtrx']."')</script>"; 
             $this->objSesion->setAccion($json_datos[0]['idsesion']['idaccion']);
             $this->objSesion->setUsuario($json_datos[0]['idsesion']['usuario']);
-            echo "<script>alert(':::USUARIO: ".$json_datos[0]['idsesion']['usuario']."')</script>"; 
-            $this->objSesion->setClave($json_datos[0]['idsesion']['clave']);
-            $this->objSesion->setTelefono($json_datos[0]['idsesion']['telefono']);
-            echo "<script>alert(':::EMAIL: ".$json_datos[1]['idsolicitud']['email']."')</script>"; 
-            $this->objSesion->setEmail($json_datos[1]['idsolicitud']['email']);
-
-            echo "<script>alert('SESION: ".$this->objSesion->getSession().": Finalizó')</script>"; 
+            $this->objSesion->setSession($json_datos[0]['idsesion']['idtrx']);
+            $this->objSesion->setIPaddr($json_datos[0]['idsesion']['ipaddr']);
+            $this->objSesion->setDeviceMAC($json_datos[0]['idsesion']['iddevice']);
+            $this->objSesion->setDeviceMarca($json_datos[0]['idsesion']['marca']);
+            $this->objSesion->setDeviceModelo($json_datos[0]['idsesion']['modelo']);
+            $this->objSesion->setDeviceSO($json_datos[0]['idsesion']['so']);
+            //Según la solicitud descompone el JSON
+            $tmpSesion = $this->objSesion->getAccion();
+            switch ($tmpSesion){
+                case \Libreame\BackendBundle\Helpers\Logica::txAccRegistro: {
+                    $this->objSesion->setEmail($json_datos[1]['idsolicitud']['email']);
+                    $this->objSesion->setClave($json_datos[1]['idsolicitud']['clave']);
+                    $this->objSesion->setTelefono($json_datos[1]['idsolicitud']['telefono']);
+                }
+            }
+            //echo "<script>alert('SESION: ".$this->objSesion->getSession().": Finalizó')</script>"; 
             $resp = self::inExitoso;
-            echo "<script>alert('Decodificó e instació el objeto')</script>"; 
+            //echo "<script>alert('Decodificó e instació el objeto')</script>"; 
             return $resp;
         } catch (Exception $ex) {
         } finally {
@@ -158,7 +174,7 @@ class AccesoController extends Controller
     public function generaSesion($pEstado,$pFecIni,$pFecFin,$pDevice,$pIpAdd)
     {
         //Guarda la sesion inactiva
-        echo "<script>alert('Ingresa a generar sesion".$pFecFin."-".$pFecIni."')</script>";
+        //echo "<script>alert('Ingresa a generar sesion".$pFecFin."-".$pFecIni."')</script>";
         try{
             $objLogica = $this->get('logica_service');
             $em = $this->getDoctrine()->getManager();
@@ -186,11 +202,11 @@ class AccesoController extends Controller
     public function generaActSesion($pSesion,$pFinalizada,$pMensaje,$pAccion,$pFecIni,$pFecFin)
     {
         //Guarda la sesion inactiva
-        echo "<script>alert('Ingresa a generar actividad de sesion".$pFecFin."-".$pFecIni."')</script>";
+        //echo "<script>alert('Ingresa a generar actividad de sesion".$pFecFin."-".$pFecIni."')</script>";
         try{
             $em = $this->getDoctrine()->getManager();
             
-            echo "<script>alert('::::Actividad Sesion".$pFecFin."-".$pFecIni."')</script>";
+            //echo "<script>alert('::::Actividad Sesion".$pFecFin."-".$pFecIni."')</script>";
             $actsesion = new LbActsesion();
             //$actsesion->setInactsesiondisus($pSesion->getInsesdispusuario());
             $actsesion->setInactsesiondisus($pSesion);
