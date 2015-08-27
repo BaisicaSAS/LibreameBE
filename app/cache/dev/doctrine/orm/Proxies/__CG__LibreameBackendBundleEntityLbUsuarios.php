@@ -64,10 +64,10 @@ class LbUsuarios extends \Libreame\BackendBundle\Entity\LbUsuarios implements \D
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', 'inusuario', 'txusuemail', 'txusutelefono', 'txusunombre', 'inusugenero', 'txusuimagen', 'txusunommostrar', 'feusunacimiento', 'txusuvalidacion', 'inusuestado', 'inusulugar');
+            return array('__isInitialized__', 'inusuario', 'txusuemail', 'txusutelefono', 'txusunombre', 'inusugenero', 'txusuimagen', 'txusunommostrar', 'feusunacimiento', 'txusuvalidacion', 'inusuestado', 'inusulugar', 'txusuclave');
         }
 
-        return array('__isInitialized__', 'inusuario', 'txusuemail', 'txusutelefono', 'txusunombre', 'inusugenero', 'txusuimagen', 'txusunommostrar', 'feusunacimiento', 'txusuvalidacion', 'inusuestado', 'inusulugar');
+        return array('__isInitialized__', 'inusuario', 'txusuemail', 'txusutelefono', 'txusunombre', 'inusugenero', 'txusuimagen', 'txusunommostrar', 'feusunacimiento', 'txusuvalidacion', 'inusuestado', 'inusulugar', 'txusuclave');
     }
 
     /**
@@ -406,6 +406,28 @@ class LbUsuarios extends \Libreame\BackendBundle\Entity\LbUsuarios implements \D
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getInusulugar', array());
 
         return parent::getInusulugar();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setTxusuclave($txusuclave)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setTxusuclave', array($txusuclave));
+
+        return parent::setTxusuclave($txusuclave);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getTxusuclave()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getTxusuclave', array());
+
+        return parent::getTxusuclave();
     }
 
 }

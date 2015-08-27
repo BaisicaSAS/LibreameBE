@@ -67,6 +67,12 @@ class LbUsuarios
      */
     private $inusulugar;
 
+    /**
+     * @var string
+     */
+    private $txusuclave;
+
+
 
     /**
      * Get inusuario
@@ -307,4 +313,29 @@ class LbUsuarios
     {
         return $this->inusulugar;
     }
-}
+
+    /**
+     * Set txusuclave
+     *
+     * @param string $txusuclave
+     * @return string
+     */
+    public function setTxusuclave($txusuclave)
+    {
+        $this->txusuclave = $txusuclave;
+
+        return $this;
+    }
+
+    /**
+     * Get txusuclave
+     *
+     * @return string 
+     */
+    public function getTxusuclave()
+    {
+        return $this->txusuclave;
+    }
+    
+    
+    }

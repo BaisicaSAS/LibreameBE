@@ -6,7 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Libreame\BackendBundle\Entity\LbSesiones;
 use Libreame\BackendBundle\Entity\LbActsesion;
-use Libreame\BackendBundle\Helpers\Solicitud;
+use Libreame\BackendBundle\Helpers\Respuesta;
 
 
 /*
@@ -35,8 +35,47 @@ class AccesoController extends Controller
     const inTamVali =  40; //Tamaño del ID para confirmacion del Registro
     const inTamSesi =  30; //Tamaño del id de sesion generado
     const txMensaje =  'Solicitud de registro de usuario en Libreame'; //Mensaje estandar para el registro de usuario
+    //Estados del usuario
+    const inUsuConf =  0; //Usuario en proceso de confiormacion de registro
+    const inUsuActi =  1; //Usuario Activo
+    const inUsuCuar =  2; //Usuario en cuarentena
+    const inInactiv =  3; //Usuario inactivo
+    //Estados de sesion
+    const inSesActi =  1; //Usuario en proceso de confiormacion de registro
+    const inSesInac =  0; //Usuario Activo
+    
+    
+    
+    //Acciones de la plataforma
+    const txAccRegistro =  '1'; //Registro en el sistema
+    const txAccIngresos =  '2'; //Login  (Ingreso)
+    const txAccRecParam =  '3'; //Recuperar datos y parámetros de usuario: incluye calificaciones
+    const txAccRecFeeds =  '4'; //Recuperar Feed (Todas las publicaciones de solicitudes y publicaciones de usuarios)...Lleva una marca de Fecha y hora para recuperar los últimos tipo twitter
+    const txAccRecOpera =  '5'; //Recuperar mi operación (Todas mis solicitudes publicaciones y mensajes)...Lleva una marca de Fecha y hora para recuperar los últimos tipo twitter
+    const txAccConfRegi =  '6'; //Confirmacion Registro en el sistema        
+    const txAccRecEjemp =  '7'; //Recuperar Ejemplar        
+    const txAccRecSolic =  '8'; //Recuperar solicitud
+    const txAccRecUsuar =  '9'; //Ver/Recuperar usuario: Incluye su calificacion
+    
+    const txAccCerraSes =  '10'; //Logout / Cerrar sesion
+    const txAccBajaSist =  '11'; //Dar de baja
+    const txAccActParam =  '12'; //Actualizar parámetros sistema y datos usuario
+    const txAccPubliEje =  '13'; //Publicar un ejemplar
+    const txAccModifEje =  '14'; //Modificar un ejemplar
+    const txAccElimiEje =  '15'; //Eliminar un ejemplar
+    const txAccPubliSol =  '16'; //Publicar una solicitud
+    const txAccModifSol =  '17'; //Modificar una solicitud
+    const txAccElimiSol =  '18'; //Eliminar una solicitud
+    const txAccPubMensa =  '19'; //Enviar un mensaje a una solicitud especifica / Publicar o Responder
+    const txAccConcNego =  '20'; //Concretar una negociación: Aceptar un usuario y descartar a los demás
+    const txAccDesiNego =  '21'; //Desistir de una negociación ya realizada
+    const txAccCaliTrat =  '22'; //Calificar un trato
+    const txAccModCalTr =  '23'; //Modificar calificación trato
+    const txAccEnviaPQR =  '24'; //Enviar una PQR
+    const txAccModifPQR =  '25'; //Modificar una PQR
+    const txAccElimiPQR =  '26'; //Eliminar una PQR
 
-    var $objSesion;
+    var $objSolicitud;
     /*
      * IngresarSistema es la UNICA funcion que recibe la información desde el cliente, para revisar y despachar
      * Recibe un JSON, con la estructura definida como default mas los datos especificos de cada opcion.
@@ -61,13 +100,13 @@ class AccesoController extends Controller
         $modo = substr($datos,0,4);
         $accion = substr($datos,4,1); //R - L
         $idreg = substr($datos,5,4);
-        echo "<script>alert('".$modo." - ".$accion." - ".$idreg."')</script>";
+        //echo "<script>alert('".$modo." - ".$accion." - ".$idreg."')</script>";
         try {
             //Este bloque es solo de Prueba
             if ($modo == 'TEST') {
                 
                 if ($accion == 'R'){
-                    //echo "<script>alert('Reconoce prueba')</script>"; 
+                    //echo "<script>alert('Reconoce REGISTRO')</script>"; 
                     $prueba = array(array('idsesion' => array ('idaccion' => '1','usuario' => $idreg.'-alexviatela',
                         'idtrx' => $idreg.'-123456789012345'.$texto, 'ipaddr'=> '200.000.000.000', 
                         'iddevice'=> 'MACADDRESS', 'marca'=>'LG', 'modelo'=>'G2 Mini', 'so'=>'KITKAT',
@@ -78,7 +117,7 @@ class AccesoController extends Controller
                 }
                 
                 if ($accion == 'L'){
-                    //echo "<script>alert('Reconoce prueba')</script>"; 
+                    //echo "<script>alert('Reconoce LOGIN')</script>"; 
                     $prueba = array(array('idsesion' => array ('idaccion' => '2','usuario' => $idreg.'-alexviatela',
                         'idtrx' => $idreg.'-123456789012345'.$texto, 'ipaddr'=> '200.000.000.000', 
                         'iddevice'=> 'MACADDRESS', 'marca'=>'LG', 'modelo'=>'G2 Mini', 'so'=>'KITKAT',
@@ -98,9 +137,9 @@ class AccesoController extends Controller
             
             if ($jsonValido != false) {
                 $objLogica = $this->get('logica_service');
-                $respuesta = $objLogica::ejecutaAccion($datos, $this->objSesion);
+                $respuesta = $objLogica::ejecutaAccion($datos, $this->objSolicitud);
             } else {
-                //echo "<script>alert('Encontramos un problema con tu registro: ".$this->$objSesion->getSession()."-".$jsonValido."')</script>"; 
+                //echo "<script>alert('Encontramos un problema con tu registro: ".$this->$objSolicitud->getSession()."-".$jsonValido."')</script>"; 
                 //@TODO: Debemos revisar que hacer cuando se detecta actividad sospechosa: Cierro sesion?. Bloqueo usuario e informo?
             }
             //echo "<script>alert('RESPUESTA ingresarSistemaAction: ".$respuesta."')</script>"; 
@@ -135,26 +174,33 @@ class AccesoController extends Controller
         try {
             $json_datos = json_decode($datos, true);
             //echo "<script>alert('Inicia a decodificar-----".$json_datos[0]['idsesion']['idtrx']."')</script>"; 
-            $this->objSesion = new Solicitud();
+            $this->objSolicitud = new Respuesta();
             //echo "<script>alert(':::TRANS: ".$json_datos[0]['idsesion']['idtrx']."')</script>"; 
-            $this->objSesion->setAccion($json_datos[0]['idsesion']['idaccion']);
-            $this->objSesion->setUsuario($json_datos[0]['idsesion']['usuario']);
-            $this->objSesion->setSession($json_datos[0]['idsesion']['idtrx']);
-            $this->objSesion->setIPaddr($json_datos[0]['idsesion']['ipaddr']);
-            $this->objSesion->setDeviceMAC($json_datos[0]['idsesion']['iddevice']);
-            $this->objSesion->setDeviceMarca($json_datos[0]['idsesion']['marca']);
-            $this->objSesion->setDeviceModelo($json_datos[0]['idsesion']['modelo']);
-            $this->objSesion->setDeviceSO($json_datos[0]['idsesion']['so']);
+            $this->objSolicitud->setAccion($json_datos[0]['idsesion']['idaccion']);
+            $this->objSolicitud->setUsuario($json_datos[0]['idsesion']['usuario']);
+            $this->objSolicitud->setSession($json_datos[0]['idsesion']['idtrx']);
+            $this->objSolicitud->setIPaddr($json_datos[0]['idsesion']['ipaddr']);
+            $this->objSolicitud->setDeviceMAC($json_datos[0]['idsesion']['iddevice']);
+            $this->objSolicitud->setDeviceMarca($json_datos[0]['idsesion']['marca']);
+            $this->objSolicitud->setDeviceModelo($json_datos[0]['idsesion']['modelo']);
+            $this->objSolicitud->setDeviceSO($json_datos[0]['idsesion']['so']);
             //Según la solicitud descompone el JSON
-            $tmpSesion = $this->objSesion->getAccion();
+            $tmpSesion = $this->objSolicitud->getAccion();
             switch ($tmpSesion){
-                case \Libreame\BackendBundle\Helpers\Logica::txAccRegistro: {
-                    $this->objSesion->setEmail($json_datos[1]['idsolicitud']['email']);
-                    $this->objSesion->setClave($json_datos[1]['idsolicitud']['clave']);
-                    $this->objSesion->setTelefono($json_datos[1]['idsolicitud']['telefono']);
+                case self::txAccRegistro: {
+                    $this->objSolicitud->setEmail($json_datos[1]['idsolicitud']['email']);
+                    $this->objSolicitud->setClave($json_datos[1]['idsolicitud']['clave']);
+                    $this->objSolicitud->setTelefono($json_datos[1]['idsolicitud']['telefono']);
+                    break;
+                }
+                case self::txAccIngresos: {
+                    $this->objSolicitud->setEmail($json_datos[1]['idsolicitud']['email']);
+                    $this->objSolicitud->setClave($json_datos[1]['idsolicitud']['clave']);
+                    $this->objSolicitud->setTelefono($json_datos[1]['idsolicitud']['telefono']);
+                    break;
                 }
             }
-            //echo "<script>alert('SESION: ".$this->objSesion->getSession().": Finalizó')</script>"; 
+            //echo "<script>alert('SESION: ".$this->objSolicitud->getSession().": Finalizó')</script>"; 
             $resp = self::inExitoso;
             //echo "<script>alert('Decodificó e instació el objeto')</script>"; 
             return $resp;
@@ -172,15 +218,34 @@ class AccesoController extends Controller
      * de los anteriores cada uno con 4 digitos.
      * 
      */
-    private function validaSesion()
+    private function validaSesion($psesion)
     {   
         $sesion = $em->getRepository('LibreameBackendBundle:LbSesiones')->findBy(array(
-            'txsesnumero' =>  $this->getSession(),
-            'insesdispusuario' => $this->getIDDevice(),
-            'insesactiva' => '1'));
+            'txsesnumero' =>  $psesion->getSession(),
+            'insesdispusuario' => $psesion->getIDDevice(),
+            'insesactiva' => self::inSesActi));
         
         return ($sesion);
     }
+
+    /*
+     * usuarioSesionActiva 
+     *Indica si un usuario tiene una sesion activa
+     * 
+     */
+    private function usuarioSesionActiva($psesion)
+    {   
+        //Identifica el dispositivo // a este es al que se asocia la sesion
+        $device = $em->getRepository('LibreameBackendBundle:LbDispusuarios')->findBy(array(
+            'txdisid' =>  $psesion->getDeviceMAC()));
+
+        $sesion = $em->getRepository('LibreameBackendBundle:LbSesiones')->findBy(array(
+            'insesdispusuario' => $device,
+            'insesactiva' => self::inSesActi));
+        
+        return ($sesion);
+    }
+    
     /*
      * GeneraSesion 
      * Guarda en BD y Devuelve el ID de la sesion
@@ -278,6 +343,8 @@ class AccesoController extends Controller
             return self::inDescone;
         }     
     }
+    
+    
     
     /*
      * enviaMailRegistro 

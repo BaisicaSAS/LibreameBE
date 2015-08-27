@@ -85,6 +85,13 @@ Libreame\BackendBundle\Entity\LbUsuarios:
             comment: '0: Esperando confirmación 1: Activo 2: Cuarentena 3: Inactivo'
             default: '0'
             column: inUsuEstado
+        txusuclave:
+            type: string
+            nullable: false
+            length: 256
+            fixed: false
+            comment: 'Clave del usuario'
+            column: txUsuClave
     manyToOne:
         inusulugar:
             targetEntity: LbLugares
