@@ -119,6 +119,7 @@ class appDevDebugProjectContainer extends Container
             'locale_listener' => 'getLocaleListenerService',
             'logger' => 'getLoggerService',
             'logica_service' => 'getLogicaServiceService',
+            'login_service' => 'getLoginServiceService',
             'monolog.handler.console' => 'getMonolog_Handler_ConsoleService',
             'monolog.handler.debug' => 'getMonolog_Handler_DebugService',
             'monolog.handler.main' => 'getMonolog_Handler_MainService',
@@ -1431,6 +1432,19 @@ class appDevDebugProjectContainer extends Container
     protected function getLogicaServiceService()
     {
         return $this->services['logica_service'] = new \Libreame\BackendBundle\Helpers\Logica();
+    }
+
+    /**
+     * Gets the 'login_service' service.
+     *
+     * This service is shared.
+     * This method always returns the same instance of the service.
+     *
+     * @return Libreame\BackendBundle\Helpers\Login A Libreame\BackendBundle\Helpers\Login instance.
+     */
+    protected function getLoginServiceService()
+    {
+        return $this->services['login_service'] = new \Libreame\BackendBundle\Helpers\Login();
     }
 
     /**

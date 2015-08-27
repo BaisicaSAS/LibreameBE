@@ -22,10 +22,11 @@ class Solicitud {
     private $pDeviceSO; //Sistema operativo del dispositivo
 
     //Atributos para el detalle: identificado en el tag IDSOLICITUD del JSON
-    //C01: Registro
-    private $pEmail;
-    private $pClave; //Clave del usuario
+    //C01: Registro 
+    private $pEmail; //Mail del usuario
     private $pTelefono; //Numero telefónico 
+    //$pClave se utiliza tambien para C02: Login
+    private $pClave; //Clave del usuario
     
     /*
      *  Bloque de getter para los atributos de la clase

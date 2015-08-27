@@ -21,6 +21,8 @@ class Registro {
      * guarda los datos básicos, genera una clave (url) dispara el envío de email de 
      * Confirmacion, retorna mensaje de exito o fracaso de operacion para el cliente 
      * y registra en la bitácora.
+     * 
+     * El sistema registra la sesión como finalizada, la cierra en horas y deja la traza en actividad de sesion.
      */
     //Constantes globales
     const inFallido =  0; //Proceso fallido por usuario existente
@@ -111,26 +113,40 @@ class Registro {
                     //Guarda la actividad de la sesion:: Como finalizada
                     //echo "<script>alert('Guardó usuario...va a generar sesion ')</script>";
                     $actsesion = $objAcceso::generaActSesion($sesion,self::inDatoUno,self::txMensaje,$pSesion->getAccion(),$fecha,$fecha);
-                    //echo "<script>alert('Generó actividad de sesion ')</script>";
+                    echo "<script>alert('Generó actividad de sesion ')</script>";
 
                     //Envia email
                     $mailsent = $objAcceso::enviaMailRegistro($usuario);
                     //echo "<script>alert('Envió mail ')</script>";
                     
-                    return self::inExitoso;
+                    return Registro::generaRespuesta(self::inExitoso, $pSesion);
+                    
                 } catch (Exception $ex) {
-                    return self::inDescone;
+                    return Registro::generaRespuesta(self::inDescone, $pSesion);
                 } 
 
             } else {
                 //El usuario existe y no es posible registrarlo de nuevo:: el email.
                 echo "<script>alert('Usuario existe')</script>";
-                return self::inFallido;
+                return Registro::generaRespuesta(self::inFallido, $pSesion);
             }
         } catch (Exception $ex) {
             echo "<script>alert('Registro Error')</script>";
+            return Registro::generaRespuesta(self::inFallido, $pSesion);
         }    
         
+    }
+    
+    private function generaRespuesta($idrespuesta, $pSesion){
+        $JSONResp = array(array('idsesion' => array ('idaccion' => $pSesion->getAccion(),
+            'usuario' => $pSesion->getUsuario(),
+            'idtrx' => $pSesion->getSession(), 'ipaddr'=> $pSesion->getIPaddr(), 
+            'iddevice'=> $pSesion->getDeviceMac(), 'marca'=>$pSesion->getDeviceMarca(), 
+            'modelo'=>$pSesion->getDeviceModelo(), 'so'=>$pSesion->getDeviceSO()
+            )), 
+            array('idrespuesta' => array('respuesta' => $idrespuesta)));
+        $JSONResp = json_encode($JSONResp);
+        return $JSONResp;
     }
     
 }

@@ -50,6 +50,7 @@ class AccesoController extends Controller
      * no estén repetidos. Registra el intento de acceso, valida los datos adicionales con respecto
      * a la accion solicitada y en caso de estar todo en orden enviar la información a la Clase Logica para 
      * que realice los solicitado y emita las respuestas al cliente
+     * Tambien es la responsable de generar todas las bitacoras de la aplicación
      */
     public function ingresarSistemaAction($datos)
     {   
@@ -58,18 +59,35 @@ class AccesoController extends Controller
         $texto = $fecha->format('YmdHis');
         //echo "<script>alert('".substr($datos,0,4)."---".substr($datos,4,2)."')</script>";
         $modo = substr($datos,0,4);
-        $idreg = substr($datos,4,4);
+        $accion = substr($datos,4,1); //R - L
+        $idreg = substr($datos,5,4);
+        echo "<script>alert('".$modo." - ".$accion." - ".$idreg."')</script>";
         try {
             //Este bloque es solo de Prueba
             if ($modo == 'TEST') {
-                //echo "<script>alert('Reconoce prueba')</script>"; 
-                $prueba = array(array('idsesion' => array ('idaccion' => 'C01','usuario' => $idreg.'-alexviatela',
-                    'idtrx' => $idreg.'-123456789012345'.$texto, 'ipaddr'=> '200.000.000.000', 
-                    'iddevice'=> 'MACADDRESS', 'marca'=>'LG', 'modelo'=>'G2 Mini', 'so'=>'KITKAT',
-                    )), 
-                    array('idsolicitud' => array('email' => $idreg.'alexviatela@gmail.com',
-                        'clave' => 'clave12345', 'telefono' => $idreg."-".$texto)));
-                $datos = json_encode($prueba);
+                
+                if ($accion == 'R'){
+                    //echo "<script>alert('Reconoce prueba')</script>"; 
+                    $prueba = array(array('idsesion' => array ('idaccion' => '1','usuario' => $idreg.'-alexviatela',
+                        'idtrx' => $idreg.'-123456789012345'.$texto, 'ipaddr'=> '200.000.000.000', 
+                        'iddevice'=> 'MACADDRESS', 'marca'=>'LG', 'modelo'=>'G2 Mini', 'so'=>'KITKAT',
+                        )), 
+                        array('idsolicitud' => array('email' => $idreg.'alexviatela@gmail.com',
+                            'clave' => 'clave12345', 'telefono' => $idreg."-".$texto)));
+                    $datos = json_encode($prueba);
+                }
+                
+                if ($accion == 'L'){
+                    //echo "<script>alert('Reconoce prueba')</script>"; 
+                    $prueba = array(array('idsesion' => array ('idaccion' => '2','usuario' => $idreg.'-alexviatela',
+                        'idtrx' => $idreg.'-123456789012345'.$texto, 'ipaddr'=> '200.000.000.000', 
+                        'iddevice'=> 'MACADDRESS', 'marca'=>'LG', 'modelo'=>'G2 Mini', 'so'=>'KITKAT',
+                        )), 
+                        array('idsolicitud' => array('email' => $idreg.'alexviatela@gmail.com',
+                            'clave' => 'clave12345', 'telefono' => $idreg."-".$texto)));
+                    $datos = json_encode($prueba);
+                }
+                
                 //echo "<script>alert('".$datos."')</script>";
             }
 
