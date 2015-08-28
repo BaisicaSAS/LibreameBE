@@ -51,10 +51,7 @@ class Login
 
     public function loginUsuario($pSolicitud)
     {   
-        $respuesta[0][0] = "respuesta";
-        $respuesta[1][0] = "idsesion";
-        $respuesta[2][0] = "cantmensajes";
-        $respuesta[2][1] = "13";
+        $respuesta = new Respuesta();
         try {
             //echo "<script>alert('Ingresa Login')</script>";
             $em = $this->getDoctrine()->getManager();
@@ -80,23 +77,34 @@ class Login
                     
                     //Verifica si la clave es correcta
                     if ($usuario->getTxusuclave() == $pSolicitud->getClave()){
-                        if (AccesoController::usuarioSesionActiva($pSolicitud)){$respuesta = self::inUSeActi;}
+                        if (AccesoController::usuarioSesionActiva($pSolicitud)){$respuesta->setRespuesta(self::inUSeActi);}
                         else
                         {
                             //AQUI SE LOGUEA FINALMENTE
+                            //Busca el dispositivo
+                            $sesion = $objAcceso::generaSesion(AccesoController::inSesActi,$fecha,NULL,$device,$pSolicitud->getIPaddr());
+                            //Guarda la actividad de la sesion:: Como finalizada
+                            //echo "<script>alert('Guardó usuario...va a generar sesion ')</script>";
+                            $actsesion = $objAcceso::generaActSesion($sesion,AccesoController::inDatoUno,'Login usuario exitoso',$pSolicitud->getAccion(),$fecha,NULL);
+                            //Genera sesion activa sin fecha de finalización
+                            //Genera actividad de sesión
+                            $respuesta->setRespuesta(self::inULogged);    
+                            $respuesta->setSession($sesion->getTxsesnumero());  
+                            
+                            //Busca la cantidad de mensajes del usuario sin leer 
+                            $respuesta->setCantMensajes($usuario->cantMsgUsr($usuario));    
                             
                         }
                     }
                     //Clave incorrecta
-                    else{$respuesta = self::inUsClInv;}    
+                    else{$respuesta->setRespuesta(self::inUsClInv);}    
                 }
                 //Usuario no está activo
-                else {$respuesta = self::inUsInact;}
+                else {$respuesta->setRespuesta(self::inUsInact);}
 
-                $respuesta = self::inULogged;    
             }
             //Usuario no existe
-            else {$respuesta = self::inUsClInv;}
+            else {$respuesta->setRespuesta(self::inUsClInv);}
             
             return Logica::generaRespuesta(AccesoController::inExitoso, $pSolicitud, AccesoController::txAccIngresos);
             

@@ -29,7 +29,7 @@ class Registro {
 
     public function registroUsuario($pSolicitud)
     {   
-        $respuesta[0][0] = "respuesta";
+        $respuesta = new Respuesta();
         $objAcceso = $this->get('acceso_service');
         try {
             //echo "<script>alert('Ingresa Registro')</script>";
@@ -50,13 +50,7 @@ class Registro {
                 try {
                     //Guarda el usuario
                     //echo "<script>alert('Usuario NO existe')</script>";
-                    $usuario->setTxusuemail($pSolicitud->getEmail());  
-                    $usuario->setTxusutelefono($pSolicitud->getTelefono());  
-                    $usuario->setTxusunombre($pSolicitud->getUsuario());  
-                    $usuario->setTxusuclave($pSolicitud->getClave());  
-                    $usuario->setTxusuimagen('DEFAUL IMAGE URL');  
-                    $usuario->setInusulugar($Lugar);  
-                    $usuario->setTxusuvalidacion(Logica::generaRand(AccesoController::inTamVali));  
+                    $usuario->creaUsuario($pSolicitud, $Lugar);
 
                     //Guarda el dispositivo si NO existe
                     //echo "<script>alert('Evalua si dispositivo existe')</script>";
@@ -65,11 +59,8 @@ class Registro {
                             array('txdisid' => $pSolicitud->getDeviceMAC()))){
                         //echo "<script>alert('Dispositivo [".$pSolicitud->getDeviceMAC()."-guardadevice".$guardadevice." ] NO existe')</script>";
                         $guardadevice=1;
-                        $device->setIndisusuario($usuario);
-                        $device->setTxdisid($pSolicitud->getDeviceMAC());
-                        $device->setTxdismarca($pSolicitud->getDeviceMarca());
-                        $device->setTxdismodelo($pSolicitud->getDeviceModelo());
-                        $device->setTxdisso($pSolicitud->getDeviceSO());
+
+                        $device->creaDispusuario($usuario, $pSolicitud);
                     } else {
                         //echo "<script>alert('Dispositivo [".$pSolicitud->getDeviceMAC()."-guardadevice".$guardadevice." ] existe')</script>";
                     }
@@ -111,29 +102,30 @@ class Registro {
                     $mailsent = $objAcceso::enviaMailRegistro($usuario);
                     //echo "<script>alert('Envió mail ')</script>";
                     
-                    $respuesta[0][1] = AccesoController::inExitoso;
+                    $respuesta->setRespuesta(AccesoController::inExitoso);
                     
                 } catch (Exception $ex) {
-                    $respuesta[0][1] = AccesoController::inDescone;
+                    $respuesta->setRespuesta(AccesoController::inDescone);
                 } 
 
             } else {
                 //El usuario existe y no es posible registrarlo de nuevo:: el email.
                 echo "<script>alert('Usuario existe')</script>";
-                $respuesta[0][1] = AccesoController::inFallido;
+                $respuesta->setRespuesta(AccesoController::inFallido);
             }
-        } catch (Exception $ex) {
-            echo "<script>alert('Registro Error')</script>";
-            $respuesta[0][1] = AccesoController::inFallido;
-        } 
-        
-        finally {
+            echo "<script>alert('Respuesta de registro NORMAL ".$respuesta->getRespuesta()." Error')</script>";
             return Logica::generaRespuesta($respuesta, $pSolicitud);
-        }
-        
+            
+        } catch (Exception $ex) {
+            echo "<script>alert('Respuesta de registro ERROR ".$respuesta->getRespuesta()." Error')</script>";
+            $respuesta->setRespuesta(AccesoController::inFallido);
+            return Logica::generaRespuesta($respuesta, $pSolicitud);
+        } 
         
         
     }
+    
+    
     
     
 }

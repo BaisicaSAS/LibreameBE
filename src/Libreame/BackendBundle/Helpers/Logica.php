@@ -3,6 +3,7 @@
 namespace Libreame\BackendBundle\Helpers;
 
 use Libreame\BackendBundle\Controller\AccesoController;
+use Libreame\BackendBundle\Helpers\Respuesta;
 
 
 class Logica 
@@ -43,6 +44,9 @@ class Logica
     
     public function generaRespuesta($respuesta, $pSolicitud){
 
+        echo "<script>alert('ACCION Genera respuesta: ".$pSolicitud->getAccion()."')</script>";
+        echo "<script>alert('REPUESTA Genera respuesta: ".$respuesta->getRespuesta()."')</script>";
+
         switch($pSolicitud->getAccion()){
             
             case AccesoController::txAccRegistro: 
@@ -52,18 +56,20 @@ class Logica
                         'iddevice'=> $pSolicitud->getDeviceMac(), 'marca'=>$pSolicitud->getDeviceMarca(), 
                         'modelo'=>$pSolicitud->getDeviceModelo(), 'so'=>$pSolicitud->getDeviceSO()
                         )), 
-                        array('idrespuesta' => (array($respuesta[0][0] => $respuesta[0][1]))));
+                        array('idrespuesta' => (array('respuesta' => $respuesta->getRespuesta()))));
                 break;
                 
-            case AccesoController::txAccRegistro: 
+            case AccesoController::txAccIngresos:
+                //$vRespuesta
                 $JSONResp = array(array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
                         'usuario' => $pSolicitud->getUsuario(),
                         'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr(), 
                         'iddevice'=> $pSolicitud->getDeviceMac(), 'marca'=>$pSolicitud->getDeviceMarca(), 
                         'modelo'=>$pSolicitud->getDeviceModelo(), 'so'=>$pSolicitud->getDeviceSO()
                         )), 
-                        array('idrespuesta' => (array($respuesta[0][0] => $respuesta[0][1],
-                            $respuesta[1][0] => $respuesta[1][1], $respuesta[2][0] => $respuesta[2][1]))));
+                        array('idrespuesta' => (array('respuesta' => $respuesta->getRespuesta(),
+                            'idsesion' => $respuesta->getSession(), 
+                            'cantmensajes' => $respuesta->getCantMensajes()))));
                 break;
                 
         }
@@ -89,5 +95,6 @@ class Logica
         //echo "<script>alert('Generó clave de ".$tamano.": ".$key."')</script>";
         return $key;         
     }
+    
     
 }

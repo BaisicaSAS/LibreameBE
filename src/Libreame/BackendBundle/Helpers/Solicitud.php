@@ -8,7 +8,7 @@ namespace Libreame\BackendBundle\Helpers;
  *
  * @author mramirez
  */
-class Respuesta {
+class Solicitud {
     //@TODO: Reorganizar el encabezado para que contenga solo IDs, y solo la información que identifica la Transaccion. 
     //Todo el resto debe ir ebn el detalle...ejemplo el telefono
     //Atributos para el encabezado: identificado en el tag IDSESION del JSON

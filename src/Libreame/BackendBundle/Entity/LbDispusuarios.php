@@ -192,4 +192,16 @@ class LbDispusuarios
     {
         return $this->indisusuario;
     }
+    
+    public function creaDispusuario($usuario, $pSolicitud)
+    {   
+        $device = new LbDispusuarios();
+        $device->setIndisusuario($usuario);
+        $device->setTxdisid($pSolicitud->getDeviceMAC());
+        $device->setTxdismarca($pSolicitud->getDeviceMarca());
+        $device->setTxdismodelo($pSolicitud->getDeviceModelo());
+        $device->setTxdisso($pSolicitud->getDeviceSO());
+        
+        return $device;        
+    }
 }

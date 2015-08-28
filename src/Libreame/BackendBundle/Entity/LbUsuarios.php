@@ -1,6 +1,7 @@
 <?php
 
 namespace Libreame\BackendBundle\Entity;
+namespace Libreame\BackendBundle\Helpers\Logica;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -337,5 +338,29 @@ class LbUsuarios
         return $this->txusuclave;
     }
     
-    
+    public function creaUsuario($pSolicitud, $Lugar)
+    {
+        $usuario = new LbUsuarios();
+        $usuario->setTxusuemail($pSolicitud->getEmail());  
+        $usuario->setTxusutelefono($pSolicitud->getTelefono());  
+        $usuario->setTxusunombre($pSolicitud->getUsuario());  
+        $usuario->setTxusuclave($pSolicitud->getClave());  
+        $usuario->setTxusuimagen('DEFAUL IMAGE URL');  
+        $usuario->setInusulugar($Lugar);  
+        $usuario->setTxusuvalidacion(Logica::generaRand(AccesoController::inTamVali));  
+        
+        return $usuario;
     }
+    
+    public function cantMsgUsr($usuario)
+    {
+        //$em = $this->getDoctrine()->getManager();
+        //$usuario = $em->getRepository('LibreameBackendBundle:LbUsuarios')->
+        //                findOneBy(array('txusuemail' => $pSolicitud->getEmail()));
+
+        
+        return 10;
+    }
+    
+    
+}

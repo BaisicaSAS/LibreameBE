@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Libreame\BackendBundle\Entity\LbSesiones;
 use Libreame\BackendBundle\Entity\LbActsesion;
+use Libreame\BackendBundle\Helpers\Solicitud;
 use Libreame\BackendBundle\Helpers\Respuesta;
 
 
@@ -174,7 +175,7 @@ class AccesoController extends Controller
         try {
             $json_datos = json_decode($datos, true);
             //echo "<script>alert('Inicia a decodificar-----".$json_datos[0]['idsesion']['idtrx']."')</script>"; 
-            $this->objSolicitud = new Respuesta();
+            $this->objSolicitud = new Solicitud();
             //echo "<script>alert(':::TRANS: ".$json_datos[0]['idsesion']['idtrx']."')</script>"; 
             $this->objSolicitud->setAccion($json_datos[0]['idsesion']['idaccion']);
             $this->objSolicitud->setUsuario($json_datos[0]['idsesion']['usuario']);
