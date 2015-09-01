@@ -108,23 +108,21 @@ class AccesoController extends Controller
                 
                 if ($accion == 'R'){
                     //echo "<script>alert('Reconoce REGISTRO')</script>"; 
-                    $prueba = array(array('idsesion' => array ('idaccion' => '1','usuario' => $idreg.'-alexviatela',
+                    $prueba = array('idsesion' => array ('idaccion' => '1','usuario' => $idreg.'-alexviatela',
                         'idtrx' => $idreg.'-123456789012345'.$texto, 'ipaddr'=> '200.000.000.000', 
-                        'iddevice'=> 'MACADDRESS', 'marca'=>'LG', 'modelo'=>'G2 Mini', 'so'=>'KITKAT',
-                        )), 
-                        array('idsolicitud' => array('email' => $idreg.'alexviatela@gmail.com',
-                            'clave' => 'clave12345', 'telefono' => $idreg."-".$texto)));
+                        'iddevice'=> $idreg.'MACADDRESS', 'marca'=>'LG', 'modelo'=>'G2 Mini', 'so'=>'KITKAT'),
+                        'idsolicitud' => array('email' => $idreg.'alexviatela@gmail.com',
+                            'clave' => 'clave12345', 'telefono' => $idreg."-".$texto));
                     $datos = json_encode($prueba);
                 }
                 
                 if ($accion == 'L'){
                     //echo "<script>alert('Reconoce LOGIN')</script>"; 
-                    $prueba = array(array('idsesion' => array ('idaccion' => '2','usuario' => $idreg.'-alexviatela',
+                    $prueba = array('idsesion' => array ('idaccion' => '2','usuario' => $idreg.'-alexviatela',
                         'idtrx' => $idreg.'-123456789012345'.$texto, 'ipaddr'=> '200.000.000.000', 
-                        'iddevice'=> 'MACADDRESS', 'marca'=>'LG', 'modelo'=>'G2 Mini', 'so'=>'KITKAT',
-                        )), 
-                        array('idsolicitud' => array('email' => $idreg.'alexviatela@gmail.com',
-                            'clave' => 'clave12345', 'telefono' => $idreg."-".$texto)));
+                        'iddevice'=> $idreg.'MACADDRESS', 'marca'=>'LG', 'modelo'=>'G2 Mini', 'so'=>'KITKAT'), 
+                        'idsolicitud' => array('clave' => 'clave12345', 
+                            'email' => $idreg.'alexviatela@gmail.com'));
                     $datos = json_encode($prueba);
                 }
                 
@@ -140,11 +138,12 @@ class AccesoController extends Controller
                 $objLogica = $this->get('logica_service');
                 $respuesta = $objLogica::ejecutaAccion($datos, $this->objSolicitud);
             } else {
-                //echo "<script>alert('Encontramos un problema con tu registro: ".$this->$objSolicitud->getSession()."-".$jsonValido."')</script>"; 
+                echo "<script>alert('Encontramos un problema con tu registro: ".$this->$objSolicitud->getSession()."-".$jsonValido."')</script>"; 
                 //@TODO: Debemos revisar que hacer cuando se detecta actividad sospechosa: Cierro sesion?. Bloqueo usuario e informo?
             }
             //echo "<script>alert('RESPUESTA ingresarSistemaAction: ".$respuesta."')</script>"; 
             return new RESPONSE("Normal ".$respuesta);
+            //return new RESPONSE("Normal ".$datos);
                     
         } catch (Exception $ex) {
             return new RESPONSE("Catch ".$jsonValido);
@@ -177,27 +176,26 @@ class AccesoController extends Controller
             //echo "<script>alert('Inicia a decodificar-----".$json_datos[0]['idsesion']['idtrx']."')</script>"; 
             $this->objSolicitud = new Solicitud();
             //echo "<script>alert(':::TRANS: ".$json_datos[0]['idsesion']['idtrx']."')</script>"; 
-            $this->objSolicitud->setAccion($json_datos[0]['idsesion']['idaccion']);
-            $this->objSolicitud->setUsuario($json_datos[0]['idsesion']['usuario']);
-            $this->objSolicitud->setSession($json_datos[0]['idsesion']['idtrx']);
-            $this->objSolicitud->setIPaddr($json_datos[0]['idsesion']['ipaddr']);
-            $this->objSolicitud->setDeviceMAC($json_datos[0]['idsesion']['iddevice']);
-            $this->objSolicitud->setDeviceMarca($json_datos[0]['idsesion']['marca']);
-            $this->objSolicitud->setDeviceModelo($json_datos[0]['idsesion']['modelo']);
-            $this->objSolicitud->setDeviceSO($json_datos[0]['idsesion']['so']);
+            $this->objSolicitud->setAccion($json_datos['idsesion']['idaccion']);
+            $this->objSolicitud->setUsuario($json_datos['idsesion']['usuario']);
+            $this->objSolicitud->setSession($json_datos['idsesion']['idtrx']);
+            $this->objSolicitud->setIPaddr($json_datos['idsesion']['ipaddr']);
+            $this->objSolicitud->setDeviceMAC($json_datos['idsesion']['iddevice']);
+            $this->objSolicitud->setDeviceMarca($json_datos['idsesion']['marca']);
+            $this->objSolicitud->setDeviceModelo($json_datos['idsesion']['modelo']);
+            $this->objSolicitud->setDeviceSO($json_datos['idsesion']['so']);
             //Según la solicitud descompone el JSON
             $tmpSesion = $this->objSolicitud->getAccion();
             switch ($tmpSesion){
                 case self::txAccRegistro: {
-                    $this->objSolicitud->setEmail($json_datos[1]['idsolicitud']['email']);
-                    $this->objSolicitud->setClave($json_datos[1]['idsolicitud']['clave']);
-                    $this->objSolicitud->setTelefono($json_datos[1]['idsolicitud']['telefono']);
+                    $this->objSolicitud->setEmail($json_datos['idsolicitud']['email']);
+                    $this->objSolicitud->setClave($json_datos['idsolicitud']['clave']);
+                    $this->objSolicitud->setTelefono($json_datos['idsolicitud']['telefono']);
                     break;
                 }
                 case self::txAccIngresos: {
-                    $this->objSolicitud->setEmail($json_datos[1]['idsolicitud']['email']);
-                    $this->objSolicitud->setClave($json_datos[1]['idsolicitud']['clave']);
-                    $this->objSolicitud->setTelefono($json_datos[1]['idsolicitud']['telefono']);
+                    $this->objSolicitud->setEmail($json_datos['idsolicitud']['email']);
+                    $this->objSolicitud->setClave($json_datos['idsolicitud']['clave']);
                     break;
                 }
             }
@@ -221,6 +219,7 @@ class AccesoController extends Controller
      */
     private function validaSesion($psesion)
     {   
+        $em = $this->getDoctrine()->getManager();
         $sesion = $em->getRepository('LibreameBackendBundle:LbSesiones')->findBy(array(
             'txsesnumero' =>  $psesion->getSession(),
             'insesdispusuario' => $psesion->getIDDevice(),
@@ -234,17 +233,24 @@ class AccesoController extends Controller
      *Indica si un usuario tiene una sesion activa
      * 
      */
-    private function usuarioSesionActiva($psesion)
+    public function usuarioSesionActiva($psolicitud)
     {   
+        $em = $this->getDoctrine()->getManager();
         //Identifica el dispositivo // a este es al que se asocia la sesion
         $device = $em->getRepository('LibreameBackendBundle:LbDispusuarios')->findBy(array(
-            'txdisid' =>  $psesion->getDeviceMAC()));
-
+            'txdisid' =>  $psolicitud->getDeviceMAC()));
+        echo "<script>alert('Dispositivo MAC ".$psolicitud->getDeviceMAC()."')</script>";
+        $id = $device->getIndispusuario().toString();
+        echo "<script>alert('Dispositivo ID ".$id."')</script>";
+        //echo "<script>alert('EXISTE Sesion activa ".$device->getIndispusuario()."')</script>";
+        
         $sesion = $em->getRepository('LibreameBackendBundle:LbSesiones')->findBy(array(
             'insesdispusuario' => $device,
             'insesactiva' => self::inSesActi));
         
-        return ($sesion);
+        if ($sesion != NULL) {echo "<script>alert('EXISTE Sesion activa ".$device->getInsesdispusuario()."')</script>";}
+        
+        return ($sesion != NULL);
     }
     
     /*

@@ -52,12 +52,15 @@ class Login
     public function loginUsuario($pSolicitud)
     {   
         $respuesta = new Respuesta();
+        $objAcceso = $this->get('acceso_service');
+        $fecha = new \DateTime;
+        setlocale (LC_TIME, "es_CO");
+        $fecha = date('c');
         try {
             //echo "<script>alert('Ingresa Login')</script>";
             $em = $this->getDoctrine()->getManager();
             $usuario = new LbUsuarios();
             $device = new LbDispusuarios();
-            $membresia = new LbMembresias();
             $sesion = new LbSesiones();
             $actsesion = new LbActsesion();
             //Verifica si el usuario existe
@@ -69,7 +72,7 @@ class Login
                         findOneBy(array('txusuemail' => $pSolicitud->getEmail()));
 
                 $estado = $usuario->getInusuestado();
-                echo "<script>alert('Estado usuario ".$estado."')</script>";
+                echo "<script>alert('-----Estado usuario ".$estado."')</script>";
 
                 //Verifica si el usuario está activo
                 if ($estado == AccesoController::inUsuActi)
@@ -77,17 +80,24 @@ class Login
                     
                     //Verifica si la clave es correcta
                     if ($usuario->getTxusuclave() == $pSolicitud->getClave()){
-                        if (AccesoController::usuarioSesionActiva($pSolicitud)){$respuesta->setRespuesta(self::inUSeActi);}
+                        //Verifica si el usuario tiene una sesion activa
+                        if (AccesoController::usuarioSesionActiva($pSolicitud)){
+                            $respuesta->setRespuesta(self::inUSeActi);
+                        }
                         else
                         {
                             //AQUI SE LOGUEA FINALMENTE
                             //Busca el dispositivo
+                            $device = $em->getRepository('LibreameBackendBundle:LbDispusuarios')->
+                                    findOneBy(array('indisusuario' => $usuario));
+                
+                            echo "<script>alert('Dispositivo ".$device->getTxdisid()."')</script>";
+
+                            //Crea sesion
+                            echo "<script>alert('-----Creará sesion')</script>";
                             $sesion = $objAcceso::generaSesion(AccesoController::inSesActi,$fecha,NULL,$device,$pSolicitud->getIPaddr());
-                            //Guarda la actividad de la sesion:: Como finalizada
-                            //echo "<script>alert('Guardó usuario...va a generar sesion ')</script>";
-                            $actsesion = $objAcceso::generaActSesion($sesion,AccesoController::inDatoUno,'Login usuario exitoso',$pSolicitud->getAccion(),$fecha,NULL);
                             //Genera sesion activa sin fecha de finalización
-                            //Genera actividad de sesión
+                            $actsesion = $objAcceso::generaActSesion($sesion,AccesoController::inDatoUno,'Login usuario '.$usuario->getTxusuemail().' exitoso',$pSolicitud->getAccion(),$fecha,NULL);
                             $respuesta->setRespuesta(self::inULogged);    
                             $respuesta->setSession($sesion->getTxsesnumero());  
                             
@@ -106,12 +116,12 @@ class Login
             //Usuario no existe
             else {$respuesta->setRespuesta(self::inUsClInv);}
             
-            return Logica::generaRespuesta(AccesoController::inExitoso, $pSolicitud, AccesoController::txAccIngresos);
+            return Logica::generaRespuesta($respuesta, $pSolicitud);
             
         }
         catch (Exception $ex) {
-            $respuesta = self::inPlatCai;
-            return Logica::generaRespuesta(AccesoController::inExitoso, $pSolicitud, AccesoController::txAccIngresos);
+            $respuesta->setRespuesta(self::inPlatCai);
+            return Logica::generaRespuesta($respuesta, $pSolicitud);
         }     
         
     }

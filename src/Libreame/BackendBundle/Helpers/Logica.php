@@ -50,26 +50,24 @@ class Logica
         switch($pSolicitud->getAccion()){
             
             case AccesoController::txAccRegistro: 
-                $JSONResp = array(array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
+                $JSONResp = array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
                         'usuario' => $pSolicitud->getUsuario(),
                         'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr(), 
                         'iddevice'=> $pSolicitud->getDeviceMac(), 'marca'=>$pSolicitud->getDeviceMarca(), 
-                        'modelo'=>$pSolicitud->getDeviceModelo(), 'so'=>$pSolicitud->getDeviceSO()
-                        )), 
-                        array('idrespuesta' => (array('respuesta' => $respuesta->getRespuesta()))));
+                        'modelo'=>$pSolicitud->getDeviceModelo(), 'so'=>$pSolicitud->getDeviceSO()), 
+                        'idrespuesta' => (array('respuesta' => $respuesta->getRespuesta())));
                 break;
                 
             case AccesoController::txAccIngresos:
                 //$vRespuesta
-                $JSONResp = array(array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
+                $JSONResp = array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
                         'usuario' => $pSolicitud->getUsuario(),
                         'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr(), 
                         'iddevice'=> $pSolicitud->getDeviceMac(), 'marca'=>$pSolicitud->getDeviceMarca(), 
-                        'modelo'=>$pSolicitud->getDeviceModelo(), 'so'=>$pSolicitud->getDeviceSO()
-                        )), 
-                        array('idrespuesta' => (array('respuesta' => $respuesta->getRespuesta(),
+                        'modelo'=>$pSolicitud->getDeviceModelo(), 'so'=>$pSolicitud->getDeviceSO()), 
+                        'idrespuesta' => (array('respuesta' => $respuesta->getRespuesta(),
                             'idsesion' => $respuesta->getSession(), 
-                            'cantmensajes' => $respuesta->getCantMensajes()))));
+                            'cantmensajes' => $respuesta->getCantMensajes())));
                 break;
                 
         }
