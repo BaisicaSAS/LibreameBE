@@ -1,0 +1,60 @@
+Libreame\BackendBundle\Entity\LbEjemplares:
+    type: entity
+    table: lb_ejemplares
+    indexes:
+        fk_lb_ejemplares_lb_usuarios1_idx:
+            columns:
+                - inEjeUsuDueno
+        fk_lb_ejemplares_lb_libros1_idx:
+            columns:
+                - inEjeLibro
+        fk_lb_ejemplares_lb_generos1_idx:
+            columns:
+                - inEjeGenero
+    id:
+        inejemplar:
+            id: true
+            type: integer
+            column: inEjemplar
+            generator:
+                strategy: IDENTITY
+    fields:
+        inejecantidad:
+            type: integer
+            nullable: false
+            column: inEjeCantidad
+        dbejeavaluo:
+            type: float
+            precision: 10
+            scale: 0
+            nullable: false
+            column: dbEjeAvaluo
+    manyToOne:
+        inejegenero:
+            targetEntity: Libreame\BackendBundle\Entity\LbGeneros
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                inEjeGenero:
+                    referencedColumnName: inGenero
+            orphanRemoval: false
+        inejelibro:
+            targetEntity: Libreame\BackendBundle\Entity\LbLibros
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                inEjeLibro:
+                    referencedColumnName: inLibro
+            orphanRemoval: false
+        inejeusudueno:
+            targetEntity: Libreame\BackendBundle\Entity\LbUsuarios
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                inEjeUsuDueno:
+                    referencedColumnName: inUsuario
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

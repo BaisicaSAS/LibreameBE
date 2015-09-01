@@ -1,0 +1,44 @@
+Libreame\BackendBundle\Entity\LbActsesion:
+    type: entity
+    table: lb_actsesion
+    indexes:
+        fk_lb_ActSesion_lb_sesiones1_idx:
+            columns:
+                - inActSesionDisUs
+    id:
+        inactsesion:
+            id: true
+            type: integer
+            column: inActSesion
+            generator:
+                strategy: IDENTITY
+    fields:
+        txactaccion:
+            type: string
+            length: 5
+            nullable: false
+            column: txActAccion
+        txactmensaje:
+            type: string
+            length: 50
+            nullable: false
+            column: txActMensaje
+        feactfecha:
+            type: datetime
+            nullable: false
+            column: feActFecha
+        inactfinalizada:
+            type: integer
+            nullable: false
+            column: inActFinalizada
+    manyToOne:
+        inactsesiondisus:
+            targetEntity: Libreame\BackendBundle\Entity\LbSesiones
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                inActSesionDisUs:
+                    referencedColumnName: inSesion
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

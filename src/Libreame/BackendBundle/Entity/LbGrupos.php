@@ -6,28 +6,42 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * LbGrupos
+ *
+ * @ORM\Table(name="lb_grupos")
+ * @ORM\Entity
  */
 class LbGrupos
 {
     /**
      * @var integer
+     *
+     * @ORM\Column(name="inGrupo", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $ingrupo;
 
     /**
      * @var string
+     *
+     * @ORM\Column(name="inGruNombre", type="string", length=100, nullable=false)
      */
     private $ingrunombre;
 
     /**
      * @var \DateTime
+     *
+     * @ORM\Column(name="feGruFecha", type="datetime", nullable=false)
      */
     private $fegrufecha;
 
     /**
      * @var integer
+     *
+     * @ORM\Column(name="inGruCantMiem", type="integer", nullable=false)
      */
     private $ingrucantmiem;
+
 
 
     /**

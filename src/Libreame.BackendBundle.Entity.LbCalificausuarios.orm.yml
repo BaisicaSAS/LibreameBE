@@ -1,0 +1,51 @@
+Libreame\BackendBundle\Entity\LbCalificausuarios:
+    type: entity
+    table: lb_calificausuarios
+    indexes:
+        fk_lb_calificausuarios_lb_usuarios1_idx:
+            columns:
+                - inCalUsuCalifica
+        fk_lb_calificausuarios_lb_usuarios2_idx:
+            columns:
+                - inCalUsuCalificado
+    id:
+        incalificacion:
+            id: true
+            type: integer
+            column: inCalificacion
+            generator:
+                strategy: IDENTITY
+    fields:
+        incalcalificacion:
+            type: integer
+            nullable: false
+            column: inCalCalificacion
+        txcalobservacion:
+            type: string
+            length: 100
+            nullable: true
+            column: txCalObservacion
+        incalreporteabuso:
+            type: integer
+            nullable: false
+            column: inCalReporteAbuso
+    manyToOne:
+        incalusucalifica:
+            targetEntity: Libreame\BackendBundle\Entity\LbUsuarios
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                inCalUsuCalifica:
+                    referencedColumnName: inUsuario
+            orphanRemoval: false
+        incalusucalificado:
+            targetEntity: Libreame\BackendBundle\Entity\LbUsuarios
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                inCalUsuCalificado:
+                    referencedColumnName: inUsuario
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

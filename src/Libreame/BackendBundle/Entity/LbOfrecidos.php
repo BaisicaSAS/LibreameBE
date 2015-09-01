@@ -6,43 +6,69 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * LbOfrecidos
+ *
+ * @ORM\Table(name="lb_ofrecidos", indexes={@ORM\Index(name="fk_lb_ofrecidos_lb_ejemplares1_idx", columns={"inOfrEjemplar"}), @ORM\Index(name="fk_lb_ofrecidos_lb_ofertas1_idx", columns={"inOfrOferta"})})
+ * @ORM\Entity
  */
 class LbOfrecidos
 {
     /**
      * @var integer
+     *
+     * @ORM\Column(name="inOfrecido", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $inofrecido;
 
     /**
      * @var integer
+     *
+     * @ORM\Column(name="inOfrTransac", type="integer", nullable=false)
      */
     private $inofrtransac;
 
     /**
      * @var string
+     *
+     * @ORM\Column(name="txOfrObservacion", type="string", length=100, nullable=true)
      */
     private $txofrobservacion;
 
     /**
      * @var float
+     *
+     * @ORM\Column(name="dbOfrValOferta", type="float", precision=10, scale=0, nullable=false)
      */
     private $dbofrvaloferta;
 
     /**
      * @var float
+     *
+     * @ORM\Column(name="dbOfrValAdic", type="float", precision=10, scale=0, nullable=false)
      */
     private $dbofrvaladic;
 
     /**
      * @var \Libreame\BackendBundle\Entity\LbEjemplares
+     *
+     * @ORM\ManyToOne(targetEntity="Libreame\BackendBundle\Entity\LbEjemplares")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="inOfrEjemplar", referencedColumnName="inEjemplar")
+     * })
      */
     private $inofrejemplar;
 
     /**
      * @var \Libreame\BackendBundle\Entity\LbOfertas
+     *
+     * @ORM\ManyToOne(targetEntity="Libreame\BackendBundle\Entity\LbOfertas")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="inOfrOferta", referencedColumnName="inOferta")
+     * })
      */
     private $inofroferta;
+
 
 
     /**

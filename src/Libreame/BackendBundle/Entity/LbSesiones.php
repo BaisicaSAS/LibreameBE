@@ -6,43 +6,66 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * LbSesiones
+ *
+ * @ORM\Table(name="lb_sesiones", indexes={@ORM\Index(name="fk_lb_sesiones_lb_dispusuarios1_idx", columns={"inSesDispUsuario"})})
+ * @ORM\Entity
  */
 class LbSesiones
 {
     /**
      * @var integer
+     *
+     * @ORM\Column(name="inSesion", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $insesion;
 
     /**
      * @var string
+     *
+     * @ORM\Column(name="txSesNumero", type="string", length=45, nullable=false)
      */
     private $txsesnumero;
 
     /**
      * @var integer
+     *
+     * @ORM\Column(name="inSesActiva", type="integer", nullable=false)
      */
     private $insesactiva;
 
     /**
      * @var \DateTime
+     *
+     * @ORM\Column(name="feSesFechaIni", type="datetime", nullable=false)
      */
     private $fesesfechaini;
 
     /**
      * @var \DateTime
+     *
+     * @ORM\Column(name="feSesFechaFin", type="datetime", nullable=true)
      */
     private $fesesfechafin;
 
     /**
      * @var string
+     *
+     * @ORM\Column(name="txIPAddr", type="string", length=30, nullable=false)
      */
     private $txipaddr;
 
     /**
      * @var \Libreame\BackendBundle\Entity\LbDispusuarios
+     *
+     * @ORM\ManyToOne(targetEntity="Libreame\BackendBundle\Entity\LbDispusuarios")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="inSesDispUsuario", referencedColumnName="inDispUsuario")
+     * })
      */
     private $insesdispusuario;
+
 
 
     /**

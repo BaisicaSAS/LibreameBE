@@ -1,77 +1,107 @@
 <?php
 
 namespace Libreame\BackendBundle\Entity;
-namespace Libreame\BackendBundle\Helpers\Logica;
 
 use Doctrine\ORM\Mapping as ORM;
+use Libreame\BackendBundle\Helpers\Logica;
+use Libreame\BackendBundle\Controller\AccesoController;
 
 /**
  * LbUsuarios
+ *
+ * @ORM\Table(name="lb_usuarios", uniqueConstraints={@ORM\UniqueConstraint(name="txUsuEmail_UNIQUE", columns={"txUsuEmail"}), @ORM\UniqueConstraint(name="txUsuTelefono_UNIQUE", columns={"txUsuTelefono"})}, indexes={@ORM\Index(name="fk_lb_usuarios_lb_lugares1_idx", columns={"inUsuLugar"})})
+ * @ORM\Entity
  */
 class LbUsuarios
 {
     /**
      * @var integer
+     *
+     * @ORM\Column(name="inUsuario", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $inusuario;
 
     /**
      * @var string
+     *
+     * @ORM\Column(name="txUsuEmail", type="string", length=100, nullable=false)
      */
     private $txusuemail;
 
     /**
      * @var string
-     * Modificado para adicionar default '0'
+     *
+     * @ORM\Column(name="txUsuTelefono", type="string", length=45, nullable=false)
      */
     private $txusutelefono = '0';
 
     /**
      * @var string
+     *
+     * @ORM\Column(name="txUsuNombre", type="string", length=100, nullable=false)
      */
     private $txusunombre;
 
     /**
      * @var integer
-     * Modificado para adicionar default 2: Sin especificar
+     * Default 2: Genero sin especificar
+     * @ORM\Column(name="inUsuGenero", type="integer", nullable=false)
      */
     private $inusugenero = 2;
 
     /**
      * @var string
+     *
+     * @ORM\Column(name="txUsuImagen", type="string", length=50, nullable=false)
      */
     private $txusuimagen;
 
     /**
      * @var string
+     *
+     * @ORM\Column(name="txUsuNomMostrar", type="string", length=20, nullable=true)
      */
     private $txusunommostrar;
 
     /**
      * @var \DateTime
+     *
+     * @ORM\Column(name="feUsuNacimiento", type="datetime", nullable=true)
      */
     private $feusunacimiento;
 
     /**
      * @var string
+     *
+     * @ORM\Column(name="txUsuValidacion", type="string", length=200, nullable=true)
      */
     private $txusuvalidacion;
 
     /**
      * @var integer
-     * Moficado para adicionar default 0:  Esperando confirmación
+     * Default: 0: Esperando confirmación
+     * @ORM\Column(name="inUsuEstado", type="integer", nullable=false)
      */
     private $inusuestado = 0;
 
     /**
-     * @var \Libreame\BackendBundle\Entity\LbLugares
-     */
-    private $inusulugar;
-
-    /**
      * @var string
+     *
+     * @ORM\Column(name="txUsuClave", type="string", length=256, nullable=false)
      */
     private $txusuclave;
+
+    /**
+     * @var \Libreame\BackendBundle\Entity\LbLugares
+     *
+     * @ORM\ManyToOne(targetEntity="Libreame\BackendBundle\Entity\LbLugares")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="inUsuLugar", referencedColumnName="inLugar")
+     * })
+     */
+    private $inusulugar;
 
 
 
@@ -293,6 +323,29 @@ class LbUsuarios
     }
 
     /**
+     * Set txusuclave
+     *
+     * @param string $txusuclave
+     * @return LbUsuarios
+     */
+    public function setTxusuclave($txusuclave)
+    {
+        $this->txusuclave = $txusuclave;
+
+        return $this;
+    }
+
+    /**
+     * Get txusuclave
+     *
+     * @return string 
+     */
+    public function getTxusuclave()
+    {
+        return $this->txusuclave;
+    }
+
+    /**
      * Set inusulugar
      *
      * @param \Libreame\BackendBundle\Entity\LbLugares $inusulugar
@@ -315,43 +368,22 @@ class LbUsuarios
         return $this->inusulugar;
     }
 
-    /**
-     * Set txusuclave
-     *
-     * @param string $txusuclave
-     * @return string
-     */
-    public function setTxusuclave($txusuclave)
-    {
-        $this->txusuclave = $txusuclave;
-
-        return $this;
-    }
-
-    /**
-     * Get txusuclave
-     *
-     * @return string 
-     */
-    public function getTxusuclave()
-    {
-        return $this->txusuclave;
-    }
-    
+    //Función que crea un usuario para su registro en el sistema
     public function creaUsuario($pSolicitud, $Lugar)
-    {
+    {   
         $usuario = new LbUsuarios();
         $usuario->setTxusuemail($pSolicitud->getEmail());  
         $usuario->setTxusutelefono($pSolicitud->getTelefono());  
         $usuario->setTxusunombre($pSolicitud->getUsuario());  
         $usuario->setTxusuclave($pSolicitud->getClave());  
-        $usuario->setTxusuimagen('DEFAUL IMAGE URL');  
+        $usuario->setTxusuimagen('DEFAULT IMAGE URL');  
         $usuario->setInusulugar($Lugar);  
         $usuario->setTxusuvalidacion(Logica::generaRand(AccesoController::inTamVali));  
         
         return $usuario;
     }
     
+    //Función que retorna la cantidad de mensajes que un usuario tiene sin leer en la plataforma
     public function cantMsgUsr($usuario)
     {
         //$em = $this->getDoctrine()->getManager();
@@ -361,6 +393,5 @@ class LbUsuarios
         
         return 10;
     }
-    
     
 }

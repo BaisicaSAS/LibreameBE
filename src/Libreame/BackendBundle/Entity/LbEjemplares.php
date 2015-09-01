@@ -6,38 +6,65 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * LbEjemplares
+ *
+ * @ORM\Table(name="lb_ejemplares", indexes={@ORM\Index(name="fk_lb_ejemplares_lb_usuarios1_idx", columns={"inEjeUsuDueno"}), @ORM\Index(name="fk_lb_ejemplares_lb_libros1_idx", columns={"inEjeLibro"}), @ORM\Index(name="fk_lb_ejemplares_lb_generos1_idx", columns={"inEjeGenero"})})
+ * @ORM\Entity
  */
 class LbEjemplares
 {
     /**
      * @var integer
+     *
+     * @ORM\Column(name="inEjemplar", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $inejemplar;
 
     /**
      * @var integer
+     *
+     * @ORM\Column(name="inEjeCantidad", type="integer", nullable=false)
      */
     private $inejecantidad;
 
     /**
      * @var float
+     *
+     * @ORM\Column(name="dbEjeAvaluo", type="float", precision=10, scale=0, nullable=false)
      */
     private $dbejeavaluo;
 
     /**
      * @var \Libreame\BackendBundle\Entity\LbGeneros
+     *
+     * @ORM\ManyToOne(targetEntity="Libreame\BackendBundle\Entity\LbGeneros")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="inEjeGenero", referencedColumnName="inGenero")
+     * })
      */
     private $inejegenero;
 
     /**
      * @var \Libreame\BackendBundle\Entity\LbLibros
+     *
+     * @ORM\ManyToOne(targetEntity="Libreame\BackendBundle\Entity\LbLibros")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="inEjeLibro", referencedColumnName="inLibro")
+     * })
      */
     private $inejelibro;
 
     /**
      * @var \Libreame\BackendBundle\Entity\LbUsuarios
+     *
+     * @ORM\ManyToOne(targetEntity="Libreame\BackendBundle\Entity\LbUsuarios")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="inEjeUsuDueno", referencedColumnName="inUsuario")
+     * })
      */
     private $inejeusudueno;
+
 
 
     /**

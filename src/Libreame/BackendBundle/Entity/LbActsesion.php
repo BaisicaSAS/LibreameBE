@@ -6,48 +6,69 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * LbActsesion
+ *
+ * @ORM\Table(name="lb_actsesion", indexes={@ORM\Index(name="fk_lb_ActSesion_lb_sesiones1_idx", columns={"inActSesionDisUs"})})
+ * @ORM\Entity
  */
 class LbActsesion
 {
     /**
      * @var integer
+     *
+     * @ORM\Column(name="inActSesion", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $inactsesion;
 
     /**
      * @var string
+     *
+     * @ORM\Column(name="txActAccion", type="string", length=5, nullable=false)
      */
     private $txactaccion;
 
     /**
      * @var string
+     *
+     * @ORM\Column(name="txActMensaje", type="string", length=50, nullable=false)
      */
     private $txactmensaje;
 
     /**
      * @var \DateTime
+     *
+     * @ORM\Column(name="feActFecha", type="datetime", nullable=false)
      */
     private $feactfecha;
 
     /**
      * @var integer
+     *
+     * @ORM\Column(name="inActFinalizada", type="integer", nullable=false)
      */
     private $inactfinalizada;
 
     /**
      * @var \Libreame\BackendBundle\Entity\LbSesiones
+     *
+     * @ORM\ManyToOne(targetEntity="Libreame\BackendBundle\Entity\LbSesiones")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="inActSesionDisUs", referencedColumnName="inSesion")
+     * })
      */
     private $inactsesiondisus;
 
 
+
     /**
-     * Get txactsesion
+     * Get inactsesion
      *
-     * @return string 
+     * @return integer 
      */
-    public function getTxactsesion()
+    public function getInactsesion()
     {
-        return $this->txactsesion;
+        return $this->inactsesion;
     }
 
     /**
@@ -64,9 +85,9 @@ class LbActsesion
     }
 
     /**
-     * Get inactaccion
+     * Get txactaccion
      *
-     * @return integer 
+     * @return string 
      */
     public function getTxactaccion()
     {

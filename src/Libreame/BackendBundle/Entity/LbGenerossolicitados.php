@@ -6,23 +6,41 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * LbGenerossolicitados
+ *
+ * @ORM\Table(name="lb_generossolicitados", indexes={@ORM\Index(name="fk_lb_generossolicitados_lb_generos1_idx", columns={"inSolGenero"}), @ORM\Index(name="fk_lb_generossolicitados_lb_solicitados1_idx", columns={"inSolSolicitado"})})
+ * @ORM\Entity
  */
 class LbGenerossolicitados
 {
     /**
      * @var integer
+     *
+     * @ORM\Column(name="inGeneroSolicitado", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $ingenerosolicitado;
 
     /**
      * @var \Libreame\BackendBundle\Entity\LbGeneros
+     *
+     * @ORM\ManyToOne(targetEntity="Libreame\BackendBundle\Entity\LbGeneros")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="inSolGenero", referencedColumnName="inGenero")
+     * })
      */
     private $insolgenero;
 
     /**
      * @var \Libreame\BackendBundle\Entity\LbSolicitados
+     *
+     * @ORM\ManyToOne(targetEntity="Libreame\BackendBundle\Entity\LbSolicitados")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="inSolSolicitado", referencedColumnName="IdSolicitado")
+     * })
      */
     private $insolsolicitado;
+
 
 
     /**

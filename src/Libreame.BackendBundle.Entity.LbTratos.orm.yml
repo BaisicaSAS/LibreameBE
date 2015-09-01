@@ -1,0 +1,67 @@
+Libreame\BackendBundle\Entity\LbTratos:
+    type: entity
+    table: lb_tratos
+    indexes:
+        fk_lb_tratos_lb_ofertas1_idx:
+            columns:
+                - inTraOferta
+        fk_lb_tratos_lb_usuarios1_idx:
+            columns:
+                - inTraUsuOfrecio
+        fk_lb_tratos_lb_usuarios2_idx:
+            columns:
+                - inTraUsuAcepto
+    id:
+        intrato:
+            id: true
+            type: integer
+            column: inTrato
+            generator:
+                strategy: IDENTITY
+    fields:
+        intrafecha:
+            type: datetime
+            nullable: false
+            column: inTraFecha
+        intraestado:
+            type: integer
+            nullable: false
+            column: inTraEstado
+        txtraacuentrega:
+            type: string
+            length: 300
+            nullable: false
+            column: txTraAcuEntrega
+        fetrafecentrega:
+            type: datetime
+            nullable: false
+            column: feTraFecEntrega
+    manyToOne:
+        intraoferta:
+            targetEntity: Libreame\BackendBundle\Entity\LbOfertas
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                inTraOferta:
+                    referencedColumnName: inOferta
+            orphanRemoval: false
+        intrausuofrecio:
+            targetEntity: Libreame\BackendBundle\Entity\LbUsuarios
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                inTraUsuOfrecio:
+                    referencedColumnName: inUsuario
+            orphanRemoval: false
+        intrausuacepto:
+            targetEntity: Libreame\BackendBundle\Entity\LbUsuarios
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                inTraUsuAcepto:
+                    referencedColumnName: inUsuario
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

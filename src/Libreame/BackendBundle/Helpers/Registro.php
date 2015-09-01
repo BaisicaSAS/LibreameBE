@@ -49,8 +49,8 @@ class Registro {
             if (!$em->getRepository('LibreameBackendBundle:LbUsuarios')->findOneBy(array('txusuemail' => $pSolicitud->getEmail()))){
                 try {
                     //Guarda el usuario
-                    //echo "<script>alert('Usuario NO existe')</script>";
-                    $usuario->creaUsuario($pSolicitud, $Lugar);
+                    //echo "<script>alert('Usuario [".$pSolicitud->getEmail()." ] NO existe')</script>";
+                    $usuario=$usuario->creaUsuario($pSolicitud, $Lugar);
 
                     //Guarda el dispositivo si NO existe
                     //echo "<script>alert('Evalua si dispositivo existe')</script>";
@@ -60,7 +60,7 @@ class Registro {
                         //echo "<script>alert('Dispositivo [".$pSolicitud->getDeviceMAC()."-guardadevice".$guardadevice." ] NO existe')</script>";
                         $guardadevice=1;
 
-                        $device->creaDispusuario($usuario, $pSolicitud);
+                        $device=$device->creaDispusuario($usuario, $pSolicitud);
                     } else {
                         //echo "<script>alert('Dispositivo [".$pSolicitud->getDeviceMAC()."-guardadevice".$guardadevice." ] existe')</script>";
                     }

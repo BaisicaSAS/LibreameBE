@@ -6,83 +6,122 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * LbLibros
+ *
+ * @ORM\Table(name="lb_libros", indexes={@ORM\Index(name="fk_lb_libros_lb_generos1_idx", columns={"inLibGenero"})})
+ * @ORM\Entity
  */
 class LbLibros
 {
     /**
      * @var integer
+     *
+     * @ORM\Column(name="inLibro", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $inlibro;
 
     /**
      * @var integer
+     *
+     * @ORM\Column(name="txLibTipoPublica", type="integer", nullable=false)
      */
     private $txlibtipopublica;
 
     /**
      * @var string
+     *
+     * @ORM\Column(name="txLibTitulo", type="string", length=200, nullable=false)
      */
     private $txlibtitulo;
 
     /**
      * @var string
+     *
+     * @ORM\Column(name="txLibAutores", type="string", length=200, nullable=true)
      */
     private $txlibautores;
 
     /**
      * @var string
+     *
+     * @ORM\Column(name="txLibIdioma", type="string", length=45, nullable=false)
      */
     private $txlibidioma;
 
     /**
      * @var string
+     *
+     * @ORM\Column(name="txLibEditorial", type="string", length=100, nullable=true)
      */
     private $txlibeditorial;
 
     /**
      * @var string
+     *
+     * @ORM\Column(name="txLibEdicionAnio", type="string", length=10, nullable=true)
      */
     private $txlibedicionanio;
 
     /**
      * @var string
+     *
+     * @ORM\Column(name="txLibEdicionNum", type="string", length=10, nullable=true)
      */
     private $txlibedicionnum;
 
     /**
      * @var string
+     *
+     * @ORM\Column(name="txLibEdicionPais", type="string", length=100, nullable=true)
      */
     private $txlibedicionpais;
 
     /**
      * @var string
+     *
+     * @ORM\Column(name="txLibCodigoOfic", type="string", length=45, nullable=true)
      */
     private $txlibcodigoofic;
 
     /**
      * @var string
+     *
+     * @ORM\Column(name="txLibResumen", type="string", length=300, nullable=true)
      */
     private $txlibresumen;
 
     /**
      * @var string
+     *
+     * @ORM\Column(name="txLibTomo", type="string", length=45, nullable=true)
      */
     private $txlibtomo;
 
     /**
      * @var string
+     *
+     * @ORM\Column(name="txLibVolumen", type="string", length=45, nullable=true)
      */
     private $txlibvolumen;
 
     /**
      * @var string
+     *
+     * @ORM\Column(name="txPaginas", type="string", length=45, nullable=true)
      */
     private $txpaginas;
 
     /**
      * @var \Libreame\BackendBundle\Entity\LbGeneros
+     *
+     * @ORM\ManyToOne(targetEntity="Libreame\BackendBundle\Entity\LbGeneros")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="inLibGenero", referencedColumnName="inGenero")
+     * })
      */
     private $inlibgenero;
+
 
 
     /**

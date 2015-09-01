@@ -6,43 +6,72 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * LbActividadofertas
+ *
+ * @ORM\Table(name="lb_actividadofertas", indexes={@ORM\Index(name="fk_lb_ActividadOfertas_lb_usuarios1_idx", columns={"inActUsuario"}), @ORM\Index(name="fk_lb_ActividadOfertas_lb_ofertas1_idx", columns={"inActOferta"}), @ORM\Index(name="fk_lb_ActividadOfertas_lb_ActividadOfertas1_idx", columns={"inActPadreAct"})})
+ * @ORM\Entity
  */
 class LbActividadofertas
 {
     /**
      * @var integer
+     *
+     * @ORM\Column(name="inActividadOferta", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $inactividadoferta;
 
     /**
      * @var \DateTime
+     *
+     * @ORM\Column(name="feActFechaHora", type="datetime", nullable=false)
      */
     private $feactfechahora;
 
     /**
      * @var string
+     *
+     * @ORM\Column(name="txActDescripcion", type="string", length=300, nullable=true)
      */
     private $txactdescripcion;
 
     /**
      * @var integer
+     *
+     * @ORM\Column(name="inActEstado", type="integer", nullable=true)
      */
     private $inactestado;
 
     /**
      * @var \Libreame\BackendBundle\Entity\LbActividadofertas
+     *
+     * @ORM\ManyToOne(targetEntity="Libreame\BackendBundle\Entity\LbActividadofertas")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="inActPadreAct", referencedColumnName="inActividadOferta")
+     * })
      */
     private $inactpadreact;
 
     /**
      * @var \Libreame\BackendBundle\Entity\LbOfertas
+     *
+     * @ORM\ManyToOne(targetEntity="Libreame\BackendBundle\Entity\LbOfertas")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="inActOferta", referencedColumnName="inOferta")
+     * })
      */
     private $inactoferta;
 
     /**
      * @var \Libreame\BackendBundle\Entity\LbUsuarios
+     *
+     * @ORM\ManyToOne(targetEntity="Libreame\BackendBundle\Entity\LbUsuarios")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="inActUsuario", referencedColumnName="inUsuario")
+     * })
      */
     private $inactusuario;
+
 
 
     /**

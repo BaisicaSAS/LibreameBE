@@ -90,7 +90,7 @@ Libreame\BackendBundle\Entity\LbUsuarios:
             nullable: false
             length: 256
             fixed: false
-            comment: 'Clave del usuario'
+            comment: ''
             column: txUsuClave
     manyToOne:
         inusulugar:

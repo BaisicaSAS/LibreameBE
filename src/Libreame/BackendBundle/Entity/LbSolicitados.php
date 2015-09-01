@@ -6,48 +6,79 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * LbSolicitados
+ *
+ * @ORM\Table(name="lb_solicitados", indexes={@ORM\Index(name="fk_lb_solicitados_lb_ejemplares1_idx", columns={"inSolEjemplar"}), @ORM\Index(name="fk_lb_solicitados_lb_ofertas1_idx", columns={"inSolOferta"}), @ORM\Index(name="fk_lb_solicitados_lb_libros1_idx", columns={"inSolLibro"})})
+ * @ORM\Entity
  */
 class LbSolicitados
 {
     /**
      * @var integer
+     *
+     * @ORM\Column(name="IdSolicitado", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $idsolicitado;
 
     /**
      * @var integer
+     *
+     * @ORM\Column(name="inSolTransac", type="integer", nullable=false)
      */
     private $insoltransac;
 
     /**
      * @var string
+     *
+     * @ORM\Column(name="txSolObservacion", type="string", length=100, nullable=true)
      */
     private $txsolobservacion;
 
     /**
      * @var float
+     *
+     * @ORM\Column(name="dbSolValOferta", type="float", precision=10, scale=0, nullable=false)
      */
     private $dbsolvaloferta;
 
     /**
      * @var float
+     *
+     * @ORM\Column(name="dbSolValAdic", type="float", precision=10, scale=0, nullable=false)
      */
     private $dbsolvaladic;
 
     /**
      * @var \Libreame\BackendBundle\Entity\LbEjemplares
+     *
+     * @ORM\ManyToOne(targetEntity="Libreame\BackendBundle\Entity\LbEjemplares")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="inSolEjemplar", referencedColumnName="inEjemplar")
+     * })
      */
     private $insolejemplar;
 
     /**
      * @var \Libreame\BackendBundle\Entity\LbLibros
+     *
+     * @ORM\ManyToOne(targetEntity="Libreame\BackendBundle\Entity\LbLibros")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="inSolLibro", referencedColumnName="inLibro")
+     * })
      */
     private $insollibro;
 
     /**
      * @var \Libreame\BackendBundle\Entity\LbOfertas
+     *
+     * @ORM\ManyToOne(targetEntity="Libreame\BackendBundle\Entity\LbOfertas")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="inSolOferta", referencedColumnName="inOferta")
+     * })
      */
     private $insoloferta;
+
 
 
     /**

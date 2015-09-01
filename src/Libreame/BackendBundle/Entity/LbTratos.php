@@ -6,48 +6,79 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * LbTratos
+ *
+ * @ORM\Table(name="lb_tratos", indexes={@ORM\Index(name="fk_lb_tratos_lb_ofertas1_idx", columns={"inTraOferta"}), @ORM\Index(name="fk_lb_tratos_lb_usuarios1_idx", columns={"inTraUsuOfrecio"}), @ORM\Index(name="fk_lb_tratos_lb_usuarios2_idx", columns={"inTraUsuAcepto"})})
+ * @ORM\Entity
  */
 class LbTratos
 {
     /**
      * @var integer
+     *
+     * @ORM\Column(name="inTrato", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $intrato;
 
     /**
      * @var \DateTime
+     *
+     * @ORM\Column(name="inTraFecha", type="datetime", nullable=false)
      */
     private $intrafecha;
 
     /**
      * @var integer
+     *
+     * @ORM\Column(name="inTraEstado", type="integer", nullable=false)
      */
     private $intraestado;
 
     /**
      * @var string
+     *
+     * @ORM\Column(name="txTraAcuEntrega", type="string", length=300, nullable=false)
      */
     private $txtraacuentrega;
 
     /**
      * @var \DateTime
+     *
+     * @ORM\Column(name="feTraFecEntrega", type="datetime", nullable=false)
      */
     private $fetrafecentrega;
 
     /**
      * @var \Libreame\BackendBundle\Entity\LbOfertas
+     *
+     * @ORM\ManyToOne(targetEntity="Libreame\BackendBundle\Entity\LbOfertas")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="inTraOferta", referencedColumnName="inOferta")
+     * })
      */
     private $intraoferta;
 
     /**
      * @var \Libreame\BackendBundle\Entity\LbUsuarios
+     *
+     * @ORM\ManyToOne(targetEntity="Libreame\BackendBundle\Entity\LbUsuarios")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="inTraUsuOfrecio", referencedColumnName="inUsuario")
+     * })
      */
     private $intrausuofrecio;
 
     /**
      * @var \Libreame\BackendBundle\Entity\LbUsuarios
+     *
+     * @ORM\ManyToOne(targetEntity="Libreame\BackendBundle\Entity\LbUsuarios")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="inTraUsuAcepto", referencedColumnName="inUsuario")
+     * })
      */
     private $intrausuacepto;
+
 
 
     /**

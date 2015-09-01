@@ -6,18 +6,28 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * LbGeneros
+ *
+ * @ORM\Table(name="lb_generos")
+ * @ORM\Entity
  */
 class LbGeneros
 {
     /**
      * @var integer
+     *
+     * @ORM\Column(name="inGenero", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $ingenero;
 
     /**
      * @var string
+     *
+     * @ORM\Column(name="txGenNombre", type="string", length=45, nullable=false)
      */
     private $txgennombre;
+
 
 
     /**

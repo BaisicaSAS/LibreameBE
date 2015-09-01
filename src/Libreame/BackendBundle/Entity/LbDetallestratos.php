@@ -6,48 +6,85 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * LbDetallestratos
+ *
+ * @ORM\Table(name="lb_detallestratos", indexes={@ORM\Index(name="fk_lb_detallestratos_lb_tratos1_idx", columns={"inDetTrato"}), @ORM\Index(name="fk_lb_detallestratos_lb_ejemplares1_idx", columns={"inDetEjemplarUsr"}), @ORM\Index(name="fk_lb_detallestratos_lb_usuarios1_idx", columns={"inDetUsuario"}), @ORM\Index(name="fk_lb_detallestratos_lb_ejemplares2_idx", columns={"inDetEjemplarOtro"}), @ORM\Index(name="fk_lb_detallestratos_lb_usuarios2_idx", columns={"inDetUsuarioOtro"})})
+ * @ORM\Entity
  */
 class LbDetallestratos
 {
     /**
      * @var integer
+     *
+     * @ORM\Column(name="inDetalleTrato", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $indetalletrato;
 
     /**
      * @var float
+     *
+     * @ORM\Column(name="inDetValorUsr", type="float", precision=10, scale=0, nullable=false)
      */
     private $indetvalorusr;
 
     /**
      * @var float
+     *
+     * @ORM\Column(name="inDetValorOtro", type="float", precision=10, scale=0, nullable=false)
      */
     private $indetvalorotro;
 
     /**
      * @var \Libreame\BackendBundle\Entity\LbEjemplares
+     *
+     * @ORM\ManyToOne(targetEntity="Libreame\BackendBundle\Entity\LbEjemplares")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="inDetEjemplarUsr", referencedColumnName="inEjemplar")
+     * })
      */
     private $indetejemplarusr;
 
     /**
      * @var \Libreame\BackendBundle\Entity\LbEjemplares
+     *
+     * @ORM\ManyToOne(targetEntity="Libreame\BackendBundle\Entity\LbEjemplares")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="inDetEjemplarOtro", referencedColumnName="inEjemplar")
+     * })
      */
     private $indetejemplarotro;
 
     /**
      * @var \Libreame\BackendBundle\Entity\LbTratos
+     *
+     * @ORM\ManyToOne(targetEntity="Libreame\BackendBundle\Entity\LbTratos")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="inDetTrato", referencedColumnName="inTrato")
+     * })
      */
     private $indettrato;
 
     /**
      * @var \Libreame\BackendBundle\Entity\LbUsuarios
+     *
+     * @ORM\ManyToOne(targetEntity="Libreame\BackendBundle\Entity\LbUsuarios")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="inDetUsuario", referencedColumnName="inUsuario")
+     * })
      */
     private $indetusuario;
 
     /**
      * @var \Libreame\BackendBundle\Entity\LbUsuarios
+     *
+     * @ORM\ManyToOne(targetEntity="Libreame\BackendBundle\Entity\LbUsuarios")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="inDetUsuarioOtro", referencedColumnName="inUsuario")
+     * })
      */
     private $indetusuariootro;
+
 
 
     /**

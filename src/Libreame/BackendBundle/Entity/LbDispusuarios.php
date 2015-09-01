@@ -6,43 +6,66 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * LbDispusuarios
+ *
+ * @ORM\Table(name="lb_dispusuarios", indexes={@ORM\Index(name="fk_lb_dispusuarios_lb_usuarios1_idx", columns={"inDisUsuario"})})
+ * @ORM\Entity
  */
 class LbDispusuarios
 {
     /**
      * @var integer
+     *
+     * @ORM\Column(name="inDispUsuario", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $indispusuario;
 
     /**
      * @var string
+     *
+     * @ORM\Column(name="txDisID", type="string", length=45, nullable=false)
      */
     private $txdisid;
 
     /**
      * @var string
+     *
+     * @ORM\Column(name="txDisNombre", type="string", length=45, nullable=true)
      */
     private $txdisnombre;
 
     /**
      * @var string
+     *
+     * @ORM\Column(name="txDisMarca", type="string", length=45, nullable=true)
      */
     private $txdismarca;
 
     /**
      * @var string
+     *
+     * @ORM\Column(name="txDisModelo", type="string", length=45, nullable=true)
      */
     private $txdismodelo;
 
     /**
      * @var string
+     *
+     * @ORM\Column(name="txDisSO", type="string", length=45, nullable=true)
      */
     private $txdisso;
 
     /**
      * @var \Libreame\BackendBundle\Entity\LbUsuarios
+     *
+     * @ORM\ManyToOne(targetEntity="Libreame\BackendBundle\Entity\LbUsuarios")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="inDisUsuario", referencedColumnName="inUsuario")
+     * })
      */
     private $indisusuario;
+
 
 
     /**
@@ -203,5 +226,5 @@ class LbDispusuarios
         $device->setTxdisso($pSolicitud->getDeviceSO());
         
         return $device;        
-    }
+    }    
 }

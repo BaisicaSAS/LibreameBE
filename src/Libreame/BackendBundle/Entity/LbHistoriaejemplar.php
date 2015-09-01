@@ -6,33 +6,55 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * LbHistoriaejemplar
+ *
+ * @ORM\Table(name="lb_historiaejemplar", indexes={@ORM\Index(name="fk_lb_historiaejemplar_lb_ejemplares1_idx", columns={"inHEjEjemplar"}), @ORM\Index(name="fk_lb_historiaejemplar_lb_usuarios1_idx", columns={"inHEjUsuario"})})
+ * @ORM\Entity
  */
 class LbHistoriaejemplar
 {
     /**
      * @var integer
+     *
+     * @ORM\Column(name="inHistEjemplar", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $inhistejemplar;
 
     /**
      * @var \DateTime
+     *
+     * @ORM\Column(name="inHEjFechaHora", type="datetime", nullable=false)
      */
     private $inhejfechahora;
 
     /**
      * @var integer
+     *
+     * @ORM\Column(name="inHEjModo", type="integer", nullable=false)
      */
     private $inhejmodo;
 
     /**
      * @var \Libreame\BackendBundle\Entity\LbEjemplares
+     *
+     * @ORM\ManyToOne(targetEntity="Libreame\BackendBundle\Entity\LbEjemplares")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="inHEjEjemplar", referencedColumnName="inEjemplar")
+     * })
      */
     private $inhejejemplar;
 
     /**
      * @var \Libreame\BackendBundle\Entity\LbUsuarios
+     *
+     * @ORM\ManyToOne(targetEntity="Libreame\BackendBundle\Entity\LbUsuarios")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="inHEjUsuario", referencedColumnName="inUsuario")
+     * })
      */
     private $inhejusuario;
+
 
 
     /**

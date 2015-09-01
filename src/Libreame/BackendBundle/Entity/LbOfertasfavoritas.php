@@ -6,28 +6,48 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * LbOfertasfavoritas
+ *
+ * @ORM\Table(name="lb_ofertasfavoritas", indexes={@ORM\Index(name="fk_lb_ofertasfavoritas_lb_usuarios1_idx", columns={"inFavUsuario"}), @ORM\Index(name="fk_lb_ofertasfavoritas_lb_ofertas1_idx", columns={"inFavOferta"})})
+ * @ORM\Entity
  */
 class LbOfertasfavoritas
 {
     /**
      * @var integer
+     *
+     * @ORM\Column(name="inOfertaFavorita", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $inofertafavorita;
 
     /**
      * @var \DateTime
+     *
+     * @ORM\Column(name="feFavFecha", type="datetime", nullable=false)
      */
     private $fefavfecha;
 
     /**
      * @var \Libreame\BackendBundle\Entity\LbOfertas
+     *
+     * @ORM\ManyToOne(targetEntity="Libreame\BackendBundle\Entity\LbOfertas")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="inFavOferta", referencedColumnName="inOferta")
+     * })
      */
     private $infavoferta;
 
     /**
      * @var \Libreame\BackendBundle\Entity\LbUsuarios
+     *
+     * @ORM\ManyToOne(targetEntity="Libreame\BackendBundle\Entity\LbUsuarios")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="inFavUsuario", referencedColumnName="inUsuario")
+     * })
      */
     private $infavusuario;
+
 
 
     /**

@@ -6,37 +6,55 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * LbMembresias
+ *
+ * @ORM\Table(name="lb_membresias", indexes={@ORM\Index(name="fk_lb_membresias_lb_usuarios_idx", columns={"inMemUsuario"}), @ORM\Index(name="fk_lb_membresias_lb_grupos1_idx", columns={"inMemGrupo"})})
+ * @ORM\Entity
  */
 class LbMembresias
 {
     /**
      * @var integer
+     *
+     * @ORM\Column(name="inMembresia", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $inmembresia;
 
     /**
      * @var integer
-     * Indica si el usuario es creador del grupo 
-     * 0: No - 1: Si    
+     * Default 0 - El usuario NO Es el creador del Grupo
+     * @ORM\Column(name="inMemCreador", type="integer", nullable=false)
      */
     private $inmemcreador = 0;
-    
+
     /**
      * @var integer
-     * Indica si el usuario sigue siendo miembro del grupo, en principio no se tendrá en cuenta este campo
-     * 0: Inactiva - 1:Activa
+     * Default 1 - Membresía activa
+     * @ORM\Column(name="inMemActiva", type="integer", nullable=false)
      */
     private $inmemactiva = 1;
 
     /**
      * @var \Libreame\BackendBundle\Entity\LbGrupos
+     *
+     * @ORM\ManyToOne(targetEntity="Libreame\BackendBundle\Entity\LbGrupos")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="inMemGrupo", referencedColumnName="inGrupo")
+     * })
      */
     private $inmemgrupo;
 
     /**
      * @var \Libreame\BackendBundle\Entity\LbUsuarios
+     *
+     * @ORM\ManyToOne(targetEntity="Libreame\BackendBundle\Entity\LbUsuarios")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="inMemUsuario", referencedColumnName="inUsuario")
+     * })
      */
     private $inmemusuario;
+
 
 
     /**

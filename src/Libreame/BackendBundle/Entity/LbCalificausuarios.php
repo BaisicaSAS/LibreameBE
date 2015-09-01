@@ -6,38 +6,62 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * LbCalificausuarios
+ *
+ * @ORM\Table(name="lb_calificausuarios", indexes={@ORM\Index(name="fk_lb_calificausuarios_lb_usuarios1_idx", columns={"inCalUsuCalifica"}), @ORM\Index(name="fk_lb_calificausuarios_lb_usuarios2_idx", columns={"inCalUsuCalificado"})})
+ * @ORM\Entity
  */
 class LbCalificausuarios
 {
     /**
      * @var integer
+     *
+     * @ORM\Column(name="inCalificacion", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $incalificacion;
 
     /**
      * @var integer
+     *
+     * @ORM\Column(name="inCalCalificacion", type="integer", nullable=false)
      */
     private $incalcalificacion;
 
     /**
      * @var string
+     *
+     * @ORM\Column(name="txCalObservacion", type="string", length=100, nullable=true)
      */
     private $txcalobservacion;
 
     /**
      * @var integer
+     *
+     * @ORM\Column(name="inCalReporteAbuso", type="integer", nullable=false)
      */
     private $incalreporteabuso;
 
     /**
      * @var \Libreame\BackendBundle\Entity\LbUsuarios
+     *
+     * @ORM\ManyToOne(targetEntity="Libreame\BackendBundle\Entity\LbUsuarios")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="inCalUsuCalifica", referencedColumnName="inUsuario")
+     * })
      */
     private $incalusucalifica;
 
     /**
      * @var \Libreame\BackendBundle\Entity\LbUsuarios
+     *
+     * @ORM\ManyToOne(targetEntity="Libreame\BackendBundle\Entity\LbUsuarios")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="inCalUsuCalificado", referencedColumnName="inUsuario")
+     * })
      */
     private $incalusucalificado;
+
 
 
     /**

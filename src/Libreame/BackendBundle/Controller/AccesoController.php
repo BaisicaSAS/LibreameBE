@@ -128,7 +128,7 @@ class AccesoController extends Controller
                     $datos = json_encode($prueba);
                 }
                 
-                //echo "<script>alert('".$datos."')</script>";
+                echo "<script>alert('".$datos."')</script>";
             }
 
             //Aquí iniciaría el código en producción, el bloque anterior solo funciona para TEST

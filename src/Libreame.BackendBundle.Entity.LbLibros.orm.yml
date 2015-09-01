@@ -1,0 +1,90 @@
+Libreame\BackendBundle\Entity\LbLibros:
+    type: entity
+    table: lb_libros
+    indexes:
+        fk_lb_libros_lb_generos1_idx:
+            columns:
+                - inLibGenero
+    id:
+        inlibro:
+            id: true
+            type: integer
+            column: inLibro
+            generator:
+                strategy: IDENTITY
+    fields:
+        txlibtipopublica:
+            type: integer
+            nullable: false
+            column: txLibTipoPublica
+        txlibtitulo:
+            type: string
+            length: 200
+            nullable: false
+            column: txLibTitulo
+        txlibautores:
+            type: string
+            length: 200
+            nullable: true
+            column: txLibAutores
+        txlibidioma:
+            type: string
+            length: 45
+            nullable: false
+            column: txLibIdioma
+        txlibeditorial:
+            type: string
+            length: 100
+            nullable: true
+            column: txLibEditorial
+        txlibedicionanio:
+            type: string
+            length: 10
+            nullable: true
+            column: txLibEdicionAnio
+        txlibedicionnum:
+            type: string
+            length: 10
+            nullable: true
+            column: txLibEdicionNum
+        txlibedicionpais:
+            type: string
+            length: 100
+            nullable: true
+            column: txLibEdicionPais
+        txlibcodigoofic:
+            type: string
+            length: 45
+            nullable: true
+            column: txLibCodigoOfic
+        txlibresumen:
+            type: string
+            length: 300
+            nullable: true
+            column: txLibResumen
+        txlibtomo:
+            type: string
+            length: 45
+            nullable: true
+            column: txLibTomo
+        txlibvolumen:
+            type: string
+            length: 45
+            nullable: true
+            column: txLibVolumen
+        txpaginas:
+            type: string
+            length: 45
+            nullable: true
+            column: txPaginas
+    manyToOne:
+        inlibgenero:
+            targetEntity: Libreame\BackendBundle\Entity\LbGeneros
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                inLibGenero:
+                    referencedColumnName: inGenero
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

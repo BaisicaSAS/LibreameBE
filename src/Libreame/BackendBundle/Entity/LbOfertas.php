@@ -6,38 +6,59 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * LbOfertas
+ *
+ * @ORM\Table(name="lb_ofertas", indexes={@ORM\Index(name="fk_lb_ofertas_lb_membresias1_idx", columns={"inOfeMembresia"})})
+ * @ORM\Entity
  */
 class LbOfertas
 {
     /**
      * @var integer
+     *
+     * @ORM\Column(name="inOferta", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $inoferta;
 
     /**
      * @var \DateTime
+     *
+     * @ORM\Column(name="feOfeFecha", type="datetime", nullable=false)
      */
     private $feofefecha;
 
     /**
      * @var integer
+     *
+     * @ORM\Column(name="inOfeVigencia", type="integer", nullable=false)
      */
     private $inofevigencia;
 
     /**
      * @var integer
+     *
+     * @ORM\Column(name="inOfeActiva", type="integer", nullable=true)
      */
     private $inofeactiva;
 
     /**
      * @var integer
+     *
+     * @ORM\Column(name="inOfeAbierta", type="integer", nullable=true)
      */
     private $inofeabierta;
 
     /**
      * @var \Libreame\BackendBundle\Entity\LbMembresias
+     *
+     * @ORM\ManyToOne(targetEntity="Libreame\BackendBundle\Entity\LbMembresias")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="inOfeMembresia", referencedColumnName="inMembresia")
+     * })
      */
     private $inofemembresia;
+
 
 
     /**

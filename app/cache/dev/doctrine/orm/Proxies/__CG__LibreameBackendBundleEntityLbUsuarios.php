@@ -64,10 +64,10 @@ class LbUsuarios extends \Libreame\BackendBundle\Entity\LbUsuarios implements \D
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', 'inusuario', 'txusuemail', 'txusutelefono', 'txusunombre', 'inusugenero', 'txusuimagen', 'txusunommostrar', 'feusunacimiento', 'txusuvalidacion', 'inusuestado', 'inusulugar', 'txusuclave');
+            return array('__isInitialized__', 'inusuario', 'txusuemail', 'txusutelefono', 'txusunombre', 'inusugenero', 'txusuimagen', 'txusunommostrar', 'feusunacimiento', 'txusuvalidacion', 'inusuestado', 'txusuclave', 'inusulugar');
         }
 
-        return array('__isInitialized__', 'inusuario', 'txusuemail', 'txusutelefono', 'txusunombre', 'inusugenero', 'txusuimagen', 'txusunommostrar', 'feusunacimiento', 'txusuvalidacion', 'inusuestado', 'inusulugar', 'txusuclave');
+        return array('__isInitialized__', 'inusuario', 'txusuemail', 'txusutelefono', 'txusunombre', 'inusugenero', 'txusuimagen', 'txusunommostrar', 'feusunacimiento', 'txusuvalidacion', 'inusuestado', 'txusuclave', 'inusulugar');
     }
 
     /**
@@ -389,6 +389,28 @@ class LbUsuarios extends \Libreame\BackendBundle\Entity\LbUsuarios implements \D
     /**
      * {@inheritDoc}
      */
+    public function setTxusuclave($txusuclave)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setTxusuclave', array($txusuclave));
+
+        return parent::setTxusuclave($txusuclave);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getTxusuclave()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getTxusuclave', array());
+
+        return parent::getTxusuclave();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function setInusulugar(\Libreame\BackendBundle\Entity\LbLugares $inusulugar = NULL)
     {
 
@@ -411,23 +433,23 @@ class LbUsuarios extends \Libreame\BackendBundle\Entity\LbUsuarios implements \D
     /**
      * {@inheritDoc}
      */
-    public function setTxusuclave($txusuclave)
+    public function creaUsuario($pSolicitud, $Lugar)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setTxusuclave', array($txusuclave));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'creaUsuario', array($pSolicitud, $Lugar));
 
-        return parent::setTxusuclave($txusuclave);
+        return parent::creaUsuario($pSolicitud, $Lugar);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getTxusuclave()
+    public function cantMsgUsr($usuario)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getTxusuclave', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'cantMsgUsr', array($usuario));
 
-        return parent::getTxusuclave();
+        return parent::cantMsgUsr($usuario);
     }
 
 }
