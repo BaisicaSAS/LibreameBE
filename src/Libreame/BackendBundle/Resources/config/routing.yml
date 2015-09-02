@@ -1,3 +1,4 @@
 libreame_ingresarSistema:
-    pattern:  /ingreso/{datos}
-    defaults: { _controller: LibreameBackendBundle:Acceso:ingresarSistema }
+    pattern:  /ingreso
+    defaults: { _controller: LibreameBackendBundle:Acceso:ingresarSistema, _format: json}
+    methods: [POST] 

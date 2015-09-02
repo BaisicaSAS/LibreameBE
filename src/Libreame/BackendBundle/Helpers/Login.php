@@ -64,7 +64,7 @@ class Login
             $sesion = new LbSesiones();
             $actsesion = new LbActsesion();
             //Verifica si el usuario existe
-            echo "<script>alert('Mail usuario ".$pSolicitud->getEmail()."')</script>";
+            //echo "<script>alert('Mail usuario ".$pSolicitud->getEmail()."')</script>";
             if ($em->getRepository('LibreameBackendBundle:LbUsuarios')->
                     findOneBy(array('txusuemail' => $pSolicitud->getEmail()))){
                 
@@ -72,7 +72,7 @@ class Login
                         findOneBy(array('txusuemail' => $pSolicitud->getEmail()));
 
                 $estado = $usuario->getInusuestado();
-                echo "<script>alert('-----Estado usuario ".$estado."')</script>";
+                //echo "<script>alert('-----Estado usuario ".$estado."')</script>";
 
                 //Verifica si el usuario está activo
                 if ($estado == AccesoController::inUsuActi)
@@ -91,10 +91,10 @@ class Login
                             $device = $em->getRepository('LibreameBackendBundle:LbDispusuarios')->
                                     findOneBy(array('indisusuario' => $usuario));
                 
-                            echo "<script>alert('Dispositivo ".$device->getTxdisid()."')</script>";
+                            //echo "<script>alert('Dispositivo ".$device->getTxdisid()."')</script>";
 
                             //Crea sesion
-                            echo "<script>alert('-----Creará sesion')</script>";
+                            //echo "<script>alert('-----Creará sesion')</script>";
                             $sesion = $objAcceso::generaSesion(AccesoController::inSesActi,$fecha,NULL,$device,$pSolicitud->getIPaddr());
                             //Genera sesion activa sin fecha de finalización
                             $actsesion = $objAcceso::generaActSesion($sesion,AccesoController::inDatoUno,'Login usuario '.$usuario->getTxusuemail().' exitoso',$pSolicitud->getAccion(),$fecha,NULL);

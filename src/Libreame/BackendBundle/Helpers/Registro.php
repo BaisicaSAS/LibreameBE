@@ -96,7 +96,7 @@ class Registro {
                     //Guarda la actividad de la sesion:: Como finalizada
                     //echo "<script>alert('Guardó usuario...va a generar sesion ')</script>";
                     $actsesion = $objAcceso::generaActSesion($sesion,AccesoController::inDatoUno,AccesoController::txMensaje,$pSolicitud->getAccion(),$fecha,$fecha);
-                    echo "<script>alert('Generó actividad de sesion ')</script>";
+                    //echo "<script>alert('Generó actividad de sesion ')</script>";
 
                     //Envia email
                     $mailsent = $objAcceso::enviaMailRegistro($usuario);
@@ -110,14 +110,14 @@ class Registro {
 
             } else {
                 //El usuario existe y no es posible registrarlo de nuevo:: el email.
-                echo "<script>alert('Usuario existe')</script>";
+                //echo "<script>alert('Usuario existe')</script>";
                 $respuesta->setRespuesta(AccesoController::inFallido);
             }
-            echo "<script>alert('Respuesta de registro NORMAL ".$respuesta->getRespuesta()." Error')</script>";
+            //echo "<script>alert('Respuesta de registro NORMAL ".$respuesta->getRespuesta()." Error')</script>";
             return Logica::generaRespuesta($respuesta, $pSolicitud);
             
         } catch (Exception $ex) {
-            echo "<script>alert('Respuesta de registro ERROR ".$respuesta->getRespuesta()." Error')</script>";
+            //echo "<script>alert('Respuesta de registro ERROR ".$respuesta->getRespuesta()." Error')</script>";
             $respuesta->setRespuesta(AccesoController::inFallido);
             return Logica::generaRespuesta($respuesta, $pSolicitud);
         } 

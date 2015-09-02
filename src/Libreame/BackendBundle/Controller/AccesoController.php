@@ -3,12 +3,12 @@
 namespace Libreame\BackendBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Libreame\BackendBundle\Entity\LbSesiones;
 use Libreame\BackendBundle\Entity\LbActsesion;
 use Libreame\BackendBundle\Helpers\Solicitud;
 use Libreame\BackendBundle\Helpers\Respuesta;
-
 
 /*
  * Controlador que contiene las funciones que validan, controlan y despachan 
@@ -92,18 +92,25 @@ class AccesoController extends Controller
      * que realice los solicitado y emita las respuestas al cliente
      * Tambien es la responsable de generar todas las bitacoras de la aplicación
      */
-    public function ingresarSistemaAction($datos)
+    public function ingresarSistemaAction()
     {   
+        $request = $this->getRequest();
+        $content = $request->getContent();
+        $datos = json_decode($content, true);
+        
         $respuesta = 0;
         $fecha = new \DateTime;
         $texto = $fecha->format('YmdHis');
         //echo "<script>alert('".substr($datos,0,4)."---".substr($datos,4,2)."')</script>";
+        /*
         $modo = substr($datos,0,4);
         $accion = substr($datos,4,1); //R - L
         $idreg = substr($datos,5,4);
-        //echo "<script>alert('".$modo." - ".$accion." - ".$idreg."')</script>";
+        echo "<script>alert('".$modo." - ".$accion." - ".$idreg."')</script>";
+        */
         try {
             //Este bloque es solo de Prueba
+            /*
             if ($modo == 'TEST') {
                 
                 if ($accion == 'R'){
@@ -128,6 +135,8 @@ class AccesoController extends Controller
                 
                 echo "<script>alert('".$datos."')</script>";
             }
+             
+            */
 
             //Aquí iniciaría el código en producción, el bloque anterior solo funciona para TEST
             //Se evalúa si se logró obtener la información de sesion desde el JSON
@@ -135,18 +144,19 @@ class AccesoController extends Controller
             //echo "<script>alert('Validación retornó: ".$jsonValido."')</script>"; 
             
             if ($jsonValido != false) {
+                //echo "<script>alert('Ejecuta accion ')</script>"; 
                 $objLogica = $this->get('logica_service');
-                $respuesta = $objLogica::ejecutaAccion($datos, $this->objSolicitud);
+                $respuesta = $objLogica::ejecutaAccion($this->objSolicitud);
             } else {
                 echo "<script>alert('Encontramos un problema con tu registro: ".$this->$objSolicitud->getSession()."-".$jsonValido."')</script>"; 
                 //@TODO: Debemos revisar que hacer cuando se detecta actividad sospechosa: Cierro sesion?. Bloqueo usuario e informo?
             }
             //echo "<script>alert('RESPUESTA ingresarSistemaAction: ".$respuesta."')</script>"; 
-            return new RESPONSE("Normal ".$respuesta);
+            return new RESPONSE($respuesta);
             //return new RESPONSE("Normal ".$datos);
                     
         } catch (Exception $ex) {
-            return new RESPONSE("Catch ".$jsonValido);
+            return new RESPONSE($jsonValido);
         }    
              
     }
@@ -172,7 +182,8 @@ class AccesoController extends Controller
     private function descomponerJson($datos)
     {   $resp = self::inFallido;
         try {
-            $json_datos = json_decode($datos, true);
+            //$json_datos = json_decode($datos, true);
+            $json_datos = $datos;
             //echo "<script>alert('Inicia a decodificar-----".$json_datos[0]['idsesion']['idtrx']."')</script>"; 
             $this->objSolicitud = new Solicitud();
             //echo "<script>alert(':::TRANS: ".$json_datos[0]['idsesion']['idtrx']."')</script>"; 
@@ -239,9 +250,9 @@ class AccesoController extends Controller
         //Identifica el dispositivo // a este es al que se asocia la sesion
         $device = $em->getRepository('LibreameBackendBundle:LbDispusuarios')->findBy(array(
             'txdisid' =>  $psolicitud->getDeviceMAC()));
-        echo "<script>alert('Dispositivo MAC ".$psolicitud->getDeviceMAC()."')</script>";
+        //echo "<script>alert('Dispositivo MAC ".$psolicitud->getDeviceMAC()."')</script>";
         $id = $device->getIndispusuario().toString();
-        echo "<script>alert('Dispositivo ID ".$id."')</script>";
+        //echo "<script>alert('Dispositivo ID ".$id."')</script>";
         //echo "<script>alert('EXISTE Sesion activa ".$device->getIndispusuario()."')</script>";
         
         $sesion = $em->getRepository('LibreameBackendBundle:LbSesiones')->findBy(array(

@@ -16,7 +16,7 @@ class Logica
      * luego de que ha sido validada por el controlador AccesoController. Luego de recibirla
      * Evalua la accion solicitada, ejecuta lo solicitado y retorna la respuesta al controlador.
      */
-    public function ejecutaAccion($datos, $solicitud)
+    public function ejecutaAccion($solicitud)
     {
         $respuesta = AccesoController::inFallido;
         $tmpSolicitud = $solicitud->getAccion();
@@ -44,8 +44,8 @@ class Logica
     
     public function generaRespuesta($respuesta, $pSolicitud){
 
-        echo "<script>alert('ACCION Genera respuesta: ".$pSolicitud->getAccion()."')</script>";
-        echo "<script>alert('REPUESTA Genera respuesta: ".$respuesta->getRespuesta()."')</script>";
+        //echo "<script>alert('ACCION Genera respuesta: ".$pSolicitud->getAccion()."')</script>";
+        //echo "<script>alert('REPUESTA Genera respuesta: ".$respuesta->getRespuesta()."')</script>";
 
         switch($pSolicitud->getAccion()){
             
