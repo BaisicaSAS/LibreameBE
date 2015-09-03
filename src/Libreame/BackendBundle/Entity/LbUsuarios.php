@@ -373,8 +373,8 @@ class LbUsuarios
     {   
         $usuario = new LbUsuarios();
         $usuario->setTxusuemail($pSolicitud->getEmail());  
+        $usuario->setTxusunombre($pSolicitud->getEmail());  
         $usuario->setTxusutelefono($pSolicitud->getTelefono());  
-        $usuario->setTxusunombre($pSolicitud->getUsuario());  
         $usuario->setTxusuclave($pSolicitud->getClave());  
         $usuario->setTxusuimagen('DEFAULT IMAGE URL');  
         $usuario->setInusulugar($Lugar);  

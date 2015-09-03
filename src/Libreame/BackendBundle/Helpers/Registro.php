@@ -52,17 +52,17 @@ class Registro {
                     //echo "<script>alert('Usuario [".$pSolicitud->getEmail()." ] NO existe')</script>";
                     $usuario=$usuario->creaUsuario($pSolicitud, $Lugar);
 
-                    //Guarda el dispositivo si NO existe
+                    //Guarda el dispositivo si NO existe: debe existir el ID + Usuario 
+                    //porque se pueden registrar y operar desde el mismo Dispositivo
                     //echo "<script>alert('Evalua si dispositivo existe')</script>";
                     $guardadevice=0;
-                    if (!$em->getRepository('LibreameBackendBundle:LbDispusuarios')->findOneBy(
-                            array('txdisid' => $pSolicitud->getDeviceMAC()))){
+                    if (!$em->getRepository('LibreameBackendBundle:LbDispusuarios')->findOneBy(array(
+                            'txdisid' => $pSolicitud->getDeviceMAC(), 
+                            'indisusuario' => $usuario))){
                         //echo "<script>alert('Dispositivo [".$pSolicitud->getDeviceMAC()."-guardadevice".$guardadevice." ] NO existe')</script>";
                         $guardadevice=1;
 
                         $device=$device->creaDispusuario($usuario, $pSolicitud);
-                    } else {
-                        //echo "<script>alert('Dispositivo [".$pSolicitud->getDeviceMAC()."-guardadevice".$guardadevice." ] existe')</script>";
                     }
 
                     //Guarda la membresia al grupo default
@@ -79,7 +79,9 @@ class Registro {
                         $em->persist($device);
                         $em->flush();
                     } else {
-                        $device = $em->getRepository('LibreameBackendBundle:LbDispusuarios')->findOneBy(array('txdisid' => $pSolicitud->getDeviceMAC()));
+                        $device = $em->getRepository('LibreameBackendBundle:LbDispusuarios')->findOneBy(array(
+                            'txdisid' => $pSolicitud->getDeviceMAC(), 
+                            'indisusuario' => $usuario));
                     }
                         
                     //echo "<script>alert('Persiste membresia')</script>";

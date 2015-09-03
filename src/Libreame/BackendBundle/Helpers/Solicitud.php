@@ -13,7 +13,6 @@ class Solicitud {
     //Todo el resto debe ir ebn el detalle...ejemplo el telefono
     //Atributos para el encabezado: identificado en el tag IDSESION del JSON
     private $pAccion; //Accion solicitada
-    private $pUsuario; //Nombre de usuario que realiza solicitud
     private $pSession; //Sesion ???? 
     private $pIPaddr; //Direccion IP
     private $pDeviceMAC; //MAC del Dispositivo
@@ -34,10 +33,6 @@ class Solicitud {
     
     public function getAccion() {
         return $this->pAccion;
-    }
-
-    public function getUsuario() {
-        return $this->pUsuario;
     }
 
     public function getSession() {
@@ -81,11 +76,6 @@ class Solicitud {
      */
     public function setAccion($pAccion) {
         $this->pAccion = $pAccion;
-        return $this;
-    }
-
-    public function setUsuario($pUsuario) {
-        $this->pUsuario = $pUsuario;
         return $this;
     }
 

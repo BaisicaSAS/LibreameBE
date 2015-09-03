@@ -63,8 +63,8 @@ class Login
             $device = new LbDispusuarios();
             $sesion = new LbSesiones();
             $actsesion = new LbActsesion();
-            //Verifica si el usuario existe
             //echo "<script>alert('Mail usuario ".$pSolicitud->getEmail()."')</script>";
+            //Verifica si el usuario existe
             if ($em->getRepository('LibreameBackendBundle:LbUsuarios')->
                     findOneBy(array('txusuemail' => $pSolicitud->getEmail()))){
                 
@@ -74,6 +74,26 @@ class Login
                 $estado = $usuario->getInusuestado();
                 //echo "<script>alert('-----Estado usuario ".$estado."')</script>";
 
+                //Busca el dispositivo si no esta asociado al usuario lo crea y lo asocia
+                if (!$em->getRepository('LibreameBackendBundle:LbDispusuarios')->findOneBy(array(
+                        'txdisid' => $pSolicitud->getDeviceMAC(), 
+                        'indisusuario' => $usuario))){
+                    //echo "<script>alert('Dispositivo [".$pSolicitud->getDeviceMAC()."-guardadevice".$guardadevice." ] NO existe')</script>";
+
+                    $device=$device->creaDispusuario($usuario, $pSolicitud);
+                    //echo "<script>alert('Persiste device')</script>";
+                    $em->persist($device);
+                    $em->flush();
+                }
+                else {
+                    $device = $em->getRepository('LibreameBackendBundle:LbDispusuarios')->findOneBy(array(
+                        'txdisid' => $pSolicitud->getDeviceMAC(), 
+                        'indisusuario' => $usuario));
+                }
+
+                echo "<script>alert('Dispositivo ".$device->getTxdisid()." - ".$device->getIndispusuario()."')</script>";
+
+                
                 //Verifica si el usuario está activo
                 if ($estado == AccesoController::inUsuActi)
                 {
@@ -81,20 +101,15 @@ class Login
                     //Verifica si la clave es correcta
                     if ($usuario->getTxusuclave() == $pSolicitud->getClave()){
                         //Verifica si el usuario tiene una sesion activa
-                        if (AccesoController::usuarioSesionActiva($pSolicitud)){
+                        if (AccesoController::usuarioSesionActiva($pSolicitud, $device)){
                             $respuesta->setRespuesta(self::inUSeActi);
                         }
                         else
                         {
                             //AQUI SE LOGUEA FINALMENTE
-                            //Busca el dispositivo
-                            $device = $em->getRepository('LibreameBackendBundle:LbDispusuarios')->
-                                    findOneBy(array('indisusuario' => $usuario));
-                
-                            //echo "<script>alert('Dispositivo ".$device->getTxdisid()."')</script>";
 
                             //Crea sesion
-                            //echo "<script>alert('-----Creará sesion')</script>";
+                            echo "<script>alert('-----Creará sesion"  .AccesoController::inSesActi."')</script>";
                             $sesion = $objAcceso::generaSesion(AccesoController::inSesActi,$fecha,NULL,$device,$pSolicitud->getIPaddr());
                             //Genera sesion activa sin fecha de finalización
                             $actsesion = $objAcceso::generaActSesion($sesion,AccesoController::inDatoUno,'Login usuario '.$usuario->getTxusuemail().' exitoso',$pSolicitud->getAccion(),$fecha,NULL);
@@ -115,6 +130,9 @@ class Login
             }
             //Usuario no existe
             else {$respuesta->setRespuesta(self::inUsClInv);}
+
+            //Flush al entity manager
+            $em->flush(); 
             
             return Logica::generaRespuesta($respuesta, $pSolicitud);
             

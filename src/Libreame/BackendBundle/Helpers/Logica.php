@@ -51,7 +51,6 @@ class Logica
             
             case AccesoController::txAccRegistro: 
                 $JSONResp = array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
-                        'usuario' => $pSolicitud->getUsuario(),
                         'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr(), 
                         'iddevice'=> $pSolicitud->getDeviceMac(), 'marca'=>$pSolicitud->getDeviceMarca(), 
                         'modelo'=>$pSolicitud->getDeviceModelo(), 'so'=>$pSolicitud->getDeviceSO()), 
@@ -61,7 +60,6 @@ class Logica
             case AccesoController::txAccIngresos:
                 //$vRespuesta
                 $JSONResp = array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
-                        'usuario' => $pSolicitud->getUsuario(),
                         'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr(), 
                         'iddevice'=> $pSolicitud->getDeviceMac(), 'marca'=>$pSolicitud->getDeviceMarca(), 
                         'modelo'=>$pSolicitud->getDeviceModelo(), 'so'=>$pSolicitud->getDeviceSO()), 

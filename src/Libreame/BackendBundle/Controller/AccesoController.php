@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Libreame\BackendBundle\Entity\LbSesiones;
 use Libreame\BackendBundle\Entity\LbActsesion;
+use Libreame\BackendBundle\Entity\LbDispusuarios;
 use Libreame\BackendBundle\Helpers\Solicitud;
 use Libreame\BackendBundle\Helpers\Respuesta;
 
@@ -188,7 +189,6 @@ class AccesoController extends Controller
             $this->objSolicitud = new Solicitud();
             //echo "<script>alert(':::TRANS: ".$json_datos[0]['idsesion']['idtrx']."')</script>"; 
             $this->objSolicitud->setAccion($json_datos['idsesion']['idaccion']);
-            $this->objSolicitud->setUsuario($json_datos['idsesion']['usuario']);
             $this->objSolicitud->setSession($json_datos['idsesion']['idtrx']);
             $this->objSolicitud->setIPaddr($json_datos['idsesion']['ipaddr']);
             $this->objSolicitud->setDeviceMAC($json_datos['idsesion']['iddevice']);
@@ -231,11 +231,14 @@ class AccesoController extends Controller
     private function validaSesion($psesion)
     {   
         $em = $this->getDoctrine()->getManager();
-        $sesion = $em->getRepository('LibreameBackendBundle:LbSesiones')->findBy(array(
+        $sesion = $em->getRepository('LibreameBackendBundle:LbSesiones')->findOneBy(array(
             'txsesnumero' =>  $psesion->getSession(),
             'insesdispusuario' => $psesion->getIDDevice(),
             'insesactiva' => self::inSesActi));
         
+        //Flush al entity manager
+        $em->flush(); 
+
         return ($sesion);
     }
 
@@ -244,24 +247,31 @@ class AccesoController extends Controller
      *Indica si un usuario tiene una sesion activa
      * 
      */
-    public function usuarioSesionActiva($psolicitud)
+    public function usuarioSesionActiva($psolicitud, $device)
     {   
         $em = $this->getDoctrine()->getManager();
         //Identifica el dispositivo // a este es al que se asocia la sesion
-        $device = $em->getRepository('LibreameBackendBundle:LbDispusuarios')->findBy(array(
-            'txdisid' =>  $psolicitud->getDeviceMAC()));
+
         //echo "<script>alert('Dispositivo MAC ".$psolicitud->getDeviceMAC()."')</script>";
-        $id = $device->getIndispusuario().toString();
-        //echo "<script>alert('Dispositivo ID ".$id."')</script>";
+        $id = $device->getIndispusuario();
+        echo "<script>alert('Dispositivo ID ".$id." - MAC: ".$psolicitud->getDeviceMAC()."')</script>";
         //echo "<script>alert('EXISTE Sesion activa ".$device->getIndispusuario()."')</script>";
-        
-        $sesion = $em->getRepository('LibreameBackendBundle:LbSesiones')->findBy(array(
-            'insesdispusuario' => $device,
+
+        $sesion = $em->getRepository('LibreameBackendBundle:LbSesiones')->findOneBy(array(
+            'insesdispusuario' => $id,
             'insesactiva' => self::inSesActi));
-        
-        if ($sesion != NULL) {echo "<script>alert('EXISTE Sesion activa ".$device->getInsesdispusuario()."')</script>";}
-        
+
+        //$ses = $sesion->getInsesion();
+
+        //echo "<script>alert('Sesion ".$ses()."')</script>";
+
+        if ($sesion != NULL) {echo "<script>alert('EXISTE Sesion activa ".$device->getIndispusuario()."')</script>";}
+
+        //Flush al entity manager
+        $em->flush(); 
+
         return ($sesion != NULL);
+            
     }
     
     /*
@@ -282,18 +292,18 @@ class AccesoController extends Controller
             $sesion = new LbSesiones();
             $sesion->setInsesactiva($pEstado);
             $sesion->setTxsesnumero($objLogica::generaRand(self::inTamSesi));
-            $sesion->setFesesfechaini(new \DateTime($pFecIni));
-            $sesion->setFesesfechafin(new \DateTime($pFecFin));
+            $sesion->setFesesfechaini($pFecIni);
+            $sesion->setFesesfechafin($pFecFin);
             $sesion->setInsesdispusuario($pDevice);
             $sesion->setTxipaddr($pIpAdd);
             $em->persist($sesion);
-            //echo "<script>alert('Guardo sesion')</script>";
+            echo "<script>alert('Guardo sesion')</script>";
             $em->flush();
             //echo "<script>alert('Retorna".$sesion->getTxsesnumero()."')</script>";
             return $sesion;
             
         } catch (Exception $ex) {
-                //echo "<script>alert('Error guardar sesion')</script>";
+                echo "<script>alert('Error guardar sesion')</script>";
                 return self::inDescone;
         } 
     }
