@@ -36,19 +36,27 @@ class Logica
                 $respuesta = $objLogin::loginUsuario($solicitud);
                 break;
             } 
+            //accion de recuperar datos y parametros de usuario
+            case AccesoController::txAccRecParam: {
+                //echo "<script>alert('Antes de entrar a Recuperar Parametros Usuario-".$solicitud->getEmail()."')</script>";
+                $objParametros = $this->get('parametros_service');
+                $respuesta = $objParametros::obtenerParametros($solicitud);
+                break;
+            } 
                 
         }
         //echo "<script>alert('ejecuta Accion: ".$respuesta."')</script>";
         return $respuesta;
     }
     
-    public function generaRespuesta($respuesta, $pSolicitud){
+    public function generaRespuesta($respuesta, $pSolicitud, $pUsuario){
 
         //echo "<script>alert('ACCION Genera respuesta: ".$pSolicitud->getAccion()."')</script>";
         //echo "<script>alert('REPUESTA Genera respuesta: ".$respuesta->getRespuesta()."')</script>";
 
         switch($pSolicitud->getAccion()){
             
+            //accion de registro en el sistema
             case AccesoController::txAccRegistro: 
                 $JSONResp = array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
                         'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr(), 
@@ -57,6 +65,7 @@ class Logica
                         'idrespuesta' => (array('respuesta' => $respuesta->getRespuesta())));
                 break;
                 
+            //accion de login en el sistema
             case AccesoController::txAccIngresos:
                 //$vRespuesta
                 $JSONResp = array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
@@ -67,9 +76,29 @@ class Logica
                             'idsesion' => $respuesta->getSession(), 
                             'cantmensajes' => $respuesta->getCantMensajes())));
                 break;
+
+            //accion de recuperar datos y parametros de usuario
+            case AccesoController::txAccRecParam:
+                //$vRespuesta
+                $JSONResp = array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
+                        'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr(), 
+                        'iddevice'=> $pSolicitud->getDeviceMac(), 'marca'=>$pSolicitud->getDeviceMarca(), 
+                        'modelo'=>$pSolicitud->getDeviceModelo(), 'so'=>$pSolicitud->getDeviceSO()), 
+                        'usuario' => (array('nomusuario' => $pUsuario->getTxusunombre(),
+                            'nommostusuario' => $pUsuario->getTxusunommostrar(), 
+                            'email' => $pUsuario->getTxusuemail(),
+                            'usutelefono' => $pUsuario->getTxusutelefono(), 
+                            'usugenero' => $pUsuario->getInusugenero(),
+                            'usuimagen' => $pUsuario->getTxusuimagen(), 
+                            'usufecnac' => $pUsuario->getFeusunacimiento(),
+                            'usulugar' => $pUsuario->getInusulugar(), 
+                            'usunomlugar' => "Pendiente"
+                                )));
+
+                break;
                 
         }
-            
+        
         $JSONResp = json_encode($JSONResp);
 
         return $JSONResp;

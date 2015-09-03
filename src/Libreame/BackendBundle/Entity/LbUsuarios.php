@@ -374,6 +374,7 @@ class LbUsuarios
         $usuario = new LbUsuarios();
         $usuario->setTxusuemail($pSolicitud->getEmail());  
         $usuario->setTxusunombre($pSolicitud->getEmail());  
+        $usuario->setTxusunommostrar($pSolicitud->getEmail());  
         $usuario->setTxusutelefono($pSolicitud->getTelefono());  
         $usuario->setTxusuclave($pSolicitud->getClave());  
         $usuario->setTxusuimagen('DEFAULT IMAGE URL');  

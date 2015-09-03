@@ -36,7 +36,7 @@ class AccesoController extends Controller
     const inGenMasc =  0; //Genero del usuario: Masculino
     const inTamVali =  40; //Tamaño del ID para confirmacion del Registro
     const inTamSesi =  30; //Tamaño del id de sesion generado
-    const txMensaje =  'Solicitud de registro de usuario en Libreame'; //Mensaje estandar para el registro de usuario
+    const txMensaje =  'Solicitud de registro de usuario en Ex4Read'; //Mensaje estandar para el registro de usuario
     //Estados del usuario
     const inUsuConf =  0; //Usuario en proceso de confiormacion de registro
     const inUsuActi =  1; //Usuario Activo
@@ -76,6 +76,14 @@ class AccesoController extends Controller
     const txAccEnviaPQR =  '24'; //Enviar una PQR
     const txAccModifPQR =  '25'; //Modificar una PQR
     const txAccElimiPQR =  '26'; //Eliminar una PQR
+
+    const inUsClInv =  0;  //Usuario o clave inválidos
+    const inULogged =  1;  //Usuario logeado exitosamente
+    const inPlatCai = -1; //Proceso fallido por conexión de plataforma
+    const inUSeActi = -2; //Usuario tiene sesion activa
+    const inSosAtaq = -3; //Sesion sospechosa de ser ataque ::: AUN NO SE IMPLEMENTA
+    const inUsInact = -4; //Usuario inactivo
+    const inUsSeIna = -5; //Sesión inactiva
 
     var $objSolicitud;
     /*
@@ -221,25 +229,61 @@ class AccesoController extends Controller
     }
     
     /*
-     * validaSesion 
+     * validaSesionUsuario 
      * Valida los datos de la sesion verificando que sea veridica
      * Credenciales está compuesto por: 1.usr,2.pass,3-device,4.session,5-opcion a despachar,
      * parametros para la url a despachar, cantidad de caracteres de cada uno 
      * de los anteriores cada uno con 4 digitos.
      * 
      */
-    private function validaSesion($psesion)
+    public function validaSesionUsuario($psolicitud)
     {   
-        $em = $this->getDoctrine()->getManager();
-        $sesion = $em->getRepository('LibreameBackendBundle:LbSesiones')->findOneBy(array(
-            'txsesnumero' =>  $psesion->getSession(),
-            'insesdispusuario' => $psesion->getIDDevice(),
-            'insesactiva' => self::inSesActi));
+        //Verifica que el usuario exista, que esté activo, que la clave coincida
+        //que corresponda al dispositivo, y que la sesion esté activa
         
+        $respuesta = self::inULogged; //Inicializa como sesion logueada
+        $em = $this->getDoctrine()->getManager();
+        if (!$em->getRepository('LibreameBackendBundle:LbUsuarios')->
+                    findOneBy(array('txusuemail' => $psolicitud->getEmail()))){
+            $respuesta = self::inUsClInv; //Usuario o clave inválidos
+        } else {    
+            $usuario = $em->getRepository('LibreameBackendBundle:LbUsuarios')->
+                    findOneBy(array('txusuemail' => $psolicitud->getEmail()));
+
+            $estado = $usuario->getInusuestado();
+
+            //Busca el dispositivo si no esta asociado al usuario envia mensaje de sesion no existe
+            if (!$em->getRepository('LibreameBackendBundle:LbDispusuarios')->findOneBy(array(
+                    'txdisid' => $psolicitud->getDeviceMAC(), 
+                    'indisusuario' => $usuario))){
+                    $respuesta = self::inUsSeIna; //Si la sesion no existe para el dispositivo
+            } else {
+                //Si el usuario está INACTIVO
+                if ($estado == self::inUsuActi)
+                {
+                    $respuesta = self::inUsuActi; //Usuario Inactiva
+                } else {
+                    //Si la clave enviada es inválida
+                    if ($usuario->getTxusuclave() != $pSolicitud->getClave()){
+                        $respuesta = self::inUsClInv; //Usuario o clave inválidos
+                    } else {
+                        //Valida si la sesion está activa
+                        if (!$em->getRepository('LibreameBackendBundle:LbSesiones')->findOneBy(array(
+                            'txsesnumero' =>  $psolicitud->getSession(),
+                            'insesdispusuario' => $psolicitud->getIDDevice(),
+                            'insesactiva' => self::inSesActi))){
+                            $respuesta = self::inUsSeIna; //Usuario o clave inválidos
+
+                        }
+                    }   
+                }
+            }
+        }
+                
         //Flush al entity manager
         $em->flush(); 
 
-        return ($sesion);
+        return ($respuesta);
     }
 
     /*
@@ -342,37 +386,6 @@ class AccesoController extends Controller
     {
         return $this->render('LibreameBackendBundle:Default:index.html.twig', array('name' => $credenciales));
     }
-    /*
-     * registraActSesion 
-     *  registra cada una de las acciones realizadas por un usuario
-     */
-    private function registraActSesion()
-    {
-        try{
-            $em = $this->getDoctrine()->getManager();
-            
-            try{
-                $tabla = new LbActsesion();
-                $tabla->setFeactfecha(TODAY);
-                $tabla->setInactaccion($this->getAccion());
-                $tabla->setInactfinalizada(TODAY);
-                $tabla->setInactsesiondisus($this->getIDUsuario());
-
-                $em->persist($tabla);
-                $em->flush();
-                
-                return self::inExitoso;
-                
-            } catch (Exception $ex) {
-                return self::inFallido;
-            }     
-           
-        } catch (Exception $ex) {
-            return self::inDescone;
-        }     
-    }
-    
-    
     
     /*
      * enviaMailRegistro 

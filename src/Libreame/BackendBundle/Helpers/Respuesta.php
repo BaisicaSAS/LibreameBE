@@ -14,8 +14,7 @@ class Respuesta {
     private $pRespuesta; //Respuesta ID
     private $pSession; //Sesion ???? 
     private $pCantMensajes; //Cantidad de Mensajes
-    private $pUsuario; //Nombre para mostrar del usuario
-    
+	    
     /*
      *  Bloque de getter para los atributos de la clase
      */
@@ -36,9 +35,6 @@ class Respuesta {
         return $this->pCantMensajes;
     }
     
-    public function getUsuario() {
-        return $this->pUsuario;
-    }
     
     /*
      *  Bloque de setter para los atributos de la clase
@@ -60,11 +56,6 @@ class Respuesta {
 
     public function setCantMensajes($pCantMensajes) {
         $this->pCantMensajes = $pCantMensajes;
-        return $this;
-    }
-
-    public function setUsuario($pUsuario) {
-        $this->pUsuario = $pUsuario;
         return $this;
     }
     

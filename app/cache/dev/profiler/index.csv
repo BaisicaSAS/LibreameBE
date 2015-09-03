@@ -98,3 +98,6 @@ dea4db,::1,POST,http://localhost/Ex4ReadBE/web/app_dev.php/ingreso,1441311460,
 55ae72,::1,POST,http://localhost/Ex4ReadBE/web/app_dev.php/ingreso,1441311646,
 4e01e9,::1,POST,http://localhost/Ex4ReadBE/web/app_dev.php/ingreso,1441311664,
 50a47d,::1,POST,http://localhost/Ex4ReadBE/web/app_dev.php/ingreso,1441311684,
+791f27,::1,GET,http://localhost/Ex4ReadBE/web/app_dev.php/ingreso,1441318965,c9bdb0
+c9bdb0,::1,POST,http://localhost/Ex4ReadBE/web/app_dev.php/ingreso,1441318965,
+6e8d57,::1,POST,http://localhost/Ex4ReadBE/web/app_dev.php/ingreso,1441319042,

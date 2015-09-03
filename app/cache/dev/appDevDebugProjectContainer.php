@@ -132,6 +132,7 @@ class appDevDebugProjectContainer extends Container
             'monolog.logger.router' => 'getMonolog_Logger_RouterService',
             'monolog.logger.security' => 'getMonolog_Logger_SecurityService',
             'monolog.logger.templating' => 'getMonolog_Logger_TemplatingService',
+            'parametros_service' => 'getParametrosServiceService',
             'profiler' => 'getProfilerService',
             'profiler_listener' => 'getProfilerListenerService',
             'property_accessor' => 'getPropertyAccessorService',
@@ -1655,6 +1656,19 @@ class appDevDebugProjectContainer extends Container
         $instance->pushHandler($this->get('monolog.handler.debug'));
 
         return $instance;
+    }
+
+    /**
+     * Gets the 'parametros_service' service.
+     *
+     * This service is shared.
+     * This method always returns the same instance of the service.
+     *
+     * @return Libreame\BackendBundle\Helpers\Parametros A Libreame\BackendBundle\Helpers\Parametros instance.
+     */
+    protected function getParametrosServiceService()
+    {
+        return $this->services['parametros_service'] = new \Libreame\BackendBundle\Helpers\Parametros();
     }
 
     /**
