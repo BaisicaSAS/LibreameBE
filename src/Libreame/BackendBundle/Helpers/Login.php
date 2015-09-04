@@ -91,7 +91,7 @@ class Login
                         'indisusuario' => $usuario));
                 }
 
-                echo "<script>alert('Dispositivo ".$device->getTxdisid()." - ".$device->getIndispusuario()."')</script>";
+               //echo "<script>alert('Dispositivo ".$device->getTxdisid()." - ".$device->getIndispusuario()."')</script>";
 
                 
                 //Verifica si el usuario está activo
@@ -109,7 +109,7 @@ class Login
                             //AQUI SE LOGUEA FINALMENTE
 
                             //Crea sesion
-                            echo "<script>alert('-----Creará sesion"  .AccesoController::inSesActi."')</script>";
+                           //echo "<script>alert('-----Creará sesion"  .AccesoController::inSesActi."')</script>";
                             $sesion = $objAcceso::generaSesion(AccesoController::inSesActi,$fecha,NULL,$device,$pSolicitud->getIPaddr());
                             //Genera sesion activa sin fecha de finalización
                             $actsesion = $objAcceso::generaActSesion($sesion,AccesoController::inDatoUno,'Login usuario '.$usuario->getTxusuemail().' exitoso',$pSolicitud->getAccion(),$fecha,NULL);

@@ -125,4 +125,13 @@ class LbLugares
     {
         return $this->inlugpadre;
     }
+
+    //Constructor de la clase
+    function __construct(){ 
+        $strBlanco = "";
+        $this->inlugar = 0;
+        $this->txlugcodigo = $strBlanco;
+        $this->txlugnombre = $strBlanco;  
+    } 
+    
 }

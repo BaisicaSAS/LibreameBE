@@ -115,7 +115,7 @@ class AccesoController extends Controller
         $modo = substr($datos,0,4);
         $accion = substr($datos,4,1); //R - L
         $idreg = substr($datos,5,4);
-        echo "<script>alert('".$modo." - ".$accion." - ".$idreg."')</script>";
+       //echo "<script>alert('".$modo." - ".$accion." - ".$idreg."')</script>";
         */
         try {
             //Este bloque es solo de Prueba
@@ -142,7 +142,7 @@ class AccesoController extends Controller
                     $datos = json_encode($prueba);
                 }
                 
-                echo "<script>alert('".$datos."')</script>";
+               //echo "<script>alert('".$datos."')</script>";
             }
              
             */
@@ -157,7 +157,7 @@ class AccesoController extends Controller
                 $objLogica = $this->get('logica_service');
                 $respuesta = $objLogica::ejecutaAccion($this->objSolicitud);
             } else {
-                echo "<script>alert('Encontramos un problema con tu registro: ".$this->$objSolicitud->getSession()."-".$jsonValido."')</script>"; 
+               //echo "<script>alert('Encontramos un problema con tu registro: ".$this->$objSolicitud->getSession()."-".$jsonValido."')</script>"; 
                 //@TODO: Debemos revisar que hacer cuando se detecta actividad sospechosa: Cierro sesion?. Bloqueo usuario e informo?
             }
             //echo "<script>alert('RESPUESTA ingresarSistemaAction: ".$respuesta."')</script>"; 
@@ -212,9 +212,15 @@ class AccesoController extends Controller
                     $this->objSolicitud->setTelefono($json_datos['idsolicitud']['telefono']);
                     break;
                 }
-                case self::txAccIngresos: {
+                case (self::txAccIngresos or self::txAccRecParam): {
                     $this->objSolicitud->setEmail($json_datos['idsolicitud']['email']);
                     $this->objSolicitud->setClave($json_datos['idsolicitud']['clave']);
+                    break;
+                }
+                case self::txAccRecFeeds: { //fALTA EL ID DEL MAXIMO ENVIADO
+                    $this->objSolicitud->setEmail($json_datos['idsolicitud']['email']);
+                    $this->objSolicitud->setClave($json_datos['idsolicitud']['clave']);
+                    //$this->objSolicitud->setTelefono($json_datos['idsolicitud']['telefono']);
                     break;
                 }
             }
@@ -241,39 +247,53 @@ class AccesoController extends Controller
         //Verifica que el usuario exista, que esté activo, que la clave coincida
         //que corresponda al dispositivo, y que la sesion esté activa
         
-        $respuesta = self::inULogged; //Inicializa como sesion logueada
+        //echo "<script>alert('Ingresa validar sesion :: ".$psolicitud->getEmail()." ::')</script>";
+        $respuesta = self::inUsSeIna; //Inicializa como sesion logueada
         $em = $this->getDoctrine()->getManager();
+       //echo "<script>alert('validaSesionUsuario :: ingreso')</script>";
         if (!$em->getRepository('LibreameBackendBundle:LbUsuarios')->
                     findOneBy(array('txusuemail' => $psolicitud->getEmail()))){
+           //echo "<script>alert('validaSesionUsuario :: No existe el USUARIO')</script>";
             $respuesta = self::inUsClInv; //Usuario o clave inválidos
         } else {    
             $usuario = $em->getRepository('LibreameBackendBundle:LbUsuarios')->
                     findOneBy(array('txusuemail' => $psolicitud->getEmail()));
 
             $estado = $usuario->getInusuestado();
+            //echo "<script>alert('encontro el usuario: estado : ".$estado." ')</script>";
 
             //Busca el dispositivo si no esta asociado al usuario envia mensaje de sesion no existe
             if (!$em->getRepository('LibreameBackendBundle:LbDispusuarios')->findOneBy(array(
                     'txdisid' => $psolicitud->getDeviceMAC(), 
                     'indisusuario' => $usuario))){
+                   //echo "<script>alert('validaSesionUsuario :: Sesion inactiva')</script>";
                     $respuesta = self::inUsSeIna; //Si la sesion no existe para el dispositivo
             } else {
                 //Si el usuario está INACTIVO
-                if ($estado == self::inUsuActi)
+                if ($estado != self::inUsuActi)
                 {
-                    $respuesta = self::inUsuActi; //Usuario Inactiva
+                   //echo "<script>alert('validaSesionUsuario :: Usuario inactivo')</script>";
+                    $respuesta = self::inUsuConf; //Usuario Inactiva
                 } else {
                     //Si la clave enviada es inválida
-                    if ($usuario->getTxusuclave() != $pSolicitud->getClave()){
+                    if ($usuario->getTxusuclave() != $psolicitud->getClave()){
+                       //echo "<script>alert('validaSesionUsuario :: Clave invalida')</script>";
                         $respuesta = self::inUsClInv; //Usuario o clave inválidos
                     } else {
                         //Valida si la sesion está activa
+                        $device = $em->getRepository('LibreameBackendBundle:LbDispusuarios')->findOneBy(array(
+                            'txdisid' => $psolicitud->getDeviceMAC(), 
+                            'indisusuario' => $usuario));
                         if (!$em->getRepository('LibreameBackendBundle:LbSesiones')->findOneBy(array(
                             'txsesnumero' =>  $psolicitud->getSession(),
-                            'insesdispusuario' => $psolicitud->getIDDevice(),
+                            'insesdispusuario' => $device,
                             'insesactiva' => self::inSesActi))){
+                           //echo "<script>alert('validaSesionUsuario :: Sesion inactiva')</script>";
                             $respuesta = self::inUsSeIna; //Usuario o clave inválidos
 
+                        } else {
+                            $respuesta = self::inULogged; //Usuario o clave inválidos
+                           //echo "<script>alert('La sesion es VALIDA')</script>";
                         }
                     }   
                 }
@@ -298,7 +318,7 @@ class AccesoController extends Controller
 
         //echo "<script>alert('Dispositivo MAC ".$psolicitud->getDeviceMAC()."')</script>";
         $id = $device->getIndispusuario();
-        echo "<script>alert('Dispositivo ID ".$id." - MAC: ".$psolicitud->getDeviceMAC()."')</script>";
+       //echo "<script>alert('Dispositivo ID ".$id." - MAC: ".$psolicitud->getDeviceMAC()."')</script>";
         //echo "<script>alert('EXISTE Sesion activa ".$device->getIndispusuario()."')</script>";
 
         $sesion = $em->getRepository('LibreameBackendBundle:LbSesiones')->findOneBy(array(
@@ -341,13 +361,13 @@ class AccesoController extends Controller
             $sesion->setInsesdispusuario($pDevice);
             $sesion->setTxipaddr($pIpAdd);
             $em->persist($sesion);
-            echo "<script>alert('Guardo sesion')</script>";
+           //echo "<script>alert('Guardo sesion')</script>";
             $em->flush();
             //echo "<script>alert('Retorna".$sesion->getTxsesnumero()."')</script>";
             return $sesion;
             
         } catch (Exception $ex) {
-                echo "<script>alert('Error guardar sesion')</script>";
+               //echo "<script>alert('Error guardar sesion')</script>";
                 return self::inDescone;
         } 
     }
@@ -378,6 +398,74 @@ class AccesoController extends Controller
                 return self::inDescone;
         } 
     }
+
+    
+    
+    /*
+     * recuperaSesionUsuario 
+     * Valida los datos de la sesion verificando que sea veridica
+     * Credenciales está compuesto por: 1.usr,2.pass,3-device,4.session,5-opcion a despachar,
+     * parametros para la url a despachar, cantidad de caracteres de cada uno 
+     * de los anteriores cada uno con 4 digitos.
+     * 
+     */
+    public function recuperaSesionUsuario($pusuario, $psolicitud)
+    {   
+        //Verifica que el usuario exista, que esté activo, que la clave coincida
+        //que corresponda al dispositivo, y que la sesion esté activa
+        
+       //echo "<script>alert('Ingresa validar sesion :: ".$psolicitud->getEmail()." ::')</script>";
+        $respuesta = self::inUsSeIna; //Inicializa como sesion logueada
+        $em = $this->getDoctrine()->getManager();
+        if (!$em->getRepository('LibreameBackendBundle:LbUsuarios')->
+                    findOneBy(array('txusuemail' => $psolicitud->getEmail()))){
+            $respuesta = self::inUsClInv; //Usuario o clave inválidos
+        } else {    
+            $usuario = $em->getRepository('LibreameBackendBundle:LbUsuarios')->
+                    findOneBy(array('txusuemail' => $psolicitud->getEmail()));
+
+            $estado = $usuario->getInusuestado();
+           //echo "<script>alert('encontro el usuario: estado : ".$estado." ')</script>";
+
+            //Busca el dispositivo si no esta asociado al usuario envia mensaje de sesion no existe
+            if (!$em->getRepository('LibreameBackendBundle:LbDispusuarios')->findOneBy(array(
+                    'txdisid' => $psolicitud->getDeviceMAC(), 
+                    'indisusuario' => $usuario))){
+                   //echo "<script>alert('Sesion no existe para dispositivo ')</script>";
+                    $respuesta = self::inUsSeIna; //Si la sesion no existe para el dispositivo
+            } else {
+                $device = $em->getRepository('LibreameBackendBundle:LbDispusuarios')->findOneBy(array(
+                    'txdisid' => $psolicitud->getDeviceMAC(), 
+                    'indisusuario' => $usuario));
+               //echo "<script>alert('encontro el dispositivo usuario ')</script>";
+                //Si el usuario está INACTIVO
+                if ($estado != self::inUsuActi)
+                {
+                   //echo "<script>alert('Usuario inactiva ')</script>";
+                    $respuesta = self::inUsuConf; //Usuario Inactiva
+                } else {
+                    //Si la clave enviada es inválida
+                    if ($usuario->getTxusuclave() != $psolicitud->getClave()){
+                       //echo "<script>alert('Clave invalida ')</script>";
+                        $respuesta = self::inUsClInv; //Usuario o clave inválidos
+                    } else {
+                        //Valida si la sesion está activa
+                       //echo "<script>alert('Va a retornar la sesion ')</script>";
+                        $respuesta = $em->getRepository('LibreameBackendBundle:LbSesiones')->findOneBy(array(
+                            'txsesnumero' =>  $psolicitud->getSession(),
+                            'insesdispusuario' => $device,
+                            'insesactiva' => self::inSesActi));
+                    }   
+                }
+            }
+        }       
+        //Flush al entity manager
+        $em->flush(); 
+
+        return ($respuesta);
+    }
+    
+    
     /*
      * eliminaSesion 
      *  Elimina una sesion 

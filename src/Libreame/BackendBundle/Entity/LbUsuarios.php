@@ -14,6 +14,7 @@ use Libreame\BackendBundle\Controller\AccesoController;
  */
 class LbUsuarios
 {
+
     /**
      * @var integer
      *
@@ -368,18 +369,33 @@ class LbUsuarios
         return $this->inusulugar;
     }
 
+    
+    //Constructor de la clase
+    function __construct(){ 
+        $strBlanco = "";
+        $this->txusuemail = $strBlanco;
+        $this->txusunombre = $strBlanco;  
+        $this->txusunommostrar = $strBlanco;
+        $this->txusutelefono = $strBlanco;
+        $this->txusuclave = $strBlanco;
+        $this->txusuimagen = $strBlanco;
+        $this->inusulugar = $strBlanco;
+        $this->txusuvalidacion = $strBlanco;
+    } 
+    
+
     //Función que crea un usuario para su registro en el sistema
     public function creaUsuario($pSolicitud, $Lugar)
     {   
         $usuario = new LbUsuarios();
-        $usuario->setTxusuemail($pSolicitud->getEmail());  
-        $usuario->setTxusunombre($pSolicitud->getEmail());  
-        $usuario->setTxusunommostrar($pSolicitud->getEmail());  
-        $usuario->setTxusutelefono($pSolicitud->getTelefono());  
-        $usuario->setTxusuclave($pSolicitud->getClave());  
-        $usuario->setTxusuimagen('DEFAULT IMAGE URL');  
-        $usuario->setInusulugar($Lugar);  
-        $usuario->setTxusuvalidacion(Logica::generaRand(AccesoController::inTamVali));  
+        $usuario->settxusuemail($pSolicitud->getEmail());  
+        $usuario->settxusunombre($pSolicitud->getEmail());  
+        $usuario->settxusunommostrar($pSolicitud->getEmail());  
+        $usuario->settxusutelefono($pSolicitud->getTelefono());  
+        $usuario->settxusuclave($pSolicitud->getClave());  
+        $usuario->settxusuimagen('DEFAULT IMAGE URL');  
+        $usuario->setinusulugar($Lugar);  
+        $usuario->settxusuvalidacion(Logica::generaRand(AccesoController::inTamVali));  
         
         return $usuario;
     }

@@ -215,4 +215,15 @@ class LbSesiones
     {
         return $this->insesdispusuario;
     }
+    
+    //Constructor de la clase
+    function __construct(){ 
+        $strBlanco = "";
+        $this->txsesnumero = $strBlanco;
+        $this->insesactiva = $strBlanco;  
+        $this->fesesfechaini = $strBlanco;
+        $this->fesesfechafin = $strBlanco;
+        $this->txipaddr = $strBlanco;
+    } 
+    
 }

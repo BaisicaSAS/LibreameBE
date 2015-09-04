@@ -4,12 +4,13 @@ namespace Libreame\BackendBundle\Helpers;
 
 use Libreame\BackendBundle\Controller\AccesoController;
 use Libreame\BackendBundle\Helpers\Respuesta;
+use Libreame\BackendBundle\Entity\LbLugares;
 
 
 class Logica 
 {   
 
-    public $datosAcceso; //Tipo Clase AccesoController
+    //public $datosAcceso; //Tipo Clase AccesoController
             
     /*
      * Esta funcion configurada como servicio se encarga de recibir la información del cliente
@@ -43,13 +44,20 @@ class Logica
                 $respuesta = $objParametros::obtenerParametros($solicitud);
                 break;
             } 
+            
+            case AccesoController::txAccRecFeeds: {
+                //echo "<script>alert('Antes de entrar a Recuperar Parametros Usuario-".$solicitud->getEmail()."')</script>";
+                $objFeeds = $this->get('feeds_service');
+                $respuesta = $objFeeds::obtenerFeeds($solicitud);
+                break;
+            } 
                 
         }
         //echo "<script>alert('ejecuta Accion: ".$respuesta."')</script>";
         return $respuesta;
     }
     
-    public function generaRespuesta($respuesta, $pSolicitud, $pUsuario){
+    public function generaRespuesta($respuesta, $pSolicitud){
 
         //echo "<script>alert('ACCION Genera respuesta: ".$pSolicitud->getAccion()."')</script>";
         //echo "<script>alert('REPUESTA Genera respuesta: ".$respuesta->getRespuesta()."')</script>";
@@ -79,24 +87,60 @@ class Logica
 
             //accion de recuperar datos y parametros de usuario
             case AccesoController::txAccRecParam:
-                //$vRespuesta
+                //Recupera el lugar, de la tabla de Lugares
+                $em = $this->getDoctrine()->getManager();
+                $lugar = new LbLugares();
+                if ($respuesta->getRespuesta()== AccesoController::inULogged){
+                    $lugar = $em->getRepository('LibreameBackendBundle:LbLugares')->
+                        findOneBy(array('inlugar' => $respuesta->RespUsuarios[0]->getInusulugar()));
+                }
+                
                 $JSONResp = array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
                         'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr(), 
                         'iddevice'=> $pSolicitud->getDeviceMac(), 'marca'=>$pSolicitud->getDeviceMarca(), 
                         'modelo'=>$pSolicitud->getDeviceModelo(), 'so'=>$pSolicitud->getDeviceSO()), 
-                        'usuario' => (array('nomusuario' => $pUsuario->getTxusunombre(),
-                            'nommostusuario' => $pUsuario->getTxusunommostrar(), 
-                            'email' => $pUsuario->getTxusuemail(),
-                            'usutelefono' => $pUsuario->getTxusutelefono(), 
-                            'usugenero' => $pUsuario->getInusugenero(),
-                            'usuimagen' => $pUsuario->getTxusuimagen(), 
-                            'usufecnac' => $pUsuario->getFeusunacimiento(),
-                            'usulugar' => $pUsuario->getInusulugar(), 
-                            'usunomlugar' => "Pendiente"
-                                )));
+                        'idrespuesta' => (array('respuesta' => $respuesta->getRespuesta(),
+                        'usuario' => (array('nomusuario' => $respuesta->RespUsuarios[0]->getTxusunombre(),
+                            'nommostusuario' => $respuesta->RespUsuarios[0]->getTxusunommostrar(), 
+                            'email' => $respuesta->RespUsuarios[0]->getTxusuemail(),
+                            'usutelefono' => $respuesta->RespUsuarios[0]->getTxusutelefono(), 
+                            'usugenero' => $respuesta->RespUsuarios[0]->getInusugenero(),
+                            'usuimagen' => $respuesta->RespUsuarios[0]->getTxusuimagen(), 
+                            'usufecnac' => $respuesta->RespUsuarios[0]->getFeusunacimiento(),
+                            'usulugar' => $lugar->getInlugar(), 
+                            'usunomlugar' => $lugar->getTxlugnombre())))));
 
                 break;
                 
+            case AccesoController::txAccRecFeeds:
+                //Recupera el lugar, de la tabla de Ejemplares
+                $em = $this->getDoctrine()->getManager();
+                $JSONResp = array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
+                        'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr(), 
+                        'iddevice'=> $pSolicitud->getDeviceMac(), 'marca'=>$pSolicitud->getDeviceMarca(), 
+                        'modelo'=>$pSolicitud->getDeviceModelo(), 'so'=>$pSolicitud->getDeviceSO()), 
+                        'idrespuesta' => (array('respuesta' => $respuesta->getRespuesta(),
+                        'ejemplares' => (array('nomusuario' => $respuesta->RespUsuarios[0]->getTxusunombre(),
+                            'nommostusuario' => $respuesta->RespUsuarios[0]->getTxusunommostrar(), 
+                            'email' => $respuesta->RespUsuarios[0]->getTxusuemail(),
+                            'usutelefono' => $respuesta->RespUsuarios[0]->getTxusutelefono(), 
+                            'usugenero' => $respuesta->RespUsuarios[0]->getInusugenero(),
+                            'usuimagen' => $respuesta->RespUsuarios[0]->getTxusuimagen(), 
+                            'usufecnac' => $respuesta->RespUsuarios[0]->getFeusunacimiento(),
+                            'usulugar' => $lugar->getInlugar(), 
+                            'usunomlugar' => $lugar->getTxlugnombre())),
+                            array('nomusuario' => $respuesta->RespUsuarios[0]->getTxusunombre(),
+                            'nommostusuario' => $respuesta->RespUsuarios[0]->getTxusunommostrar(), 
+                            'email' => $respuesta->RespUsuarios[0]->getTxusuemail(),
+                            'usutelefono' => $respuesta->RespUsuarios[0]->getTxusutelefono(), 
+                            'usugenero' => $respuesta->RespUsuarios[0]->getInusugenero(),
+                            'usuimagen' => $respuesta->RespUsuarios[0]->getTxusuimagen(), 
+                            'usufecnac' => $respuesta->RespUsuarios[0]->getFeusunacimiento(),
+                            'usulugar' => $lugar->getInlugar(), 
+                            'usunomlugar' => $lugar->getTxlugnombre())                            
+                                ))));
+
+                break;
         }
         
         $JSONResp = json_encode($JSONResp);

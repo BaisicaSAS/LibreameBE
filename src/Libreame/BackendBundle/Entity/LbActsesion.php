@@ -31,7 +31,7 @@ class LbActsesion
     /**
      * @var string
      *
-     * @ORM\Column(name="txActMensaje", type="string", length=50, nullable=false)
+     * @ORM\Column(name="txActMensaje", type="string", length=500, nullable=false)
      */
     private $txactmensaje;
 
