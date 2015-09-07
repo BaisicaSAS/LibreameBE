@@ -19,21 +19,21 @@ class LbMembresias
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $inmembresia;
+    protected $inmembresia;
 
     /**
      * @var integer
      * Default 0 - El usuario NO Es el creador del Grupo
      * @ORM\Column(name="inMemCreador", type="integer", nullable=false)
      */
-    private $inmemcreador = 0;
+    protected $inmemcreador = 0;
 
     /**
      * @var integer
      * Default 1 - Membresía activa
      * @ORM\Column(name="inMemActiva", type="integer", nullable=false)
      */
-    private $inmemactiva = 1;
+    protected $inmemactiva = 1;
 
     /**
      * @var \Libreame\BackendBundle\Entity\LbGrupos
@@ -43,7 +43,7 @@ class LbMembresias
      *   @ORM\JoinColumn(name="inMemGrupo", referencedColumnName="inGrupo")
      * })
      */
-    private $inmemgrupo;
+    protected $inmemgrupo;
 
     /**
      * @var \Libreame\BackendBundle\Entity\LbUsuarios
@@ -53,7 +53,7 @@ class LbMembresias
      *   @ORM\JoinColumn(name="inMemUsuario", referencedColumnName="inUsuario")
      * })
      */
-    private $inmemusuario;
+    protected $inmemusuario;
 
 
 

@@ -19,98 +19,98 @@ class LbLibros
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $inlibro;
+    protected $inlibro;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="txLibTipoPublica", type="integer", nullable=false)
      */
-    private $txlibtipopublica;
+    protected $txlibtipopublica;
 
     /**
      * @var string
      *
      * @ORM\Column(name="txLibTitulo", type="string", length=200, nullable=false)
      */
-    private $txlibtitulo;
+    protected $txlibtitulo;
 
     /**
      * @var string
      *
      * @ORM\Column(name="txLibAutores", type="string", length=200, nullable=true)
      */
-    private $txlibautores;
+    protected $txlibautores;
 
     /**
      * @var string
      *
      * @ORM\Column(name="txLibIdioma", type="string", length=45, nullable=false)
      */
-    private $txlibidioma;
+    protected $txlibidioma;
 
     /**
      * @var string
      *
      * @ORM\Column(name="txLibEditorial", type="string", length=100, nullable=true)
      */
-    private $txlibeditorial;
+    protected $txlibeditorial;
 
     /**
      * @var string
      *
      * @ORM\Column(name="txLibEdicionAnio", type="string", length=10, nullable=true)
      */
-    private $txlibedicionanio;
+    protected $txlibedicionanio;
 
     /**
      * @var string
      *
      * @ORM\Column(name="txLibEdicionNum", type="string", length=10, nullable=true)
      */
-    private $txlibedicionnum;
+    protected $txlibedicionnum;
 
     /**
      * @var string
      *
      * @ORM\Column(name="txLibEdicionPais", type="string", length=100, nullable=true)
      */
-    private $txlibedicionpais;
+    protected $txlibedicionpais;
 
     /**
      * @var string
      *
      * @ORM\Column(name="txLibCodigoOfic", type="string", length=45, nullable=true)
      */
-    private $txlibcodigoofic;
+    protected $txlibcodigoofic;
 
     /**
      * @var string
      *
      * @ORM\Column(name="txLibResumen", type="string", length=300, nullable=true)
      */
-    private $txlibresumen;
+    protected $txlibresumen;
 
     /**
      * @var string
      *
      * @ORM\Column(name="txLibTomo", type="string", length=45, nullable=true)
      */
-    private $txlibtomo;
+    protected $txlibtomo;
 
     /**
      * @var string
      *
      * @ORM\Column(name="txLibVolumen", type="string", length=45, nullable=true)
      */
-    private $txlibvolumen;
+    protected $txlibvolumen;
 
     /**
      * @var string
      *
      * @ORM\Column(name="txPaginas", type="string", length=45, nullable=true)
      */
-    private $txpaginas;
+    protected $txpaginas;
 
     /**
      * @var \Libreame\BackendBundle\Entity\LbGeneros
@@ -120,7 +120,7 @@ class LbLibros
      *   @ORM\JoinColumn(name="inLibGenero", referencedColumnName="inGenero")
      * })
      */
-    private $inlibgenero;
+    protected $inlibgenero;
 
 
 

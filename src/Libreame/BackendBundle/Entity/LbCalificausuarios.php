@@ -19,28 +19,28 @@ class LbCalificausuarios
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $incalificacion;
+    protected $incalificacion;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="inCalCalificacion", type="integer", nullable=false)
      */
-    private $incalcalificacion;
+    protected $incalcalificacion;
 
     /**
      * @var string
      *
      * @ORM\Column(name="txCalObservacion", type="string", length=100, nullable=true)
      */
-    private $txcalobservacion;
+    protected $txcalobservacion;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="inCalReporteAbuso", type="integer", nullable=false)
      */
-    private $incalreporteabuso;
+    protected $incalreporteabuso;
 
     /**
      * @var \Libreame\BackendBundle\Entity\LbUsuarios
@@ -50,7 +50,7 @@ class LbCalificausuarios
      *   @ORM\JoinColumn(name="inCalUsuCalifica", referencedColumnName="inUsuario")
      * })
      */
-    private $incalusucalifica;
+    protected $incalusucalifica;
 
     /**
      * @var \Libreame\BackendBundle\Entity\LbUsuarios
@@ -60,7 +60,7 @@ class LbCalificausuarios
      *   @ORM\JoinColumn(name="inCalUsuCalificado", referencedColumnName="inUsuario")
      * })
      */
-    private $incalusucalificado;
+    protected $incalusucalificado;
 
 
 

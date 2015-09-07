@@ -74,14 +74,14 @@ class FeedEjemplares {
         $objAcceso = $this->get('acceso_service');
         $usuario = new LbUsuarios();
         $sesion = new LbSesiones();
-        $ejemplar = new LbEjemplares();
         try {
             //Valida que la sesión corresponda y se encuentre activa
             $respSesionVali=$objAcceso::validaSesionUsuario($psolicitud);
-           //echo "<script>alert(' recuperarFeedEjemplares :: Validez de sesion ".$respSesionVali." ')</script>";
+            //echo "<script>alert(' recuperarFeedEjemplares :: Validez de sesion ".$respSesionVali." ')</script>";
             if ($respSesionVali==$objAcceso::inULogged) 
             {    
-                $em = $this->getDoctrine()->getManager();
+                //echo "<script>alert(' recuperarFeedEjemplares :: FindAll ')</script>";
+                $em = $this->getDoctrine()->getEntityManager();
                 //Busca el usuario 
                 $usuario = $em->getRepository('LibreameBackendBundle:LbUsuarios')->
                     findOneBy(array('txusuemail' => $psolicitud->getEmail()));
@@ -90,27 +90,30 @@ class FeedEjemplares {
                 $sesion = $objAcceso::recuperaSesionUsuario($usuario,$psolicitud);
                //echo "<script>alert('La sesion es ".$sesion->getTxsesnumero()." ')</script>";
                 //Guarda la actividad de la sesion:: 
-                $actsesion = $objAcceso::generaActSesion($sesion,AccesoController::inDatoUno,"Recupera Feed de Ejemplares".$psolicitud->getEmail()." recuperados con éxito",$psolicitud->getAccion(),$fecha,$fecha);
+                $objAcceso::generaActSesion($sesion,AccesoController::inDatoUno,"Recupera Feed de Ejemplares".$psolicitud->getEmail()." recuperados con éxito ",$psolicitud->getAccion(),$fecha,$fecha);
                 //echo "<script>alert('Generó actividad de sesion ')</script>";
                 
                 $respuesta->setRespuesta(AccesoController::inExitoso);
                 
                 //Recupera cada uno de los ejemplares con ID > al del parametro
-                $ejemplares = $em->getRepository('LibreameBackendBundle:LbEjemplares')->findAll();
+                $sql = "SELECT e FROM LibreameBackendBundle:LbEjemplares e WHERE e.inejemplar > ".$psolicitud->getUltEjemplar();
+                //echo "<script>alert('".$sql."')</script>";
                 
-                foreach ($ejemplares as $ejemplar)
-                {    //Ingresa el ejemplar en el arreglo de la Clase actual para la respuesta
-                    $this->setArrFeedEjemplar($ejemplar);
-                }
+                $query = $em->createQuery($sql);
+                //$query = $em->createQuery('SELECT e FROM LibreameBackendBundle:LbEjemplares e WHERE e.inejemplar > 1');
+                $ejemplares = $query->getResult();
+                
             } else {
                 $respuesta->setRespuesta($respSesionVali);
-                $this->setArrFeeds($ejemplar);
+                $ejemplares = array();
             }
         } catch (Exception $ex) {
             $respuesta->setRespuesta(AccesoController::inDescone);
+            $ejemplares = array();
         } 
         
-        return Logica::generaRespuesta($respuesta, $psolicitud, $this->ArrEjemplares);
+        //return Logica::generaRespuesta($respuesta, $psolicitud, $this->ArrEjemplares);
+        return Logica::generaRespuesta($respuesta, $psolicitud, $ejemplares);
             
        
     }

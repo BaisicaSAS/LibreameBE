@@ -19,7 +19,7 @@ class LbGenerossolicitados
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $ingenerosolicitado;
+    protected $ingenerosolicitado;
 
     /**
      * @var \Libreame\BackendBundle\Entity\LbGeneros
@@ -29,7 +29,7 @@ class LbGenerossolicitados
      *   @ORM\JoinColumn(name="inSolGenero", referencedColumnName="inGenero")
      * })
      */
-    private $insolgenero;
+    protected $insolgenero;
 
     /**
      * @var \Libreame\BackendBundle\Entity\LbSolicitados
@@ -39,7 +39,7 @@ class LbGenerossolicitados
      *   @ORM\JoinColumn(name="inSolSolicitado", referencedColumnName="IdSolicitado")
      * })
      */
-    private $insolsolicitado;
+    protected $insolsolicitado;
 
 
 

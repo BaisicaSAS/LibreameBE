@@ -110,42 +110,7 @@ class AccesoController extends Controller
         $respuesta = 0;
         $fecha = new \DateTime;
         $texto = $fecha->format('YmdHis');
-        //echo "<script>alert('".substr($datos,0,4)."---".substr($datos,4,2)."')</script>";
-        /*
-        $modo = substr($datos,0,4);
-        $accion = substr($datos,4,1); //R - L
-        $idreg = substr($datos,5,4);
-       //echo "<script>alert('".$modo." - ".$accion." - ".$idreg."')</script>";
-        */
         try {
-            //Este bloque es solo de Prueba
-            /*
-            if ($modo == 'TEST') {
-                
-                if ($accion == 'R'){
-                    //echo "<script>alert('Reconoce REGISTRO')</script>"; 
-                    $prueba = array('idsesion' => array ('idaccion' => '1','usuario' => $idreg.'-alexviatela',
-                        'idtrx' => $idreg.'-123456789012345'.$texto, 'ipaddr'=> '200.000.000.000', 
-                        'iddevice'=> $idreg.'MACADDRESS', 'marca'=>'LG', 'modelo'=>'G2 Mini', 'so'=>'KITKAT'),
-                        'idsolicitud' => array('email' => $idreg.'alexviatela@gmail.com',
-                            'clave' => 'clave12345', 'telefono' => $idreg."-".$texto));
-                    $datos = json_encode($prueba);
-                }
-                
-                if ($accion == 'L'){
-                    //echo "<script>alert('Reconoce LOGIN')</script>"; 
-                    $prueba = array('idsesion' => array ('idaccion' => '2','usuario' => $idreg.'-alexviatela',
-                        'idtrx' => $idreg.'-123456789012345'.$texto, 'ipaddr'=> '200.000.000.000', 
-                        'iddevice'=> $idreg.'MACADDRESS', 'marca'=>'LG', 'modelo'=>'G2 Mini', 'so'=>'KITKAT'), 
-                        'idsolicitud' => array('clave' => 'clave12345', 
-                            'email' => $idreg.'alexviatela@gmail.com'));
-                    $datos = json_encode($prueba);
-                }
-                
-               //echo "<script>alert('".$datos."')</script>";
-            }
-             
-            */
 
             //Aquí iniciaría el código en producción, el bloque anterior solo funciona para TEST
             //Se evalúa si se logró obtener la información de sesion desde el JSON
@@ -205,22 +170,33 @@ class AccesoController extends Controller
             $this->objSolicitud->setDeviceSO($json_datos['idsesion']['so']);
             //Según la solicitud descompone el JSON
             $tmpSesion = $this->objSolicitud->getAccion();
+            //echo "<script>alert('ult ejemplar ".$json_datos['idsolicitud']['ultejemplar']."')</script>";
+            //echo "<script>alert('sesion ".$tmpSesion."')</script>";
             switch ($tmpSesion){
                 case self::txAccRegistro: {
+                    //echo "<script>alert('ENTRA POR REGISTR')</script>";
                     $this->objSolicitud->setEmail($json_datos['idsolicitud']['email']);
                     $this->objSolicitud->setClave($json_datos['idsolicitud']['clave']);
                     $this->objSolicitud->setTelefono($json_datos['idsolicitud']['telefono']);
                     break;
                 }
-                case (self::txAccIngresos or self::txAccRecParam): {
+                case self::txAccIngresos : {
+                    //echo "<script>alert('ENTRA POR LOGIN')</script>";
                     $this->objSolicitud->setEmail($json_datos['idsolicitud']['email']);
                     $this->objSolicitud->setClave($json_datos['idsolicitud']['clave']);
                     break;
                 }
-                case self::txAccRecFeeds: { //fALTA EL ID DEL MAXIMO ENVIADO
+                case self::txAccRecParam: {
+                    //echo "<script>alert('ENTRA POR OBT PARAM')</script>";
                     $this->objSolicitud->setEmail($json_datos['idsolicitud']['email']);
                     $this->objSolicitud->setClave($json_datos['idsolicitud']['clave']);
-                    //$this->objSolicitud->setTelefono($json_datos['idsolicitud']['telefono']);
+                    break;
+                }
+                case self::txAccRecFeeds: { 
+                    //echo "<script>alert('ENTRA POR FEED')</script>";
+                    $this->objSolicitud->setEmail($json_datos['idsolicitud']['email']);
+                    $this->objSolicitud->setClave($json_datos['idsolicitud']['clave']);
+                    $this->objSolicitud->setUltEjemplar($json_datos['idsolicitud']['ultejemplar']);
                     break;
                 }
             }

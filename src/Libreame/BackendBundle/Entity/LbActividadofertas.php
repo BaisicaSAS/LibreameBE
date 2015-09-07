@@ -19,28 +19,28 @@ class LbActividadofertas
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $inactividadoferta;
+    protected $inactividadoferta;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="feActFechaHora", type="datetime", nullable=false)
      */
-    private $feactfechahora;
+    protected $feactfechahora;
 
     /**
      * @var string
      *
      * @ORM\Column(name="txActDescripcion", type="string", length=300, nullable=true)
      */
-    private $txactdescripcion;
+    protected $txactdescripcion;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="inActEstado", type="integer", nullable=true)
      */
-    private $inactestado;
+    protected $inactestado;
 
     /**
      * @var \Libreame\BackendBundle\Entity\LbActividadofertas
@@ -50,7 +50,7 @@ class LbActividadofertas
      *   @ORM\JoinColumn(name="inActPadreAct", referencedColumnName="inActividadOferta")
      * })
      */
-    private $inactpadreact;
+    protected $inactpadreact;
 
     /**
      * @var \Libreame\BackendBundle\Entity\LbOfertas
@@ -60,7 +60,7 @@ class LbActividadofertas
      *   @ORM\JoinColumn(name="inActOferta", referencedColumnName="inOferta")
      * })
      */
-    private $inactoferta;
+    protected $inactoferta;
 
     /**
      * @var \Libreame\BackendBundle\Entity\LbUsuarios
@@ -70,7 +70,7 @@ class LbActividadofertas
      *   @ORM\JoinColumn(name="inActUsuario", referencedColumnName="inUsuario")
      * })
      */
-    private $inactusuario;
+    protected $inactusuario;
 
 
 

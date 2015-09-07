@@ -2434,6 +2434,7 @@
     <service id="registro_service" class="Libreame\BackendBundle\Helpers\Registro"/>
     <service id="login_service" class="Libreame\BackendBundle\Helpers\Login"/>
     <service id="parametros_service" class="Libreame\BackendBundle\Helpers\Parametros"/>
+    <service id="feeds_service" class="Libreame\BackendBundle\Helpers\FeedEjemplares"/>
     <service id="twig.extension.acme.demo" class="Acme\DemoBundle\Twig\Extension\DemoExtension" public="false">
       <tag name="twig.extension"/>
       <argument type="service" id="twig.loader"/>

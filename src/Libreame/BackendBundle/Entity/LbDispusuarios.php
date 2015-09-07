@@ -19,42 +19,42 @@ class LbDispusuarios
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $indispusuario;
+    protected $indispusuario;
 
     /**
      * @var string
      *
      * @ORM\Column(name="txDisID", type="string", length=45, nullable=false)
      */
-    private $txdisid;
+    protected $txdisid;
 
     /**
      * @var string
      *
      * @ORM\Column(name="txDisNombre", type="string", length=45, nullable=true)
      */
-    private $txdisnombre;
+    protected $txdisnombre;
 
     /**
      * @var string
      *
      * @ORM\Column(name="txDisMarca", type="string", length=45, nullable=true)
      */
-    private $txdismarca;
+    protected $txdismarca;
 
     /**
      * @var string
      *
      * @ORM\Column(name="txDisModelo", type="string", length=45, nullable=true)
      */
-    private $txdismodelo;
+    protected $txdismodelo;
 
     /**
      * @var string
      *
      * @ORM\Column(name="txDisSO", type="string", length=45, nullable=true)
      */
-    private $txdisso;
+    protected $txdisso;
 
     /**
      * @var \Libreame\BackendBundle\Entity\LbUsuarios
@@ -64,7 +64,7 @@ class LbDispusuarios
      *   @ORM\JoinColumn(name="inDisUsuario", referencedColumnName="inUsuario")
      * })
      */
-    private $indisusuario;
+    protected $indisusuario;
 
 
 

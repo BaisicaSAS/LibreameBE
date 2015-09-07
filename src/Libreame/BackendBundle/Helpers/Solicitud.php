@@ -26,7 +26,8 @@ class Solicitud {
     private $pTelefono; //Numero telefónico 
     //$pClave se utiliza tambien para C02: Login
     private $pClave; //Clave del usuario
-    
+    //$pUltEjemplar
+    private $pUltEjemplar;
     /*
      *  Bloque de getter para los atributos de la clase
      */
@@ -69,6 +70,10 @@ class Solicitud {
 
     public function getTelefono() {
         return $this->pTelefono;
+    }
+
+    public function getUltEjemplar() {
+        return $this->pUltEjemplar;
     }
     
     /*
@@ -124,4 +129,12 @@ class Solicitud {
         return $this;
     }
     
+    public function setUltEjemplar($pUltEjemplar) {
+        if ($pUltEjemplar==""){
+            $this->pUltEjemplar = 0;
+        } else {
+            $this->pUltEjemplar = $pUltEjemplar;
+        }
+        return $this;
+    }
 }

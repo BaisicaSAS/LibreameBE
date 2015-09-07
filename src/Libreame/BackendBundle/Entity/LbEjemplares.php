@@ -19,21 +19,21 @@ class LbEjemplares
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $inejemplar;
+    protected $inejemplar;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="inEjeCantidad", type="integer", nullable=false)
      */
-    private $inejecantidad;
+    protected $inejecantidad;
 
     /**
      * @var float
      *
      * @ORM\Column(name="dbEjeAvaluo", type="float", precision=10, scale=0, nullable=false)
      */
-    private $dbejeavaluo;
+    protected $dbejeavaluo;
 
     /**
      * @var \Libreame\BackendBundle\Entity\LbGeneros
@@ -43,7 +43,7 @@ class LbEjemplares
      *   @ORM\JoinColumn(name="inEjeGenero", referencedColumnName="inGenero")
      * })
      */
-    private $inejegenero;
+    protected $inejegenero;
 
     /**
      * @var \Libreame\BackendBundle\Entity\LbLibros
@@ -53,7 +53,7 @@ class LbEjemplares
      *   @ORM\JoinColumn(name="inEjeLibro", referencedColumnName="inLibro")
      * })
      */
-    private $inejelibro;
+    protected $inejelibro;
 
     /**
      * @var \Libreame\BackendBundle\Entity\LbUsuarios
@@ -63,7 +63,7 @@ class LbEjemplares
      *   @ORM\JoinColumn(name="inEjeUsuDueno", referencedColumnName="inUsuario")
      * })
      */
-    private $inejeusudueno;
+    protected $inejeusudueno;
 
 
 

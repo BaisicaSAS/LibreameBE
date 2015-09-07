@@ -19,21 +19,21 @@ class LbDetallestratos
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $indetalletrato;
+    protected $indetalletrato;
 
     /**
      * @var float
      *
      * @ORM\Column(name="inDetValorUsr", type="float", precision=10, scale=0, nullable=false)
      */
-    private $indetvalorusr;
+    protected $indetvalorusr;
 
     /**
      * @var float
      *
      * @ORM\Column(name="inDetValorOtro", type="float", precision=10, scale=0, nullable=false)
      */
-    private $indetvalorotro;
+    protected $indetvalorotro;
 
     /**
      * @var \Libreame\BackendBundle\Entity\LbEjemplares
@@ -43,7 +43,7 @@ class LbDetallestratos
      *   @ORM\JoinColumn(name="inDetEjemplarUsr", referencedColumnName="inEjemplar")
      * })
      */
-    private $indetejemplarusr;
+    protected $indetejemplarusr;
 
     /**
      * @var \Libreame\BackendBundle\Entity\LbEjemplares
@@ -53,7 +53,7 @@ class LbDetallestratos
      *   @ORM\JoinColumn(name="inDetEjemplarOtro", referencedColumnName="inEjemplar")
      * })
      */
-    private $indetejemplarotro;
+    protected $indetejemplarotro;
 
     /**
      * @var \Libreame\BackendBundle\Entity\LbTratos
@@ -63,7 +63,7 @@ class LbDetallestratos
      *   @ORM\JoinColumn(name="inDetTrato", referencedColumnName="inTrato")
      * })
      */
-    private $indettrato;
+    protected $indettrato;
 
     /**
      * @var \Libreame\BackendBundle\Entity\LbUsuarios
@@ -73,7 +73,7 @@ class LbDetallestratos
      *   @ORM\JoinColumn(name="inDetUsuario", referencedColumnName="inUsuario")
      * })
      */
-    private $indetusuario;
+    protected $indetusuario;
 
     /**
      * @var \Libreame\BackendBundle\Entity\LbUsuarios
@@ -83,7 +83,7 @@ class LbDetallestratos
      *   @ORM\JoinColumn(name="inDetUsuarioOtro", referencedColumnName="inUsuario")
      * })
      */
-    private $indetusuariootro;
+    protected $indetusuariootro;
 
 
 

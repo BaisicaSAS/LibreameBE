@@ -19,21 +19,21 @@ class LbHistoriaejemplar
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $inhistejemplar;
+    protected $inhistejemplar;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="inHEjFechaHora", type="datetime", nullable=false)
      */
-    private $inhejfechahora;
+    protected $inhejfechahora;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="inHEjModo", type="integer", nullable=false)
      */
-    private $inhejmodo;
+    protected $inhejmodo;
 
     /**
      * @var \Libreame\BackendBundle\Entity\LbEjemplares
@@ -43,7 +43,7 @@ class LbHistoriaejemplar
      *   @ORM\JoinColumn(name="inHEjEjemplar", referencedColumnName="inEjemplar")
      * })
      */
-    private $inhejejemplar;
+    protected $inhejejemplar;
 
     /**
      * @var \Libreame\BackendBundle\Entity\LbUsuarios
@@ -53,7 +53,7 @@ class LbHistoriaejemplar
      *   @ORM\JoinColumn(name="inHEjUsuario", referencedColumnName="inUsuario")
      * })
      */
-    private $inhejusuario;
+    protected $inhejusuario;
 
 
 

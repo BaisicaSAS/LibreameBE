@@ -19,7 +19,7 @@ class LbGenerosofrecidos
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $ingeneroofrecido;
+    protected $ingeneroofrecido;
 
     /**
      * @var \Libreame\BackendBundle\Entity\LbGeneros
@@ -29,7 +29,7 @@ class LbGenerosofrecidos
      *   @ORM\JoinColumn(name="inGOfGenero", referencedColumnName="inGenero")
      * })
      */
-    private $ingofgenero;
+    protected $ingofgenero;
 
     /**
      * @var \Libreame\BackendBundle\Entity\LbOfrecidos
@@ -39,7 +39,7 @@ class LbGenerosofrecidos
      *   @ORM\JoinColumn(name="inGOfOfrecido", referencedColumnName="inOfrecido")
      * })
      */
-    private $ingofofrecido;
+    protected $ingofofrecido;
 
 
 

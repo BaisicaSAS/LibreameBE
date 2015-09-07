@@ -19,21 +19,21 @@ class LbLugares
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $inlugar;
+    protected $inlugar;
 
     /**
      * @var string
      *
      * @ORM\Column(name="txLugCodigo", type="string", length=45, nullable=false)
      */
-    private $txlugcodigo;
+    protected $txlugcodigo;
 
     /**
      * @var string
      *
      * @ORM\Column(name="txLugNombre", type="string", length=100, nullable=false)
      */
-    private $txlugnombre;
+    protected $txlugnombre;
 
     /**
      * @var \Libreame\BackendBundle\Entity\LbLugares
@@ -43,7 +43,7 @@ class LbLugares
      *   @ORM\JoinColumn(name="inLugPadre", referencedColumnName="inLugar")
      * })
      */
-    private $inlugpadre;
+    protected $inlugpadre;
 
 
 

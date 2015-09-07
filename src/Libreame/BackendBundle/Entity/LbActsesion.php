@@ -19,35 +19,35 @@ class LbActsesion
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $inactsesion;
+    protected $inactsesion;
 
     /**
      * @var string
      *
      * @ORM\Column(name="txActAccion", type="string", length=5, nullable=false)
      */
-    private $txactaccion;
+    protected $txactaccion;
 
     /**
      * @var string
      *
      * @ORM\Column(name="txActMensaje", type="string", length=500, nullable=false)
      */
-    private $txactmensaje;
+    protected $txactmensaje;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="feActFecha", type="datetime", nullable=false)
      */
-    private $feactfecha;
+    protected $feactfecha;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="inActFinalizada", type="integer", nullable=false)
      */
-    private $inactfinalizada;
+    protected $inactfinalizada;
 
     /**
      * @var \Libreame\BackendBundle\Entity\LbSesiones
@@ -57,7 +57,7 @@ class LbActsesion
      *   @ORM\JoinColumn(name="inActSesionDisUs", referencedColumnName="inSesion")
      * })
      */
-    private $inactsesiondisus;
+    protected $inactsesiondisus;
 
 
 

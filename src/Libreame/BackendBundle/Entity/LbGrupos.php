@@ -19,28 +19,28 @@ class LbGrupos
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $ingrupo;
+    protected $ingrupo;
 
     /**
      * @var string
      *
      * @ORM\Column(name="inGruNombre", type="string", length=100, nullable=false)
      */
-    private $ingrunombre;
+    protected $ingrunombre;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="feGruFecha", type="datetime", nullable=false)
      */
-    private $fegrufecha;
+    protected $fegrufecha;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="inGruCantMiem", type="integer", nullable=false)
      */
-    private $ingrucantmiem;
+    protected $ingrucantmiem;
 
 
 
