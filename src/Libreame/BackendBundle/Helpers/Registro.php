@@ -120,7 +120,7 @@ class Registro {
             
         } catch (Exception $ex) {
             //echo "<script>alert('Respuesta de registro ERROR ".$respuesta->getRespuesta()." Error')</script>";
-            $respuesta->setRespuesta(AccesoController::inFallido);
+            $respuesta->setRespuesta(AccesoController::inPlatCai);
             return Logica::generaRespuesta($respuesta, $pSolicitud);
         } 
         

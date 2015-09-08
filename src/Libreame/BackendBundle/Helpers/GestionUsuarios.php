@@ -6,25 +6,18 @@ namespace Libreame\BackendBundle\Helpers;
 use Libreame\BackendBundle\Controller\AccesoController;
 
 use Libreame\BackendBundle\Entity\LbUsuarios;
-use Libreame\BackendBundle\Entity\LbDispusuarios;
-use Libreame\BackendBundle\Entity\LbMembresias;
 use Libreame\BackendBundle\Entity\LbSesiones;
-use Libreame\BackendBundle\Entity\LbActsesion;
 /**
- * Description of Parametros
+ * Description of Gestion Usuarios
  *
  * @author mramirez
  */
-class Parametros {
+class GestionUsuarios {
     
     /*
-     * registro 
-     * Esta es la funcion que genera el registro de un usuario en el sistema
-     * guarda los datos básicos, genera una clave (url) dispara el envío de email de 
-     * Confirmacion, retorna mensaje de exito o fracaso de operacion para el cliente 
-     * y registra en la bitácora.
+     * ObtenerParametros 
+     * Retorna la información del usuario que se encuentra logueado, para visualización
      * 
-     * El sistema registra la sesión como finalizada, la cierra en horas y deja la traza en actividad de sesion.
      */
 
     public function obtenerParametros($psolicitud)
@@ -45,11 +38,12 @@ class Parametros {
                 $usuario = $em->getRepository('LibreameBackendBundle:LbUsuarios')->
                     findOneBy(array('txusuemail' => $psolicitud->getEmail()));
                 
+                //SE INACTIVA PORQUE PUEDE GENERAR UNA GRAN CANTIDAD DE REGISTROS EN UNA SOLA SESION
                 //Busca y recupera el objeto de la sesion:: 
-                $sesion = $objAcceso::recuperaSesionUsuario($usuario,$psolicitud);
-               //echo "<script>alert('La sesion es ".$sesion->getTxsesnumero()." ')</script>";
+                //$sesion = $objAcceso::recuperaSesionUsuario($usuario,$psolicitud);
+                //echo "<script>alert('La sesion es ".$sesion->getTxsesnumero()." ')</script>";
                 //Guarda la actividad de la sesion:: 
-                $actsesion = $objAcceso::generaActSesion($sesion,AccesoController::inDatoUno,"Datos de usuario ".$psolicitud->getEmail()." recuperados con éxito",$psolicitud->getAccion(),$fecha,$fecha);
+                //$objAcceso::generaActSesion($sesion,AccesoController::inDatoUno,"Datos de usuario ".$psolicitud->getEmail()." recuperados con éxito",$psolicitud->getAccion(),$fecha,$fecha);
                 //echo "<script>alert('Generó actividad de sesion ')</script>";
                 
                 $respuesta->setRespuesta(AccesoController::inExitoso);
@@ -63,10 +57,9 @@ class Parametros {
                 $respuesta->setArrUsuarios($usuario);
             }
         } catch (Exception $ex) {
-            $respuesta->setRespuesta(AccesoController::inDescone);
-        } 
-        
-        return Logica::generaRespuesta($respuesta, $psolicitud, $usuario);
-            
+            $respuesta->setRespuesta(AccesoController::inPlatCai);
+        } finally {
+            return Logica::generaRespuesta($respuesta, $psolicitud, $usuario);
+        }
     }
 }

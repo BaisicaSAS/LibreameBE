@@ -22,77 +22,77 @@ class LbUsuarios
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $inusuario;
+    protected $inusuario;
 
     /**
      * @var string
      *
      * @ORM\Column(name="txUsuEmail", type="string", length=100, nullable=false)
      */
-    private $txusuemail;
+    protected $txusuemail;
 
     /**
      * @var string
      *
      * @ORM\Column(name="txUsuTelefono", type="string", length=45, nullable=false)
      */
-    private $txusutelefono = '0';
+    protected $txusutelefono = '0';
 
     /**
      * @var string
      *
      * @ORM\Column(name="txUsuNombre", type="string", length=100, nullable=false)
      */
-    private $txusunombre;
+    protected $txusunombre;
 
     /**
      * @var integer
      * Default 2: Genero sin especificar
      * @ORM\Column(name="inUsuGenero", type="integer", nullable=false)
      */
-    private $inusugenero = 2;
+    protected $inusugenero = 2;
 
     /**
      * @var string
      *
      * @ORM\Column(name="txUsuImagen", type="string", length=50, nullable=false)
      */
-    private $txusuimagen;
+    protected $txusuimagen;
 
     /**
      * @var string
      *
      * @ORM\Column(name="txUsuNomMostrar", type="string", length=20, nullable=true)
      */
-    private $txusunommostrar;
+    protected $txusunommostrar;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="feUsuNacimiento", type="datetime", nullable=true)
      */
-    private $feusunacimiento;
+    protected $feusunacimiento;
 
     /**
      * @var string
      *
      * @ORM\Column(name="txUsuValidacion", type="string", length=200, nullable=true)
      */
-    private $txusuvalidacion;
+    protected $txusuvalidacion;
 
     /**
      * @var integer
      * Default: 0: Esperando confirmación
      * @ORM\Column(name="inUsuEstado", type="integer", nullable=false)
      */
-    private $inusuestado = 0;
+    protected $inusuestado = 0;
 
     /**
      * @var string
      *
      * @ORM\Column(name="txUsuClave", type="string", length=256, nullable=false)
      */
-    private $txusuclave;
+    protected $txusuclave;
 
     /**
      * @var \Libreame\BackendBundle\Entity\LbLugares
@@ -102,7 +102,7 @@ class LbUsuarios
      *   @ORM\JoinColumn(name="inUsuLugar", referencedColumnName="inLugar")
      * })
      */
-    private $inusulugar;
+    protected $inusulugar;
 
 
 

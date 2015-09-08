@@ -19,14 +19,14 @@ class LbOfertasfavoritas
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $inofertafavorita;
+    protected $inofertafavorita;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="feFavFecha", type="datetime", nullable=false)
      */
-    private $fefavfecha;
+    protected $fefavfecha;
 
     /**
      * @var \Libreame\BackendBundle\Entity\LbOfertas
@@ -36,7 +36,7 @@ class LbOfertasfavoritas
      *   @ORM\JoinColumn(name="inFavOferta", referencedColumnName="inOferta")
      * })
      */
-    private $infavoferta;
+    protected $infavoferta;
 
     /**
      * @var \Libreame\BackendBundle\Entity\LbUsuarios
@@ -46,7 +46,7 @@ class LbOfertasfavoritas
      *   @ORM\JoinColumn(name="inFavUsuario", referencedColumnName="inUsuario")
      * })
      */
-    private $infavusuario;
+    protected $infavusuario;
 
 
 

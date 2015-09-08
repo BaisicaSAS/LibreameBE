@@ -19,35 +19,35 @@ class LbOfertas
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $inoferta;
+    protected $inoferta;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="feOfeFecha", type="datetime", nullable=false)
      */
-    private $feofefecha;
+    protected $feofefecha;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="inOfeVigencia", type="integer", nullable=false)
      */
-    private $inofevigencia;
+    protected $inofevigencia;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="inOfeActiva", type="integer", nullable=true)
      */
-    private $inofeactiva;
+    protected $inofeactiva;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="inOfeAbierta", type="integer", nullable=true)
      */
-    private $inofeabierta;
+    protected $inofeabierta;
 
     /**
      * @var \Libreame\BackendBundle\Entity\LbMembresias
@@ -57,7 +57,7 @@ class LbOfertas
      *   @ORM\JoinColumn(name="inOfeMembresia", referencedColumnName="inMembresia")
      * })
      */
-    private $inofemembresia;
+    protected $inofemembresia;
 
 
 

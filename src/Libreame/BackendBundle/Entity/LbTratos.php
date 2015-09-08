@@ -19,35 +19,35 @@ class LbTratos
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $intrato;
+    protected $intrato;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="inTraFecha", type="datetime", nullable=false)
      */
-    private $intrafecha;
+    protected $intrafecha;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="inTraEstado", type="integer", nullable=false)
      */
-    private $intraestado;
+    protected $intraestado;
 
     /**
      * @var string
      *
      * @ORM\Column(name="txTraAcuEntrega", type="string", length=300, nullable=false)
      */
-    private $txtraacuentrega;
+    protected $txtraacuentrega;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="feTraFecEntrega", type="datetime", nullable=false)
      */
-    private $fetrafecentrega;
+    protected $fetrafecentrega;
 
     /**
      * @var \Libreame\BackendBundle\Entity\LbOfertas
@@ -57,7 +57,7 @@ class LbTratos
      *   @ORM\JoinColumn(name="inTraOferta", referencedColumnName="inOferta")
      * })
      */
-    private $intraoferta;
+    protected $intraoferta;
 
     /**
      * @var \Libreame\BackendBundle\Entity\LbUsuarios
@@ -67,7 +67,7 @@ class LbTratos
      *   @ORM\JoinColumn(name="inTraUsuOfrecio", referencedColumnName="inUsuario")
      * })
      */
-    private $intrausuofrecio;
+    protected $intrausuofrecio;
 
     /**
      * @var \Libreame\BackendBundle\Entity\LbUsuarios
@@ -77,7 +77,7 @@ class LbTratos
      *   @ORM\JoinColumn(name="inTraUsuAcepto", referencedColumnName="inUsuario")
      * })
      */
-    private $intrausuacepto;
+    protected $intrausuacepto;
 
 
 

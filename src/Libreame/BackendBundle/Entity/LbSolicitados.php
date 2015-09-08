@@ -19,35 +19,35 @@ class LbSolicitados
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $idsolicitado;
+    protected $idsolicitado;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="inSolTransac", type="integer", nullable=false)
      */
-    private $insoltransac;
+    protected $insoltransac;
 
     /**
      * @var string
      *
      * @ORM\Column(name="txSolObservacion", type="string", length=100, nullable=true)
      */
-    private $txsolobservacion;
+    protected $txsolobservacion;
 
     /**
      * @var float
      *
      * @ORM\Column(name="dbSolValOferta", type="float", precision=10, scale=0, nullable=false)
      */
-    private $dbsolvaloferta;
+    protected $dbsolvaloferta;
 
     /**
      * @var float
      *
      * @ORM\Column(name="dbSolValAdic", type="float", precision=10, scale=0, nullable=false)
      */
-    private $dbsolvaladic;
+    protected $dbsolvaladic;
 
     /**
      * @var \Libreame\BackendBundle\Entity\LbEjemplares
@@ -57,7 +57,7 @@ class LbSolicitados
      *   @ORM\JoinColumn(name="inSolEjemplar", referencedColumnName="inEjemplar")
      * })
      */
-    private $insolejemplar;
+    protected $insolejemplar;
 
     /**
      * @var \Libreame\BackendBundle\Entity\LbLibros
@@ -67,7 +67,7 @@ class LbSolicitados
      *   @ORM\JoinColumn(name="inSolLibro", referencedColumnName="inLibro")
      * })
      */
-    private $insollibro;
+    protected $insollibro;
 
     /**
      * @var \Libreame\BackendBundle\Entity\LbOfertas
@@ -77,7 +77,7 @@ class LbSolicitados
      *   @ORM\JoinColumn(name="inSolOferta", referencedColumnName="inOferta")
      * })
      */
-    private $insoloferta;
+    protected $insoloferta;
 
 
 

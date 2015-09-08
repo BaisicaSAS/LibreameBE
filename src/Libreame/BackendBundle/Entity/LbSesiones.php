@@ -19,42 +19,42 @@ class LbSesiones
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $insesion;
+    protected $insesion;
 
     /**
      * @var string
      *
      * @ORM\Column(name="txSesNumero", type="string", length=45, nullable=false)
      */
-    private $txsesnumero;
+    protected $txsesnumero;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="inSesActiva", type="integer", nullable=false)
      */
-    private $insesactiva;
+    protected $insesactiva;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="feSesFechaIni", type="datetime", nullable=false)
      */
-    private $fesesfechaini;
+    protected $fesesfechaini;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="feSesFechaFin", type="datetime", nullable=true)
      */
-    private $fesesfechafin;
+    protected $fesesfechafin;
 
     /**
      * @var string
      *
      * @ORM\Column(name="txIPAddr", type="string", length=30, nullable=false)
      */
-    private $txipaddr;
+    protected $txipaddr;
 
     /**
      * @var \Libreame\BackendBundle\Entity\LbDispusuarios
@@ -64,7 +64,7 @@ class LbSesiones
      *   @ORM\JoinColumn(name="inSesDispUsuario", referencedColumnName="inDispUsuario")
      * })
      */
-    private $insesdispusuario;
+    protected $insesdispusuario;
 
 
 

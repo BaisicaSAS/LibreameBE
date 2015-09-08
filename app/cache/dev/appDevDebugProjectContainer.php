@@ -64,7 +64,6 @@ class appDevDebugProjectContainer extends Container
             'doctrine.orm.default_manager_configurator' => 'getDoctrine_Orm_DefaultManagerConfiguratorService',
             'doctrine.orm.validator.unique' => 'getDoctrine_Orm_Validator_UniqueService',
             'doctrine.orm.validator_initializer' => 'getDoctrine_Orm_ValidatorInitializerService',
-            'feeds_service' => 'getFeedsServiceService',
             'file_locator' => 'getFileLocatorService',
             'filesystem' => 'getFilesystemService',
             'form.csrf_provider' => 'getForm_CsrfProviderService',
@@ -115,6 +114,8 @@ class appDevDebugProjectContainer extends Container
             'fragment.renderer.esi' => 'getFragment_Renderer_EsiService',
             'fragment.renderer.hinclude' => 'getFragment_Renderer_HincludeService',
             'fragment.renderer.inline' => 'getFragment_Renderer_InlineService',
+            'gest_ejemplares_service' => 'getGestEjemplaresServiceService',
+            'gest_usuarios_service' => 'getGestUsuariosServiceService',
             'http_kernel' => 'getHttpKernelService',
             'kernel' => 'getKernelService',
             'locale_listener' => 'getLocaleListenerService',
@@ -133,7 +134,6 @@ class appDevDebugProjectContainer extends Container
             'monolog.logger.router' => 'getMonolog_Logger_RouterService',
             'monolog.logger.security' => 'getMonolog_Logger_SecurityService',
             'monolog.logger.templating' => 'getMonolog_Logger_TemplatingService',
-            'parametros_service' => 'getParametrosServiceService',
             'profiler' => 'getProfilerService',
             'profiler_listener' => 'getProfilerListenerService',
             'property_accessor' => 'getPropertyAccessorService',
@@ -695,19 +695,6 @@ class appDevDebugProjectContainer extends Container
     protected function getDoctrine_Orm_ValidatorInitializerService()
     {
         return $this->services['doctrine.orm.validator_initializer'] = new \Symfony\Bridge\Doctrine\Validator\DoctrineInitializer($this->get('doctrine'));
-    }
-
-    /**
-     * Gets the 'feeds_service' service.
-     *
-     * This service is shared.
-     * This method always returns the same instance of the service.
-     *
-     * @return Libreame\BackendBundle\Helpers\FeedEjemplares A Libreame\BackendBundle\Helpers\FeedEjemplares instance.
-     */
-    protected function getFeedsServiceService()
-    {
-        return $this->services['feeds_service'] = new \Libreame\BackendBundle\Helpers\FeedEjemplares();
     }
 
     /**
@@ -1379,6 +1366,32 @@ class appDevDebugProjectContainer extends Container
     }
 
     /**
+     * Gets the 'gest_ejemplares_service' service.
+     *
+     * This service is shared.
+     * This method always returns the same instance of the service.
+     *
+     * @return Libreame\BackendBundle\Helpers\GestionEjemplares A Libreame\BackendBundle\Helpers\GestionEjemplares instance.
+     */
+    protected function getGestEjemplaresServiceService()
+    {
+        return $this->services['gest_ejemplares_service'] = new \Libreame\BackendBundle\Helpers\GestionEjemplares();
+    }
+
+    /**
+     * Gets the 'gest_usuarios_service' service.
+     *
+     * This service is shared.
+     * This method always returns the same instance of the service.
+     *
+     * @return Libreame\BackendBundle\Helpers\GestionUsuarios A Libreame\BackendBundle\Helpers\GestionUsuarios instance.
+     */
+    protected function getGestUsuariosServiceService()
+    {
+        return $this->services['gest_usuarios_service'] = new \Libreame\BackendBundle\Helpers\GestionUsuarios();
+    }
+
+    /**
      * Gets the 'http_kernel' service.
      *
      * This service is shared.
@@ -1670,19 +1683,6 @@ class appDevDebugProjectContainer extends Container
         $instance->pushHandler($this->get('monolog.handler.debug'));
 
         return $instance;
-    }
-
-    /**
-     * Gets the 'parametros_service' service.
-     *
-     * This service is shared.
-     * This method always returns the same instance of the service.
-     *
-     * @return Libreame\BackendBundle\Helpers\Parametros A Libreame\BackendBundle\Helpers\Parametros instance.
-     */
-    protected function getParametrosServiceService()
-    {
-        return $this->services['parametros_service'] = new \Libreame\BackendBundle\Helpers\Parametros();
     }
 
     /**

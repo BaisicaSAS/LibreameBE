@@ -23,12 +23,12 @@ services:
 #        arguments: [@service_id, "plain_value", %parameter%]
 
     #Servicio que contiene los metodos para obtener los datos de un usuario (Pestaña de PREFERENCIAS)
-    parametros_service:
-        class: Libreame\BackendBundle\Helpers\Parametros
+    gest_usuarios_service:
+        class: Libreame\BackendBundle\Helpers\GestionUsuarios
 #        arguments: [@service_id, "plain_value", %parameter%]
 
     #Servicio que contiene los metodos para recu´perar los feed de Ejemplares subidos a la plataforma
-    feeds_service:
-        class: Libreame\BackendBundle\Helpers\FeedEjemplares
+    gest_ejemplares_service:
+        class: Libreame\BackendBundle\Helpers\GestionEjemplares
 #        arguments: [@service_id, "plain_value", %parameter%]
 

@@ -19,35 +19,35 @@ class LbOfrecidos
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $inofrecido;
+    protected $inofrecido;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="inOfrTransac", type="integer", nullable=false)
      */
-    private $inofrtransac;
+    protected $inofrtransac;
 
     /**
      * @var string
      *
      * @ORM\Column(name="txOfrObservacion", type="string", length=100, nullable=true)
      */
-    private $txofrobservacion;
+    protected $txofrobservacion;
 
     /**
      * @var float
      *
      * @ORM\Column(name="dbOfrValOferta", type="float", precision=10, scale=0, nullable=false)
      */
-    private $dbofrvaloferta;
+    protected $dbofrvaloferta;
 
     /**
      * @var float
      *
      * @ORM\Column(name="dbOfrValAdic", type="float", precision=10, scale=0, nullable=false)
      */
-    private $dbofrvaladic;
+    protected $dbofrvaladic;
 
     /**
      * @var \Libreame\BackendBundle\Entity\LbEjemplares
@@ -57,7 +57,7 @@ class LbOfrecidos
      *   @ORM\JoinColumn(name="inOfrEjemplar", referencedColumnName="inEjemplar")
      * })
      */
-    private $inofrejemplar;
+    protected $inofrejemplar;
 
     /**
      * @var \Libreame\BackendBundle\Entity\LbOfertas
@@ -67,7 +67,7 @@ class LbOfrecidos
      *   @ORM\JoinColumn(name="inOfrOferta", referencedColumnName="inOferta")
      * })
      */
-    private $inofroferta;
+    protected $inofroferta;
 
 
 
