@@ -183,7 +183,6 @@ class Logica
         } 
     }    
 
-    
     /*
      * respuestaFeedEjemplares: 
      * Funcion que genera el JSON de respuesta para la accion de recuperar Feed de ejemplares :: AccesoController::txAccRecFeeds:
@@ -223,6 +222,48 @@ class Logica
         } catch (Exception $ex) {
                 return self::inPlatCai;
         } 
+    }    
+    
+    /*
+     * respuestaPublicaeEjemplar: 
+     * Funcion que genera el JSON de respuesta para la accion de Publicar un ejemplar :: AccesoController::txAccPubliEje:
+     */
+    public function respuestaPublicarEjemplar($respuesta, $pSolicitud, $parreglo){
+        return "";
+        /*try{
+            $em = $this->getDoctrine()->getManager();
+            $arrTmp[] = array();
+
+            foreach ($parreglo as $ejemplar){
+                //Recupera nombre del genero, Nombre del libro, Nombre del uduario Dueño
+                $genero = new LbGeneros();
+                $libro = new LbLibros();
+                $usuario = new LbUsuarios();
+                if ($respuesta->getRespuesta()== AccesoController::inULogged){
+                    $genero = $em->getRepository('LibreameBackendBundle:LbGeneros')->
+                        findOneBy(array('ingenero' => $ejemplar->getInejegenero()));
+                    $libro = $em->getRepository('LibreameBackendBundle:LbLibros')->
+                        findOneBy(array('inlibro' => $ejemplar->getInejelibro()));
+                    $usuario = $em->getRepository('LibreameBackendBundle:LbUsuarios')->
+                        findOneBy(array('inusuario' => $ejemplar->getInejeusudueno()));
+                }
+                $arrTmp[] = array('idejemplar' => $ejemplar->getInejemplar(), 
+                  'idgenero' => $genero->getIngenero(), 'inejecantidad' => $ejemplar->getInejecantidad(),
+                  'dbavaluo' => $ejemplar->getDbejeavaluo(), 'indueno' => $usuario->getInusuario(),
+                  'inlibro' => $libro->getInlibro(), 'txgenero' => $genero->getTxgennombre(), 
+                  'txlibro' => $libro->getTxlibtitulo(), 'txdueno' => $usuario->getTxusunombre()
+                ) ;
+            }
+
+            return array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
+                    'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr(), 
+                    'iddevice'=> $pSolicitud->getDeviceMac(), 'marca'=>$pSolicitud->getDeviceMarca(), 
+                    'modelo'=>$pSolicitud->getDeviceModelo(), 'so'=>$pSolicitud->getDeviceSO()), 
+                    'idrespuesta' => array('respuesta' => $respuesta->getRespuesta(), 
+                    'ejemplares' => $arrTmp));
+        } catch (Exception $ex) {
+                return self::inPlatCai;
+        } */
     }    
     
     /*

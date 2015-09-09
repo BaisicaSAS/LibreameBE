@@ -28,6 +28,11 @@ class Solicitud {
     private $pClave; //Clave del usuario
     //$pUltEjemplar
     private $pUltEjemplar;
+    //Parametros para la creación de un Ejemplar, cargue o búsqueda del libro y de los generos
+    private $pEjemplar;
+    private $pLibro;
+    private $pGenero;
+    
     /*
      *  Bloque de getter para los atributos de la clase
      */
