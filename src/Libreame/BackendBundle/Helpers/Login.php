@@ -134,12 +134,12 @@ class Login
             //Flush al entity manager
             $em->flush(); 
             
-            return Logica::generaRespuesta($respuesta, $pSolicitud);
+            return Logica::generaRespuesta($respuesta, $pSolicitud, NULL);
             
         }
         catch (Exception $ex) {
             $respuesta->setRespuesta(self::inPlatCai);
-            return Logica::generaRespuesta($respuesta, $pSolicitud);
+            return Logica::generaRespuesta($respuesta, $pSolicitud, NULL);
         }     
         
     }

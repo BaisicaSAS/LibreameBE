@@ -106,22 +106,24 @@ class Registro {
                     
                     $respuesta->setRespuesta(AccesoController::inExitoso);
                     
+                    //echo "<script>alert('Respuesta de registro NORMAL ".$respuesta->getRespuesta()." Error')</script>";
+                    return Logica::generaRespuesta($respuesta, $pSolicitud, NULL);
                 } catch (Exception $ex) {
                     $respuesta->setRespuesta(AccesoController::inDescone);
+                    return Logica::generaRespuesta($respuesta, $pSolicitud, NULL);
                 } 
 
             } else {
                 //El usuario existe y no es posible registrarlo de nuevo:: el email.
                 //echo "<script>alert('Usuario existe')</script>";
                 $respuesta->setRespuesta(AccesoController::inFallido);
+                return Logica::generaRespuesta($respuesta, $pSolicitud, NULL);
             }
-            //echo "<script>alert('Respuesta de registro NORMAL ".$respuesta->getRespuesta()." Error')</script>";
-            return Logica::generaRespuesta($respuesta, $pSolicitud);
             
         } catch (Exception $ex) {
             //echo "<script>alert('Respuesta de registro ERROR ".$respuesta->getRespuesta()." Error')</script>";
             $respuesta->setRespuesta(AccesoController::inPlatCai);
-            return Logica::generaRespuesta($respuesta, $pSolicitud);
+            return Logica::generaRespuesta($respuesta, $pSolicitud, NULL);
         } 
         
         

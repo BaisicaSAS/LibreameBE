@@ -188,7 +188,7 @@ class GestionEjemplares {
     }
     
 }
-http://localhost/Ex4ReadBE/web/app_dev.php/ingreso
+/*http://localhost/Ex4ReadBE/web/app_dev.php/ingreso
 
     
 in    
@@ -247,4 +247,4 @@ out
             }
         ]
     }
-}
+}*/

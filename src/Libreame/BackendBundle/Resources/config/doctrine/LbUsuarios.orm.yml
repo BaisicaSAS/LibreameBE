@@ -55,14 +55,14 @@ Libreame\BackendBundle\Entity\LbUsuarios:
         txusuimagen:
             type: string
             nullable: false
-            length: 50
+            length: 500
             fixed: false
             comment: 'Cuando no se especifica el sistema pone una por defecto.'
             column: txUsuImagen
         txusunommostrar:
             type: string
             nullable: true
-            length: 20
+            length: 100
             fixed: false
             comment: "Si no se digita nada, se muestra el txUsuNombre\n"
             column: txUsuNomMostrar

@@ -114,6 +114,8 @@ class appDevDebugProjectContainer extends Container
             'fragment.renderer.esi' => 'getFragment_Renderer_EsiService',
             'fragment.renderer.hinclude' => 'getFragment_Renderer_HincludeService',
             'fragment.renderer.inline' => 'getFragment_Renderer_InlineService',
+            'gest_ejemplares_service' => 'getGestEjemplaresServiceService',
+            'gest_usuarios_service' => 'getGestUsuariosServiceService',
             'http_kernel' => 'getHttpKernelService',
             'kernel' => 'getKernelService',
             'locale_listener' => 'getLocaleListenerService',
@@ -1361,6 +1363,32 @@ class appDevDebugProjectContainer extends Container
         $instance->setFragmentPath('/_fragment');
 
         return $instance;
+    }
+
+    /**
+     * Gets the 'gest_ejemplares_service' service.
+     *
+     * This service is shared.
+     * This method always returns the same instance of the service.
+     *
+     * @return Libreame\BackendBundle\Helpers\GestionEjemplares A Libreame\BackendBundle\Helpers\GestionEjemplares instance.
+     */
+    protected function getGestEjemplaresServiceService()
+    {
+        return $this->services['gest_ejemplares_service'] = new \Libreame\BackendBundle\Helpers\GestionEjemplares();
+    }
+
+    /**
+     * Gets the 'gest_usuarios_service' service.
+     *
+     * This service is shared.
+     * This method always returns the same instance of the service.
+     *
+     * @return Libreame\BackendBundle\Helpers\GestionUsuarios A Libreame\BackendBundle\Helpers\GestionUsuarios instance.
+     */
+    protected function getGestUsuariosServiceService()
+    {
+        return $this->services['gest_usuarios_service'] = new \Libreame\BackendBundle\Helpers\GestionUsuarios();
     }
 
     /**

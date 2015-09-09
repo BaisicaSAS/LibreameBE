@@ -136,9 +136,15 @@ class appDevUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirectab
         }
 
         // libreame_ingresarSistema
-        if (0 === strpos($pathinfo, '/ingreso') && preg_match('#^/ingreso/(?P<datos>[^/]++)$#s', $pathinfo, $matches)) {
-            return $this->mergeDefaults(array_replace($matches, array('_route' => 'libreame_ingresarSistema')), array (  '_controller' => 'Libreame\\BackendBundle\\Controller\\AccesoController::ingresarSistemaAction',));
+        if ($pathinfo === '/ingreso') {
+            if ($this->context->getMethod() != 'POST') {
+                $allow[] = 'POST';
+                goto not_libreame_ingresarSistema;
+            }
+
+            return array (  '_controller' => 'Libreame\\BackendBundle\\Controller\\AccesoController::ingresarSistemaAction',  '_format' => 'json',  '_route' => 'libreame_ingresarSistema',);
         }
+        not_libreame_ingresarSistema:
 
         // _welcome
         if (rtrim($pathinfo, '/') === '') {
