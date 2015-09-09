@@ -53,9 +53,8 @@ class Login
     {   
         $respuesta = new Respuesta();
         $objAcceso = $this->get('acceso_service');
-        $fecha = new \DateTime;
         setlocale (LC_TIME, "es_CO");
-        $fecha = date('c');
+        $fecha = new \DateTime;
         try {
             //echo "<script>alert('Ingresa Login')</script>";
             $em = $this->getDoctrine()->getManager();
@@ -65,12 +64,9 @@ class Login
             $actsesion = new LbActsesion();
             //echo "<script>alert('Mail usuario ".$pSolicitud->getEmail()."')</script>";
             //Verifica si el usuario existe
-            if ($em->getRepository('LibreameBackendBundle:LbUsuarios')->
+            if ($usuario = $em->getRepository('LibreameBackendBundle:LbUsuarios')->
                     findOneBy(array('txusuemail' => $pSolicitud->getEmail()))){
                 
-                $usuario = $em->getRepository('LibreameBackendBundle:LbUsuarios')->
-                        findOneBy(array('txusuemail' => $pSolicitud->getEmail()));
-
                 $estado = $usuario->getInusuestado();
                 //echo "<script>alert('-----Estado usuario ".$estado."')</script>";
 
@@ -109,10 +105,10 @@ class Login
                             //AQUI SE LOGUEA FINALMENTE
 
                             //Crea sesion
-                           //echo "<script>alert('-----Creará sesion"  .AccesoController::inSesActi."')</script>";
+                            //echo "<script>alert('-----Creará sesion"  .AccesoController::inSesActi."')</script>";
                             $sesion = $objAcceso::generaSesion(AccesoController::inSesActi,$fecha,NULL,$device,$pSolicitud->getIPaddr());
                             //Genera sesion activa sin fecha de finalización
-                            $actsesion = $objAcceso::generaActSesion($sesion,AccesoController::inDatoUno,'Login usuario '.$usuario->getTxusuemail().' exitoso',$pSolicitud->getAccion(),$fecha,NULL);
+                            $objAcceso::generaActSesion($sesion,AccesoController::inDatoUno,'Login usuario '.$usuario->getTxusuemail().' exitoso',$pSolicitud->getAccion(),$fecha,NULL);
                             $respuesta->setRespuesta(self::inULogged);    
                             $respuesta->setSession($sesion->getTxsesnumero());  
                             

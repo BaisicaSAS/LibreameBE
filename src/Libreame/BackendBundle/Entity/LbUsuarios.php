@@ -388,16 +388,20 @@ class LbUsuarios
     public function creaUsuario($pSolicitud, $Lugar)
     {   
         $usuario = new LbUsuarios();
-        $usuario->settxusuemail($pSolicitud->getEmail());  
-        $usuario->settxusunombre($pSolicitud->getEmail());  
-        $usuario->settxusunommostrar($pSolicitud->getEmail());  
-        $usuario->settxusutelefono($pSolicitud->getTelefono());  
-        $usuario->settxusuclave($pSolicitud->getClave());  
-        $usuario->settxusuimagen('DEFAULT IMAGE URL');  
-        $usuario->setinusulugar($Lugar);  
-        $usuario->settxusuvalidacion(Logica::generaRand(AccesoController::inTamVali));  
-        
-        return $usuario;
+        try {
+            $usuario->settxusuemail($pSolicitud->getEmail());  
+            $usuario->settxusunombre($pSolicitud->getEmail());  
+            $usuario->settxusunommostrar($pSolicitud->getEmail());  
+            $usuario->settxusutelefono($pSolicitud->getTelefono());  
+            $usuario->settxusuclave($pSolicitud->getClave());  
+            $usuario->settxusuimagen('DEFAULT IMAGE URL');  
+            $usuario->setinusulugar($Lugar);  
+            $usuario->settxusuvalidacion(Logica::generaRand(AccesoController::inTamVali));  
+
+            return $usuario;
+        } catch (Exception $ex)  {    
+            return $usuario;
+        }
     }
     
     //Función que retorna la cantidad de mensajes que un usuario tiene sin leer en la plataforma
