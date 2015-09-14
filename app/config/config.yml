@@ -1,6 +1,7 @@
 imports:
     - { resource: parameters.yml }
     - { resource: security.yml }
+    - { resource: @LibreameBackendBundle/Resources/config/services.yml }
 
 framework:
     #esi:             ~
@@ -59,6 +60,12 @@ doctrine:
     orm:
         auto_generate_proxy_classes: "%kernel.debug%"
         auto_mapping: true
+        default_entity_manager: default
+        entity_managers:
+            default:
+                connection: default
+                mappings:
+                    LibreameBackendBundle: ~
 
 # Swiftmailer Configuration
 swiftmailer:

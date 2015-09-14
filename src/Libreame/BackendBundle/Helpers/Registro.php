@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Libreame\BackendBundle\Helpers;
 
 use Libreame\BackendBundle\Controller\AccesoController;
@@ -30,7 +29,7 @@ class Registro {
     public function registroUsuario($pSolicitud)
     {   
         $respuesta = new Respuesta();
-        $objAcceso = $this->get('acceso_service');
+        $objLogica = $this->get('logica_service');
         //echo "<script>alert('Ingresa Registro')</script>";
         $em = $this->getDoctrine()->getManager();
         $usuario = new LbUsuarios();
@@ -98,31 +97,31 @@ class Registro {
                 //echo "<script
                 //>alert('".$fecha."')</script>";
 
-                $sesion = $objAcceso::generaSesion(AccesoController::inDatoCer,$fecha,$fecha,$device,$pSolicitud->getIPaddr());
+                $sesion = $objLogica::generaSesion(AccesoController::inDatoCer,$fecha,$fecha,$device,$pSolicitud->getIPaddr());
                 //Guarda la actividad de la sesion:: Como finalizada
                 //echo "<script>alert('Guardó usuario...va a generar sesion ')</script>";
-                $objAcceso::generaActSesion($sesion,AccesoController::inDatoUno,AccesoController::txMensaje,$pSolicitud->getAccion(),$fecha,$fecha);
+                $objLogica::generaActSesion($sesion,AccesoController::inDatoUno,AccesoController::txMensaje,$pSolicitud->getAccion(),$fecha,$fecha);
                 //echo "<script>alert('Generó actividad de sesion ')</script>";
 
                 //Envia email
-                $objAcceso::enviaMailRegistro($usuario);
+                $objLogica::enviaMailRegistro($usuario);
                 //echo "<script>alert('Envió mail ')</script>";
 
                 $respuesta->setRespuesta(AccesoController::inExitoso);
                 
                 //echo "<script>alert('Respuesta de registro NORMAL ".$respuesta->getRespuesta()." Error')</script>";
-                return Logica::generaRespuesta($respuesta, $pSolicitud, NULL);
+                return $objLogica::generaRespuesta($respuesta, $pSolicitud, NULL);
 
             } catch (Exception $ex) {
                 //echo "<script>alert('Respuesta de registro ERROR ".$respuesta->getRespuesta()." Error')</script>";
                 $respuesta->setRespuesta(AccesoController::inPlatCai);
-                return Logica::generaRespuesta($respuesta, $pSolicitud, NULL);
+                return $objLogica::generaRespuesta($respuesta, $pSolicitud, NULL);
             } 
         } else {
             //El usuario existe y no es posible registrarlo de nuevo:: el email.
             //echo "<script>alert('Usuario existe')</script>";
             $respuesta->setRespuesta(AccesoController::inFallido);
-            return Logica::generaRespuesta($respuesta, $pSolicitud, NULL);
+            return $objLogica::generaRespuesta($respuesta, $pSolicitud, NULL);
         }
             
     }

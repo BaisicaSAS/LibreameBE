@@ -52,7 +52,7 @@ class Login
     public function loginUsuario($pSolicitud)
     {   
         $respuesta = new Respuesta();
-        $objAcceso = $this->get('acceso_service');
+        $objLogica = $this->get('logica_service');
         setlocale (LC_TIME, "es_CO");
         $fecha = new \DateTime;
         try {
@@ -97,7 +97,7 @@ class Login
                     //Verifica si la clave es correcta
                     if ($usuario->getTxusuclave() == $pSolicitud->getClave()){
                         //Verifica si el usuario tiene una sesion activa
-                        if (AccesoController::usuarioSesionActiva($pSolicitud, $device)){
+                        if ($objLogica->usuarioSesionActiva($pSolicitud, $device)){
                             $respuesta->setRespuesta(self::inUSeActi);
                         }
                         else
@@ -106,9 +106,9 @@ class Login
 
                             //Crea sesion
                             //echo "<script>alert('-----Creará sesion"  .AccesoController::inSesActi."')</script>";
-                            $sesion = $objAcceso::generaSesion(AccesoController::inSesActi,$fecha,NULL,$device,$pSolicitud->getIPaddr());
+                            $sesion = $objLogica::generaSesion(AccesoController::inSesActi,$fecha,NULL,$device,$pSolicitud->getIPaddr());
                             //Genera sesion activa sin fecha de finalización
-                            $objAcceso::generaActSesion($sesion,AccesoController::inDatoUno,'Login usuario '.$usuario->getTxusuemail().' exitoso',$pSolicitud->getAccion(),$fecha,NULL);
+                            $objLogica::generaActSesion($sesion,AccesoController::inDatoUno,'Login usuario '.$usuario->getTxusuemail().' exitoso',$pSolicitud->getAccion(),$fecha,NULL);
                             $respuesta->setRespuesta(self::inULogged);    
                             $respuesta->setSession($sesion->getTxsesnumero());  
                             
@@ -130,12 +130,12 @@ class Login
             //Flush al entity manager
             $em->flush(); 
             
-            return Logica::generaRespuesta($respuesta, $pSolicitud, NULL);
+            return $objLogica::generaRespuesta($respuesta, $pSolicitud, NULL);
             
         }
         catch (Exception $ex) {
             $respuesta->setRespuesta(self::inPlatCai);
-            return Logica::generaRespuesta($respuesta, $pSolicitud, NULL);
+            return $objLogica::generaRespuesta($respuesta, $pSolicitud, NULL);
         }     
         
     }

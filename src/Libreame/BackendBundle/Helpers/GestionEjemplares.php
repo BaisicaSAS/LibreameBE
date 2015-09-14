@@ -29,15 +29,15 @@ class GestionEjemplares {
     {   
         $fecha = new \DateTime;
         $respuesta = new Respuesta();
-        $objAcceso = $this->get('acceso_service');
+        $objLogica = $this->get('logica_service');
         $usuario = new LbUsuarios();
         $sesion = new LbSesiones();
         $ejemplares = new LbEjemplares();
         try {
             //Valida que la sesión corresponda y se encuentre activa
-            $respSesionVali=$objAcceso::validaSesionUsuario($psolicitud);
+            $respSesionVali=$objLogica::validaSesionUsuario($psolicitud);
             //echo "<script>alert(' recuperarFeedEjemplares :: Validez de sesion ".$respSesionVali." ')</script>";
-            if ($respSesionVali==$objAcceso::inULogged) 
+            if ($respSesionVali==$objLogica::inULogged) 
             {    
                 //echo "<script>alert(' recuperarFeedEjemplares :: FindAll ')</script>";
                 $em = $this->getDoctrine()->getEntityManager();
@@ -86,22 +86,22 @@ class GestionEjemplares {
                 //echo "<script>alert('SQL ".$sql." ')</script>";
                 //SE INACTIVA PORQUE PUEDE GENERAR UNA GRAN CANTIDAD DE REGISTROS EN UNA SOLA SESION
                 //Busca y recupera el objeto de la sesion:: 
-                //$sesion = $objAcceso::recuperaSesionUsuario($usuario,$psolicitud);
+                //$sesion = $objLogica::recuperaSesionUsuario($usuario,$psolicitud);
                 //echo "<script>alert('La sesion es ".$sesion->getTxsesnumero()." ')</script>";
                 //Guarda la actividad de la sesion:: 
-                //$objAcceso::generaActSesion($sesion,AccesoController::inDatoUno,"Recupera Feed de Ejemplares".$psolicitud->getEmail()." recuperados con éxito ",$psolicitud->getAccion(),$fecha,$fecha);
+                //$objLogica::generaActSesion($sesion,AccesoController::inDatoUno,"Recupera Feed de Ejemplares".$psolicitud->getEmail()." recuperados con éxito ",$psolicitud->getAccion(),$fecha,$fecha);
                 //echo "<script>alert('Generó actividad de sesion ')</script>";
                 
-                return Logica::generaRespuesta($respuesta, $psolicitud, $ejemplares);
+                return $objLogica::generaRespuesta($respuesta, $psolicitud, $ejemplares);
             } else {
                 $respuesta->setRespuesta($respSesionVali);
                 $ejemplares = array();
-                return Logica::generaRespuesta($respuesta, $psolicitud, $ejemplares);
+                return $objLogica::generaRespuesta($respuesta, $psolicitud, $ejemplares);
             }
         } catch (Exception $ex) {
             $respuesta->setRespuesta(AccesoController::inPlatCai);
             $ejemplares = array();
-            return Logica::generaRespuesta($respuesta, $psolicitud, $ejemplares);
+            return $objLogica::generaRespuesta($respuesta, $psolicitud, $ejemplares);
         }
        
     }
@@ -110,15 +110,15 @@ class GestionEjemplares {
     {   
         $fecha = new \DateTime;
         $respuesta = new Respuesta();
-        $objAcceso = $this->get('acceso_service');
+        $objLogica = $this->get('logica_service');
         $usuario = new LbUsuarios();
         $sesion = new LbSesiones();
         $ejemplares = new LbEjemplares();
         try {
             //Valida que la sesión corresponda y se encuentre activa
-            $respSesionVali=$objAcceso::validaSesionUsuario($psolicitud);
+            $respSesionVali=$objLogica::validaSesionUsuario($psolicitud);
             //echo "<script>alert(' recuperarFeedEjemplares :: Validez de sesion ".$respSesionVali." ')</script>";
-            if ($respSesionVali==$objAcceso::inULogged) 
+            if ($respSesionVali==  AccesoController::inULogged) 
             {    
                 //echo "<script>alert(' recuperarFeedEjemplares :: FindAll ')</script>";
                 $em = $this->getDoctrine()->getEntityManager();
@@ -167,22 +167,22 @@ class GestionEjemplares {
                 //echo "<script>alert('SQL ".$sql." ')</script>";
                 //SE INACTIVA PORQUE PUEDE GENERAR UNA GRAN CANTIDAD DE REGISTROS EN UNA SOLA SESION
                 //Busca y recupera el objeto de la sesion:: 
-                //$sesion = $objAcceso::recuperaSesionUsuario($usuario,$psolicitud);
+                //$sesion = $objLogica::recuperaSesionUsuario($usuario,$psolicitud);
                 //echo "<script>alert('La sesion es ".$sesion->getTxsesnumero()." ')</script>";
                 //Guarda la actividad de la sesion:: 
-                //$objAcceso::generaActSesion($sesion,AccesoController::inDatoUno,"Recupera Feed de Ejemplares".$psolicitud->getEmail()." recuperados con éxito ",$psolicitud->getAccion(),$fecha,$fecha);
+                //$objLogica::generaActSesion($sesion,AccesoController::inDatoUno,"Recupera Feed de Ejemplares".$psolicitud->getEmail()." recuperados con éxito ",$psolicitud->getAccion(),$fecha,$fecha);
                 //echo "<script>alert('Generó actividad de sesion ')</script>";
                 
-                return Logica::generaRespuesta($respuesta, $psolicitud, $ejemplares);
+                return $objLogica::generaRespuesta($respuesta, $psolicitud, $ejemplares);
             } else {
                 $respuesta->setRespuesta($respSesionVali);
                 $ejemplares = array();
-                return Logica::generaRespuesta($respuesta, $psolicitud, $ejemplares);
+                return $objLogica::generaRespuesta($respuesta, $psolicitud, $ejemplares);
             }
         } catch (Exception $ex) {
             $respuesta->setRespuesta(AccesoController::inPlatCai);
             $ejemplares = array();
-            return Logica::generaRespuesta($respuesta, $psolicitud, $ejemplares);
+            return $objLogica::generaRespuesta($respuesta, $psolicitud, $ejemplares);
         }
        
     }

@@ -24,14 +24,14 @@ class GestionUsuarios {
     {   
         $fecha = new \DateTime;
         $respuesta = new Respuesta();
-        $objAcceso = $this->get('acceso_service');
+        $objLogica = $this->get('logica_service');
         $usuario = new LbUsuarios();
         $sesion = new LbSesiones();
         try {
             //Valida que la sesión corresponda y se encuentre activa
-            $respSesionVali=$objAcceso::validaSesionUsuario($psolicitud);
+            $respSesionVali=$objLogica::validaSesionUsuario($psolicitud);
            //echo "<script>alert(' obtenerParametros :: Validez de sesion ".$respSesionVali." ')</script>";
-            if ($respSesionVali==$objAcceso::inULogged) 
+            if ($respSesionVali==AccesoController::inULogged) 
             {    
                 $em = $this->getDoctrine()->getManager();
                 //Busca el usuario 
@@ -40,10 +40,10 @@ class GestionUsuarios {
                 
                 //SE INACTIVA PORQUE PUEDE GENERAR UNA GRAN CANTIDAD DE REGISTROS EN UNA SOLA SESION
                 //Busca y recupera el objeto de la sesion:: 
-                //$sesion = $objAcceso::recuperaSesionUsuario($usuario,$psolicitud);
+                //$sesion = $objLogica::recuperaSesionUsuario($usuario,$psolicitud);
                 //echo "<script>alert('La sesion es ".$sesion->getTxsesnumero()." ')</script>";
                 //Guarda la actividad de la sesion:: 
-                //$objAcceso::generaActSesion($sesion,AccesoController::inDatoUno,"Datos de usuario ".$psolicitud->getEmail()." recuperados con éxito",$psolicitud->getAccion(),$fecha,$fecha);
+                //$objLogica::generaActSesion($sesion,AccesoController::inDatoUno,"Datos de usuario ".$psolicitud->getEmail()." recuperados con éxito",$psolicitud->getAccion(),$fecha,$fecha);
                 //echo "<script>alert('Generó actividad de sesion ')</script>";
                 
                 $respuesta->setRespuesta(AccesoController::inExitoso);
@@ -59,7 +59,7 @@ class GestionUsuarios {
         } catch (Exception $ex) {
             $respuesta->setRespuesta(AccesoController::inPlatCai);
         } finally {
-            return Logica::generaRespuesta($respuesta, $psolicitud, $usuario);
+            return $objLogica::generaRespuesta($respuesta, $psolicitud, $usuario);
         }
     }
 }
