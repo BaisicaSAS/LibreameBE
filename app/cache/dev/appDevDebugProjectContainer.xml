@@ -571,6 +571,12 @@
     <parameter key="console.command.ids" type="collection"/>
   </parameters>
   <services>
+    <service id="logica_service" class="Libreame\BackendBundle\Helpers\Logica"/>
+    <service id="acceso_service" class="Libreame\BackendBundle\Controller\AccesoController"/>
+    <service id="registro_service" class="Libreame\BackendBundle\Helpers\Registro"/>
+    <service id="login_service" class="Libreame\BackendBundle\Helpers\Login"/>
+    <service id="gest_usuarios_service" class="Libreame\BackendBundle\Helpers\GestionUsuarios"/>
+    <service id="gest_ejemplares_service" class="Libreame\BackendBundle\Helpers\GestionEjemplares"/>
     <service id="controller_name_converter" class="Symfony\Bundle\FrameworkBundle\Controller\ControllerNameParser" public="false">
       <tag name="monolog.logger" channel="request"/>
       <argument type="service" id="kernel"/>
@@ -2429,12 +2435,6 @@
       <argument type="service" id="security.authentication.trust_resolver" on-invalid="null"/>
       <argument type="service" id="security.role_hierarchy" on-invalid="null"/>
     </service>
-    <service id="logica_service" class="Libreame\BackendBundle\Helpers\Logica"/>
-    <service id="acceso_service" class="Libreame\BackendBundle\Controller\AccesoController"/>
-    <service id="registro_service" class="Libreame\BackendBundle\Helpers\Registro"/>
-    <service id="login_service" class="Libreame\BackendBundle\Helpers\Login"/>
-    <service id="gest_usuarios_service" class="Libreame\BackendBundle\Helpers\GestionUsuarios"/>
-    <service id="gest_ejemplares_service" class="Libreame\BackendBundle\Helpers\GestionEjemplares"/>
     <service id="twig.extension.acme.demo" class="Acme\DemoBundle\Twig\Extension\DemoExtension" public="false">
       <tag name="twig.extension"/>
       <argument type="service" id="twig.loader"/>

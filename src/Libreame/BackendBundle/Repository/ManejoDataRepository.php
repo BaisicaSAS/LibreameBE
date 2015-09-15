@@ -3,8 +3,6 @@
 namespace Libreame\BackendBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
-use Symfony\Component\Security\Core\User\UserProviderInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
 use Libreame\BackendBundle\Controller\AccesoController;
 use Libreame\BackendBundle\Entity\LbLugares;
 use Libreame\BackendBundle\Entity\LbEjemplares;
