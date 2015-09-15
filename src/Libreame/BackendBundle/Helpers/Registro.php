@@ -4,6 +4,7 @@ namespace Libreame\BackendBundle\Helpers;
 
 use Libreame\BackendBundle\Controller\AccesoController;
 
+use Libreame\BackendBundle\Repository\ManejoDataRepository;
 use Libreame\BackendBundle\Entity\LbUsuarios;
 use Libreame\BackendBundle\Entity\LbDispusuarios;
 use Libreame\BackendBundle\Entity\LbMembresias;
@@ -31,7 +32,7 @@ class Registro {
         $respuesta = new Respuesta();
         $objLogica = $this->get('logica_service');
         //echo "<script>alert('Ingresa Registro')</script>";
-        $em = $this->getDoctrine()->getManager();
+        //$em = $this->getDoctrine()->getManager();
         $usuario = new LbUsuarios();
         $device = new LbDispusuarios();
         $membresia = new LbMembresias();
@@ -40,14 +41,12 @@ class Registro {
 
 
         //Lugar por default (Es el de ID = 1)
-        $Lugar = $em->getRepository('LibreameBackendBundle:LbLugares')->find(1);
+        $Lugar = ManejoDataRepository::getLugar(1);
         //Grupo por default (Es el de ID = 1)
-        $Grupo = $em->getRepository('LibreameBackendBundle:LbGrupos')->find(1);
+        $Grupo = ManejoDataRepository::getGrupo(1);
         //Valida que el usuario no existe
-        if (!$em->getRepository('LibreameBackendBundle:LbUsuarios')
-            ->findOneBy(array('txusuemail' => $pSolicitud->getEmail())) and 
-          !$em->getRepository('LibreameBackendBundle:LbUsuarios')
-            ->findOneBy(array('txusutelefono' => $pSolicitud->getTelefono()))){
+        if (!ManejoDataRepository::getUsuarioByEmail($pSolicitud->getEmail()) and 
+            !ManejoDataRepository::getUsuarioByTelefono($pSolicitud->getTelefono())){
             try {
                 //Guarda el usuario
                 //echo "<script>alert('Usuario [".$pSolicitud->getEmail()." ] NO existe')</script>";
@@ -57,9 +56,7 @@ class Registro {
                 //porque se pueden registrar y operar desde el mismo Dispositivo
                 //echo "<script>alert('DISPOSITIVO')</script>";
                 $guardadevice=0;
-                if (!$em->getRepository('LibreameBackendBundle:LbDispusuarios')->findOneBy(array(
-                        'txdisid' => $pSolicitud->getDeviceMAC(), 
-                        'indisusuario' => $usuario))){
+                if (!ManejoDataRepository::getDispositivoUsuario($pSolicitud->getDeviceMAC(), $usuario)){
                     //echo "<script>alert('Dispositivo [".$pSolicitud->getDeviceMAC()."-guardadevice".$guardadevice." ] NO existe')</script>";
                     $guardadevice=1;
 
@@ -73,23 +70,24 @@ class Registro {
                 
                 //throw $this->createNotFoundException('Error de registros');
                 //Guarda la información
-                $em->persist($usuario);
-                $em->flush();
+                //$em->persist($usuario);
+                //$em->flush();
+                ManejoDataRepository::persistEntidad($usuario);
                 //echo "<script>alert('Persiste usuario')</script>";
                 //Si el dispositivo existia no se guarda y se trae del repositorio
                 if($guardadevice===1){
                     //echo "<script>alert('Persiste device')</script>";
-                    $em->persist($device);
-                    $em->flush();
+                    ManejoDataRepository::persistEntidad($device);
+                    //$em->persist($device);
+                    //$em->flush();
                 } else {
-                    $device = $em->getRepository('LibreameBackendBundle:LbDispusuarios')->findOneBy(array(
-                        'txdisid' => $pSolicitud->getDeviceMAC(), 
-                        'indisusuario' => $usuario));
+                    $device = ManejoDataRepository::getDispositivoUsuario($pSolicitud->getDeviceMAC(), $usuario);
                 }
 
                 //echo "<script>alert('Persiste membresia')</script>";
-                $em->persist($membresia);
-                $em->flush();
+                ManejoDataRepository::persistEntidad($membresia);
+                //$em->persist($membresia);
+                //$em->flush();
                 //Guarda la sesion inactiva
                 //echo "<script>alert('Guardó usuario...va a generar sesion ')</script>";
                 setlocale (LC_TIME, "es_CO");
@@ -97,10 +95,10 @@ class Registro {
                 //echo "<script
                 //>alert('".$fecha."')</script>";
 
-                $sesion = $objLogica::generaSesion(AccesoController::inDatoCer,$fecha,$fecha,$device,$pSolicitud->getIPaddr());
+                $sesion = ManejoDataRepository::generaSesion(AccesoController::inDatoCer,$fecha,$fecha,$device,$pSolicitud->getIPaddr());
                 //Guarda la actividad de la sesion:: Como finalizada
                 //echo "<script>alert('Guardó usuario...va a generar sesion ')</script>";
-                $objLogica::generaActSesion($sesion,AccesoController::inDatoUno,AccesoController::txMensaje,$pSolicitud->getAccion(),$fecha,$fecha);
+                ManejoDataRepository::generaActSesion($sesion,AccesoController::inDatoUno,AccesoController::txMensaje,$pSolicitud->getAccion(),$fecha,$fecha);
                 //echo "<script>alert('Generó actividad de sesion ')</script>";
 
                 //Envia email

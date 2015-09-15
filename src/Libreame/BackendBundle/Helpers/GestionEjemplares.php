@@ -4,6 +4,8 @@
 namespace Libreame\BackendBundle\Helpers;
 
 use Libreame\BackendBundle\Controller\AccesoController;
+use Libreame\BackendBundle\Repository\ManejoDataRepository;
+
 
 use Libreame\BackendBundle\Entity\LbUsuarios;
 use Libreame\BackendBundle\Entity\LbEjemplares;
@@ -35,18 +37,15 @@ class GestionEjemplares {
         $ejemplares = new LbEjemplares();
         try {
             //Valida que la sesión corresponda y se encuentre activa
-            $respSesionVali=$objLogica::validaSesionUsuario($psolicitud);
+            $respSesionVali=  ManejoDataRepository::validaSesionUsuario($psolicitud);
             //echo "<script>alert(' recuperarFeedEjemplares :: Validez de sesion ".$respSesionVali." ')</script>";
-            if ($respSesionVali==$objLogica::inULogged) 
+            if ($respSesionVali==AccesoController::inULogged) 
             {    
                 //echo "<script>alert(' recuperarFeedEjemplares :: FindAll ')</script>";
-                $em = $this->getDoctrine()->getEntityManager();
                 //Busca el usuario 
-                $usuario = $em->getRepository('LibreameBackendBundle:LbUsuarios')->
-                    findOneBy(array('txusuemail' => $psolicitud->getEmail()));
+                $usuario = ManejoDataRepository::getUsuarioByEmail($psolicitud->getEmail());
                 
-                $membresia= $em->getRepository('LibreameBackendBundle:LbMembresias')->
-                    findBy(array('inmemusuario' => $usuario));
+                $membresia= ManejoDataRepository::getMembresiasUsuario($usuario);
                 
                 //echo "<script>alert('MEM ".count($membresia)." regs ')</script>";
                 
@@ -55,41 +54,24 @@ class GestionEjemplares {
                     $arrMem[] = $memb->getInmemgrupo();
                 }
 
-                $sql = "SELECT e FROM LibreameBackendBundle:LbGrupos e "
-                        ." WHERE e.ingrupo in (:grupos) ";
-                $query = $em->createQuery($sql)->setParameter('grupos', $arrMem);
-                
-                $grupo = $query->getResult();
+
+                $grupo= ManejoDataRepository::getGruposUsuario($arrMem);
 
                 $arrGru = array();
                 foreach ($grupo as $gru){
                     $arrGru[] = $gru->getIngrupo();
                 }
 
-                
-                //Recupera cada uno de los ejemplares con ID > al del parametro
-                $sql = "SELECT e FROM LibreameBackendBundle:LbEjemplares e, "
-                        . "LibreameBackendBundle:LbMembresias m,"
-                        . "LibreameBackendBundle:LbUsuarios u WHERE e.inejemplar > ".$psolicitud->getUltEjemplar()
-                        ." and e.inejeusudueno = m.inmemusuario"
-                        ." and m.inmemgrupo in (:grupos) ";
-                
-                $query = $em->createQuery($sql)->setParameter('grupos', $arrGru);
-                /*foreach ($arrGru as $dato){
-                    echo "<script>alert('SQL ".$dato." ')</script>";
-                }*/
 
-
-                //$query = $em->createQuery('SELECT e FROM LibreameBackendBundle:LbEjemplares e WHERE e.inejemplar > 1');
-                $ejemplares = $query->getResult();
+                $ejemplares = ManejoDataRepository::getEjemplaresDisponibles($arrGru, $psolicitud->getUltEjemplar());
                 $respuesta->setRespuesta(AccesoController::inExitoso);
-                //echo "<script>alert('SQL ".$sql." ')</script>";
+
                 //SE INACTIVA PORQUE PUEDE GENERAR UNA GRAN CANTIDAD DE REGISTROS EN UNA SOLA SESION
                 //Busca y recupera el objeto de la sesion:: 
-                //$sesion = $objLogica::recuperaSesionUsuario($usuario,$psolicitud);
+                //$sesion = ManejoDataRepository::recuperaSesionUsuario($usuario,$psolicitud);
                 //echo "<script>alert('La sesion es ".$sesion->getTxsesnumero()." ')</script>";
                 //Guarda la actividad de la sesion:: 
-                //$objLogica::generaActSesion($sesion,AccesoController::inDatoUno,"Recupera Feed de Ejemplares".$psolicitud->getEmail()." recuperados con éxito ",$psolicitud->getAccion(),$fecha,$fecha);
+                //ManejoDataRepository::generaActSesion($sesion,AccesoController::inDatoUno,"Recupera Feed de Ejemplares".$psolicitud->getEmail()." recuperados con éxito ",$psolicitud->getAccion(),$fecha,$fecha);
                 //echo "<script>alert('Generó actividad de sesion ')</script>";
                 
                 return $objLogica::generaRespuesta($respuesta, $psolicitud, $ejemplares);

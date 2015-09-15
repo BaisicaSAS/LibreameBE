@@ -1,15 +1,8 @@
-parameters:
-    entityManager.class: Doctrine\ORM\EntityManager
-
-
 services:
    
     #Servicio para acciones comunes y llamado a funciones de negocio
-    #logica_service:
-    #    class: Libreame\BackendBundle\Helpers\Logica
-    #    calls:
-    #        - [entityManager, [@entityManager.class]]
-            
+    logica_service:
+        class: Libreame\BackendBundle\Helpers\Logica
 #        arguments: [@doctrine.orm.entity_manager]
 
     #Servicio principal publico, por el cual se puede acceder a cualquier funcionalidad del sistema

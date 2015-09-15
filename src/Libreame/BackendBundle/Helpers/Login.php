@@ -2,6 +2,7 @@
 
 namespace Libreame\BackendBundle\Helpers;
 
+use Libreame\BackendBundle\Repository\ManejoDataRepository;
 use Libreame\BackendBundle\Controller\AccesoController;
 use Libreame\BackendBundle\Entity\LbUsuarios;
 use Libreame\BackendBundle\Entity\LbDispusuarios;
@@ -41,14 +42,6 @@ class Login
      * 
      */
     
-    //Constantes de la funcion
-    const inUsClInv =  0;  //Usuario o clave inválidos
-    const inULogged =  1;  //Usuario logeado exitosamente
-    const inPlatCai = -1; //Proceso fallido por conexión de plataforma
-    const inUSeActi = -2; //Usuario tiene sesion activa
-    const inSosAtaq = -3; //Sesion sospechosa de ser ataque ::: AUN NO SE IMPLEMENTA
-    const inUsInact = -4; //Usuario inactivo
-
     public function loginUsuario($pSolicitud)
     {   
         $respuesta = new Respuesta();
@@ -57,34 +50,27 @@ class Login
         $fecha = new \DateTime;
         try {
             //echo "<script>alert('Ingresa Login')</script>";
-            $em = $this->getDoctrine()->getManager();
             $usuario = new LbUsuarios();
             $device = new LbDispusuarios();
             $sesion = new LbSesiones();
             $actsesion = new LbActsesion();
             //echo "<script>alert('Mail usuario ".$pSolicitud->getEmail()."')</script>";
             //Verifica si el usuario existe
-            if ($usuario = $em->getRepository('LibreameBackendBundle:LbUsuarios')->
-                    findOneBy(array('txusuemail' => $pSolicitud->getEmail()))){
+            if ($usuario = ManejoDataRepository::getUsuarioByEmail($pSolicitud->getEmail())){
                 
                 $estado = $usuario->getInusuestado();
                 //echo "<script>alert('-----Estado usuario ".$estado."')</script>";
 
                 //Busca el dispositivo si no esta asociado al usuario lo crea y lo asocia
-                if (!$em->getRepository('LibreameBackendBundle:LbDispusuarios')->findOneBy(array(
-                        'txdisid' => $pSolicitud->getDeviceMAC(), 
-                        'indisusuario' => $usuario))){
+                if (!ManejoDataRepository::getDispositivoUsuario($pSolicitud->getDeviceMAC(), $usuario)){
                     //echo "<script>alert('Dispositivo [".$pSolicitud->getDeviceMAC()."-guardadevice".$guardadevice." ] NO existe')</script>";
 
                     $device=$device->creaDispusuario($usuario, $pSolicitud);
                     //echo "<script>alert('Persiste device')</script>";
-                    $em->persist($device);
-                    $em->flush();
+                    !ManejoDataRepository::persistEntidad($device);
                 }
                 else {
-                    $device = $em->getRepository('LibreameBackendBundle:LbDispusuarios')->findOneBy(array(
-                        'txdisid' => $pSolicitud->getDeviceMAC(), 
-                        'indisusuario' => $usuario));
+                    $device = ManejoDataRepository::getDispositivoUsuario($pSolicitud->getDeviceMAC(), $usuario);
                 }
 
                //echo "<script>alert('Dispositivo ".$device->getTxdisid()." - ".$device->getIndispusuario()."')</script>";
@@ -97,8 +83,8 @@ class Login
                     //Verifica si la clave es correcta
                     if ($usuario->getTxusuclave() == $pSolicitud->getClave()){
                         //Verifica si el usuario tiene una sesion activa
-                        if ($objLogica->usuarioSesionActiva($pSolicitud, $device)){
-                            $respuesta->setRespuesta(self::inUSeActi);
+                        if (ManejoDataRepository::usuarioSesionActiva($pSolicitud, $device)){
+                            $respuesta->setRespuesta(AccesoController::inUSeActi);
                         }
                         else
                         {
@@ -106,10 +92,10 @@ class Login
 
                             //Crea sesion
                             //echo "<script>alert('-----Creará sesion"  .AccesoController::inSesActi."')</script>";
-                            $sesion = $objLogica::generaSesion(AccesoController::inSesActi,$fecha,NULL,$device,$pSolicitud->getIPaddr());
+                            $sesion = ManejoDataRepository::generaSesion(AccesoController::inSesActi,$fecha,NULL,$device,$pSolicitud->getIPaddr());
                             //Genera sesion activa sin fecha de finalización
-                            $objLogica::generaActSesion($sesion,AccesoController::inDatoUno,'Login usuario '.$usuario->getTxusuemail().' exitoso',$pSolicitud->getAccion(),$fecha,NULL);
-                            $respuesta->setRespuesta(self::inULogged);    
+                            ManejoDataRepository::generaActSesion($sesion,AccesoController::inDatoUno,'Login usuario '.$usuario->getTxusuemail().' exitoso',$pSolicitud->getAccion(),$fecha,NULL);
+                            $respuesta->setRespuesta(AccesoController::inULogged);    
                             $respuesta->setSession($sesion->getTxsesnumero());  
                             
                             //Busca la cantidad de mensajes del usuario sin leer 
@@ -118,23 +104,22 @@ class Login
                         }
                     }
                     //Clave incorrecta
-                    else{$respuesta->setRespuesta(self::inUsClInv);}    
+                    else{$respuesta->setRespuesta(AccesoController::inUsClInv);}    
                 }
                 //Usuario no está activo
-                else {$respuesta->setRespuesta(self::inUsInact);}
+                else {$respuesta->setRespuesta(AccesoController::inUsInact);}
 
             }
             //Usuario no existe
-            else {$respuesta->setRespuesta(self::inUsClInv);}
+            else {$respuesta->setRespuesta(AccesoController::inUsClInv);}
 
             //Flush al entity manager
-            $em->flush(); 
             
             return $objLogica::generaRespuesta($respuesta, $pSolicitud, NULL);
             
         }
         catch (Exception $ex) {
-            $respuesta->setRespuesta(self::inPlatCai);
+            $respuesta->setRespuesta(AccesoController::inPlatCai);
             return $objLogica::generaRespuesta($respuesta, $pSolicitud, NULL);
         }     
         

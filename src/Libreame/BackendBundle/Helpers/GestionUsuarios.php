@@ -4,6 +4,7 @@
 namespace Libreame\BackendBundle\Helpers;
 
 use Libreame\BackendBundle\Controller\AccesoController;
+use Libreame\BackendBundle\Repository\ManejoDataRepository;
 
 use Libreame\BackendBundle\Entity\LbUsuarios;
 use Libreame\BackendBundle\Entity\LbSesiones;
@@ -29,21 +30,19 @@ class GestionUsuarios {
         $sesion = new LbSesiones();
         try {
             //Valida que la sesión corresponda y se encuentre activa
-            $respSesionVali=$objLogica::validaSesionUsuario($psolicitud);
+            $respSesionVali=ManejoDataRepository::validaSesionUsuario($psolicitud);
            //echo "<script>alert(' obtenerParametros :: Validez de sesion ".$respSesionVali." ')</script>";
             if ($respSesionVali==AccesoController::inULogged) 
             {    
-                $em = $this->getDoctrine()->getManager();
                 //Busca el usuario 
-                $usuario = $em->getRepository('LibreameBackendBundle:LbUsuarios')->
-                    findOneBy(array('txusuemail' => $psolicitud->getEmail()));
+                $usuario = ManejoDataRepository::getUsuarioByEmail($psolicitud->getEmail());
                 
                 //SE INACTIVA PORQUE PUEDE GENERAR UNA GRAN CANTIDAD DE REGISTROS EN UNA SOLA SESION
                 //Busca y recupera el objeto de la sesion:: 
-                //$sesion = $objLogica::recuperaSesionUsuario($usuario,$psolicitud);
+                //$sesion = ManejoDataRepository::recuperaSesionUsuario($usuario,$psolicitud);
                 //echo "<script>alert('La sesion es ".$sesion->getTxsesnumero()." ')</script>";
                 //Guarda la actividad de la sesion:: 
-                //$objLogica::generaActSesion($sesion,AccesoController::inDatoUno,"Datos de usuario ".$psolicitud->getEmail()." recuperados con éxito",$psolicitud->getAccion(),$fecha,$fecha);
+                //ManejoDataRepository::generaActSesion($sesion,AccesoController::inDatoUno,"Datos de usuario ".$psolicitud->getEmail()." recuperados con éxito",$psolicitud->getAccion(),$fecha,$fecha);
                 //echo "<script>alert('Generó actividad de sesion ')</script>";
                 
                 $respuesta->setRespuesta(AccesoController::inExitoso);

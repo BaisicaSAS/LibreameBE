@@ -44,7 +44,7 @@ class AccesoController extends Controller
     const inSesActi =  1; //Usuario en proceso de confiormacion de registro
     const inSesInac =  0; //Usuario Activo
     
-    
+
     
     //Acciones de la plataforma
     const txAccRegistro =  '1'; //Registro en el sistema
@@ -75,6 +75,7 @@ class AccesoController extends Controller
     const txAccModifPQR =  '25'; //Modificar una PQR
     const txAccElimiPQR =  '26'; //Eliminar una PQR
 
+    //Constantes de la funcion Login
     const inUsClInv =  0;  //Usuario o clave inválidos
     const inULogged =  1;  //Usuario logeado exitosamente
     const inPlatCai = -1; //Proceso fallido por conexión de plataforma
@@ -119,8 +120,8 @@ class AccesoController extends Controller
             if ($jsonValido != false) {
                 //echo "<script>alert('Ejecuta accion ')</script>"; 
                 //$objLogica = $this->get('logica_service')->container->setParameter("@doctrine.orm.default_entity_manager", $em);
-                $objLogica = new Logica($em);
-                //$objLogica = $this->get('logica_service');
+                //$objLogica = new Logica($em);
+                $objLogica = $this->get('logica_service');
                 //$objLogica = new Logica($em);
                 //$objLogica = $this->get('logica_service')->container->setParameter("@doctrine.orm.default_entity_manager", $em);
                 $respuesta = $objLogica::ejecutaAccion($this->objSolicitud);
