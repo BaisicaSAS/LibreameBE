@@ -1,10 +1,6 @@
 Libreame\BackendBundle\Entity\LbLibros:
     type: entity
     table: lb_libros
-    indexes:
-        fk_lb_libros_lb_generos1_idx:
-            columns:
-                - inLibGenero
     id:
         inlibro:
             type: integer
@@ -107,14 +103,4 @@ Libreame\BackendBundle\Entity\LbLibros:
             fixed: false
             comment: 'Numero de páginas del libro'
             column: txPaginas
-    manyToOne:
-        inlibgenero:
-            targetEntity: LbGeneros
-            cascade: {  }
-            mappedBy: null
-            inversedBy: null
-            joinColumns:
-                inLibGenero:
-                    referencedColumnName: inGenero
-            orphanRemoval: false
     lifecycleCallbacks: {  }

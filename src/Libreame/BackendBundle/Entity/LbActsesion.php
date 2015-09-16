@@ -188,7 +188,7 @@ class LbActsesion
     /**
      * @var integer
      */
-    private $inactaccion;
+    protected $inactaccion = 0;
 
 
     /**

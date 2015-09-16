@@ -13,6 +13,7 @@ use Libreame\BackendBundle\Entity\LbDispusuarios;
 use Libreame\BackendBundle\Entity\LbGrupos;
 use Libreame\BackendBundle\Entity\LbSesiones;
 use Libreame\BackendBundle\Entity\LbActsesion;
+use Libreame\BackendBundle\Entity\LbGeneroslibros;
 use Libreame\BackendBundle\Entity\LbMembresias;
 /**
  * Description of ManejoDataRepository
@@ -283,13 +284,26 @@ class ManejoDataRepository extends EntityRepository {
         } 
     }
     
-    //Obtiene el objeto Genero según su ID 
-    public function getGenero($ingenero)
+    //Obtiene varios objetos Genero según el ID del libro 
+    public function getGeneroLibro($inlibro)
+    {   
+        try{
+            $em = $this->getDoctrine()->getManager();
+            return $em->getRepository('LibreameBackendBundle:LbGenerosLibros')->
+                findBy(array('inglilibro' => $inlibro));
+            $em->flush();
+        } catch (Exception $ex) {
+                return new LbGeneroslibros();
+        } 
+    }
+    
+    //Obtiene el dato del genero según el Objeto
+    public function getGenero($genero)
     {   
         try{
             $em = $this->getDoctrine()->getManager();
             return $em->getRepository('LibreameBackendBundle:LbGeneros')->
-                findOneBy(array('ingenero' => $ingenero));
+                findOneBy(array('ingenero' => $genero));
             $em->flush();
         } catch (Exception $ex) {
                 return new LbGeneros();

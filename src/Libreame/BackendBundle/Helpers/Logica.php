@@ -8,6 +8,7 @@ use Libreame\BackendBundle\Repository\ManejoDataRepository;
 use Doctrine\Bundle\DoctrineBundle\Registry;
 use Libreame\BackendBundle\Entity\LbLugares;
 use Libreame\BackendBundle\Entity\LbGeneros;
+use Libreame\BackendBundle\Entity\LbGeneroslibros;
 use Libreame\BackendBundle\Entity\LbLibros;
 use Libreame\BackendBundle\Entity\LbUsuarios;
 use Libreame\BackendBundle\Entity\LbSesiones;
@@ -27,6 +28,7 @@ class Logica {
     {
         try{
             $respuesta = AccesoController::inFallido;
+            
             $tmpSolicitud = $solicitud->getAccion();
             //echo "<script>alert('".$tmpSolicitud."-".AccesoController::txAccRegistro."')</script>";
             switch ($tmpSolicitud){
@@ -117,6 +119,23 @@ class Logica {
 
     
     /*
+     * respuestaGenerica: 
+     * Funcion que genera el JSON de respuesta cuando por calidad de datos no se ralizó ninguna operacion
+     */
+    public function respuestaGenerica($respuesta, $pSolicitud){
+        try {
+            return array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
+                            'idtrx' => $pSolicitud->getSession(), 'ipaddr'=> $pSolicitud->getIPaddr(), 
+                            'iddevice'=> $pSolicitud->getDeviceMac(), 'marca'=>$pSolicitud->getDeviceMarca(), 
+                            'modelo'=>$pSolicitud->getDeviceModelo(), 'so'=>$pSolicitud->getDeviceSO()), 
+                            'idrespuesta' => (array('respuesta' => $respuesta->getRespuesta())));
+        } catch (Exception $ex) {
+                return AccesoController::inPlatCai;
+        } 
+    }    
+    
+
+    /*
      * respuestaRegistro: 
      * Funcion que genera el JSON de respuesta para la accion de registro :: AccesoController::txAccRegistro
      */
@@ -131,7 +150,6 @@ class Logica {
                 return AccesoController::inPlatCai;
         } 
     }    
-    
 
     /*
      * respuestaLogin: 
@@ -196,18 +214,25 @@ class Logica {
             foreach ($parreglo as $ejemplar){
                 //Recupera nombre del genero, Nombre del libro, Nombre del uduario Dueño
                 $genero = new LbGeneros();
+                $generolibro = new LbGeneroslibros();
                 $libro = new LbLibros();
                 $usuario = new LbUsuarios();
                 if ($respuesta->getRespuesta()== AccesoController::inULogged){
-                    $genero = ManejoDataRepository::getGenero($ejemplar->getInejegenero());
                     $libro = ManejoDataRepository::getLibro($ejemplar->getInejelibro());
+                    $generolibro = ManejoDataRepository::getGeneroLibro($ejemplar->getInejelibro());
                     $usuario = ManejoDataRepository::getUsuarioById($ejemplar->getInejeusudueno());
                 }
+                //Guarda los generos
+                foreach ($generolibro as $gen){
+                    $genero = ManejoDataRepository::getGenero($gen->getIngligenero());
+                    $arrGeneros[] = array('ingenero' => $genero->getIngenero(), 'txgenero' => $genero->getTxgennombre());
+                }
+                
                 $arrTmp[] = array('idejemplar' => $ejemplar->getInejemplar(), 
-                  'idgenero' => $genero->getIngenero(), 'inejecantidad' => $ejemplar->getInejecantidad(),
+                  'idgenero' => $arrGeneros, 'inejecantidad' => $ejemplar->getInejecantidad(),
                   'dbavaluo' => $ejemplar->getDbejeavaluo(), 'indueno' => $usuario->getInusuario(),
-                  'inlibro' => $libro->getInlibro(), 'txgenero' => $genero->getTxgennombre(), 
-                  'txlibro' => $libro->getTxlibtitulo(), 'txdueno' => $usuario->getTxusunombre()
+                  'inlibro' => $libro->getInlibro(), 'txlibro' => $libro->getTxlibtitulo(), 
+                  'txdueno' => $usuario->getTxusunombre()
                 ) ;
             }
 

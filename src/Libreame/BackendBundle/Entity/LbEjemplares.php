@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * LbEjemplares
  *
- * @ORM\Table(name="lb_ejemplares", indexes={@ORM\Index(name="fk_lb_ejemplares_lb_usuarios1_idx", columns={"inEjeUsuDueno"}), @ORM\Index(name="fk_lb_ejemplares_lb_libros1_idx", columns={"inEjeLibro"}), @ORM\Index(name="fk_lb_ejemplares_lb_generos1_idx", columns={"inEjeGenero"})})
+ * @ORM\Table(name="lb_ejemplares", indexes={@ORM\Index(name="fk_lb_ejemplares_lb_usuarios1_idx", columns={"inEjeUsuDueno"}), @ORM\Index(name="fk_lb_ejemplares_lb_libros1_idx", columns={"inEjeLibro"})})
  * @ORM\Entity
  */
 class LbEjemplares
@@ -35,15 +35,6 @@ class LbEjemplares
      */
     protected $dbejeavaluo;
 
-    /**
-     * @var \Libreame\BackendBundle\Entity\LbGeneros
-     *
-     * @ORM\ManyToOne(targetEntity="Libreame\BackendBundle\Entity\LbGeneros")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="inEjeGenero", referencedColumnName="inGenero")
-     * })
-     */
-    protected $inejegenero;
 
     /**
      * @var \Libreame\BackendBundle\Entity\LbLibros
@@ -121,29 +112,6 @@ class LbEjemplares
     public function getDbejeavaluo()
     {
         return $this->dbejeavaluo;
-    }
-
-    /**
-     * Set inejegenero
-     *
-     * @param \Libreame\BackendBundle\Entity\LbGeneros $inejegenero
-     * @return LbEjemplares
-     */
-    public function setInejegenero(\Libreame\BackendBundle\Entity\LbGeneros $inejegenero = null)
-    {
-        $this->inejegenero = $inejegenero;
-
-        return $this;
-    }
-
-    /**
-     * Get inejegenero
-     *
-     * @return \Libreame\BackendBundle\Entity\LbGeneros 
-     */
-    public function getInejegenero()
-    {
-        return $this->inejegenero;
     }
 
     /**

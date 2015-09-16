@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * LbLibros
  *
- * @ORM\Table(name="lb_libros", indexes={@ORM\Index(name="fk_lb_libros_lb_generos1_idx", columns={"inLibGenero"})})
+ * @ORM\Table(name="lb_libros")
  * @ORM\Entity
  */
 class LbLibros
@@ -111,17 +111,6 @@ class LbLibros
      * @ORM\Column(name="txPaginas", type="string", length=45, nullable=true)
      */
     protected $txpaginas;
-
-    /**
-     * @var \Libreame\BackendBundle\Entity\LbGeneros
-     *
-     * @ORM\ManyToOne(targetEntity="Libreame\BackendBundle\Entity\LbGeneros")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="inLibGenero", referencedColumnName="inGenero")
-     * })
-     */
-    protected $inlibgenero;
-
 
 
     /**
@@ -433,26 +422,4 @@ class LbLibros
         return $this->txpaginas;
     }
 
-    /**
-     * Set inlibgenero
-     *
-     * @param \Libreame\BackendBundle\Entity\LbGeneros $inlibgenero
-     * @return LbLibros
-     */
-    public function setInlibgenero(\Libreame\BackendBundle\Entity\LbGeneros $inlibgenero = null)
-    {
-        $this->inlibgenero = $inlibgenero;
-
-        return $this;
-    }
-
-    /**
-     * Get inlibgenero
-     *
-     * @return \Libreame\BackendBundle\Entity\LbGeneros 
-     */
-    public function getInlibgenero()
-    {
-        return $this->inlibgenero;
-    }
 }

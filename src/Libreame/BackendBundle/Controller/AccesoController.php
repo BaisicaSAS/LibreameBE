@@ -24,7 +24,7 @@ use Libreame\BackendBundle\Helpers\Respuesta;
 class AccesoController extends Controller
 {   
     //Constantes globales
-    const inFallido =  0; //Proceso fallido por calidad de datos
+    const inFallido =  0; //Proceso fallido
     const inDescone = -1; //Proceso fallido por conexión de plataforma
     const inExitoso =  1; //Proceso existoso
     const inDatoCer =  0; //Valor cero: Sirve para los datos Inactivo, Cerrado etc del modelo
@@ -34,6 +34,7 @@ class AccesoController extends Controller
     const inGenMasc =  0; //Genero del usuario: Masculino
     const inTamVali =  40; //Tamaño del ID para confirmacion del Registro
     const inTamSesi =  30; //Tamaño del id de sesion generado
+    const inJsonInv = -10; //Datos inconsistentes
     const txMensaje =  'Solicitud de registro de usuario en Ex4Read'; //Mensaje estandar para el registro de usuario
     //Estados del usuario
     const inUsuConf =  0; //Usuario en proceso de confiormacion de registro
@@ -114,10 +115,8 @@ class AccesoController extends Controller
         //Se evalúa si se logró obtener la información de sesion desde el JSON
         $jsonValido = $this->descomponerJson($datos);
         try {
-
             //echo "<script>alert('Validación retornó: ".$jsonValido."')</script>"; 
-            
-            if ($jsonValido != false) {
+            if ($jsonValido != self::inJsonInv) {
                 //echo "<script>alert('Ejecuta accion ')</script>"; 
                 //$objLogica = $this->get('logica_service')->container->setParameter("@doctrine.orm.default_entity_manager", $em);
                 //$objLogica = new Logica($em);
@@ -126,6 +125,11 @@ class AccesoController extends Controller
                 //$objLogica = $this->get('logica_service')->container->setParameter("@doctrine.orm.default_entity_manager", $em);
                 $respuesta = $objLogica::ejecutaAccion($this->objSolicitud);
             } else {
+                //echo "<script>alert('.......ELSE..........')</script>";
+                $objLogica = $this->get('logica_service');
+                $jrespuesta = new Respuesta();
+                $jrespuesta->setRespuesta($jsonValido);    
+                $respuesta = json_encode($objLogica::respuestaGenerica($jrespuesta, $this->objSolicitud));
                //echo "<script>alert('Encontramos un problema con tu registro: ".$this->$objSolicitud->getSession()."-".$jsonValido."')</script>"; 
                 //@TODO: Debemos revisar que hacer cuando se detecta actividad sospechosa: Cierro sesion?. Bloqueo usuario e informo?
             }
@@ -159,68 +163,144 @@ class AccesoController extends Controller
      * }
      */
     private function descomponerJson($datos)
-    {   $resp = self::inFallido;
+    {   
         try {
             //$json_datos = json_decode($datos, true);
             $json_datos = $datos;
-            //echo "<script>alert('Inicia a decodificar-----".$json_datos[0]['idsesion']['idtrx']."')</script>"; 
+            //echo "<script>alert('Inicia a decodificar-----".$json_datos['idsesion']['idtrx']."')</script>"; 
             $this->objSolicitud = new Solicitud();
-            //echo "<script>alert(':::TRANS: ".$json_datos[0]['idsesion']['idtrx']."')</script>"; 
-            $this->objSolicitud->setAccion($json_datos['idsesion']['idaccion']);
-            $this->objSolicitud->setSession($json_datos['idsesion']['idtrx']);
-            $this->objSolicitud->setIPaddr($json_datos['idsesion']['ipaddr']);
-            $this->objSolicitud->setDeviceMAC($json_datos['idsesion']['iddevice']);
-            $this->objSolicitud->setDeviceMarca($json_datos['idsesion']['marca']);
-            $this->objSolicitud->setDeviceModelo($json_datos['idsesion']['modelo']);
-            $this->objSolicitud->setDeviceSO($json_datos['idsesion']['so']);
-            //Según la solicitud descompone el JSON
-            $tmpSesion = $this->objSolicitud->getAccion();
-            //echo "<script>alert('ult ejemplar ".$json_datos['idsolicitud']['ultejemplar']."')</script>";
-            //echo "<script>alert('sesion ".$tmpSesion."')</script>";
-            switch ($tmpSesion){
-                case self::txAccRegistro: { //Dato:1
-                    //echo "<script>alert('ENTRA POR REGISTRO')</script>";
-                    $this->objSolicitud->setEmail($json_datos['idsolicitud']['email']);
-                    $this->objSolicitud->setClave($json_datos['idsolicitud']['clave']);
-                    $this->objSolicitud->setTelefono($json_datos['idsolicitud']['telefono']);
-                    break;
+            //echo "<script>alert('VALIDARA')</script>";
+            $estrValida = $this->estructuraCorrecta($datos);
+            //echo "<script>alert('VALIDADO COMO: ".$estrValida ? 'true' : 'false'."')</script>";
+
+            if ($estrValida)
+            {    
+                //echo "<script>alert(':::TRANS: ".$json_datos['idsesion']['idtrx']."')</script>"; 
+                //echo "<script>alert(':::TRANS: ')</script>"; 
+                $resp = self::inExitoso;
+                $this->objSolicitud->setAccion($json_datos['idsesion']['idaccion']);
+                $this->objSolicitud->setSession($json_datos['idsesion']['idtrx']);
+                $this->objSolicitud->setIPaddr($json_datos['idsesion']['ipaddr']);
+                $this->objSolicitud->setDeviceMAC($json_datos['idsesion']['iddevice']);
+                $this->objSolicitud->setDeviceMarca($json_datos['idsesion']['marca']);
+                $this->objSolicitud->setDeviceModelo($json_datos['idsesion']['modelo']);
+                $this->objSolicitud->setDeviceSO($json_datos['idsesion']['so']);
+                //Según la solicitud descompone el JSON
+                $tmpSesion = $this->objSolicitud->getAccion();
+                //echo "<script>alert('ult ejemplar ".$json_datos['idsolicitud']['ultejemplar']."')</script>";
+                //echo "<script>alert('sesion ".$tmpSesion."')</script>";
+                switch ($tmpSesion){
+                    case self::txAccRegistro: { //Dato:1
+                        //echo "<script>alert('ENTRA POR REGISTRO')</script>";
+                        $this->objSolicitud->setEmail($json_datos['idsolicitud']['email']);
+                        $this->objSolicitud->setClave($json_datos['idsolicitud']['clave']);
+                        $this->objSolicitud->setTelefono($json_datos['idsolicitud']['telefono']);
+                        break;
+                    }
+                    case self::txAccIngresos : { //Dato:2
+                        //echo "<script>alert('ENTRA POR LOGIN')</script>";
+                        $this->objSolicitud->setEmail($json_datos['idsolicitud']['email']);
+                        $this->objSolicitud->setClave($json_datos['idsolicitud']['clave']);
+                        break;
+                    }
+                    case self::txAccRecParam: { //Dato:3
+                        //echo "<script>alert('ENTRA POR OBT PARAM')</script>";
+                        $this->objSolicitud->setEmail($json_datos['idsolicitud']['email']);
+                        $this->objSolicitud->setClave($json_datos['idsolicitud']['clave']);
+                        break;
+                    }
+                    case self::txAccRecFeeds: { //Dato:4
+                        //echo "<script>alert('ENTRA POR FEED')</script>";
+                        $this->objSolicitud->setEmail($json_datos['idsolicitud']['email']);
+                        $this->objSolicitud->setClave($json_datos['idsolicitud']['clave']);
+                        $this->objSolicitud->setUltEjemplar($json_datos['idsolicitud']['ultejemplar']);
+                        break;
+                    }
+                    case self::txAccPubliEje: { //Dato:13
+                        //echo "<script>alert('ENTRA POR PUBLICAR')</script>";
+                        $this->objSolicitud->setEmail($json_datos['idsolicitud']['email']);
+                        $this->objSolicitud->setClave($json_datos['idsolicitud']['clave']);
+                        break;
+                    }
+
                 }
-                case self::txAccIngresos : { //Dato:2
-                    //echo "<script>alert('ENTRA POR LOGIN')</script>";
-                    $this->objSolicitud->setEmail($json_datos['idsolicitud']['email']);
-                    $this->objSolicitud->setClave($json_datos['idsolicitud']['clave']);
-                    break;
-                }
-                case self::txAccRecParam: { //Dato:3
-                    //echo "<script>alert('ENTRA POR OBT PARAM')</script>";
-                    $this->objSolicitud->setEmail($json_datos['idsolicitud']['email']);
-                    $this->objSolicitud->setClave($json_datos['idsolicitud']['clave']);
-                    break;
-                }
-                case self::txAccRecFeeds: { //Dato:4
-                    //echo "<script>alert('ENTRA POR FEED')</script>";
-                    $this->objSolicitud->setEmail($json_datos['idsolicitud']['email']);
-                    $this->objSolicitud->setClave($json_datos['idsolicitud']['clave']);
-                    $this->objSolicitud->setUltEjemplar($json_datos['idsolicitud']['ultejemplar']);
-                    break;
-                }
-                case self::txAccPubliEje: { //Dato:13
-                    //echo "<script>alert('ENTRA POR PUBLICAR')</script>";
-                    $this->objSolicitud->setEmail($json_datos['idsolicitud']['email']);
-                    $this->objSolicitud->setClave($json_datos['idsolicitud']['clave']);
-                    $this->objSolicitud->setUltEjemplar($json_datos['idsolicitud']['ultejemplar']);
-                    break;
-                }
+                //echo "<script>alert('SESION: ".$this->objSolicitud->getSession().": Finalizó')</script>"; 
+                $resp = self::inExitoso;
+            } else {
+                $resp = self::inJsonInv;
+            }   
                 
-            }
-            //echo "<script>alert('SESION: ".$this->objSolicitud->getSession().": Finalizó')</script>"; 
-            $resp = self::inExitoso;
             //echo "<script>alert('Decodificó e instació el objeto')</script>"; 
             return $resp;
         } catch (Exception $ex) {
-        } finally {
-            return $resp;
+            return self::inJsonInv;
         }    
+    }
+    
+    private function estructuraCorrecta($datos) 
+    {   
+        $resp = TRUE;
+        //Recupera el ID de la accion
+        if (!isset($datos['idsesion']['idaccion'])) {
+            //echo "<script>alert('FALTA IDACCION')</script>";
+            $resp = FALSE;
+        } else {
+            //Evalúa todos los datos del ENCABEZADO
+            $accion = $datos['idsesion']['idaccion'];
+            //echo "<script>alert('ACCION: ".$accion."')</script>"; 
+            if (!isset($datos['idsesion']['idtrx'])){ 
+                //echo "<script>alert('FALTA IDTRANSACCION: Sesion')</script>";
+                $resp = FALSE;
+            } elseif (!isset($datos['idsesion']['ipaddr'])) {
+                //echo "<script>alert('FALTA IPADDRES')</script>";
+                $resp = FALSE;
+            } elseif (!isset($datos['idsesion']['iddevice'])) {
+                //echo "<script>alert('FALTA DEVICE')</script>";
+                $resp = FALSE;
+            } elseif (!isset($datos['idsesion']['marca'])) {
+                //echo "<script>alert('FALTA MARCA')</script>";
+                $resp = FALSE;
+            } elseif (!isset($datos['idsesion']['modelo'])) {
+                //echo "<script>alert('FALTA MODELO')</script>";
+                $resp = FALSE;
+            } elseif (!isset($datos['idsesion']['so'])) {
+                //echo "<script>alert('FALTA SO')</script>";
+                $resp = FALSE;
+            } else {
+                //Si todos los datos del encabezado están seteados, evalúa según la acción
+                switch ($accion){
+                    case self::txAccRegistro: { //Dato:1
+                        //echo "<script>alert('VAL ENTRA POR REGISTRO')</script>";
+                        $resp = (isset($datos['idsolicitud']['email']) and isset($datos['idsolicitud']['clave']) 
+                                and isset($datos['idsolicitud']['telefono']));
+                        break;
+                    }
+                    case self::txAccIngresos : { //Dato:2
+                        //echo "<script>alert('VAL ENTRA POR LOGIN')</script>";
+                        $resp = (isset($datos['idsolicitud']['email']) and isset($datos['idsolicitud']['clave']));
+                        break;
+                    }
+                    case self::txAccRecParam: { //Dato:3
+                        //echo "<script>alert('VAL ENTRA POR OBT PARAM')</script>";
+                        $resp = (isset($datos['idsolicitud']['email']) and isset($datos['idsolicitud']['clave']));
+                        break;
+                    }
+                    case self::txAccRecFeeds: { //Dato:4
+                        //echo "<script>alert('VAL ENTRA POR FEED')</script>";
+                        $resp = (isset($datos['idsolicitud']['email']) and isset($datos['idsolicitud']['clave']) 
+                                and isset($datos['idsolicitud']['ultejemplar']));
+                        break;
+                    }
+                    case self::txAccPubliEje: { //Dato:13
+                        //echo "<script>alert('VAL ENTRA POR PUBLICAR')</script>";
+                        $resp = (isset($datos['idsolicitud']['email']) and isset($datos['idsolicitud']['clave']));
+                        break;
+                    }
+                }
+            }
+        }
+        //echo "<script>alert('VALIDADO COMO: ".$resp ? 'true' : 'false'."')</script>";
+        return $resp;
     }
 
 }
