@@ -8,9 +8,6 @@ Libreame\BackendBundle\Entity\LbEjemplares:
         fk_lb_ejemplares_lb_libros1_idx:
             columns:
                 - inEjeLibro
-        fk_lb_ejemplares_lb_generos1_idx:
-            columns:
-                - inEjeGenero
     id:
         inejemplar:
             type: integer
@@ -38,14 +35,14 @@ Libreame\BackendBundle\Entity\LbEjemplares:
             default: '0'
             column: dbEjeAvaluo
     manyToOne:
-        inejegenero:
-            targetEntity: LbGeneros
+        inejeusudueno:
+            targetEntity: LbUsuarios
             cascade: {  }
             mappedBy: null
             inversedBy: null
             joinColumns:
-                inEjeGenero:
-                    referencedColumnName: inGenero
+                inEjeUsuDueno:
+                    referencedColumnName: inUsuario
             orphanRemoval: false
         inejelibro:
             targetEntity: LbLibros
@@ -55,14 +52,5 @@ Libreame\BackendBundle\Entity\LbEjemplares:
             joinColumns:
                 inEjeLibro:
                     referencedColumnName: inLibro
-            orphanRemoval: false
-        inejeusudueno:
-            targetEntity: LbUsuarios
-            cascade: {  }
-            mappedBy: null
-            inversedBy: null
-            joinColumns:
-                inEjeUsuDueno:
-                    referencedColumnName: inUsuario
             orphanRemoval: false
     lifecycleCallbacks: {  }

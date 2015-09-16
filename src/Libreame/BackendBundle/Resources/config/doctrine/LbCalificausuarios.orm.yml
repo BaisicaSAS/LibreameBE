@@ -28,7 +28,7 @@ Libreame\BackendBundle\Entity\LbCalificausuarios:
         txcalobservacion:
             type: string
             nullable: true
-            length: 100
+            length: 500
             fixed: false
             comment: 'Comentario anexo a la calificacion'
             column: txCalObservacion

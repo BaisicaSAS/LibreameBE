@@ -15,7 +15,7 @@ Libreame\BackendBundle\Entity\LbGrupos:
         ingrunombre:
             type: string
             nullable: false
-            length: 100
+            length: 200
             fixed: false
             comment: 'Nombre del grupo'
             column: inGruNombre

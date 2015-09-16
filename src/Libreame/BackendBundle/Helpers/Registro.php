@@ -92,12 +92,11 @@ class Registro {
                 //echo "<script>alert('Guardó usuario...va a generar sesion ')</script>";
                 setlocale (LC_TIME, "es_CO");
                 $fecha = new \DateTime('c');
-                //echo "<script
-                //>alert('".$fecha."')</script>";
+                //echo "<script>alert('fecha ')</script>";
 
                 $sesion = ManejoDataRepository::generaSesion(AccesoController::inDatoCer,$fecha,$fecha,$device,$pSolicitud->getIPaddr());
+                //echo "<script>alert('Generó sesion ')</script>";
                 //Guarda la actividad de la sesion:: Como finalizada
-                //echo "<script>alert('Guardó usuario...va a generar sesion ')</script>";
                 ManejoDataRepository::generaActSesion($sesion,AccesoController::inDatoUno,AccesoController::txMensaje,$pSolicitud->getAccion(),$fecha,$fecha);
                 //echo "<script>alert('Generó actividad de sesion ')</script>";
 

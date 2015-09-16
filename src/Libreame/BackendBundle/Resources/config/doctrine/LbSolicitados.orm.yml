@@ -32,7 +32,7 @@ Libreame\BackendBundle\Entity\LbSolicitados:
         txsolobservacion:
             type: string
             nullable: true
-            length: 100
+            length: 300
             fixed: false
             comment: 'Observaciones especificas de la solicitud: No importa el estado, que no este rallado, el de pasta dura...etc.'
             column: txSolObservacion
@@ -62,15 +62,6 @@ Libreame\BackendBundle\Entity\LbSolicitados:
                 inSolEjemplar:
                     referencedColumnName: inEjemplar
             orphanRemoval: false
-        insollibro:
-            targetEntity: LbLibros
-            cascade: {  }
-            mappedBy: null
-            inversedBy: null
-            joinColumns:
-                inSolLibro:
-                    referencedColumnName: inLibro
-            orphanRemoval: false
         insoloferta:
             targetEntity: LbOfertas
             cascade: {  }
@@ -79,5 +70,14 @@ Libreame\BackendBundle\Entity\LbSolicitados:
             joinColumns:
                 inSolOferta:
                     referencedColumnName: inOferta
+            orphanRemoval: false
+        insollibro:
+            targetEntity: LbLibros
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                inSolLibro:
+                    referencedColumnName: inLibro
             orphanRemoval: false
     lifecycleCallbacks: {  }

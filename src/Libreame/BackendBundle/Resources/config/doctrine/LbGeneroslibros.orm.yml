@@ -1,0 +1,40 @@
+Libreame\BackendBundle\Entity\LbGeneroslibros:
+    type: entity
+    table: lb_generoslibros
+    indexes:
+        fk_lb_generosejemplares_lb_generos1_idx:
+            columns:
+                - inGLiGenero
+        fk_lb_generosejemplares_lb_libros1_idx:
+            columns:
+                - inGLiLibro
+    id:
+        ingenerolibro:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: 'Id Genero-Libro'
+            id: true
+            column: inGeneroLibro
+            generator:
+                strategy: IDENTITY
+    manyToOne:
+        ingligenero:
+            targetEntity: LbGeneros
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                inGLiGenero:
+                    referencedColumnName: inGenero
+            orphanRemoval: false
+        inglilibro:
+            targetEntity: LbLibros
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                inGLiLibro:
+                    referencedColumnName: inLibro
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

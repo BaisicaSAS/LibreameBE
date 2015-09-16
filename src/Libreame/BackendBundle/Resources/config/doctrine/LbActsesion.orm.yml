@@ -16,18 +16,17 @@ Libreame\BackendBundle\Entity\LbActsesion:
             generator:
                 strategy: IDENTITY
     fields:
-        txactaccion:
-            type: string
+        inactaccion:
+            type: integer
             nullable: false
-            length: 5
-            fixed: false
+            unsigned: false
             comment: 'Todas las acciones que existan en el sistema enumeradas y quemadas en una tabla o arreglo'
             default: '0'
-            column: txActAccion
+            column: inActAccion
         txactmensaje:
             type: string
             nullable: false
-            length: 500
+            length: 50
             fixed: false
             comment: 'Mensaje de exito / fallo de la acción'
             column: txActMensaje

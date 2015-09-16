@@ -156,7 +156,7 @@ class ManejoDataRepository extends EntityRepository {
             $sesion->setInsesdispusuario($pDevice);
             $sesion->setTxipaddr($pIpAdd);
             $em->persist($sesion);
-           //echo "<script>alert('Guardo sesion')</script>";
+            //echo "<script>alert('Guardo sesion')</script>";
             $em->flush();
             //echo "<script>alert('Retorna".$sesion->getTxsesnumero()."')</script>";
             return $sesion;
@@ -177,19 +177,24 @@ class ManejoDataRepository extends EntityRepository {
             $em = $this->getDoctrine()->getManager();
             
             //echo "<script>alert('::::Actividad Sesion".$pFecFin."-".$pFecIni."')</script>";
+            //echo "<script>alert('::::Actividad accion ".$pAccion."')</script>";
             $actsesion = new LbActsesion();
             //$actsesion->setInactsesiondisus($pSesion->getInsesdispusuario());
             $actsesion->setInactsesiondisus($pSesion);
-            $actsesion->setTxactaccion($pAccion);
+            $actsesion->setInactaccion($pAccion);
             $actsesion->setFeactfecha($pSesion->getFesesfechaini());
             $actsesion->setInactfinalizada($pFinalizada);
             $actsesion->setTxactmensaje($pMensaje);
+            //echo "<script>alert('::::Antes de persist act sesion')</script>";
             $em->persist($actsesion);
+            //echo "<script>alert('::::antes de flush act sesion')</script>";
             $em->flush();
-
+            //echo "<script>alert('::::despues de flush act sesion')</script>";
+ 
             return $actsesion;
             
-        } catch (Exception $ex) {
+        } catch (\Doctrine\DBAL\DBALException  $ex) {
+                //echo "<script>alert('::::".$ex->getMessage()."')</script>";
                 return AccesoController::inPlatCai;
         } 
     }
@@ -423,9 +428,11 @@ class ManejoDataRepository extends EntityRepository {
     public function persistEntidad($entidad)
     {   
         try{
+            //echo "<script>alert('1Persiste usuario')</script>";
             $em = $this->getDoctrine()->getManager();
             $em->persist($entidad);
             $em->flush();
+            //echo "<script>alert('2Persiste usuario')</script>";
         } catch (Exception $ex) {
                 return null;
         } 

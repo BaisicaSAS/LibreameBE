@@ -37,7 +37,7 @@ Libreame\BackendBundle\Entity\LbTratos:
         txtraacuentrega:
             type: string
             nullable: false
-            length: 300
+            length: 500
             fixed: false
             comment: 'Permite indicar lugares, acuerdos y condiciones particulares de la entrega'
             column: txTraAcuEntrega

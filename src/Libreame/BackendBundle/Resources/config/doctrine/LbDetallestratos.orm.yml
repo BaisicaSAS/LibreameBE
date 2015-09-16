@@ -45,24 +45,6 @@ Libreame\BackendBundle\Entity\LbDetallestratos:
             default: '0'
             column: inDetValorOtro
     manyToOne:
-        indetejemplarusr:
-            targetEntity: LbEjemplares
-            cascade: {  }
-            mappedBy: null
-            inversedBy: null
-            joinColumns:
-                inDetEjemplarUsr:
-                    referencedColumnName: inEjemplar
-            orphanRemoval: false
-        indetejemplarotro:
-            targetEntity: LbEjemplares
-            cascade: {  }
-            mappedBy: null
-            inversedBy: null
-            joinColumns:
-                inDetEjemplarOtro:
-                    referencedColumnName: inEjemplar
-            orphanRemoval: false
         indettrato:
             targetEntity: LbTratos
             cascade: {  }
@@ -72,6 +54,15 @@ Libreame\BackendBundle\Entity\LbDetallestratos:
                 inDetTrato:
                     referencedColumnName: inTrato
             orphanRemoval: false
+        indetejemplarusr:
+            targetEntity: LbEjemplares
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                inDetEjemplarUsr:
+                    referencedColumnName: inEjemplar
+            orphanRemoval: false
         indetusuario:
             targetEntity: LbUsuarios
             cascade: {  }
@@ -80,6 +71,15 @@ Libreame\BackendBundle\Entity\LbDetallestratos:
             joinColumns:
                 inDetUsuario:
                     referencedColumnName: inUsuario
+            orphanRemoval: false
+        indetejemplarotro:
+            targetEntity: LbEjemplares
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                inDetEjemplarOtro:
+                    referencedColumnName: inEjemplar
             orphanRemoval: false
         indetusuariootro:
             targetEntity: LbUsuarios

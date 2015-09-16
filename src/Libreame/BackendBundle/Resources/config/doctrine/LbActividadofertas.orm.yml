@@ -42,14 +42,14 @@ Libreame\BackendBundle\Entity\LbActividadofertas:
             default: '0'
             column: inActEstado
     manyToOne:
-        inactpadreact:
-            targetEntity: LbActividadofertas
+        inactusuario:
+            targetEntity: LbUsuarios
             cascade: {  }
             mappedBy: null
             inversedBy: null
             joinColumns:
-                inActPadreAct:
-                    referencedColumnName: inActividadOferta
+                inActUsuario:
+                    referencedColumnName: inUsuario
             orphanRemoval: false
         inactoferta:
             targetEntity: LbOfertas
@@ -60,13 +60,13 @@ Libreame\BackendBundle\Entity\LbActividadofertas:
                 inActOferta:
                     referencedColumnName: inOferta
             orphanRemoval: false
-        inactusuario:
-            targetEntity: LbUsuarios
+        inactpadreact:
+            targetEntity: LbActividadofertas
             cascade: {  }
             mappedBy: null
             inversedBy: null
             joinColumns:
-                inActUsuario:
-                    referencedColumnName: inUsuario
+                inActPadreAct:
+                    referencedColumnName: inActividadOferta
             orphanRemoval: false
     lifecycleCallbacks: {  }

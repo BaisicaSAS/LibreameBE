@@ -28,7 +28,7 @@ class Logica {
         try{
             $respuesta = AccesoController::inFallido;
             $tmpSolicitud = $solicitud->getAccion();
-            //echo "<script>alert('".$tmpSesion."-".AccesoController::txAccRegistro."')</script>";
+            //echo "<script>alert('".$tmpSolicitud."-".AccesoController::txAccRegistro."')</script>";
             switch ($tmpSolicitud){
                 //accion de registro en el sistema
                 case AccesoController::txAccRegistro: {//Dato:1

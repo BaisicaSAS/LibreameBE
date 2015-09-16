@@ -185,4 +185,32 @@ class LbActsesion
     {
         return $this->inactsesiondisus;
     }
+    /**
+     * @var integer
+     */
+    private $inactaccion;
+
+
+    /**
+     * Set inactaccion
+     *
+     * @param integer $inactaccion
+     * @return LbActsesion
+     */
+    public function setInactaccion($inactaccion)
+    {
+        $this->inactaccion = $inactaccion;
+
+        return $this;
+    }
+
+    /**
+     * Get inactaccion
+     *
+     * @return integer 
+     */
+    public function getInactaccion()
+    {
+        return $this->inactaccion;
+    }
 }
