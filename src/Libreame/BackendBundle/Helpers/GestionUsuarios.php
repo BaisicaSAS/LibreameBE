@@ -36,11 +36,15 @@ class GestionUsuarios {
             {    
                 //Busca el usuario 
                 $usuario = ManejoDataRepository::getUsuarioByEmail($psolicitud->getEmail());
-                
+                $califica = ManejoDataRepository::getCalificaUsuarioRecibidas($usuario);
+                echo "<script>alert('RESP cali ".count($califica)." ')</script>";
+                $grupos = ManejoDataRepository::getGruposUsuario($usuario);
+                echo "<script>alert('RESP grup ".count($grupos)." ')</script>";
+                //echo "<script>alert('La sesion es ".$usuario->getTxusuemail()."')</script>";
+
                 //SE INACTIVA PORQUE PUEDE GENERAR UNA GRAN CANTIDAD DE REGISTROS EN UNA SOLA SESION
                 //Busca y recupera el objeto de la sesion:: 
                 //$sesion = ManejoDataRepository::recuperaSesionUsuario($usuario,$psolicitud);
-                //echo "<script>alert('La sesion es ".$sesion->getTxsesnumero()." ')</script>";
                 //Guarda la actividad de la sesion:: 
                 //ManejoDataRepository::generaActSesion($sesion,AccesoController::inDatoUno,"Datos de usuario ".$psolicitud->getEmail()." recuperados con éxito",$psolicitud->getAccion(),$fecha,$fecha);
                 //echo "<script>alert('Generó actividad de sesion ')</script>";
@@ -49,7 +53,12 @@ class GestionUsuarios {
 
                 //echo "<script>alert('2 Validez de sesion ".$respuesta." ')</script>";
                 //Ingresa el usuario en el arreglo de la Clase respuesta
+                echo "<script>alert('ALEX ')</script>";
                 $respuesta->setArrUsuarios($usuario);
+                echo "<script>alert('ALEX ".$respuesta->RespUsuarios[0]->getTxusunombre()." ')</script>";
+
+                $respuesta->setArrCalificaciones($califica);
+                $respuesta->setArrGrupos($grupos);
                 
             } else {
                 $respuesta->setRespuesta($respSesionVali);

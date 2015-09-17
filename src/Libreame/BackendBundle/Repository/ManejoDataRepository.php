@@ -15,6 +15,7 @@ use Libreame\BackendBundle\Entity\LbSesiones;
 use Libreame\BackendBundle\Entity\LbActsesion;
 use Libreame\BackendBundle\Entity\LbGeneroslibros;
 use Libreame\BackendBundle\Entity\LbMembresias;
+use Libreame\BackendBundle\Entity\LbCalificausuarios;
 /**
  * Description of ManejoDataRepository
  *
@@ -403,13 +404,13 @@ class ManejoDataRepository extends EntityRepository {
     }
     
     //Obtiene todos los grupos a los que pertenece el usuario
-    public function getGruposUsuario(Array $memb)
+    public function getGruposUsuario(LbUsuarios $usuario)
     {   
         try{
             $em = $this->getDoctrine()->getManager();
-            $sql = "SELECT e FROM LibreameBackendBundle:LbGrupos e "
-                    ." WHERE e.ingrupo in (:grupos) ";
-            $query = $em->createQuery($sql)->setParameter('grupos', $memb);
+            $sql = "SELECT g.ingrunombre FROM LibreameBackendBundle:LbGrupos g JOIN LibreameBackendBundle:LbMembresias m"
+                    ." WHERE m.inmemusuario = :usuario) ";
+            $query = $em->createQuery($sql)->setParameter('usuario', $usuario);
             return $query->getResult();
         } catch (Exception $ex) {
                 return new LbGrupos();
@@ -436,6 +437,32 @@ class ManejoDataRepository extends EntityRepository {
         } 
     }
                 
+    //Obtiene las calificaciones RECIBIDAS por un usuario
+    public function getCalificaUsuarioRecibidas(LbUsuarios $usuario)
+    {
+        try{
+            $em = $this->getDoctrine()->getManager();
+            return $em->getRepository('LibreameBackendBundle:LbCalificausuarios')->
+                    findBy(array('incalusucalificado' => $usuario));;
+            $em->flush();
+        } catch (Exception $ex) {
+                return new LbCalificausuarios();
+        } 
+    }
+
+    //Obtiene las calificaciones REALIZADAS por un usuario
+    public function getCalificaUsuarioRealizadas(LbUsuarios $usuario)
+    {
+        try{
+            $em = $this->getDoctrine()->getManager();
+            return $em->getRepository('LibreameBackendBundle:LbCalificausuarios')->
+                    findBy(array('incalusucalifica' => $usuario));;
+            $em->flush();    
+
+        } catch (Exception $ex) {
+                return new LbCalificausuarios();
+        } 
+    }
 
                 
     //Guarda CUALQUIER ENTIDAD del parametro

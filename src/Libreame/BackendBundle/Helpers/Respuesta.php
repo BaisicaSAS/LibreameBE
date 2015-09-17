@@ -3,6 +3,8 @@
 namespace Libreame\BackendBundle\Helpers;
 
 use Libreame\BackendBundle\Entity\LbUsuarios;
+use Libreame\BackendBundle\Entity\LbGrupos;
+use Libreame\BackendBundle\Entity\LbCalificausuarios;
 
 /**
  * Esta clase contiene la información de RESPUESTA A una solicitud de usuario::: 
@@ -16,9 +18,11 @@ class Respuesta {
     private $pRespuesta; //Respuesta ID
     private $pSession; //Sesion ???? 
     private $pCantMensajes; //Cantidad de Mensajes
-    public $RespUsuarios; //Arreglo de Usuarios 
-    private $puntUsuario; //Puntero para los usuarios
-	    
+    public  $RespUsuarios; //Arreglo de Usuarios 
+    private $RespCalifUsu; //Arreglo de calificaciones de usuario
+    private $RespGrupos; //Arreglo de calificaciones de usuario
+    private $CalifPromedio; //CAlificacion promedio que ha obtenido el usuario
+
     /*
      *  Bloque de getter para los atributos de la clase
      */
@@ -39,6 +43,21 @@ class Respuesta {
         return $this->pCantMensajes;
     }
     
+    public function getArrUsuarios()
+    {
+        return $this->RespUsuarios;
+    }   
+
+    public function getArrCalificaciones()
+    {
+        return $this->RespCalifUsu;
+    }   
+
+    public function getArrGrupos()
+    {
+        return $this->RespGrupos;
+    }   
+
     /*
      *  Bloque de setter para los atributos de la clase
      */
@@ -62,44 +81,24 @@ class Respuesta {
         return $this;
     }
 
+
+    public function setArrCalificaciones(LbCalificausuarios $califica)
+    {
+        $this->RespCalifUsu[] = $califica;
+        //return $this;
+    }   
+
+    public function setArrGrupos(LbGrupos $grupos)
+    {
+        $this->RespGrupos[] = $grupos;
+        //return $this;
+    }   
+
     public function setArrUsuarios(LbUsuarios $usuario)
     {
         $this->RespUsuarios[] = $usuario;
+        //return $this;
     }   
 
-    //Bloque otras funciones para arreglos
-    public function actualUsuarios ()
-    {
-        if (! $this->validoUsuario()) { return false; }
-        if (empty($this->RespUsuarios[$this->puntUsuario])) { return array(); }
-        return $this->RespUsuarios[$this->puntUsuario];
-    }
-    
-    public function keyUsuarios()
-    {
-        return $this->puntUsuario;
-    }
-    
-    public function siguienteUsuario()
-    {
-        return ++ $this->puntUsuario;
-    }
-    
-    public function redimensionarUsuarios()
-    {
-        $this->puntUsuario = 0;
-    }
-    
-    public function validoUsuario()
-    {
-	return $this->puntUsuario !== false;
-    }
-    
-    
-    public function cantidadUsuarios()
-    {
-        return count($this->RespUsuarios);
-    }
-        
 }
 

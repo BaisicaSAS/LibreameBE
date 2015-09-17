@@ -14,6 +14,7 @@ use Libreame\BackendBundle\Entity\LbUsuarios;
 use Libreame\BackendBundle\Entity\LbSesiones;
 use Libreame\BackendBundle\Entity\LbEjemplares;
 use Libreame\BackendBundle\Entity\LbActsesion;
+use Libreame\BackendBundle\Helpers\Respuesta;
 
 
 class Logica {   
@@ -179,7 +180,7 @@ class Logica {
         try {
             //Recupera el lugar, de la tabla de Lugares
             
-            //$lugar = new LbLugares();
+            $lugar = new LbLugares();
             if ($respuesta->getRespuesta()== AccesoController::inULogged){
                 $lugar = ManejoDataRepository::getLugar($respuesta->RespUsuarios[0]->getInusulugar());
             }
@@ -197,7 +198,9 @@ class Logica {
                         'usuimagen' => $respuesta->RespUsuarios[0]->getTxusuimagen(), 
                         'usufecnac' => $respuesta->RespUsuarios[0]->getFeusunacimiento(),
                         'usulugar' => $lugar->getInlugar(), 
-                        'usunomlugar' => $lugar->getTxlugnombre())))));
+                        'usunomlugar' => $lugar->getTxlugnombre())),
+                    'comentarios' => (array($respuesta->getArrCalificaciones())),
+                    'grupos' => (array($respuesta->getArrGrupos())))));
         } catch (Exception $ex) {
                 return AccesoController::inPlatCai;
         } 

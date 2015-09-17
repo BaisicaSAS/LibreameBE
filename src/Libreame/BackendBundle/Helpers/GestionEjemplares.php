@@ -45,17 +45,11 @@ class GestionEjemplares {
                 //Busca el usuario 
                 $usuario = ManejoDataRepository::getUsuarioByEmail($psolicitud->getEmail());
                 
-                $membresia= ManejoDataRepository::getMembresiasUsuario($usuario);
+                //$membresia= ManejoDataRepository::getMembresiasUsuario($usuario);
                 
                 //echo "<script>alert('MEM ".count($membresia)." regs ')</script>";
                 
-                $arrMem = array();
-                foreach ($membresia as $memb){
-                    $arrMem[] = $memb->getInmemgrupo();
-                }
-
-
-                $grupo= ManejoDataRepository::getGruposUsuario($arrMem);
+                $grupo= ManejoDataRepository::getGruposUsuario($usuario);
 
                 $arrGru = array();
                 foreach ($grupo as $gru){
