@@ -409,7 +409,21 @@ class ManejoDataRepository extends EntityRepository {
         try{
             $em = $this->getDoctrine()->getManager();
             $sql = "SELECT g.ingrunombre FROM LibreameBackendBundle:LbGrupos g JOIN LibreameBackendBundle:LbMembresias m"
-                    ." WHERE m.inmemusuario = :usuario) ";
+                    ." WHERE m.inmemusuario = :usuario AND m.inmemgrupo = g.ingrupo";
+            $query = $em->createQuery($sql)->setParameter('usuario', $usuario);
+            return $query->getResult();
+        } catch (Exception $ex) {
+                return new LbGrupos();
+        } 
+    }
+                
+    //Obtiene todos los grupos a los que pertenece el usuario
+    public function getObjetoGruposUsuario(LbUsuarios $usuario)
+    {   
+        try{
+            $em = $this->getDoctrine()->getManager();
+            $sql = "SELECT g FROM LibreameBackendBundle:LbGrupos g JOIN LibreameBackendBundle:LbMembresias m"
+                    ." WHERE m.inmemusuario = :usuario AND g.ingrupo = m.inmemgrupo";
             $query = $em->createQuery($sql)->setParameter('usuario', $usuario);
             return $query->getResult();
         } catch (Exception $ex) {
@@ -421,13 +435,14 @@ class ManejoDataRepository extends EntityRepository {
     public function getEjemplaresDisponibles(Array $grupos, $inultejemplar)
     {   
         try{
-            
             //Recupera cada uno de los ejemplares con ID > al del parametro
             $em = $this->getDoctrine()->getManager();
             $sql = "SELECT e FROM LibreameBackendBundle:LbEjemplares e, "
                     . "LibreameBackendBundle:LbMembresias m,"
-                    . "LibreameBackendBundle:LbUsuarios u WHERE e.inejemplar > ".$inultejemplar
+                    . "LibreameBackendBundle:LbUsuarios u"
+                    . "LibreameBackendBundle:LbOfrecidos o WHERE e.inejemplar > ".$inultejemplar
                     ." and e.inejeusudueno = m.inmemusuario"
+                    . "and o.inofrejemplar = e.inejemplar   "
                     ." and m.inmemgrupo in (:grupos) ";
 
             $query = $em->createQuery($sql)->setParameter('grupos', $grupos);

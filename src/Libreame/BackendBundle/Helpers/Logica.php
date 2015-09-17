@@ -189,8 +189,8 @@ class Logica {
                     'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr(), 
                     'iddevice'=> $pSolicitud->getDeviceMac(), 'marca'=>$pSolicitud->getDeviceMarca(), 
                     'modelo'=>$pSolicitud->getDeviceModelo(), 'so'=>$pSolicitud->getDeviceSO()), 
-                    'idrespuesta' => (array('respuesta' => $respuesta->getRespuesta(),
-                    'usuario' => (array('nomusuario' => $respuesta->RespUsuarios[0]->getTxusunombre(),
+                    'idrespuesta' => array('respuesta' => $respuesta->getRespuesta(),
+                    'usuario' => array('nomusuario' => $respuesta->RespUsuarios[0]->getTxusunombre(),
                         'nommostusuario' => $respuesta->RespUsuarios[0]->getTxusunommostrar(), 
                         'email' => $respuesta->RespUsuarios[0]->getTxusuemail(),
                         'usutelefono' => $respuesta->RespUsuarios[0]->getTxusutelefono(), 
@@ -198,9 +198,9 @@ class Logica {
                         'usuimagen' => $respuesta->RespUsuarios[0]->getTxusuimagen(), 
                         'usufecnac' => $respuesta->RespUsuarios[0]->getFeusunacimiento(),
                         'usulugar' => $lugar->getInlugar(), 
-                        'usunomlugar' => $lugar->getTxlugnombre())),
-                    'comentarios' => (array($respuesta->getArrCalificaciones())),
-                    'grupos' => (array($respuesta->getArrGrupos())))));
+                        'usunomlugar' => $lugar->getTxlugnombre()),
+                    'comentarios' => $respuesta->getArrCalificaciones(),
+                    'grupos' => $respuesta->getArrGrupos()));
         } catch (Exception $ex) {
                 return AccesoController::inPlatCai;
         } 

@@ -49,7 +49,7 @@ class GestionEjemplares {
                 
                 //echo "<script>alert('MEM ".count($membresia)." regs ')</script>";
                 
-                $grupo= ManejoDataRepository::getGruposUsuario($usuario);
+                $grupo= ManejoDataRepository::getObjetoGruposUsuario($usuario);
 
                 $arrGru = array();
                 foreach ($grupo as $gru){
