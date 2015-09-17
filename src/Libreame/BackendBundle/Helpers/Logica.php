@@ -200,7 +200,14 @@ class Logica {
                         'usulugar' => $lugar->getInlugar(), 
                         'usunomlugar' => $lugar->getTxlugnombre()),
                     'comentarios' => $respuesta->getArrCalificaciones(),
-                    'grupos' => $respuesta->getArrGrupos()));
+                    'califpromedio' => '4.3',
+                    'grupos' => $respuesta->getArrGrupos()),
+                    'resumen' => array('ejemplares' => '5', 'vendidos' => '4', 'comprados' => '0', 
+                        'cambiados' => '3', 'donados' => '1'),
+                    'preferencias' => array('generos' => array('genero'=>'Genero 1', 'genero'=>'Genero 2' ), 
+                        'autores' => array('autor'=>'Autor 1', 'autor'=>'Autor 2' ), 
+                        'editoriales' => array('editorial'=>'editorial 1', 'Editorial'=>'Editorial 2' ))
+                );
         } catch (Exception $ex) {
                 return AccesoController::inPlatCai;
         } 

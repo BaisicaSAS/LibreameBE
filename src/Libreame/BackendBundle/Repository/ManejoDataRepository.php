@@ -437,13 +437,13 @@ class ManejoDataRepository extends EntityRepository {
         try{
             //Recupera cada uno de los ejemplares con ID > al del parametro
             $em = $this->getDoctrine()->getManager();
-            $sql = "SELECT e FROM LibreameBackendBundle:LbEjemplares e, "
-                    . "LibreameBackendBundle:LbMembresias m,"
-                    . "LibreameBackendBundle:LbUsuarios u"
-                    . "LibreameBackendBundle:LbOfrecidos o WHERE e.inejemplar > ".$inultejemplar
-                    ." and e.inejeusudueno = m.inmemusuario"
-                    . "and o.inofrejemplar = e.inejemplar   "
-                    ." and m.inmemgrupo in (:grupos) ";
+            $sql = "SELECT e FROM LibreameBackendBundle:LbEjemplares e,"
+                    . " LibreameBackendBundle:LbMembresias m,"
+                    . " LibreameBackendBundle:LbUsuarios u,"
+                    . " LibreameBackendBundle:LbOfrecidos o WHERE e.inejemplar > ".$inultejemplar
+                    . " and e.inejeusudueno = m.inmemusuario"
+                    . " and o.inofrejemplar = e.inejemplar"
+                    . " and m.inmemgrupo in (:grupos) ";
 
             $query = $em->createQuery($sql)->setParameter('grupos', $grupos);
             return $query->getResult();

@@ -422,4 +422,27 @@ class LbLibros
         return $this->txpaginas;
     }
 
+    public function crearLibro($psolicitud)
+    {
+        $libro = new LbLibros();
+        try {
+            $libro->setTxlibtipopublica($psolicitud->getEmail());  
+            $libro->setTxlibtitulo($psolicitud->getEmail());  
+            $libro->setTxlibautores($psolicitud->getEmail());  
+            $libro->setTxlibidioma($psolicitud->getTelefono());  
+            $libro->setTxlibeditorial($psolicitud->getClave());  
+            $libro->setTxlibedicionanio('DEFAULT IMAGE URL');  
+            $libro->setTxlibedicionnum($psolicitud);  
+            $libro->setTxlibedicionpais($psolicitud->getEmail());  
+            $libro->setTxlibcodigoofic($psolicitud->getEmail());  
+            $libro->setTxlibresumen($psolicitud->getEmail());  
+            $libro->setTxlibtomo($psolicitud->getTelefono());  
+            $libro->setTxlibvolumen($psolicitud->getClave());  
+            $libro->setTxpaginas('DEFAULT IMAGE URL');  
+
+            return $libro;
+        } catch (Exception $ex)  {    
+            return $libro;
+        }
+    }
 }

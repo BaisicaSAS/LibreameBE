@@ -62,4 +62,5 @@ class LbGeneros
     {
         return $this->txgennombre;
     }
+    
 }

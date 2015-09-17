@@ -29,10 +29,13 @@ class Solicitud {
     //$pUltEjemplar
     private $pUltEjemplar;
     //Parametros para la creación de un Ejemplar, cargue o búsqueda del libro y de los generos
-    private $pEjemplar;
-    private $pLibro;
-    private $pGenero;
-    
+    private $pTitulo;
+    private $pIdlibro;
+    private $pTipopublica; //{0:Libro || 1:Revista || 2:Periodico}
+    private $pIdioma;
+    private $pAvaluo;
+    private $pPublicar;
+
     /*
      *  Bloque de getter para los atributos de la clase
      */
@@ -79,6 +82,30 @@ class Solicitud {
 
     public function getUltEjemplar() {
         return $this->pUltEjemplar;
+    }
+    
+    public function getTitulo() {
+        return $this->pTitulo;
+    }
+    
+    public function getIdLibro() {
+        return $this->pIdlibro;
+    }
+    
+    public function getTipopublica() {
+        return $this->pTipopublica;
+    }
+    
+    public function getIdioma() {
+        return $this->pIdioma;
+    }
+    
+    public function getAvaluo() {
+        return $this->pAvaluo;
+    }
+    
+    public function getPublicar() {
+        return $this->pPublicar;
     }
     
     /*
@@ -142,4 +169,35 @@ class Solicitud {
         }
         return $this;
     }
+
+    public function setTitulo($pTitulo) {
+        $this->pTitulo = $pTitulo;
+        return $this;
+    }
+    
+    public function setIdLibro($pIdlibro) {
+        $this->pIdlibro = $pIdlibro;
+        return $this;
+    }
+    
+    public function setTipopublica($pTipopublica) {
+        $this->pTipopublica = $pTipopublica;
+        return $this;
+    }
+    
+    public function setIdioma($pIdioma) {
+        $this->pIdioma = $pIdioma;
+        return $this;
+    }
+    
+    public function setAvaluo($pAvaluo) {
+        $this->pAvaluo = $pAvaluo;
+        return $this;
+    }
+    
+    public function setPublicar($pPublicar) {
+        $this->pPublicar = $pPublicar;
+        return $this;
+    }
+    
 }

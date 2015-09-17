@@ -159,4 +159,20 @@ class LbEjemplares
     {
         return $this->inejeusudueno;
     }
+    
+    public function crearEjemplar($psolicitud)
+    {
+        $ejemplar = new LbEjemplares();
+        try {
+            $ejemplar->setInejecantidad($pSolicitud->getEmail());  
+            $ejemplar->setDbejeavaluo($pSolicitud->getEmail());  
+            $ejemplar->setInejelibro($pSolicitud->getEmail());  
+            $ejemplar->setInejeusudueno($pSolicitud->getTelefono());  
+     
+            return $ejemplar;
+        } catch (Exception $ex)  {    
+            return $ejemplar;
+        }
+    }
+    
 }

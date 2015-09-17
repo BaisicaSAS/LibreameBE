@@ -12,17 +12,17 @@ class LbGeneroslibros
     /**
      * @var integer
      */
-    private $ingenerolibro;
+    protected $ingenerolibro;
 
     /**
      * @var \Libreame\BackendBundle\Entity\LbGeneros
      */
-    private $ingligenero;
+    protected $ingligenero;
 
     /**
      * @var \Libreame\BackendBundle\Entity\LbLibros
      */
-    private $inglilibro;
+    protected $inglilibro;
 
 
     /**

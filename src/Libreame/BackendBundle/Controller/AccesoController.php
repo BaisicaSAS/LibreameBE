@@ -8,7 +8,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Libreame\BackendBundle\Helpers\Logica;
 use Libreame\BackendBundle\Helpers\Solicitud;
 use Libreame\BackendBundle\Helpers\Respuesta;
-
+use Libreame\BackendBundle\Entity\LbEjemplares;
+use Libreame\BackendBundle\Entity\LbLibros;
+use Libreame\BackendBundle\Entity\LbGeneros;
 /*
  * Controlador que contiene las funciones que validan, controlan y despachan 
  * el acceso a todas las url. Esto implica la generacion y validacion de Tokens
@@ -220,6 +222,13 @@ class AccesoController extends Controller
                         //echo "<script>alert('ENTRA POR PUBLICAR')</script>";
                         $this->objSolicitud->setEmail($json_datos['idsolicitud']['email']);
                         $this->objSolicitud->setClave($json_datos['idsolicitud']['clave']);
+                        $this->objSolicitud->setTitulo($json_datos['idsolicitud']['titulo']);
+                        $this->objSolicitud->setIdLibro($json_datos['idsolicitud']['idlibro']);
+                        $this->objSolicitud->setTipopublica($json_datos['idsolicitud']['tipopublica']);
+                        $this->objSolicitud->setIdioma($json_datos['idsolicitud']['idioma']);
+                        $this->objSolicitud->setAvaluo($json_datos['idsolicitud']['avaluo']);
+                        $this->objSolicitud->setPublicar($json_datos['idsolicitud']['publicar']); //Indica si publica o no el ejemplar
+                        Faltan los datos de precio / cambio / etc del ejemplar
                         break;
                     }
 
