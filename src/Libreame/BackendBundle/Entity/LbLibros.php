@@ -434,7 +434,9 @@ class LbLibros
             $libro->setTxlibedicionanio('');  
             $libro->setTxlibedicionnum('');  
             $libro->setTxlibedicionpais('');  
+            $libro->setTxlibediciondescripcion('');  
             $libro->setTxlibcodigoofic('');  
+            $libro->setTxlibcodigoofic13('');  
             $libro->setTxlibresumen('');  
             $libro->setTxlibtomo('');  
             $libro->setTxlibvolumen('');  
