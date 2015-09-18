@@ -35,6 +35,12 @@ class Solicitud {
     private $pIdioma;
     private $pAvaluo;
     private $pPublicar;
+    private $pTituloSol;
+    private $pIdlibroSol;
+    private $pTransacSol;
+    private $pObservaSol;
+    private $pValOferSol;
+    private $pValAdicSol;
 
     /*
      *  Bloque de getter para los atributos de la clase
@@ -108,6 +114,30 @@ class Solicitud {
         return $this->pPublicar;
     }
     
+    public function getTituloSol() {
+        return $this->pTituloSol;
+    }
+    
+    public function getIdLibroSol() {
+        return $this->pIdlibroSol;
+    }
+    
+    public function getTransacSol() {
+        return $this->pTransacSol;
+    }
+    
+    public function getObservaSol() {
+        return $this->pObservaSol;
+    }
+    
+    public function getValOferSol() {
+        return $this->pValOferSol;
+    }
+    
+    public function getValAdicSol() {
+        return $this->pValAdicSol;
+    }
+
     /*
      *  Bloque de setter para los atributos de la clase
      */
@@ -170,16 +200,6 @@ class Solicitud {
         return $this;
     }
 
-    public function setTitulo($pTitulo) {
-        $this->pTitulo = $pTitulo;
-        return $this;
-    }
-    
-    public function setIdLibro($pIdlibro) {
-        $this->pIdlibro = $pIdlibro;
-        return $this;
-    }
-    
     public function setTipopublica($pTipopublica) {
         $this->pTipopublica = $pTipopublica;
         return $this;
@@ -200,4 +220,33 @@ class Solicitud {
         return $this;
     }
     
+    public function setTituloSol($pTituloSol) {
+        $this->pTituloSol = $pTituloSol;
+        return $this;
+    }
+    
+    public function setIdLibroSol($pIdlibroSol) {
+        $this->pIdlibroSol = $pIdlibroSol;
+        return $this;
+    }
+    
+    public function setTransacSol($pTransacSol) {
+        $this->pTransacSol = $pTransacSol;
+        return $this;
+    }
+    
+    public function setObservaSol($pObservaSol) {
+        $this->pObservaSol= $pObservaSol;
+        return $this;
+    }
+    
+    public function setValOferSol($pValOferSol) {
+        $this->pValOferSol = $pValOferSol;
+        return $this;
+    }
+    
+    public function setValAdicSol($pValAdicSol) {
+        $this->pValAdicSol = $pValAdicSol;
+        return $this;
+    }
 }

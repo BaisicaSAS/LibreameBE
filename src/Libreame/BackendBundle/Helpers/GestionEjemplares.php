@@ -96,8 +96,10 @@ class GestionEjemplares {
             //echo "<script>alert(' recuperarFeedEjemplares :: Validez de sesion ".$respSesionVali." ')</script>";
             if ($respSesionVali==AccesoController::inULogged) 
             {    
-                //echo "<script>alert(' recuperarFeedEjemplares :: FindAll ')</script>";
-                //Busca el usuario 
+                //Si el ID del libro esta seteado en la solicitud se recupera de la BD, de lo contrario se crea
+                if($psolicitud->getIdlibro() != '') {
+                    
+                }
                 $usuario = ManejoDataRepository::getUsuarioByEmail($psolicitud->getEmail());
                 
                 //$membresia= ManejoDataRepository::getMembresiasUsuario($usuario);

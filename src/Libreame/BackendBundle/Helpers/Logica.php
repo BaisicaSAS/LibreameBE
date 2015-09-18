@@ -198,15 +198,14 @@ class Logica {
                         'usuimagen' => $respuesta->RespUsuarios[0]->getTxusuimagen(), 
                         'usufecnac' => $respuesta->RespUsuarios[0]->getFeusunacimiento(),
                         'usulugar' => $lugar->getInlugar(), 
-                        'usunomlugar' => $lugar->getTxlugnombre()),
-                    'comentarios' => $respuesta->getArrCalificaciones(),
-                    'califpromedio' => '4.3',
-                    'grupos' => $respuesta->getArrGrupos()),
-                    'resumen' => array('ejemplares' => '5', 'vendidos' => '4', 'comprados' => '0', 
-                        'cambiados' => '3', 'donados' => '1'),
-                    'preferencias' => array('generos' => array('genero'=>'Genero 1', 'genero'=>'Genero 2' ), 
-                        'autores' => array('autor'=>'Autor 1', 'autor'=>'Autor 2' ), 
-                        'editoriales' => array('editorial'=>'editorial 1', 'Editorial'=>'Editorial 2' ))
+                        'usunomlugar' => $lugar->getTxlugnombre(),
+                        'comentarios' => $respuesta->getArrCalificaciones(),
+                        'grupos' => $respuesta->getArrGrupos(),
+                        'resumen' => array('ejemplares' => '5', 'vendidos' => '4', 'comprados' => '0', 
+                            'cambiados' => '3', 'donados' => '1'),
+                        'preferencias' => array('generos' => array(array('genero'=>'Genero 1'), array('genero'=>'Genero 2') ), 
+                            'autores' => array(array('autor'=>'Autor 1'), array('autor'=>'Autor 2') ), 
+                            'editoriales' => array(array('editorial'=>'editorial 1'), array('editorial'=>'editorial 2') ))))
                 );
         } catch (Exception $ex) {
                 return AccesoController::inPlatCai;
@@ -219,7 +218,8 @@ class Logica {
      */
     public function respuestaFeedEjemplares($respuesta, $pSolicitud, $parreglo){
         try{
-            $arrTmp[] = array();
+            $arrGeneros = array();
+            $arrTmp = array();
             $ejemplar = new LbEjemplares();
             foreach ($parreglo as $ejemplar){
                 //Recupera nombre del genero, Nombre del libro, Nombre del uduario Dueño

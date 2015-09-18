@@ -227,8 +227,14 @@ class AccesoController extends Controller
                         $this->objSolicitud->setTipopublica($json_datos['idsolicitud']['tipopublica']);
                         $this->objSolicitud->setIdioma($json_datos['idsolicitud']['idioma']);
                         $this->objSolicitud->setAvaluo($json_datos['idsolicitud']['avaluo']);
-                        $this->objSolicitud->setPublicar($json_datos['idsolicitud']['publicar']); //Indica si publica o no el ejemplar
-                        Faltan los datos de precio / cambio / etc del ejemplar
+
+                        $this->objSolicitud->setTituloSol($json_datos['idsolicitud']['titulosol']);
+                        $this->objSolicitud->setIdLibroSol($json_datos['idsolicitud']['idlibrosol']);
+                        $this->objSolicitud->setValAdicSol($json_datos['idsolicitud']['valadicsol']);
+                        $this->objSolicitud->setValOferSol($json_datos['idsolicitud']['valofersol']);
+                        $this->objSolicitud->setTransacSol($json_datos['idsolicitud']['transacsol']);
+                        $this->objSolicitud->setObservaSol($json_datos['idsolicitud']['observasol']);
+
                         break;
                     }
 
