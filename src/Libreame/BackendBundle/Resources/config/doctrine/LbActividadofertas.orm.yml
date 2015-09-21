@@ -16,7 +16,7 @@ Libreame\BackendBundle\Entity\LbActividadofertas:
             type: integer
             nullable: false
             unsigned: false
-            comment: ''
+            comment: 'id de la actividad'
             id: true
             column: inActividadOferta
             generator:
@@ -38,7 +38,7 @@ Libreame\BackendBundle\Entity\LbActividadofertas:
             type: integer
             nullable: true
             unsigned: false
-            comment: "0: No leido\n1: Leido\n2: Ofensivo/Oculto\n3: Privado\n4: Eliminado del hilo (No se eliminan pero estos no deben aparecer nunca.)\n"
+            comment: '0: No leido 1: Leido 2: Ofensivo-Oculto 3: Privado 4: Eliminado del hilo (No se eliminan pero estos no deben aparecer nunca.)'
             default: '0'
             column: inActEstado
     manyToOne:

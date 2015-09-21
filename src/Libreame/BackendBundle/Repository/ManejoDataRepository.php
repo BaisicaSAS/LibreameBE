@@ -16,6 +16,8 @@ use Libreame\BackendBundle\Entity\LbActsesion;
 use Libreame\BackendBundle\Entity\LbGeneroslibros;
 use Libreame\BackendBundle\Entity\LbMembresias;
 use Libreame\BackendBundle\Entity\LbCalificausuarios;
+use Libreame\BackendBundle\Entity\LbOfertas;
+use Libreame\BackendBundle\Entity\LbOfrecidos;
 /**
  * Description of ManejoDataRepository
  *
@@ -24,7 +26,6 @@ use Libreame\BackendBundle\Entity\LbCalificausuarios;
 class ManejoDataRepository extends EntityRepository {
 
     
-
     /*
      * validaSesionUsuario 
      * Valida los datos de la sesion verificando que sea veridica
@@ -36,7 +37,7 @@ class ManejoDataRepository extends EntityRepository {
 
     public function validaSesionUsuario($psolicitud)
     {   
-        $respuesta = AccesoController::inPlatCai;
+        //$respuesta = AccesoController::inPlatCai;
         try{
             //Verifica que el usuario exista, que esté activo, que la clave coincida
             //que corresponda al dispositivo, y que la sesion esté activa
@@ -494,5 +495,141 @@ class ManejoDataRepository extends EntityRepository {
         } 
     }
     
+    /*
+     * Recupera un libro, con su Id numerico
+     */
+    public function getLibroById($idlibro){
+        try{
+            $em = $this->getDoctrine()->getManager();
+            return $em->getRepository('LibreameBackendBundle:LbLibros')->
+                    findBy(array('inlibro' => $idlibro));
+            $em->flush();    
 
+        } catch (Exception $ex) {
+                return new LbLibros();
+        } 
+    }
+    
+    /*
+     * Crea registro en generolibro, para el genero por defecto y lo rtorna
+     */
+    public function asociarGeneroBasicoLibro(LbLibros $libro){
+        $generolibro = new LbGeneroslibros();
+        try{
+            $em = $this->getDoctrine()->getManager();
+            $genero = $em->getRepository('LibreameBackendBundle:LbGeneros')->
+                    findById(AccesoController::inIdGeneral);
+            
+            $generolibro->setIngligenero($genero);
+            $generolibro->setInglilibro($libro);
+            
+            $em->persist($generolibro);
+            $em->flush();    
+
+        } catch (Exception $ex) {
+                return new LbLibros();
+        } 
+    }
+
+    /*
+     * Metodo para crear un libro desde una solicitud
+     */
+    public function crearLibro(Solicitud $psolicitud)
+    {
+        $libro = new LbLibros(); 
+        try {
+            $em = $this->getDoctrine()->getManager();
+            $libro->setTxlibtipopublica($psolicitud->getTipopublica());  
+            $libro->setTxlibtitulo($psolicitud->getTitulo());  
+            $libro->setTxlibautores(AccesoController::txMenNoId);  
+            $libro->setTxlibidioma($psolicitud->getIdioma());  
+            $libro->setTxlibeditorial(AccesoController::txMenNoId);  
+            $libro->setTxlibedicionanio(AccesoController::txMenNoId);  
+            $libro->setTxlibedicionnum(AccesoController::txMenNoId);  
+            $libro->setTxlibedicionpais(AccesoController::txMenNoId); 
+            $libro->setTxlibediciondescripcion(AccesoController::txMenNoId);  
+            $libro->setTxlibcodigoofic(AccesoController::txMenNoId);  
+            $libro->setTxlibcodigoofic13(AccesoController::txMenNoId);  
+            $libro->setTxlibresumen(AccesoController::txMenNoId);  
+            $libro->setTxlibtomo(AccesoController::txMenNoId);  
+            $libro->setTxlibvolumen(AccesoController::txMenNoId);  
+            $libro->setTxpaginas(AccesoController::txMenNoId);  
+            $em->persist($libro);
+            $em->flush();    
+
+            return $libro;
+        } catch (Exception $ex)  {    
+            return $libro;
+        }
+    }
+    
+    /*
+     * Crea un ejemplar a partir de una solicitud y el libro que representa
+     */
+    public function crearEjemplar(Solicitud $psolicitud, LbLibros $libro, LbUsuarios $usuario)
+    {
+        $ejemplar = new LbEjemplares();
+        try {
+            $em = $this->getDoctrine()->getManager();
+            $ejemplar->setInejecantidad(AccesoController::inIdGeneral);//Se utiliza esta constante porque representa el # 1  
+            $ejemplar->setDbejeavaluo($psolicitud->getAvaluo());  
+            $ejemplar->setInejelibro($libro);  
+            $ejemplar->setInejeusudueno($usuario);  
+     
+            $em->persist($ejemplar);
+            $em->flush();    
+            
+            return $ejemplar;
+        } catch (Exception $ex)  {    
+            return $ejemplar;
+        }
+    }
+    
+    /*
+     * Genera una oferta para un ejemplar especifico
+     * NOTA:: Por ahora todas las ofertas se generan sobre el grupo General, aun no se implementa GRUPOS FULL
+     */
+    public function generarOfertaEjemplar(Solicitud $psolicitud, LbEjemplares $ejemplar, LbUsuarios $usuario)
+    {
+        try {
+            $fecha = new \DateTime;
+            $em = $this->getDoctrine()->getManager();
+            //Obtiene el objeto Membresia a grupo general para el usuario
+            $grupo = $em->getRepository('LibreameBackendBundle:LbGrupos')->
+                    findById(AccesoController::inIdGeneral);
+            $membresia = $em->getRepository('LibreameBackendBundle:LbMembresias')->
+                    findOneBy(array('inmemgrupo' => $grupo, 'inmemusuario' => $usuario));
+            
+            //Registro de oferta
+            $oferta = new LbOfertas();
+            $oferta->setFeofefecha($fecha);
+            $oferta->setInofemembresia($membresia);
+            //Por ahora no se utilizará este dato, hay que revisar periodicamente 
+            //si la oferta lleva mas de x días para informar al usuario
+            $oferta->setInofevigencia(0); 
+            $oferta->setInofeabierta(AccesoController::inIdGeneral); //Se utiliza esta constante porque su valor es 1 
+            $oferta->setInofeactiva(AccesoController::inIdGeneral); //Se utiliza esta constante porque su valor es 1
+            
+            $em->persist($oferta);
+            $em->flush();    
+            
+            //Registro de ofrecidos
+            $ofrecido = new LbOfrecidos(); 
+            $ofrecido->setInofrejemplar($ejemplar);
+            $ofrecido->setInofroferta($oferta);
+            $ofrecido->setInofrtransac($psolicitud->get);
+            $ofrecido->setTxofrobservacion($psolicitud->ge);
+            $ofrecido->setDbofrvaladic($dbofrvaladic);
+            $ofrecido->setDbofrvaloferta($dbofrvaloferta);
+            
+            $em->persist($ofrecido);
+            $em->flush();    
+            
+            return $ofrecido;
+        } catch (Exception $ex)  {    
+            return $ejemplar;
+        }
+        
+    }
+    
 }

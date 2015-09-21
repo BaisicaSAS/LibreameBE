@@ -3,7 +3,6 @@
 namespace Libreame\BackendBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-
 /**
  * LbEjemplares
  *
@@ -158,21 +157,6 @@ class LbEjemplares
     public function getInejeusudueno()
     {
         return $this->inejeusudueno;
-    }
-    
-    public function crearEjemplar($psolicitud)
-    {
-        $ejemplar = new LbEjemplares();
-        try {
-            $ejemplar->setInejecantidad($pSolicitud->getEmail());  
-            $ejemplar->setDbejeavaluo($pSolicitud->getEmail());  
-            $ejemplar->setInejelibro($pSolicitud->getEmail());  
-            $ejemplar->setInejeusudueno($pSolicitud->getTelefono());  
-     
-            return $ejemplar;
-        } catch (Exception $ex)  {    
-            return $ejemplar;
-        }
     }
     
 }

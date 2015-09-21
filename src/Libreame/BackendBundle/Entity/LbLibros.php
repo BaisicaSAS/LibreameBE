@@ -3,7 +3,6 @@
 namespace Libreame\BackendBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-
 /**
  * LbLibros
  *
@@ -112,6 +111,15 @@ class LbLibros
      */
     protected $txpaginas;
 
+    /**
+     * @var string
+     */
+    private $txediciondescripcion;
+
+    /**
+     * @var string
+     */
+    private $txlibcodigoofic13;
 
     /**
      * Get inlibro
@@ -422,29 +430,50 @@ class LbLibros
         return $this->txpaginas;
     }
 
-    public function crearLibro($psolicitud)
+    /**
+     * Set txediciondescripcion
+     *
+     * @param string $txediciondescripcion
+     * @return LbLibros
+     */
+    public function setTxediciondescripcion($txediciondescripcion)
     {
-        $libro = new LbLibros(); 
-        try {
-            $libro->setTxlibtipopublica($psolicitud->getTipopublica());  
-            $libro->setTxlibtitulo($psolicitud->getTitulo());  
-            $libro->setTxlibautores('');  
-            $libro->setTxlibidioma($psolicitud->getIdioma());  
-            $libro->setTxlibeditorial('');  
-            $libro->setTxlibedicionanio('');  
-            $libro->setTxlibedicionnum('');  
-            $libro->setTxlibedicionpais('');  
-            $libro->setTxlibediciondescripcion('');  
-            $libro->setTxlibcodigoofic('');  
-            $libro->setTxlibcodigoofic13('');  
-            $libro->setTxlibresumen('');  
-            $libro->setTxlibtomo('');  
-            $libro->setTxlibvolumen('');  
-            $libro->setTxpaginas('');  
+        $this->txediciondescripcion = $txediciondescripcion;
 
-            return $libro;
-        } catch (Exception $ex)  {    
-            return $libro;
-        }
+        return $this;
     }
+
+    /**
+     * Get txediciondescripcion
+     *
+     * @return string 
+     */
+    public function getTxediciondescripcion()
+    {
+        return $this->txediciondescripcion;
+    }
+
+    /**
+     * Set txlibcodigoofic13
+     *
+     * @param string $txlibcodigoofic13
+     * @return LbLibros
+     */
+    public function setTxlibcodigoofic13($txlibcodigoofic13)
+    {
+        $this->txlibcodigoofic13 = $txlibcodigoofic13;
+
+        return $this;
+    }
+
+    /**
+     * Get txlibcodigoofic13
+     *
+     * @return string 
+     */
+    public function getTxlibcodigoofic13()
+    {
+        return $this->txlibcodigoofic13;
+    }
+
 }

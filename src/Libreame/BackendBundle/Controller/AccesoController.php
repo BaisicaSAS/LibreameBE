@@ -38,6 +38,7 @@ class AccesoController extends Controller
     const inTamSesi =  30; //Tamaño del id de sesion generado
     const inJsonInv = -10; //Datos inconsistentes
     const txMensaje =  'Solicitud de registro de usuario en Ex4Read'; //Mensaje estandar para el registro de usuario
+    const txMenNoId =  'Sin identificar'; //Mensaje estandar para datos sin identificar
     //Estados del usuario
     const inUsuConf =  0; //Usuario en proceso de confiormacion de registro
     const inUsuActi =  1; //Usuario Activo
@@ -86,6 +87,8 @@ class AccesoController extends Controller
     const inSosAtaq = -3; //Sesion sospechosa de ser ataque ::: AUN NO SE IMPLEMENTA
     const inUsInact = -4; //Usuario inactivo
     const inUsSeIna = -5; //Sesión inactiva
+
+    const inIdGeneral = 1; //Id General para datos basicos :: Genero, Lugar, Grupo 
 
     var $objSolicitud;
     /*

@@ -1,6 +1,22 @@
 Libreame\BackendBundle\Entity\LbLibros:
     type: entity
     table: lb_libros
+    indexes:
+        idx_tipopublica:
+            columns:
+                - txLibTipoPublica
+        idx_titulo:
+            columns:
+                - txLibTitulo
+        idx_editorial:
+            columns:
+                - txLibEditorial
+        idx_ISBN10:
+            columns:
+                - txLibCodigoOfic
+        idx_ISBN13:
+            columns:
+                - txLibCodigoOfic13
     id:
         inlibro:
             type: integer
@@ -29,7 +45,7 @@ Libreame\BackendBundle\Entity\LbLibros:
         txlibautores:
             type: string
             nullable: true
-            length: 200
+            length: 700
             fixed: false
             comment: 'Autores del libro separados por coma'
             column: txLibAutores
@@ -68,13 +84,27 @@ Libreame\BackendBundle\Entity\LbLibros:
             fixed: false
             comment: 'País donde fue editado'
             column: txLibEdicionPais
+        txediciondescripcion:
+            type: string
+            nullable: true
+            length: 45
+            fixed: false
+            comment: 'Descripcion de la edicion: Pasta dura...de lujo, etc'
+            column: txEdicionDescripcion
         txlibcodigoofic:
             type: string
             nullable: true
             length: 45
             fixed: false
-            comment: 'ISBN - ISSN'
+            comment: 'ISBN - ISSN 10'
             column: txLibCodigoOfic
+        txlibcodigoofic13:
+            type: string
+            nullable: true
+            length: 45
+            fixed: false
+            comment: 'ISBN - ISSN 13'
+            column: txLibCodigoOfic13
         txlibresumen:
             type: string
             nullable: true

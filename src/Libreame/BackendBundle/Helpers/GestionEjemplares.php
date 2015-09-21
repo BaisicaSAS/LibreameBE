@@ -7,12 +7,14 @@ use Libreame\BackendBundle\Controller\AccesoController;
 use Libreame\BackendBundle\Repository\ManejoDataRepository;
 
 
+use Libreame\BackendBundle\Entity\LbLibros;
 use Libreame\BackendBundle\Entity\LbUsuarios;
 use Libreame\BackendBundle\Entity\LbEjemplares;
 use Libreame\BackendBundle\Entity\LbDispusuarios;
 use Libreame\BackendBundle\Entity\LbMembresias;
 use Libreame\BackendBundle\Entity\LbSesiones;
 use Libreame\BackendBundle\Entity\LbActsesion;
+use Libreame\BackendBundle\Entity\LbGeneroslibros;
 /**
  * Description of Feeds
  *
@@ -87,9 +89,8 @@ class GestionEjemplares {
         $fecha = new \DateTime;
         $respuesta = new Respuesta();
         $objLogica = $this->get('logica_service');
-        $usuario = new LbUsuarios();
-        $sesion = new LbSesiones();
         $ejemplares = new LbEjemplares();
+        $libro = new LbLibro();
         try {
             //Valida que la sesión corresponda y se encuentre activa
             $respSesionVali=  ManejoDataRepository::validaSesionUsuario($psolicitud);
@@ -97,12 +98,17 @@ class GestionEjemplares {
             if ($respSesionVali==AccesoController::inULogged) 
             {    
                 //Si el ID del libro esta seteado en la solicitud se recupera de la BD, de lo contrario se crea
-                if($psolicitud->getIdlibro() != '') {
-                    
-                }
                 $usuario = ManejoDataRepository::getUsuarioByEmail($psolicitud->getEmail());
+                if($psolicitud->getIdlibro() != '') {
+                    $libro = ManejoDataRepository::getLibroById($psolicitud->getIdlibro());
+                    //Crear la asociación del libro con genero, si no existe el libro
+                    ManejoDataRepository::asociarGeneroBasicoLibro($libro);
+                } else {
+                    $libro = ManejoDataRepository::crearLibro($psolicitud);
+                }
+                $ejemplar = ManejoDataRepository::crearEjemplar($psolicitud,$libro,$usuario);
                 
-                //$membresia= ManejoDataRepository::getMembresiasUsuario($usuario);
+                //$membresia= ManejoDataRepository::getMembresiasUsuario($usuario)
                 
                 //echo "<script>alert('MEM ".count($membresia)." regs ')</script>";
                 

@@ -28,7 +28,7 @@ Libreame\BackendBundle\Entity\LbHistoriaejemplar:
             type: integer
             nullable: false
             unsigned: false
-            comment: "Indica:\n0: si es el usuario original (en Libreame)\n1: si lo cambió\n2: si lo compró"
+            comment: "Indica:\n0: si es el usuario original (en ex4Read)\n1: si lo cambió (recibiendolo)\n2: si lo compró (recibiendolo)\n3. si lo cambio (entregandolo)\n4. si lo vendió (entregandolo)\n5. si lo donó (entregandolo)"
             default: '0'
             column: inHEjModo
     manyToOne:
