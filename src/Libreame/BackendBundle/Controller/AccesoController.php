@@ -79,6 +79,9 @@ class AccesoController extends Controller
     const txAccModifPQR =  '25'; //Modificar una PQR
     const txAccElimiPQR =  '26'; //Eliminar una PQR
 
+    const txEjemplarPub =  'P'; //Indica que es el ejemplar a publicar de la solicitud
+    const txEjemplarSol =  'S'; //Indica que es el ejemplar a Solicitar de la solicitud
+
     //Constantes de la funcion Login
     const inUsClInv =  0;  //Usuario o clave inválidos
     const inULogged =  1;  //Usuario logeado exitosamente

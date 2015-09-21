@@ -101,46 +101,32 @@ class GestionEjemplares {
                 $usuario = ManejoDataRepository::getUsuarioByEmail($psolicitud->getEmail());
                 if($psolicitud->getIdlibro() != '') {
                     $libro = ManejoDataRepository::getLibroById($psolicitud->getIdlibro());
+                } else {
+                    $libro = ManejoDataRepository::crearLibro($psolicitud, AccesoController::txEjemplarPub);
                     //Crear la asociación del libro con genero, si no existe el libro
                     ManejoDataRepository::asociarGeneroBasicoLibro($libro);
-                } else {
-                    $libro = ManejoDataRepository::crearLibro($psolicitud);
                 }
+
+                //Crea elejemplar
                 $ejemplar = ManejoDataRepository::crearEjemplar($psolicitud,$libro,$usuario);
                 
-                //$membresia= ManejoDataRepository::getMembresiasUsuario($usuario)
-                
-                //echo "<script>alert('MEM ".count($membresia)." regs ')</script>";
-                
-                $grupo= ManejoDataRepository::getObjetoGruposUsuario($usuario);
+                //Genera la oferta para el ejemplar
+                ManejoDataRepository::generarOfertaEjemplar($psolicitud, $ejemplar, $usuario);
 
-                $arrGru = array();
-                foreach ($grupo as $gru){
-                    $arrGru[] = $gru->getIngrupo();
-                }
-
-
-                $ejemplares = ManejoDataRepository::getEjemplaresDisponibles($arrGru, $psolicitud->getUltEjemplar());
-                $respuesta->setRespuesta(AccesoController::inExitoso);
-
-                //SE INACTIVA PORQUE PUEDE GENERAR UNA GRAN CANTIDAD DE REGISTROS EN UNA SOLA SESION
                 //Busca y recupera el objeto de la sesion:: 
-                //$sesion = ManejoDataRepository::recuperaSesionUsuario($usuario,$psolicitud);
-                //echo "<script>alert('La sesion es ".$sesion->getTxsesnumero()." ')</script>";
+                $sesion = ManejoDataRepository::recuperaSesionUsuario($usuario,$psolicitud);
                 //Guarda la actividad de la sesion:: 
-                //ManejoDataRepository::generaActSesion($sesion,AccesoController::inDatoUno,"Recupera Feed de Ejemplares".$psolicitud->getEmail()." recuperados con éxito ",$psolicitud->getAccion(),$fecha,$fecha);
+                ManejoDataRepository::generaActSesion($sesion,AccesoController::inDatoUno,$libro->getTxlibtitulo()." publicado con éxito por ".$psolicitud->getEmail(),$psolicitud->getAccion(),$fecha,$fecha);
                 //echo "<script>alert('Generó actividad de sesion ')</script>";
-                
-                return $objLogica::generaRespuesta($respuesta, $psolicitud, $ejemplares);
+
+                return $objLogica::generaRespuesta($respuesta, $psolicitud);
             } else {
                 $respuesta->setRespuesta($respSesionVali);
-                $ejemplares = array();
-                return $objLogica::generaRespuesta($respuesta, $psolicitud, $ejemplares);
+                return $objLogica::generaRespuesta($respuesta, $psolicitud);
             }
         } catch (Exception $ex) {
             $respuesta->setRespuesta(AccesoController::inPlatCai);
-            $ejemplares = array();
-            return $objLogica::generaRespuesta($respuesta, $psolicitud, $ejemplares);
+            return $objLogica::generaRespuesta($respuesta, $psolicitud);
         }
        
     }

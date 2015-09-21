@@ -37,7 +37,7 @@ class Solicitud {
     private $pPublicar;
     private $pTituloSol;
     private $pIdlibroSol;
-    private $pTransacSol;
+    private $pTransacSol;  //Cambio
     private $pObservaSol;
     private $pValOferSol;
     private $pValAdicSol;

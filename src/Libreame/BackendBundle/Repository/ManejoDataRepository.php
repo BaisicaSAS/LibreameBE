@@ -17,7 +17,9 @@ use Libreame\BackendBundle\Entity\LbGeneroslibros;
 use Libreame\BackendBundle\Entity\LbMembresias;
 use Libreame\BackendBundle\Entity\LbCalificausuarios;
 use Libreame\BackendBundle\Entity\LbOfertas;
+use Libreame\BackendBundle\Entity\LbSolicitados;
 use Libreame\BackendBundle\Entity\LbOfrecidos;
+use Libreame\BackendBundle\Entity\LbActividadofertas;
 /**
  * Description of ManejoDataRepository
  *
@@ -532,17 +534,23 @@ class ManejoDataRepository extends EntityRepository {
     }
 
     /*
-     * Metodo para crear un libro desde una solicitud
+     * Metodo para crear un libro desde una solicitud, en $cual: la P indica que es el 
+     * PUBLICADO, la S, que es SOLICITADO
      */
-    public function crearLibro(Solicitud $psolicitud)
+    public function crearLibro(Solicitud $psolicitud, $cual)
     {
         $libro = new LbLibros(); 
         try {
             $em = $this->getDoctrine()->getManager();
             $libro->setTxlibtipopublica($psolicitud->getTipopublica());  
-            $libro->setTxlibtitulo($psolicitud->getTitulo());  
+            if ($cual == AccesoController::txEjemplarPub) {
+                $libro->setTxlibtitulo($psolicitud->getTitulo());  
+                $libro->setTxlibidioma($psolicitud->getIdioma());  
+            } else {
+                $libro->setTxlibtitulo($psolicitud->getTituloSol());  
+                $libro->setTxlibidioma($psolicitud->getIdioma());  
+            }
             $libro->setTxlibautores(AccesoController::txMenNoId);  
-            $libro->setTxlibidioma($psolicitud->getIdioma());  
             $libro->setTxlibeditorial(AccesoController::txMenNoId);  
             $libro->setTxlibedicionanio(AccesoController::txMenNoId);  
             $libro->setTxlibedicionnum(AccesoController::txMenNoId);  
@@ -591,6 +599,10 @@ class ManejoDataRepository extends EntityRepository {
      */
     public function generarOfertaEjemplar(Solicitud $psolicitud, LbEjemplares $ejemplar, LbUsuarios $usuario)
     {
+        $oferta = new LbOfertas();
+        $ofrecido = new LbOfrecidos(); 
+        $solicitado = new LbSolicitados(); 
+        $actoferta = new LbActividadofertas();
         try {
             $fecha = new \DateTime;
             $em = $this->getDoctrine()->getManager();
@@ -601,7 +613,6 @@ class ManejoDataRepository extends EntityRepository {
                     findOneBy(array('inmemgrupo' => $grupo, 'inmemusuario' => $usuario));
             
             //Registro de oferta
-            $oferta = new LbOfertas();
             $oferta->setFeofefecha($fecha);
             $oferta->setInofemembresia($membresia);
             //Por ahora no se utilizará este dato, hay que revisar periodicamente 
@@ -614,20 +625,58 @@ class ManejoDataRepository extends EntityRepository {
             $em->flush();    
             
             //Registro de ofrecidos
-            $ofrecido = new LbOfrecidos(); 
             $ofrecido->setInofrejemplar($ejemplar);
             $ofrecido->setInofroferta($oferta);
-            $ofrecido->setInofrtransac($psolicitud->get);
+            $ofrecido->setInofrtransac($psolicitud->gettr);
             $ofrecido->setTxofrobservacion($psolicitud->ge);
             $ofrecido->setDbofrvaladic($dbofrvaladic);
             $ofrecido->setDbofrvaloferta($dbofrvaloferta);
             
             $em->persist($ofrecido);
             $em->flush();    
+
+            //Si hay solicitud de libros en cambio se registra
+            $regSol = 0; //Variable para identificar si se debe registrar un ejemplar Solicitado: inicia en false
+            if($psolicitud->getIdlibroSol() != '') {
+                $libro = ManejoDataRepository::getLibroById($psolicitud->getIdlibroSol());
+                $regSol = 1;
+            } else {
+                if ($psolicitud->getTxSol() != ''){ 
+                    $libro = ManejoDataRepository::crearLibro($psolicitud, AccesoController::txEjemplarSol);
+                    //Crear la asociación del libro con genero, si no existe el libro
+                    ManejoDataRepository::asociarGeneroBasicoLibro($libro);
+                    $regSol = 1;
+                }    
+            }
             
+            /* ojo aqui voy pero debo revisar el modelo para los solicitados...no es por ejemplar sino por libro
+            //Registra el libro solicitado
+            if ($regSol == 1){
+                $solicitado->setInsolejemplar($insolejemplar)
+                protected $idsolicitado;
+                protected $insoltransac;
+                protected $txsolobservacion;
+                protected $dbsolvaloferta;
+                protected $dbsolvaladic;
+                protected $insolejemplar;
+
+                protected $insollibro;
+                protected $insoloferta;
+            }
+            */
+            
+            //Actividad ofertas
+            $actoferta->setFeactfechahora($fecha);
+            $actoferta->setTxactdescripcion($psolicitud->getObservasol());
+            $actoferta->setInactoferta($oferta);
+            $actoferta->setInactusuario($usuario);
+            
+            $em->persist($actoferta);
+            $em->flush();
+           
             return $ofrecido;
         } catch (Exception $ex)  {    
-            return $ejemplar;
+            return $ofrecido;
         }
         
     }
