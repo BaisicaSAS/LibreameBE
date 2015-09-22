@@ -637,34 +637,57 @@ class ManejoDataRepository extends EntityRepository {
 
             //Si hay solicitud de libros en cambio se registra
             $regSol = 0; //Variable para identificar si se debe registrar un ejemplar Solicitado: inicia en false
-            if($psolicitud->getIdlibroSol() != '') {
-                $libro = ManejoDataRepository::getLibroById($psolicitud->getIdlibroSol());
+            if($psolicitud->getIdlibroSol1() != '') {
+                $libro1 = ManejoDataRepository::getLibroById($psolicitud->getIdlibroSol1());
                 $regSol = 1;
             } else {
-                if ($psolicitud->getTxSol() != ''){ 
-                    $libro = ManejoDataRepository::crearLibro($psolicitud, AccesoController::txEjemplarSol);
+                if ($psolicitud->getTitulosol1() != ''){ 
+                    $libro1 = ManejoDataRepository::crearLibro($psolicitud, AccesoController::txEjemplarSol1);
                     //Crear la asociación del libro con genero, si no existe el libro
-                    ManejoDataRepository::asociarGeneroBasicoLibro($libro);
+                    ManejoDataRepository::asociarGeneroBasicoLibro($libro1);
                     $regSol = 1;
                 }    
             }
             
-            /* ojo aqui voy pero debo revisar el modelo para los solicitados...no es por ejemplar sino por libro
+            $regSol2 = 0; //Variable para identificar si se debe registrar un ejemplar Solicitado: inicia en false
+            if($psolicitud->getIdlibroSol2() != '') {
+                $libro2 = ManejoDataRepository::getLibroById($psolicitud->getIdlibroSol2());
+                $regSol2 = 2;
+            } else {
+                if ($psolicitud->getTituloSol2() != ''){ 
+                    $libro2 = ManejoDataRepository::crearLibro($psolicitud, AccesoController::txEjemplarSol2);
+                    //Crear la asociación del libro con genero, si no existe el libro
+                    ManejoDataRepository::asociarGeneroBasicoLibro($libro2);
+                    $regSol2 = 2;
+                }    
+            }
+            
             //Registra el libro solicitado
             if ($regSol == 1){
-                $solicitado->setInsolejemplar($insolejemplar)
-                protected $idsolicitado;
-                protected $insoltransac;
-                protected $txsolobservacion;
-                protected $dbsolvaloferta;
-                protected $dbsolvaladic;
-                protected $insolejemplar;
+                $solicitado = new LbSolicitados();
+                $solicitado->setInsoltransac(2);
+                $solicitado->setTxsolobservacion($psolicitud->getObservaSol());
+                $solicitado->setDbsolvaloferta($psolicitud->getValOferSol());
+                $solicitado->setDbsolvaladic($psolicitud->getValAdicSol1());
+                $solicitado->setInsollibro($libro1);
+                $solicitado->setInsoloferta($oferta);
 
-                protected $insollibro;
-                protected $insoloferta;
+                $em->persist($solicitado);
+                $em->flush();
             }
-            */
             
+            if ($regSol == 2){
+                $solicitado = new LbSolicitados();
+                $solicitado->setInsoltransac(2);
+                $solicitado->setTxsolobservacion($psolicitud->getObservaSol());
+                $solicitado->setDbsolvaloferta($psolicitud->getValOferSol());
+                $solicitado->setDbsolvaladic($psolicitud->getValAdicSol1());
+                $solicitado->setInsollibro($libro1);
+                $solicitado->setInsoloferta($oferta);
+
+                $em->persist($solicitado);
+                $em->flush();
+            }
             //Actividad ofertas
             $actoferta->setFeactfechahora($fecha);
             $actoferta->setTxactdescripcion($psolicitud->getObservasol());
@@ -674,9 +697,9 @@ class ManejoDataRepository extends EntityRepository {
             $em->persist($actoferta);
             $em->flush();
            
-            return $ofrecido;
+            return $actoferta;
         } catch (Exception $ex)  {    
-            return $ofrecido;
+            return $actoferta;
         }
         
     }

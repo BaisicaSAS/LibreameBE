@@ -22,7 +22,15 @@ class Respuesta {
     private $RespCalifUsu; //Arreglo de calificaciones de usuario
     private $RespGrupos; //Arreglo de calificaciones de usuario
     private $CalifPromedio; //CAlificacion promedio que ha obtenido el usuario
-
+    //Respuestas para PublicarEjemplar
+    private $idejemplar; //Id ejemplar
+    private $titulo; //Titulo del ejemplar
+    private $estado; //Estado del ejemplar
+    private $idoferta; 
+    private $idmensaje;
+    private $fecha;
+    private $padre;
+    private $descripcion;
     /*
      *  Bloque de getter para los atributos de la clase
      */
@@ -56,6 +64,46 @@ class Respuesta {
     public function getArrGrupos()
     {
         return $this->RespGrupos;
+    }   
+
+    public function getIdEjemplar()
+    {
+        return $this->idejemplar;
+    }   
+
+    public function getTitulo()
+    {
+        return $this->titulo;
+    }   
+
+    public function getEstado()
+    {
+        return $this->estado;
+    }   
+
+    public function getIdOferta()
+    {
+        return $this->idoferta;
+    }   
+
+    public function getIdMensaje()
+    {
+        return $this->idmensaje;
+    }   
+
+    public function getFecha()
+    {
+        return $this->fecha;
+    }   
+
+    public function getPadre()
+    {
+        return $this->padre;
+    }   
+
+    public function getDescripcion()
+    {
+        return $this->descripcion;
     }   
 
     /*
@@ -100,5 +148,53 @@ class Respuesta {
         return $this;
     }   
 
+    public function setIdEjemplar($idejemplar)
+    {
+        $this->idejemplar = $idejemplar;
+        return $this;
+    }   
+
+    public function setTitulo($titulo)
+    {
+        $this->titulo = $titulo;
+        return $this;
+    }   
+    
+    public function setEstado($estado)
+    {
+        $this->estado = $estado;
+        return $this;
+    }   
+
+    public function setIdOferta($idoferta)
+    {
+        $this->idoferta = $idoferta;
+        return $this;
+    }   
+    
+    public function setIdMensaje($idmensaje)
+    {
+        $this->idmensaje = $idmensaje;
+        return $this;
+    }   
+    
+    public function setFecha($fecha)
+    {
+        $this->fecha = $fecha;
+        return $this;
+    }   
+    
+    public function setPadre($padre)
+    {
+        $this->padre = $padre;
+        return $this;
+    }   
+    
+    public function setDescripcion($descripcion)
+    {
+        $this->descripcion = $descripcion;
+        return $this;
+    }   
+    
 }
 

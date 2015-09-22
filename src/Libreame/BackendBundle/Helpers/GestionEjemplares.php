@@ -90,7 +90,7 @@ class GestionEjemplares {
         $respuesta = new Respuesta();
         $objLogica = $this->get('logica_service');
         $ejemplares = new LbEjemplares();
-        $libro = new LbLibro();
+        $libro = new LbLibros();
         try {
             //Valida que la sesión corresponda y se encuentre activa
             $respSesionVali=  ManejoDataRepository::validaSesionUsuario($psolicitud);
@@ -111,22 +111,31 @@ class GestionEjemplares {
                 $ejemplar = ManejoDataRepository::crearEjemplar($psolicitud,$libro,$usuario);
                 
                 //Genera la oferta para el ejemplar
-                ManejoDataRepository::generarOfertaEjemplar($psolicitud, $ejemplar, $usuario);
-
+                $actoferta = ManejoDataRepository::generarOfertaEjemplar($psolicitud, $ejemplar, $usuario);
+                
                 //Busca y recupera el objeto de la sesion:: 
                 $sesion = ManejoDataRepository::recuperaSesionUsuario($usuario,$psolicitud);
                 //Guarda la actividad de la sesion:: 
                 ManejoDataRepository::generaActSesion($sesion,AccesoController::inDatoUno,$libro->getTxlibtitulo()." publicado con éxito por ".$psolicitud->getEmail(),$psolicitud->getAccion(),$fecha,$fecha);
                 //echo "<script>alert('Generó actividad de sesion ')</script>";
-
-                return $objLogica::generaRespuesta($respuesta, $psolicitud);
+                $respuesta->setRespuesta($respSesionVali);
+                $respuesta->setIdEjemplar($ejemplar->getInejemplar());
+                $respuesta->setTitulo($libro->getTxlibtitulo());
+                $respuesta->setEstado(1);
+                $respuesta->setIdOferta($actoferta->getInactoferta());
+                $respuesta->setIdMensaje($actoferta->getInactividadoferta());
+                $respuesta->setFecha($actoferta->getFeactfechahora());
+                $respuesta->setPadre($actoferta->getInactpadreact());
+                $respuesta->setDescripcion($actoferta->getTxactdescripcion());
+                
+                return $objLogica::generaRespuesta($respuesta, $psolicitud, NULL);
             } else {
                 $respuesta->setRespuesta($respSesionVali);
-                return $objLogica::generaRespuesta($respuesta, $psolicitud);
+                return $objLogica::generaRespuesta($respuesta, $psolicitud, NULL);
             }
         } catch (Exception $ex) {
             $respuesta->setRespuesta(AccesoController::inPlatCai);
-            return $objLogica::generaRespuesta($respuesta, $psolicitud);
+            return $objLogica::generaRespuesta($respuesta, $psolicitud, NULL);
         }
        
     }

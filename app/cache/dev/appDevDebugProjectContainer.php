@@ -3511,7 +3511,7 @@ class appDevDebugProjectContainer extends Container
             'kernel.root_dir' => 'C:/xampp/htdocs/Ex4ReadBE/app',
             'kernel.environment' => 'dev',
             'kernel.debug' => true,
-            'kernel.name' => 'app',
+            'kernel.name' => 'ap_',
             'kernel.cache_dir' => 'C:/xampp/htdocs/Ex4ReadBE/app/cache/dev',
             'kernel.logs_dir' => 'C:/xampp/htdocs/Ex4ReadBE/app/logs',
             'kernel.bundles' => array(

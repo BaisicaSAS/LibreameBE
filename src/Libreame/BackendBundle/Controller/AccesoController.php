@@ -80,7 +80,8 @@ class AccesoController extends Controller
     const txAccElimiPQR =  '26'; //Eliminar una PQR
 
     const txEjemplarPub =  'P'; //Indica que es el ejemplar a publicar de la solicitud
-    const txEjemplarSol =  'S'; //Indica que es el ejemplar a Solicitar de la solicitud
+    const txEjemplarSol1 =  'S1'; //Indica que es el ejemplar a Solicitar de la solicitud
+    const txEjemplarSol2 =  'S2'; //Indica que es el ejemplar a Solicitar de la solicitud
 
     //Constantes de la funcion Login
     const inUsClInv =  0;  //Usuario o clave inválidos
@@ -230,15 +231,16 @@ class AccesoController extends Controller
                         $this->objSolicitud->setClave($json_datos['idsolicitud']['clave']);
                         $this->objSolicitud->setTitulo($json_datos['idsolicitud']['titulo']);
                         $this->objSolicitud->setIdLibro($json_datos['idsolicitud']['idlibro']);
-                        $this->objSolicitud->setTipopublica($json_datos['idsolicitud']['tipopublica']);
                         $this->objSolicitud->setIdioma($json_datos['idsolicitud']['idioma']);
                         $this->objSolicitud->setAvaluo($json_datos['idsolicitud']['avaluo']);
+                        $this->objSolicitud->setValventa($json_datos['idsolicitud']['valventa']);
 
-                        $this->objSolicitud->setTituloSol($json_datos['idsolicitud']['titulosol']);
-                        $this->objSolicitud->setIdLibroSol($json_datos['idsolicitud']['idlibrosol']);
-                        $this->objSolicitud->setValAdicSol($json_datos['idsolicitud']['valadicsol']);
-                        $this->objSolicitud->setValOferSol($json_datos['idsolicitud']['valofersol']);
-                        $this->objSolicitud->setTransacSol($json_datos['idsolicitud']['transacsol']);
+                        $this->objSolicitud->setTituloSol1($json_datos['idsolicitud']['titulosol1']);
+                        $this->objSolicitud->setIdLibroSol1($json_datos['idsolicitud']['idlibrosol1']);
+                        $this->objSolicitud->setValAdicSol1($json_datos['idsolicitud']['valadicsol1']);
+                        $this->objSolicitud->setTituloSol2($json_datos['idsolicitud']['titulosol2']);
+                        $this->objSolicitud->setIdLibroSol2($json_datos['idsolicitud']['idlibrosol2']);
+                        $this->objSolicitud->setValAdicSol2($json_datos['idsolicitud']['valadicsol2']);
                         $this->objSolicitud->setObservaSol($json_datos['idsolicitud']['observasol']);
 
                         break;

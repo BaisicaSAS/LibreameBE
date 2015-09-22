@@ -31,16 +31,18 @@ class Solicitud {
     //Parametros para la creación de un Ejemplar, cargue o búsqueda del libro y de los generos
     private $pTitulo;
     private $pIdlibro;
-    private $pTipopublica; //{0:Libro || 1:Revista || 2:Periodico}
     private $pIdioma;
     private $pAvaluo;
-    private $pPublicar;
-    private $pTituloSol;
-    private $pIdlibroSol;
-    private $pTransacSol;  //Cambio
+    private $pValVenta;
+    private $pTituloSol1;
+    private $pIdlibroSol1;
+    private $pValAdicSol1;
+    private $pTituloSol2;
+    private $pIdlibroSol2;
+    private $pValAdicSol2;
     private $pObservaSol;
     private $pValOferSol;
-    private $pValAdicSol;
+    
 
     /*
      *  Bloque de getter para los atributos de la clase
@@ -97,11 +99,7 @@ class Solicitud {
     public function getIdLibro() {
         return $this->pIdlibro;
     }
-    
-    public function getTipopublica() {
-        return $this->pTipopublica;
-    }
-    
+        
     public function getIdioma() {
         return $this->pIdioma;
     }
@@ -110,32 +108,40 @@ class Solicitud {
         return $this->pAvaluo;
     }
     
-    public function getPublicar() {
-        return $this->pPublicar;
+    public function getValventa() {
+        return $this->pValVenta;
+    }
+
+    public function getTituloSol1() {
+        return $this->pTituloSol1;
     }
     
-    public function getTituloSol() {
-        return $this->pTituloSol;
+    public function getIdLibroSol1() {
+        return $this->pIdlibroSol1;
+    }
+   
+    public function getValAdicSol1() {
+        return $this->pValAdicSol1;
+    }
+
+    public function getTituloSol2() {
+        return $this->pTituloSol2;
     }
     
-    public function getIdLibroSol() {
-        return $this->pIdlibroSol;
+    public function getIdLibroSol2() {
+        return $this->pIdlibroSol2;
     }
-    
-    public function getTransacSol() {
-        return $this->pTransacSol;
+   
+    public function getValAdicSol() {
+        return $this->pValAdicSol;
     }
-    
+
     public function getObservaSol() {
         return $this->pObservaSol;
     }
     
     public function getValOferSol() {
         return $this->pValOferSol;
-    }
-    
-    public function getValAdicSol() {
-        return $this->pValAdicSol;
     }
 
     /*
@@ -200,11 +206,16 @@ class Solicitud {
         return $this;
     }
 
-    public function setTipopublica($pTipopublica) {
-        $this->pTipopublica = $pTipopublica;
+    public function setTitulo($pTitulo) {
+        $this->pTitulo = $pTitulo;
         return $this;
     }
     
+    public function setIdLibro($pIdlibro) {
+        $this->pIdlibro = $pIdlibro;
+        return $this;
+    }
+        
     public function setIdioma($pIdioma) {
         $this->pIdioma = $pIdioma;
         return $this;
@@ -215,28 +226,43 @@ class Solicitud {
         return $this;
     }
     
-    public function setPublicar($pPublicar) {
-        $this->pPublicar = $pPublicar;
+    public function setValventa($pValVenta) {
+        $this->pValVenta = $pValVenta;
+        return $this;
+    }
+
+    public function setTituloSol1($pTituloSol1) {
+        $this->pTituloSol1 = $pTituloSol1;
         return $this;
     }
     
-    public function setTituloSol($pTituloSol) {
-        $this->pTituloSol = $pTituloSol;
+    public function setIdLibroSol1($pIdLibroSol1) {
+        $this->pIdlibroSol1 = $pIdLibroSol1;
+        return $this;
+    }
+   
+    public function setValAdicSol1($pValAdicSol1) {
+        $this->pValAdicSol1 = $pValAdicSol1;
+        return $this;
+    }
+
+    public function setTituloSol2($pTituloSol2) {
+        $this->pTituloSol2 = $pTituloSol2;
         return $this;
     }
     
-    public function setIdLibroSol($pIdlibroSol) {
-        $this->pIdlibroSol = $pIdlibroSol;
+    public function setIdLibroSol2($pIdLibroSol2) {
+        $this->pIdlibroSol2 = $pIdLibroSol2;
         return $this;
     }
-    
-    public function setTransacSol($pTransacSol) {
-        $this->pTransacSol = $pTransacSol;
+   
+    public function setValAdicSol2($pValAdicSol2) {
+        $this->pValAdicSol2 = $pValAdicSol2;
         return $this;
     }
-    
+
     public function setObservaSol($pObservaSol) {
-        $this->pObservaSol= $pObservaSol;
+        $this->pObservaSol = $pObservaSol;
         return $this;
     }
     
@@ -245,6 +271,7 @@ class Solicitud {
         return $this;
     }
     
+        
     public function setValAdicSol($pValAdicSol) {
         $this->pValAdicSol = $pValAdicSol;
         return $this;
