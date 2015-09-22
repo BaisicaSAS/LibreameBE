@@ -23,7 +23,8 @@ class GestionUsuarios {
 
     public function obtenerParametros($psolicitud)
     {   
-        $fecha = new \DateTime;
+        /*setlocale (LC_TIME, "es_CO");
+        $fecha = new \DateTime;*/
         $respuesta = new Respuesta();
         $objLogica = $this->get('logica_service');
         $usuario = new LbUsuarios();

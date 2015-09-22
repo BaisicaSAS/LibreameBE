@@ -25,7 +25,7 @@ class LbLibros
      *
      * @ORM\Column(name="txLibTipoPublica", type="integer", nullable=false)
      */
-    protected $txlibtipopublica;
+    protected $txlibtipopublica = 0;
 
     /**
      * @var string

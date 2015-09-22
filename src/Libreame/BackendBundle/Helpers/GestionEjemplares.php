@@ -29,9 +29,10 @@ class GestionEjemplares {
      * Por ahora solo tendrá Ejemplares, luego se evaluará si tambien se cargan TRATOS Cerrados / Ofertas realizadas
      */
     
-    public function recuperarFeedEjemplares($psolicitud)
+    public function recuperarFeedEjemplares(Solicitud $psolicitud)
     {   
-        $fecha = new \DateTime;
+        /*setlocale (LC_TIME, "es_CO");
+        $fecha = new \DateTime;*/
         $respuesta = new Respuesta();
         $objLogica = $this->get('logica_service');
         $usuario = new LbUsuarios();
@@ -84,49 +85,21 @@ class GestionEjemplares {
        
     }
     
-    public function publicarEjemplar($psolicitud)
+    public function publicarEjemplar(Solicitud $psolicitud)
     {   
-        $fecha = new \DateTime;
+        /*setlocale (LC_TIME, "es_CO");
+        $fecha = new \DateTime;*/
         $respuesta = new Respuesta();
         $objLogica = $this->get('logica_service');
-        $ejemplares = new LbEjemplares();
-        $libro = new LbLibros();
         try {
             //Valida que la sesión corresponda y se encuentre activa
             $respSesionVali=  ManejoDataRepository::validaSesionUsuario($psolicitud);
             //echo "<script>alert(' recuperarFeedEjemplares :: Validez de sesion ".$respSesionVali." ')</script>";
             if ($respSesionVali==AccesoController::inULogged) 
             {    
-                //Si el ID del libro esta seteado en la solicitud se recupera de la BD, de lo contrario se crea
-                $usuario = ManejoDataRepository::getUsuarioByEmail($psolicitud->getEmail());
-                if($psolicitud->getIdlibro() != '') {
-                    $libro = ManejoDataRepository::getLibroById($psolicitud->getIdlibro());
-                } else {
-                    $libro = ManejoDataRepository::crearLibro($psolicitud, AccesoController::txEjemplarPub);
-                    //Crear la asociación del libro con genero, si no existe el libro
-                    ManejoDataRepository::asociarGeneroBasicoLibro($libro);
-                }
-
-                //Crea elejemplar
-                $ejemplar = ManejoDataRepository::crearEjemplar($psolicitud,$libro,$usuario);
-                
                 //Genera la oferta para el ejemplar
-                $actoferta = ManejoDataRepository::generarOfertaEjemplar($psolicitud, $ejemplar, $usuario);
-                
-                //Busca y recupera el objeto de la sesion:: 
-                $sesion = ManejoDataRepository::recuperaSesionUsuario($usuario,$psolicitud);
-                //Guarda la actividad de la sesion:: 
-                ManejoDataRepository::generaActSesion($sesion,AccesoController::inDatoUno,$libro->getTxlibtitulo()." publicado con éxito por ".$psolicitud->getEmail(),$psolicitud->getAccion(),$fecha,$fecha);
-                //echo "<script>alert('Generó actividad de sesion ')</script>";
+                $respuesta = ManejoDataRepository::generarOfertaEjemplar($psolicitud);
                 $respuesta->setRespuesta($respSesionVali);
-                $respuesta->setIdEjemplar($ejemplar->getInejemplar());
-                $respuesta->setTitulo($libro->getTxlibtitulo());
-                $respuesta->setEstado(1);
-                $respuesta->setIdOferta($actoferta->getInactoferta());
-                $respuesta->setIdMensaje($actoferta->getInactividadoferta());
-                $respuesta->setFecha($actoferta->getFeactfechahora());
-                $respuesta->setPadre($actoferta->getInactpadreact());
-                $respuesta->setDescripcion($actoferta->getTxactdescripcion());
                 
                 return $objLogica::generaRespuesta($respuesta, $psolicitud, NULL);
             } else {
@@ -141,63 +114,3 @@ class GestionEjemplares {
     }
     
 }
-/*http://localhost/Ex4ReadBE/web/app_dev.php/ingreso
-
-    
-in    
-{    "idsesion": {
-        "idaccion": "4",
-        "idtrx": "rvk4aat3k8x30mgvwxli2-xwcig3ha",
-        "ipaddr": "200.000.000.000",
-        "iddevice": "A4MACADDRESS",
-        "marca": "LG",
-        "modelo": "G2 Mini",
-        "so": "KITKAT"
-    },
-    "idsolicitud": {
-        "email": "A4alexviatela@gmail.com",
-        "clave": "clave12345",
-        "ultejemplar": "2"
-    }
-}    
-
-out
-{
-    "idsesion": {
-        "idaccion": "4",
-        "idtrx": "",
-        "ipaddr": "200.000.000.000",
-        "iddevice": "A4MACADDRESS",
-        "marca": "LG",
-        "modelo": "G2 Mini",
-        "so": "KITKAT"
-    },
-    "idrespuesta": {
-        "respuesta": 1,
-        "ejemplares": [
-            [],
-            {
-                "idejemplar": 3,
-                "idgenero": 1,
-                "inejecantidad": 1,
-                "dbavaluo": 0,
-                "indueno": 810,
-                "inlibro": 2,
-                "txgenero": "Genero Prueba",
-                "txlibro": "Libro Prueba 2",
-                "txdueno": "A4alexviatela@gmail.com"
-            },
-            {
-                "idejemplar": 4,
-                "idgenero": 1,
-                "inejecantidad": 3,
-                "dbavaluo": 0,
-                "indueno": 810,
-                "inlibro": 1,
-                "txgenero": "Genero Prueba",
-                "txlibro": "Libro Prueba 1",
-                "txdueno": "A4alexviatela@gmail.com"
-            }
-        ]
-    }
-}*/

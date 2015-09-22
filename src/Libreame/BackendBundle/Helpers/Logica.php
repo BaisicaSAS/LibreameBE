@@ -34,35 +34,42 @@ class Logica {
             //echo "<script>alert('".$tmpSolicitud."-".AccesoController::txAccRegistro."')</script>";
             switch ($tmpSolicitud){
                 //accion de registro en el sistema
-                case AccesoController::txAccRegistro: {//Dato:1
+                case AccesoController::txAccRegistro: {//Dato:1 : Registro en el sistema
                     //echo "<script>alert('Antes de entrar a Registro-".$solicitud->getEmail()."')</script>";
                     $objRegistro = $this->get('registro_service');
                     $respuesta = $objRegistro::registroUsuario($solicitud);
                     break;
                 }    
                 //accion de login en el sistema
-                case AccesoController::txAccIngresos: {//Dato:2
+                case AccesoController::txAccIngresos: {//Dato:2 : Login
                     //echo "<script>alert('Antes de entrar a Login-".$solicitud->getEmail()."')</script>";
                     $objLogin = $this->get('login_service');
                     $respuesta = $objLogin::loginUsuario($solicitud);
                     break;
                 } 
                 //accion de recuperar datos y parametros de usuario
-                case AccesoController::txAccRecParam: {//Dato:3
+                case AccesoController::txAccRecParam: {//Dato:3 : Recuperar datos de usuario (Propio)
                     //echo "<script>alert('Antes de entrar a Recuperar Parametros Usuario-".$solicitud->getEmail()."')</script>";
                     $objGestUsuarios = $this->get('gest_usuarios_service');
                     $respuesta = $objGestUsuarios::obtenerParametros($solicitud);
                     break;
                 } 
 
-                case AccesoController::txAccRecFeeds: {//Dato:4
+                case AccesoController::txAccRecFeeds: {//Dato:4 : Recuperar Feeds de ejemplares
                     //echo "<script>alert('Antes de entrar a Recuperar Parametros Usuario-".$solicitud->getEmail()."')</script>";
                     $objGestEjemplares = $this->get('gest_ejemplares_service');
                     $respuesta = $objGestEjemplares::recuperarFeedEjemplares($solicitud);
                     break;
                 } 
 
-                case AccesoController::txAccPubliEje: {//Dato:13
+                case AccesoController::txAccCerraSes: {//Dato:10 : Cerrar Sesion
+                    //echo "<script>alert('Antes de entrar a Logout-".$solicitud->getEmail()."')</script>";
+                    $objLogin = $this->get('login_service');
+                    $respuesta = $objLogin::logoutUsuario($solicitud);
+                    break;
+                } 
+
+                case AccesoController::txAccPubliEje: {//Dato:13 : Publicar ejemplar
                     //echo "<script>alert('Antes de entrar a Publicar Ejemplar Usuario-".$solicitud->getEmail()."')</script>";
                     $objGestEjemplares = $this->get('gest_ejemplares_service');
                     $respuesta = $objGestEjemplares::publicarEjemplar($solicitud);
@@ -86,7 +93,7 @@ class Logica {
             switch($pSolicitud->getAccion()){
 
                 //accion de registro en el sistema
-                case AccesoController::txAccRegistro:  //Dato: 1 
+                case AccesoController::txAccRegistro:  //Dato: 1  
                     $JSONResp = Logica::respuestaRegistro($respuesta, $pSolicitud);
                     break;
 
@@ -104,6 +111,11 @@ class Logica {
                 //accion de recuperar los feeds de publicaciones nuevas
                 case AccesoController::txAccRecFeeds:  //Dato: 4
                     $JSONResp = Logica::respuestaFeedEjemplares($respuesta, $pSolicitud, $parreglo);
+                    break;
+
+                //accion de cerrar sesion de usuario
+                case AccesoController::txAccCerraSes:  //Dato: 10
+                    $JSONResp = Logica::respuestaCerrarSesion($respuesta, $pSolicitud);
                     break;
 
                 //accion de publicar un ejemplar
@@ -257,6 +269,23 @@ class Logica {
         } 
     }    
     
+    /*
+     * respuestaCerrarSesion: 
+     * Funcion que genera el JSON de respuesta para la accion de Cerrar Sesion :: AccesoController::txAccCerraSes
+     */
+    public function respuestaCerrarSesion($respuesta, $pSolicitud){
+        try {
+            return array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
+                            'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr(), 
+                            'iddevice'=> $pSolicitud->getDeviceMac(), 'marca'=>$pSolicitud->getDeviceMarca(), 
+                            'modelo'=>$pSolicitud->getDeviceModelo(), 'so'=>$pSolicitud->getDeviceSO()), 
+                            'idrespuesta' => (array('respuesta' => $respuesta->getRespuesta())));
+        } catch (Exception $ex) {
+                return AccesoController::inPlatCai;
+        } 
+    }    
+
+
     /*
      * respuestaPublicaeEjemplar: 
      * Funcion que genera el JSON de respuesta para la accion de Publicar un ejemplar :: AccesoController::txAccPubliEje:
