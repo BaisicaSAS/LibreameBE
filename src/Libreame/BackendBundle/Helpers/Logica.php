@@ -118,6 +118,11 @@ class Logica {
                     $JSONResp = Logica::respuestaCerrarSesion($respuesta, $pSolicitud);
                     break;
 
+                //accion de cerrar sesion de usuario
+                case AccesoController::txAccCerraSes:  //Dato: 10
+                    $JSONResp = Logica::respuestaCerrarSesion($respuesta, $pSolicitud);
+                    break;
+
                 //accion de publicar un ejemplar
                 case AccesoController::txAccPubliEje:  //Dato: 13
                     $JSONResp = Logica::respuestaPublicarEjemplar($respuesta, $pSolicitud);
@@ -273,7 +278,7 @@ class Logica {
      * respuestaCerrarSesion: 
      * Funcion que genera el JSON de respuesta para la accion de Cerrar Sesion :: AccesoController::txAccCerraSes
      */
-    public function respuestaCerrarSesion(Respuesta $respuesta, Solicitud $pSolicitud){
+    public function respuestaCerrarSesion($respuesta, $pSolicitud){
         try {
             return array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
                             'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr(), 
@@ -291,23 +296,6 @@ class Logica {
      * Funcion que genera el JSON de respuesta para la accion de Publicar un ejemplar :: AccesoController::txAccPubliEje:
      */
     
-        private $pIdOferta; //Id Oferta
-    private $pTitulo; //Titulo del libro ofrecido
-    private $pIdlibro; //Id del libro ofrecido
-    private $pIdioma; //Idioma
-    private $pAvaluo; //Avalúa
-    private $pValVenta; //Valor venta
-    private $pTituloSol1; //Primer Titulo Solicitado
-    private $pIdlibroSol1; //Primer id del libro Solicitado
-    private $pValAdicSol1; //Valor adicional para el primer libro
-    private $pTituloSol2; //Segundo Titulo Solicitado
-    private $pIdlibroSol2; //Segundo id del libro Solicitado
-    private $pValAdicSol2; //Valor adicional para el segundo libro
-    private $pObservaSol; //Observaciones de la oferta
-    private $pIdMensaje; //Id Mensaje recibido (La plataforma publica el ejemplar)
-    private $pTxMensaje; //Mensaje recibido (La plataforma publica el ejemplar)
-    private $pFeMensaje; //Fecha Mensaje recibido (La plataforma publica el ejemplar)
-
     public function respuestaPublicarEjemplar(Respuesta $respuesta, Solicitud $pSolicitud){
         return array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
                     'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr(), 
@@ -326,7 +314,6 @@ class Logica {
                         'fecha'=>$respuesta->getFeMensaje(), 'padre'=>$respuesta->getIdPadre(),
                         'descripcion'=>$respuesta->getTxMensaje())));
     }    
-    
     
     /*
      * enviaMailRegistro 
