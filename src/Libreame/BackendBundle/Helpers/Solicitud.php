@@ -30,10 +30,7 @@ class Solicitud {
     private $pUltEjemplar;
     //Parametros para la creación de un Ejemplar, cargue o búsqueda del libro y de los generos
     private $pTipopublica; //Tipo de publicacion 0 / 1 / 2
-<<<<<<< HEAD
     private $pIdOferta;
-=======
->>>>>>> origin/master
     private $pTitulo; //Titulo del libro ofrecido
     private $pIdlibro; //Id del libro ofrecido
     private $pIdioma; //Idioma
@@ -100,13 +97,10 @@ class Solicitud {
         return $this->pTipopublica;
     }
     
-<<<<<<< HEAD
     public function getIdOferta() {
         return $this->pIdOferta;
     }
-    
-=======
->>>>>>> origin/master
+
     public function getTitulo() {
         return $this->pTitulo;
     }
@@ -223,14 +217,11 @@ class Solicitud {
         return $this;
     }
     
-<<<<<<< HEAD
     public function setIdOferta($pIdOferta) {
         $this->pIdOferta = $pIdOferta;
         return $this;
     }
 
-=======
->>>>>>> origin/master
     public function setTitulo($pTitulo) {
         $this->pTitulo = $pTitulo;
         return $this;
