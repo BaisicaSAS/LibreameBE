@@ -646,7 +646,7 @@ class ManejoDataRepository extends EntityRepository {
                 $regSol1 = 1;
             } else {
                 if ($psolicitud->getTitulosol1() != ''){ 
-                    if ($libro=ManejoDataRepository::buscarLibroByTitulo($psolicitud->getTituloSol1(),$em)){
+                    if ($libro1=ManejoDataRepository::buscarLibroByTitulo($psolicitud->getTituloSol1(),$em)){
                         $regSol1 = 1;
                     } else {
                         $libro1 = ManejoDataRepository::crearLibro($psolicitud, AccesoController::txEjemplarSol1);
@@ -664,7 +664,7 @@ class ManejoDataRepository extends EntityRepository {
                 $regSol2 = 1;
             } else {
                 if ($psolicitud->getTituloSol2() != ''){ 
-                    if ($libro=ManejoDataRepository::buscarLibroByTitulo($psolicitud->getTituloSol2(),$em)){
+                    if ($libro2=ManejoDataRepository::buscarLibroByTitulo($psolicitud->getTituloSol2(),$em)){
                         $regSol1 = 1;
                     } else {
                         $libro2 = ManejoDataRepository::crearLibro($psolicitud, AccesoController::txEjemplarSol2);
@@ -822,15 +822,15 @@ class ManejoDataRepository extends EntityRepository {
     public function buscarLibroByTitulo($titulo, $em)
     {
         try{
-            $libro = new LbLibros();
+            /*$libro = new LbLibros();
             $sql = "SELECT l FROM LibreameBackendBundle:LbLibros l"
                     ." WHERE l.txlibtitulo LIKE :titulo";
             $query = $em->createQuery($sql)->setParameter('titulo', "%$titulo%");
             $libro = $query->getResult();
-            return $libro;
+            return $libro;*/
 
-            //return $em->getRepository('LibreameBackendBundle:LbLibros')->
-            //        findOneBy(array('txlibtitulo' => $titulo));;
+            return $em->getRepository('LibreameBackendBundle:LbLibros')->
+                    findOneBy(array('txlibtitulo' => $titulo));;
 
         } catch (Exception $ex) {
                 return new LbCalificausuarios();
