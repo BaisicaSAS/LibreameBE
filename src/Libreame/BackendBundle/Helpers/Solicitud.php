@@ -29,19 +29,20 @@ class Solicitud {
     //$pUltEjemplar
     private $pUltEjemplar;
     //Parametros para la creación de un Ejemplar, cargue o búsqueda del libro y de los generos
-    private $pTitulo;
-    private $pIdlibro;
-    private $pIdioma;
-    private $pAvaluo;
-    private $pValVenta;
-    private $pTituloSol1;
-    private $pIdlibroSol1;
-    private $pValAdicSol1;
-    private $pTituloSol2;
-    private $pIdlibroSol2;
-    private $pValAdicSol2;
-    private $pObservaSol;
-    private $pValOferSol;
+    private $pTipopublica; //Tipo de publicacion 0 / 1 / 2
+    private $pIdOferta;
+    private $pTitulo; //Titulo del libro ofrecido
+    private $pIdlibro; //Id del libro ofrecido
+    private $pIdioma; //Idioma
+    private $pAvaluo; //Avalúa
+    private $pValVenta; //Valor venta
+    private $pTituloSol1; //Primer Titulo Solicitado
+    private $pIdlibroSol1; //Primer id del libro Solicitado
+    private $pValAdicSol1; //Valor adicional para el primer libro
+    private $pTituloSol2; //Segundo Titulo Solicitado
+    private $pIdlibroSol2; //Segundo id del libro Solicitado
+    private $pValAdicSol2; //Valor adicional para el segundo libro
+    private $pObservaSol; //Observaciones de la oferta
     
 
     /*
@@ -92,6 +93,14 @@ class Solicitud {
         return $this->pUltEjemplar;
     }
     
+    public function getTipopublica() {
+        return $this->pTipopublica;
+    }
+    
+    public function getIdOferta() {
+        return $this->pIdOferta;
+    }
+    
     public function getTitulo() {
         return $this->pTitulo;
     }
@@ -132,17 +141,14 @@ class Solicitud {
         return $this->pIdlibroSol2;
     }
    
-    public function getValAdicSol() {
-        return $this->pValAdicSol;
+    public function getValAdicSol2() {
+        return $this->pValAdicSol2;
     }
 
     public function getObservaSol() {
         return $this->pObservaSol;
     }
     
-    public function getValOferSol() {
-        return $this->pValOferSol;
-    }
 
     /*
      *  Bloque de setter para los atributos de la clase
@@ -206,6 +212,16 @@ class Solicitud {
         return $this;
     }
 
+    public function setTipopublica($pTipopublica) {
+        $this->pTipopublica = $pTipopublica;
+        return $this;
+    }
+    
+    public function setIdOferta($pIdOferta) {
+        $this->pIdOferta = $pIdOferta;
+        return $this;
+    }
+
     public function setTitulo($pTitulo) {
         $this->pTitulo = $pTitulo;
         return $this;
@@ -266,14 +282,4 @@ class Solicitud {
         return $this;
     }
     
-    public function setValOferSol($pValOferSol) {
-        $this->pValOferSol = $pValOferSol;
-        return $this;
-    }
-    
-        
-    public function setValAdicSol($pValAdicSol) {
-        $this->pValAdicSol = $pValAdicSol;
-        return $this;
-    }
 }

@@ -34,35 +34,42 @@ class Logica {
             //echo "<script>alert('".$tmpSolicitud."-".AccesoController::txAccRegistro."')</script>";
             switch ($tmpSolicitud){
                 //accion de registro en el sistema
-                case AccesoController::txAccRegistro: {//Dato:1
+                case AccesoController::txAccRegistro: {//Dato:1 : Registro en el sistema
                     //echo "<script>alert('Antes de entrar a Registro-".$solicitud->getEmail()."')</script>";
                     $objRegistro = $this->get('registro_service');
                     $respuesta = $objRegistro::registroUsuario($solicitud);
                     break;
                 }    
                 //accion de login en el sistema
-                case AccesoController::txAccIngresos: {//Dato:2
+                case AccesoController::txAccIngresos: {//Dato:2 : Login
                     //echo "<script>alert('Antes de entrar a Login-".$solicitud->getEmail()."')</script>";
                     $objLogin = $this->get('login_service');
                     $respuesta = $objLogin::loginUsuario($solicitud);
                     break;
                 } 
                 //accion de recuperar datos y parametros de usuario
-                case AccesoController::txAccRecParam: {//Dato:3
+                case AccesoController::txAccRecParam: {//Dato:3 : Recuperar datos de usuario (Propio)
                     //echo "<script>alert('Antes de entrar a Recuperar Parametros Usuario-".$solicitud->getEmail()."')</script>";
                     $objGestUsuarios = $this->get('gest_usuarios_service');
                     $respuesta = $objGestUsuarios::obtenerParametros($solicitud);
                     break;
                 } 
 
-                case AccesoController::txAccRecFeeds: {//Dato:4
+                case AccesoController::txAccRecFeeds: {//Dato:4 : Recuperar Feeds de ejemplares
                     //echo "<script>alert('Antes de entrar a Recuperar Parametros Usuario-".$solicitud->getEmail()."')</script>";
                     $objGestEjemplares = $this->get('gest_ejemplares_service');
                     $respuesta = $objGestEjemplares::recuperarFeedEjemplares($solicitud);
                     break;
                 } 
 
-                case AccesoController::txAccPubliEje: {//Dato:13
+                case AccesoController::txAccCerraSes: {//Dato:10 : Cerrar Sesion
+                    //echo "<script>alert('Antes de entrar a Logout-".$solicitud->getEmail()."')</script>";
+                    $objLogin = $this->get('login_service');
+                    $respuesta = $objLogin::logoutUsuario($solicitud);
+                    break;
+                } 
+
+                case AccesoController::txAccPubliEje: {//Dato:13 : Publicar ejemplar
                     //echo "<script>alert('Antes de entrar a Publicar Ejemplar Usuario-".$solicitud->getEmail()."')</script>";
                     $objGestEjemplares = $this->get('gest_ejemplares_service');
                     $respuesta = $objGestEjemplares::publicarEjemplar($solicitud);
@@ -77,7 +84,7 @@ class Logica {
         } 
     }
     
-    public function generaRespuesta($respuesta, $pSolicitud, $parreglo){
+    public function generaRespuesta(Respuesta $respuesta, Solicitud $pSolicitud, $parreglo){
 
         try {
             //echo "<script>alert('ACCION Genera respuesta: ".$pSolicitud->getAccion()."')</script>";
@@ -86,7 +93,7 @@ class Logica {
             switch($pSolicitud->getAccion()){
 
                 //accion de registro en el sistema
-                case AccesoController::txAccRegistro:  //Dato: 1 
+                case AccesoController::txAccRegistro:  //Dato: 1  
                     $JSONResp = Logica::respuestaRegistro($respuesta, $pSolicitud);
                     break;
 
@@ -106,6 +113,11 @@ class Logica {
                     $JSONResp = Logica::respuestaFeedEjemplares($respuesta, $pSolicitud, $parreglo);
                     break;
 
+                //accion de cerrar sesion de usuario
+                case AccesoController::txAccCerraSes:  //Dato: 10
+                    $JSONResp = Logica::respuestaCerrarSesion($respuesta, $pSolicitud);
+                    break;
+
                 //accion de publicar un ejemplar
                 case AccesoController::txAccPubliEje:  //Dato: 13
                     $JSONResp = Logica::respuestaPublicarEjemplar($respuesta, $pSolicitud);
@@ -123,7 +135,7 @@ class Logica {
      * respuestaGenerica: 
      * Funcion que genera el JSON de respuesta cuando por calidad de datos no se ralizó ninguna operacion
      */
-    public function respuestaGenerica($respuesta, $pSolicitud){
+    public function respuestaGenerica(Respuesta $respuesta, Solicitud $pSolicitud){
         try {
             return array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
                             'idtrx' => $pSolicitud->getSession(), 'ipaddr'=> $pSolicitud->getIPaddr(), 
@@ -140,7 +152,7 @@ class Logica {
      * respuestaRegistro: 
      * Funcion que genera el JSON de respuesta para la accion de registro :: AccesoController::txAccRegistro
      */
-    public function respuestaRegistro($respuesta, $pSolicitud){
+    public function respuestaRegistro(Respuesta $respuesta, Solicitud $pSolicitud){
         try {
             return array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
                             'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr(), 
@@ -156,7 +168,7 @@ class Logica {
      * respuestaLogin: 
      * Funcion que genera el JSON de respuesta para la accion de Login :: AccesoController::txAccIngresos:
      */
-    public function respuestaLogin($respuesta, $pSolicitud){
+    public function respuestaLogin(Respuesta $respuesta, Solicitud $pSolicitud){
         try {
             return array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
                             'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr(), 
@@ -175,7 +187,7 @@ class Logica {
      * respuestaDatosUsuario: 
      * Funcion que genera el JSON de respuesta para la accion de Recuperar Datos de Usuario :: AccesoController::txAccRecParam
      */
-    public function respuestaDatosUsuario($respuesta, $pSolicitud, $parreglo){
+    public function respuestaDatosUsuario(Respuesta $respuesta, Solicitud $pSolicitud, $parreglo){
 
         try {
             //Recupera el lugar, de la tabla de Lugares
@@ -216,7 +228,7 @@ class Logica {
      * respuestaFeedEjemplares: 
      * Funcion que genera el JSON de respuesta para la accion de recuperar Feed de ejemplares :: AccesoController::txAccRecFeeds:
      */
-    public function respuestaFeedEjemplares($respuesta, $pSolicitud, $parreglo){
+    public function respuestaFeedEjemplares(Respuesta $respuesta, Solicitud $pSolicitud, $parreglo){
         try{
             $arrGeneros = array();
             $arrTmp = array();
@@ -258,22 +270,63 @@ class Logica {
     }    
     
     /*
+     * respuestaCerrarSesion: 
+     * Funcion que genera el JSON de respuesta para la accion de Cerrar Sesion :: AccesoController::txAccCerraSes
+     */
+    public function respuestaCerrarSesion(Respuesta $respuesta, Solicitud $pSolicitud){
+        try {
+            return array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
+                            'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr(), 
+                            'iddevice'=> $pSolicitud->getDeviceMac(), 'marca'=>$pSolicitud->getDeviceMarca(), 
+                            'modelo'=>$pSolicitud->getDeviceModelo(), 'so'=>$pSolicitud->getDeviceSO()), 
+                            'idrespuesta' => (array('respuesta' => $respuesta->getRespuesta())));
+        } catch (Exception $ex) {
+                return AccesoController::inPlatCai;
+        } 
+    }    
+
+
+    /*
      * respuestaPublicaeEjemplar: 
      * Funcion que genera el JSON de respuesta para la accion de Publicar un ejemplar :: AccesoController::txAccPubliEje:
      */
-    public function respuestaPublicarEjemplar($respuesta, $pSolicitud){
+    
+        private $pIdOferta; //Id Oferta
+    private $pTitulo; //Titulo del libro ofrecido
+    private $pIdlibro; //Id del libro ofrecido
+    private $pIdioma; //Idioma
+    private $pAvaluo; //Avalúa
+    private $pValVenta; //Valor venta
+    private $pTituloSol1; //Primer Titulo Solicitado
+    private $pIdlibroSol1; //Primer id del libro Solicitado
+    private $pValAdicSol1; //Valor adicional para el primer libro
+    private $pTituloSol2; //Segundo Titulo Solicitado
+    private $pIdlibroSol2; //Segundo id del libro Solicitado
+    private $pValAdicSol2; //Valor adicional para el segundo libro
+    private $pObservaSol; //Observaciones de la oferta
+    private $pIdMensaje; //Id Mensaje recibido (La plataforma publica el ejemplar)
+    private $pTxMensaje; //Mensaje recibido (La plataforma publica el ejemplar)
+    private $pFeMensaje; //Fecha Mensaje recibido (La plataforma publica el ejemplar)
+
+    public function respuestaPublicarEjemplar(Respuesta $respuesta, Solicitud $pSolicitud){
         return array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
                     'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr(), 
                     'iddevice'=> $pSolicitud->getDeviceMac(), 'marca'=>$pSolicitud->getDeviceMarca(), 
                     'modelo'=>$pSolicitud->getDeviceModelo(), 'so'=>$pSolicitud->getDeviceSO()), 
                     'idrespuesta' => array('respuesta' => $respuesta->getRespuesta(), 
                     'ejemplar' => array('idejemplar' => $respuesta->getIdEjemplar(),
-                        'titulo'=>$respuesta->getTitulo(), 'estado' => $respuesta->getEstado()),
-                    'oferta'=>array('idoferta'=>$respuesta->getIdOferta()),
+                        'titulo'=>$respuesta->getTitulo(), 'idlibro' => $respuesta->getIdlibro(),
+                        'idioma'=>$respuesta->getIdioma(),'avaluo'=>$respuesta->getAvaluo(),
+                        'valventa'=>$respuesta->getValVenta()),
+                    'oferta'=>array('idoferta'=>$respuesta->getIdOferta(),'observasol'=>$respuesta->getObservaSol(),
+                        'idlibrosol1'=>$respuesta->getIdLibroSol1(),'titulosol1'=>$respuesta->getTituloSol1(),
+                        'valadicsol1'=>$respuesta->getValAdicSol1(),'idlibrosol2'=>$respuesta->getIdLibroSol2(),
+                        'titulosol2'=>$respuesta->getTituloSol2(),'valadicsol2'=>$respuesta->getValAdicSol2()),
                     'mensaje'=>array('idmensaje'=>$respuesta->getIdMensaje(),
-                        'fecha'=>$respuesta->getFecha(), 'padre'=>$respuesta->getPadre(),
-                        'descripcion'=>$respuesta->getDescripcion())));
+                        'fecha'=>$respuesta->getFeMensaje(), 'padre'=>$respuesta->getIdPadre(),
+                        'descripcion'=>$respuesta->getTxMensaje())));
     }    
+    
     
     /*
      * enviaMailRegistro 

@@ -39,6 +39,7 @@ class AccesoController extends Controller
     const inJsonInv = -10; //Datos inconsistentes
     const txMensaje =  'Solicitud de registro de usuario en Ex4Read'; //Mensaje estandar para el registro de usuario
     const txMenNoId =  'Sin identificar'; //Mensaje estandar para datos sin identificar
+    const txMeNoIdS =  'Pendiente'; //Mensaje estandar para pendiente/Sin identificar, con campo Longitud menor a 10
     //Estados del usuario
     const inUsuConf =  0; //Usuario en proceso de confiormacion de registro
     const inUsuActi =  1; //Usuario Activo
@@ -118,8 +119,9 @@ class AccesoController extends Controller
         $em = $this->getDoctrine()->getManager();
         
         $respuesta = 0;
+        /*setlocale (LC_TIME, "es_CO");
         $fecha = new \DateTime;
-        $texto = $fecha->format('YmdHis');
+        $texto = $fecha->format('YmdHis');*/
         //Aquí iniciaría el código en producción, el bloque anterior solo funciona para TEST
         //Se evalúa si se logró obtener la información de sesion desde el JSON
         $jsonValido = $this->descomponerJson($datos);
@@ -133,7 +135,7 @@ class AccesoController extends Controller
                 //$objLogica = new Logica($em);
                 //$objLogica = $this->get('logica_service')->container->setParameter("@doctrine.orm.default_entity_manager", $em);
                 $respuesta = $objLogica::ejecutaAccion($this->objSolicitud);
-            } else {
+            } else { //JSON INVALIDO RESPUESTA GENERAL : -10
                 //echo "<script>alert('.......ELSE..........')</script>";
                 $objLogica = $this->get('logica_service');
                 $jrespuesta = new Respuesta();
@@ -199,36 +201,43 @@ class AccesoController extends Controller
                 //echo "<script>alert('ult ejemplar ".$json_datos['idsolicitud']['ultejemplar']."')</script>";
                 //echo "<script>alert('sesion ".$tmpSesion."')</script>";
                 switch ($tmpSesion){
-                    case self::txAccRegistro: { //Dato:1
+                    case self::txAccRegistro: { //Dato:1: Registro en el sistema
                         //echo "<script>alert('ENTRA POR REGISTRO')</script>";
                         $this->objSolicitud->setEmail($json_datos['idsolicitud']['email']);
                         $this->objSolicitud->setClave($json_datos['idsolicitud']['clave']);
                         $this->objSolicitud->setTelefono($json_datos['idsolicitud']['telefono']);
                         break;
                     }
-                    case self::txAccIngresos : { //Dato:2
+                    case self::txAccIngresos : { //Dato:2: Login
                         //echo "<script>alert('ENTRA POR LOGIN')</script>";
                         $this->objSolicitud->setEmail($json_datos['idsolicitud']['email']);
                         $this->objSolicitud->setClave($json_datos['idsolicitud']['clave']);
                         break;
                     }
-                    case self::txAccRecParam: { //Dato:3
+                    case self::txAccRecParam: { //Dato:3 : Recuperar datos de Usuario (Propios)
                         //echo "<script>alert('ENTRA POR OBT PARAM')</script>";
                         $this->objSolicitud->setEmail($json_datos['idsolicitud']['email']);
                         $this->objSolicitud->setClave($json_datos['idsolicitud']['clave']);
                         break;
                     }
-                    case self::txAccRecFeeds: { //Dato:4
+                    case self::txAccRecFeeds: { //Dato:4 : Recuperar Feed de ejemplares
                         //echo "<script>alert('ENTRA POR FEED')</script>";
                         $this->objSolicitud->setEmail($json_datos['idsolicitud']['email']);
                         $this->objSolicitud->setClave($json_datos['idsolicitud']['clave']);
                         $this->objSolicitud->setUltEjemplar($json_datos['idsolicitud']['ultejemplar']);
                         break;
                     }
-                    case self::txAccPubliEje: { //Dato:13
+                    case self::txAccCerraSes: { //Dato:10 : Cerrar sesion
+                        //echo "<script>alert('ENTRA POR CERRAR SESION')</script>";
+                        $this->objSolicitud->setEmail($json_datos['idsolicitud']['email']);
+                        $this->objSolicitud->setClave($json_datos['idsolicitud']['clave']);
+                        break;
+                    }
+                    case self::txAccPubliEje: { //Dato:13 : Publicar un ejemplar
                         //echo "<script>alert('ENTRA POR PUBLICAR')</script>";
                         $this->objSolicitud->setEmail($json_datos['idsolicitud']['email']);
                         $this->objSolicitud->setClave($json_datos['idsolicitud']['clave']);
+                        $this->objSolicitud->setIdOferta($json_datos['idsolicitud']['idoferta']);
                         $this->objSolicitud->setTitulo($json_datos['idsolicitud']['titulo']);
                         $this->objSolicitud->setIdLibro($json_datos['idsolicitud']['idlibro']);
                         $this->objSolicitud->setIdioma($json_datos['idsolicitud']['idioma']);
@@ -292,29 +301,34 @@ class AccesoController extends Controller
             } else {
                 //Si todos los datos del encabezado están seteados, evalúa según la acción
                 switch ($accion){
-                    case self::txAccRegistro: { //Dato:1
+                    case self::txAccRegistro: { //Dato:1 :  Registro en el sistema
                         //echo "<script>alert('VAL ENTRA POR REGISTRO')</script>";
                         $resp = (isset($datos['idsolicitud']['email']) and isset($datos['idsolicitud']['clave']) 
                                 and isset($datos['idsolicitud']['telefono']));
                         break;
                     }
-                    case self::txAccIngresos : { //Dato:2
+                    case self::txAccIngresos : { //Dato:2 : Login
                         //echo "<script>alert('VAL ENTRA POR LOGIN')</script>";
                         $resp = (isset($datos['idsolicitud']['email']) and isset($datos['idsolicitud']['clave']));
                         break;
                     }
-                    case self::txAccRecParam: { //Dato:3
+                    case self::txAccRecParam: { //Dato:3 : Recuperar datos de Usuario (Propios)
                         //echo "<script>alert('VAL ENTRA POR OBT PARAM')</script>";
                         $resp = (isset($datos['idsolicitud']['email']) and isset($datos['idsolicitud']['clave']));
                         break;
                     }
-                    case self::txAccRecFeeds: { //Dato:4
+                    case self::txAccRecFeeds: { //Dato:4 : Recuperar Feed de ejemplares
                         //echo "<script>alert('VAL ENTRA POR FEED')</script>";
                         $resp = (isset($datos['idsolicitud']['email']) and isset($datos['idsolicitud']['clave']) 
                                 and isset($datos['idsolicitud']['ultejemplar']));
                         break;
                     }
-                    case self::txAccPubliEje: { //Dato:13
+                    case self::txAccCerraSes: { //Dato:10 : Cerrar Sesion
+                        //echo "<script>alert('VAL ENTRA POR CERRAR SESION')</script>";
+                        $resp = (isset($datos['idsolicitud']['email']) and isset($datos['idsolicitud']['clave']));
+                        break;
+                    }
+                    case self::txAccPubliEje: { //Dato:13 : Publicar un Ejemplar
                         //echo "<script>alert('VAL ENTRA POR PUBLICAR')</script>";
                         $resp = (isset($datos['idsolicitud']['email']) and isset($datos['idsolicitud']['clave']));
                         break;

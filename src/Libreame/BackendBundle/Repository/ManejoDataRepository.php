@@ -20,6 +20,8 @@ use Libreame\BackendBundle\Entity\LbOfertas;
 use Libreame\BackendBundle\Entity\LbSolicitados;
 use Libreame\BackendBundle\Entity\LbOfrecidos;
 use Libreame\BackendBundle\Entity\LbActividadofertas;
+use Libreame\BackendBundle\Helpers\Solicitud;
+use Libreame\BackendBundle\Helpers\Respuesta;
 /**
  * Description of ManejoDataRepository
  *
@@ -269,7 +271,7 @@ class ManejoDataRepository extends EntityRepository {
             //Flush al entity manager
             $em->flush(); 
 
-            return ($respuesta);
+            return ($respuesta);//Retorna objeto tipo Sesion
         } catch (Exception $ex) {
                 return AccesoController::inPlatCai;
         } 
@@ -504,7 +506,7 @@ class ManejoDataRepository extends EntityRepository {
         try{
             $em = $this->getDoctrine()->getManager();
             return $em->getRepository('LibreameBackendBundle:LbLibros')->
-                    findBy(array('inlibro' => $idlibro));
+                    findOneBy(array('inlibro' => $idlibro));
             $em->flush();    
 
         } catch (Exception $ex) {
@@ -515,21 +517,21 @@ class ManejoDataRepository extends EntityRepository {
     /*
      * Crea registro en generolibro, para el genero por defecto y lo rtorna
      */
-    public function asociarGeneroBasicoLibro(LbLibros $libro){
+    public function asociarGeneroBasicoLibro(LbLibros $libro, $em){
         $generolibro = new LbGeneroslibros();
         try{
-            $em = $this->getDoctrine()->getManager();
+            //$em = $this->getDoctrine()->getManager();
             $genero = $em->getRepository('LibreameBackendBundle:LbGeneros')->
-                    findById(AccesoController::inIdGeneral);
+                    findOneBy(array('ingenero'=>AccesoController::inIdGeneral));
             
             $generolibro->setIngligenero($genero);
             $generolibro->setInglilibro($libro);
             
-            $em->persist($generolibro);
-            $em->flush();    
-
+            //$em->persist($generolibro);
+            //$em->flush();    
+            return $generolibro;
         } catch (Exception $ex) {
-                return new LbLibros();
+            return $generolibro;
         } 
     }
 
@@ -541,29 +543,32 @@ class ManejoDataRepository extends EntityRepository {
     {
         $libro = new LbLibros(); 
         try {
-            $em = $this->getDoctrine()->getManager();
-            $libro->setTxlibtipopublica($psolicitud->getTipopublica());  
+            //$em = $this->getDoctrine()->getManager();
+            //$libro->setTxlibtipopublica($psolicitud->getTipopublica());  
             if ($cual == AccesoController::txEjemplarPub) {
                 $libro->setTxlibtitulo($psolicitud->getTitulo());  
                 $libro->setTxlibidioma($psolicitud->getIdioma());  
-            } else {
-                $libro->setTxlibtitulo($psolicitud->getTituloSol());  
+            } elseif ($cual == AccesoController::txEjemplarSol1) {
+                $libro->setTxlibtitulo($psolicitud->getTituloSol1());  
+                $libro->setTxlibidioma($psolicitud->getIdioma());  
+            } elseif ($cual == AccesoController::txEjemplarSol2) {
+                $libro->setTxlibtitulo($psolicitud->getTituloSol2());  
                 $libro->setTxlibidioma($psolicitud->getIdioma());  
             }
             $libro->setTxlibautores(AccesoController::txMenNoId);  
             $libro->setTxlibeditorial(AccesoController::txMenNoId);  
-            $libro->setTxlibedicionanio(AccesoController::txMenNoId);  
-            $libro->setTxlibedicionnum(AccesoController::txMenNoId);  
+            $libro->setTxlibedicionanio(AccesoController::txMeNoIdS);  
+            $libro->setTxlibedicionnum(AccesoController::txMeNoIdS);  
             $libro->setTxlibedicionpais(AccesoController::txMenNoId); 
-            $libro->setTxlibediciondescripcion(AccesoController::txMenNoId);  
+            $libro->setTxediciondescripcion(AccesoController::txMenNoId);  
             $libro->setTxlibcodigoofic(AccesoController::txMenNoId);  
             $libro->setTxlibcodigoofic13(AccesoController::txMenNoId);  
             $libro->setTxlibresumen(AccesoController::txMenNoId);  
             $libro->setTxlibtomo(AccesoController::txMenNoId);  
             $libro->setTxlibvolumen(AccesoController::txMenNoId);  
             $libro->setTxpaginas(AccesoController::txMenNoId);  
-            $em->persist($libro);
-            $em->flush();    
+            //$em->persist($libro);
+            //$em->flush();    
 
             return $libro;
         } catch (Exception $ex)  {    
@@ -578,14 +583,14 @@ class ManejoDataRepository extends EntityRepository {
     {
         $ejemplar = new LbEjemplares();
         try {
-            $em = $this->getDoctrine()->getManager();
+            //$em = $this->getDoctrine()->getManager();
             $ejemplar->setInejecantidad(AccesoController::inIdGeneral);//Se utiliza esta constante porque representa el # 1  
             $ejemplar->setDbejeavaluo($psolicitud->getAvaluo());  
             $ejemplar->setInejelibro($libro);  
             $ejemplar->setInejeusudueno($usuario);  
      
-            $em->persist($ejemplar);
-            $em->flush();    
+            //$em->persist($ejemplar);
+            //$em->flush();    
             
             return $ejemplar;
         } catch (Exception $ex)  {    
@@ -597,18 +602,82 @@ class ManejoDataRepository extends EntityRepository {
      * Genera una oferta para un ejemplar especifico
      * NOTA:: Por ahora todas las ofertas se generan sobre el grupo General, aun no se implementa GRUPOS FULL
      */
-    public function generarOfertaEjemplar(Solicitud $psolicitud, LbEjemplares $ejemplar, LbUsuarios $usuario)
+    public function generarOfertaEjemplar(Solicitud $psolicitud)
     {
         $oferta = new LbOfertas();
+        $respuesta = new Respuesta();
         $ofrecido = new LbOfrecidos(); 
-        $solicitado = new LbSolicitados(); 
         $actoferta = new LbActividadofertas();
+        $ejemplar = new LbEjemplares();
+        $generolibro = new LbGeneroslibros();
+        $generolibro1 = new LbGeneroslibros();
+        $generolibro2 = new LbGeneroslibros();
         try {
+            setlocale (LC_TIME, "es_CO");
             $fecha = new \DateTime;
             $em = $this->getDoctrine()->getManager();
+            $em->getConnection()->beginTransaction();
+
+            //Si el ID del libro esta seteado en la solicitud se recupera de la BD, de lo contrario se crea
+            $regSol = 0; //Variable para identificar si se debe registrar un ejemplar Solicitado: inicia en false
+            $usuario = ManejoDataRepository::getUsuarioByEmail($psolicitud->getEmail());
+            if($psolicitud->getIdlibro() != '') {
+                $libro = ManejoDataRepository::getLibroById($psolicitud->getIdlibro());
+                $regSol = 1;
+            } else {
+                if ($libro=ManejoDataRepository::buscarLibroByTitulo($psolicitud->getTitulo(),$em)){
+                    $regSol = 1;
+                } else {
+                    $libro = ManejoDataRepository::crearLibro($psolicitud, AccesoController::txEjemplarPub);
+                    //Crear la asociación del libro con genero, si no existe el libro
+                    $generolibro = ManejoDataRepository::asociarGeneroBasicoLibro($libro, $em);
+                    $regSol = 2;
+                }
+            }
+
+            //Crea elejemplar
+            $ejemplar = ManejoDataRepository::crearEjemplar($psolicitud,$libro,$usuario);
+
+            //Si hay solicitud de libros en cambio se registran como Libro1 y Libro2
+            $regSol1 = 0; //Variable para identificar si se debe registrar un ejemplar Solicitado: inicia en false
+            $libro1 = new LbLibros();
+            if($psolicitud->getIdlibroSol1() != '') {
+                $libro1 = ManejoDataRepository::getLibroById($psolicitud->getIdlibroSol1());
+                $regSol1 = 1;
+            } else {
+                if ($psolicitud->getTitulosol1() != ''){ 
+                    if ($libro=ManejoDataRepository::buscarLibroByTitulo($psolicitud->getTituloSol1(),$em)){
+                        $regSol1 = 1;
+                    } else {
+                        $libro1 = ManejoDataRepository::crearLibro($psolicitud, AccesoController::txEjemplarSol1);
+                        //Crear la asociación del libro con genero, si no existe el libro
+                        $generolibro1 = ManejoDataRepository::asociarGeneroBasicoLibro($libro1, $em);
+                        $regSol1 = 2;
+                    }
+                }    
+            }
+
+            $regSol2 = 0; //Variable para identificar si se debe registrar un ejemplar Solicitado: inicia en false
+            $libro2 = new LbLibros();
+            if($psolicitud->getIdlibroSol2() != '') {
+                $libro2 = ManejoDataRepository::getLibroById($psolicitud->getIdlibroSol2());
+                $regSol2 = 1;
+            } else {
+                if ($psolicitud->getTituloSol2() != ''){ 
+                    if ($libro=ManejoDataRepository::buscarLibroByTitulo($psolicitud->getTituloSol2(),$em)){
+                        $regSol1 = 1;
+                    } else {
+                        $libro2 = ManejoDataRepository::crearLibro($psolicitud, AccesoController::txEjemplarSol2);
+                        //Crear la asociación del libro con genero, si no existe el libro
+                        $generolibro2 = ManejoDataRepository::asociarGeneroBasicoLibro($libro2, $em);
+                        $regSol2 = 2;
+                    }
+                }    
+            }
+            
             //Obtiene el objeto Membresia a grupo general para el usuario
             $grupo = $em->getRepository('LibreameBackendBundle:LbGrupos')->
-                    findById(AccesoController::inIdGeneral);
+                    findOneBy(array('ingrupo' => AccesoController::inIdGeneral));
             $membresia = $em->getRepository('LibreameBackendBundle:LbMembresias')->
                     findOneBy(array('inmemgrupo' => $grupo, 'inmemusuario' => $usuario));
             
@@ -621,72 +690,33 @@ class ManejoDataRepository extends EntityRepository {
             $oferta->setInofeabierta(AccesoController::inIdGeneral); //Se utiliza esta constante porque su valor es 1 
             $oferta->setInofeactiva(AccesoController::inIdGeneral); //Se utiliza esta constante porque su valor es 1
             
-            $em->persist($oferta);
-            $em->flush();    
-            
             //Registro de ofrecidos
             $ofrecido->setInofrejemplar($ejemplar);
+            $ofrecido->setInofrtransac(2);
             $ofrecido->setInofroferta($oferta);
-            $ofrecido->setInofrtransac($psolicitud->gettr);
-            $ofrecido->setTxofrobservacion($psolicitud->ge);
-            $ofrecido->setDbofrvaladic($dbofrvaladic);
-            $ofrecido->setDbofrvaloferta($dbofrvaloferta);
-            
-            $em->persist($ofrecido);
-            $em->flush();    
-
-            //Si hay solicitud de libros en cambio se registra
-            $regSol = 0; //Variable para identificar si se debe registrar un ejemplar Solicitado: inicia en false
-            if($psolicitud->getIdlibroSol1() != '') {
-                $libro1 = ManejoDataRepository::getLibroById($psolicitud->getIdlibroSol1());
-                $regSol = 1;
-            } else {
-                if ($psolicitud->getTitulosol1() != ''){ 
-                    $libro1 = ManejoDataRepository::crearLibro($psolicitud, AccesoController::txEjemplarSol1);
-                    //Crear la asociación del libro con genero, si no existe el libro
-                    ManejoDataRepository::asociarGeneroBasicoLibro($libro1);
-                    $regSol = 1;
-                }    
-            }
-            
-            $regSol2 = 0; //Variable para identificar si se debe registrar un ejemplar Solicitado: inicia en false
-            if($psolicitud->getIdlibroSol2() != '') {
-                $libro2 = ManejoDataRepository::getLibroById($psolicitud->getIdlibroSol2());
-                $regSol2 = 2;
-            } else {
-                if ($psolicitud->getTituloSol2() != ''){ 
-                    $libro2 = ManejoDataRepository::crearLibro($psolicitud, AccesoController::txEjemplarSol2);
-                    //Crear la asociación del libro con genero, si no existe el libro
-                    ManejoDataRepository::asociarGeneroBasicoLibro($libro2);
-                    $regSol2 = 2;
-                }    
-            }
+            $ofrecido->setTxofrobservacion($psolicitud->getObservaSol());
+            $ofrecido->setDbofrvaladic($psolicitud->getAvaluo());
+            $ofrecido->setDbofrvaloferta($psolicitud->getValVenta());
             
             //Registra el libro solicitado
-            if ($regSol == 1){
-                $solicitado = new LbSolicitados();
-                $solicitado->setInsoltransac(2);
-                $solicitado->setTxsolobservacion($psolicitud->getObservaSol());
-                $solicitado->setDbsolvaloferta($psolicitud->getValOferSol());
-                $solicitado->setDbsolvaladic($psolicitud->getValAdicSol1());
-                $solicitado->setInsollibro($libro1);
-                $solicitado->setInsoloferta($oferta);
-
-                $em->persist($solicitado);
-                $em->flush();
+            if ($regSol > 0){
+                $solicitado1 = new LbSolicitados();
+                $solicitado1->setInsoltransac(2);
+                $solicitado1->setTxsolobservacion($psolicitud->getObservaSol());
+                $solicitado1->setDbsolvaloferta($psolicitud->getValAdicSol1());
+                $solicitado1->setDbsolvaladic($psolicitud->getValAdicSol1());
+                $solicitado1->setInsollibro($libro1);
+                $solicitado1->setInsoloferta($oferta);
             }
             
-            if ($regSol == 2){
-                $solicitado = new LbSolicitados();
-                $solicitado->setInsoltransac(2);
-                $solicitado->setTxsolobservacion($psolicitud->getObservaSol());
-                $solicitado->setDbsolvaloferta($psolicitud->getValOferSol());
-                $solicitado->setDbsolvaladic($psolicitud->getValAdicSol1());
-                $solicitado->setInsollibro($libro1);
-                $solicitado->setInsoloferta($oferta);
-
-                $em->persist($solicitado);
-                $em->flush();
+            if ($regSol2 > 0){
+                $solicitado2 = new LbSolicitados();
+                $solicitado2->setInsoltransac(2);
+                $solicitado2->setTxsolobservacion($psolicitud->getObservaSol());
+                $solicitado2->setDbsolvaloferta($psolicitud->getValAdicSol2());
+                $solicitado2->setDbsolvaladic($psolicitud->getValAdicSol2());
+                $solicitado2->setInsollibro($libro2);
+                $solicitado2->setInsoloferta($oferta);
             }
             //Actividad ofertas
             $actoferta->setFeactfechahora($fecha);
@@ -694,14 +724,116 @@ class ManejoDataRepository extends EntityRepository {
             $actoferta->setInactoferta($oferta);
             $actoferta->setInactusuario($usuario);
             
+
+            $em->persist($libro);
+            if($regSol == 2)  { 
+                $em->persist($generolibro);
+            }
+
+            if($regSol1 == 2) { 
+                $em->persist($libro1);
+                $em->persist($generolibro1);
+                
+            }
+            
+            if($regSol2 == 2) { 
+                $em->persist($libro2);
+                $em->persist($generolibro2);
+            }
+
+            $em->persist($ejemplar);
+            
+            $em->persist($oferta);
+            
+            $em->persist($ofrecido);
+
+            if ($regSol1 > 0){
+                $em->persist($solicitado1);
+            }
+            
+            if ($regSol2 > 0){
+                $em->persist($solicitado2);
+            }
+            
             $em->persist($actoferta);
+
+            /*
+             * Setea la respuesta
+             */            
             $em->flush();
-           
-            return $actoferta;
+            $em->getConnection()->commit();
+            
+            $fecha = $actoferta->getFeactfechahora();
+            $textofecha = $fecha->format('Y/m/d H:i:s');
+            $respuesta->setIdOferta($actoferta->getInactividadoferta());
+            $respuesta->setTitulo($libro->getTxlibtitulo());
+            $respuesta->setIdlibro($libro->getInlibro());
+            $respuesta->setIdEjemplar($ejemplar->getInejemplar());
+            $respuesta->setIdioma($libro->getTxlibidioma());
+            $respuesta->setAvaluo($ejemplar->getDbejeavaluo());
+            $respuesta->setValVenta($ofrecido->getDbofrvaloferta());
+            $respuesta->setTituloSol1($libro1->getTxlibtitulo());
+            $respuesta->setIdLibroSol1($libro1->getInlibro());
+            $respuesta->setValAdicSol1($solicitado1->getDbsolvaladic());
+            $respuesta->setTituloSol2($libro2->getTxlibtitulo());
+            $respuesta->setIdLibroSol2($libro2->getInlibro());
+            $respuesta->setValAdicSol2($solicitado1->getDbsolvaladic());
+            $respuesta->setObservaSol($ofrecido->getTxofrobservacion());
+            $respuesta->setIdMensaje($actoferta->getInactividadoferta());
+            $respuesta->setTxMensaje($actoferta->getTxactdescripcion());
+            $respuesta->setFeMensaje($textofecha);
+            $respuesta->setIdPadre($actoferta->getInactpadreact());
+
+            //Busca y recupera el objeto de la sesion:: 
+            $sesion = ManejoDataRepository::recuperaSesionUsuario($usuario,$psolicitud);
+            //Guarda la actividad de la sesion:: 
+            ManejoDataRepository::generaActSesion($sesion,AccesoController::inDatoUno,$libro->getTxlibtitulo()." publicado con éxito por ".$psolicitud->getEmail(),$psolicitud->getAccion(),$fecha,$fecha);
+            //echo "<script>alert('Generó actividad de sesion ')</script>";
+            return $respuesta;
         } catch (Exception $ex)  {    
-            return $actoferta;
+            $em->getConnection()->rollback();
+            return $respuesta;
         }
         
     }
     
+    //Cierra la sesion de un usuario 
+    public function cerrarSesionUsuario(LbSesiones $sesion)
+    {   
+        try{
+            setlocale (LC_TIME, "es_CO");
+            $fecha = new \DateTime;
+            $em = $this->getDoctrine()->getManager();
+            
+            $sesion->setFesesfechafin($fecha);
+            $sesion->setInsesactiva(AccesoController::inDatoCer);
+            
+            $em->persist($sesion);
+            
+            $em->flush();
+            
+            return $sesion;
+        } catch (Exception $ex) {
+             return new LbSesiones();
+        } 
+    }
+
+    
+    public function buscarLibroByTitulo($titulo, $em)
+    {
+        try{
+            $libro = new LbLibros();
+            $sql = "SELECT l FROM LibreameBackendBundle:LbLibros l"
+                    ." WHERE l.txlibtitulo LIKE :titulo";
+            $query = $em->createQuery($sql)->setParameter('titulo', "%$titulo%");
+            $libro = $query->getResult();
+            return $libro;
+
+            //return $em->getRepository('LibreameBackendBundle:LbLibros')->
+            //        findOneBy(array('txlibtitulo' => $titulo));;
+
+        } catch (Exception $ex) {
+                return new LbCalificausuarios();
+        } 
+    }
 }

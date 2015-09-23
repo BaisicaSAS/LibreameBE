@@ -23,14 +23,24 @@ class Respuesta {
     private $RespGrupos; //Arreglo de calificaciones de usuario
     private $CalifPromedio; //CAlificacion promedio que ha obtenido el usuario
     //Respuestas para PublicarEjemplar
-    private $idejemplar; //Id ejemplar
-    private $titulo; //Titulo del ejemplar
-    private $estado; //Estado del ejemplar
-    private $idoferta; 
-    private $idmensaje;
-    private $fecha;
-    private $padre;
-    private $descripcion;
+    private $pIdOferta; //Id Oferta
+    private $pTitulo; //Titulo del libro ofrecido
+    private $pIdlibro; //Id del libro ofrecido
+    private $pIdEjemplar; //Id del Ejemplar
+    private $pIdioma; //Idioma
+    private $pAvaluo; //Avalúa
+    private $pValVenta; //Valor venta
+    private $pTituloSol1; //Primer Titulo Solicitado
+    private $pIdlibroSol1; //Primer id del libro Solicitado
+    private $pValAdicSol1; //Valor adicional para el primer libro
+    private $pTituloSol2; //Segundo Titulo Solicitado
+    private $pIdlibroSol2; //Segundo id del libro Solicitado
+    private $pValAdicSol2; //Valor adicional para el segundo libro
+    private $pObservaSol; //Observaciones de la oferta
+    private $pIdMensaje; //Id Mensaje recibido (La plataforma publica el ejemplar)
+    private $pTxMensaje; //Mensaje recibido (La plataforma publica el ejemplar)
+    private $pFeMensaje; //Fecha Mensaje recibido (La plataforma publica el ejemplar)
+    private $pIdPadre; //Id Mensaje padre del hilo
     /*
      *  Bloque de getter para los atributos de la clase
      */
@@ -66,44 +76,95 @@ class Respuesta {
         return $this->RespGrupos;
     }   
 
-    public function getIdEjemplar()
+    public function getIdOferta()
     {
-        return $this->idejemplar;
+        return $this->pIdOferta;
     }   
 
     public function getTitulo()
     {
-        return $this->titulo;
+        return $this->pTitulo;
     }   
 
-    public function getEstado()
+    public function getIdlibro()
     {
-        return $this->estado;
+        return $this->pIdlibro;
     }   
 
-    public function getIdOferta()
+    public function getIdEjemplar()
     {
-        return $this->idoferta;
+        return $this->pIdEjemplar;
+    }   
+
+    public function getIdioma()
+    {
+        return $this->pIdioma;
+    }   
+
+    public function getAvaluo()
+    {
+        return $this->pAvaluo;
+    }   
+
+    public function getValVenta()
+    {
+        return $this->pValVenta;
+    }   
+
+    public function getTituloSol1()
+    {
+        return $this->pTituloSol1;
+    }   
+
+    public function getIdLibroSol1()
+    {
+        return $this->pIdlibroSol1;
+    }   
+
+    public function getValAdicSol1()
+    {
+        return $this->pValAdicSol1;
+    }   
+
+    public function getTituloSol2()
+    {
+        return $this->pTituloSol2;
+    }   
+
+    public function getIdLibroSol2()
+    {
+        return $this->pIdlibroSol2;
+    }   
+
+    public function getValAdicSol2()
+    {
+        return $this->pValAdicSol2;
+    }   
+
+    public function getObservaSol()
+    {
+        return $this->pObservaSol;
     }   
 
     public function getIdMensaje()
     {
-        return $this->idmensaje;
+        return $this->pIdMensaje;
     }   
 
-    public function getFecha()
+    public function getTxMensaje()
     {
-        return $this->fecha;
+        return $this->pTxMensaje;
     }   
 
-    public function getPadre()
+    public function getFeMensaje()
     {
-        return $this->padre;
+        return $this->pFeMensaje;
     }   
 
-    public function getDescripcion()
+
+    public function getIdPadre()
     {
-        return $this->descripcion;
+        return $this->pIdPadre;
     }   
 
     /*
@@ -147,54 +208,115 @@ class Respuesta {
         $this->RespUsuarios[] = $usuario;
         return $this;
     }   
-
-    public function setIdEjemplar($idejemplar)
-    {
-        $this->idejemplar = $idejemplar;
-        return $this;
-    }   
-
-    public function setTitulo($titulo)
-    {
-        $this->titulo = $titulo;
-        return $this;
-    }   
     
-    public function setEstado($estado)
+    public function setIdOferta($pIdOferta)
     {
-        $this->estado = $estado;
+        $this->pIdOferta = $pIdOferta;
         return $this;
     }   
 
-    public function setIdOferta($idoferta)
+    public function setTitulo($pTitulo)
     {
-        $this->idoferta = $idoferta;
+        $this->pTitulo = $pTitulo;
         return $this;
     }   
-    
-    public function setIdMensaje($idmensaje)
+
+    public function setIdlibro($pIdlibro)
     {
-        $this->idmensaje = $idmensaje;
+        $this->pIdlibro = $pIdlibro;
         return $this;
     }   
-    
-    public function setFecha($fecha)
+
+    public function setIdEjemplar($pIdEjemplar)
     {
-        $this->fecha = $fecha;
+        $this->pIdEjemplar = $pIdEjemplar;
         return $this;
     }   
-    
-    public function setPadre($padre)
+
+    public function setIdioma($pIdioma)
     {
-        $this->padre = $padre;
+        $this->pIdioma = $pIdioma;
         return $this;
     }   
-    
-    public function setDescripcion($descripcion)
+
+    public function setAvaluo($pAvaluo)
     {
-        $this->descripcion = $descripcion;
+        $this->pAvaluo = $pAvaluo;
         return $this;
     }   
-    
+
+    public function setValVenta($pValVenta)
+    {
+        $this->pValVenta = $pValVenta;
+        return $this;
+    }   
+
+    public function setTituloSol1($pTituloSol1)
+    {
+        $this->pTituloSol1 = $pTituloSol1;
+        return $this;
+    }   
+
+    public function setIdLibroSol1($pIdlibroSol1)
+    {
+        $this->pIdlibroSol1 = $pIdlibroSol1;
+        return $this;
+    }   
+
+    public function setValAdicSol1($pValAdicSol1)
+    {
+        $this->pValAdicSol1 = $pValAdicSol1;
+        return $this;
+    }   
+
+    public function setTituloSol2($pTituloSol2)
+    {
+        $this->pTituloSol2 = $pTituloSol2;
+        return $this;
+    }   
+
+    public function setIdLibroSol2($pIdlibroSol2)
+    {
+        $this->pIdlibroSol2 = $pIdlibroSol2;
+        return $this;
+    }   
+
+    public function setValAdicSol2($pValAdicSol2)
+    {
+        $this->pValAdicSol2 = $pValAdicSol2;
+        return $this;
+    }   
+
+    public function setObservaSol($pObservaSol)
+    {
+        $this->pObservaSol = $pObservaSol;
+        return $this;
+    }   
+
+    public function setIdMensaje($pIdMensaje)
+    {
+        $this->pIdMensaje = $pIdMensaje;
+        return $this;
+    }   
+
+    public function setTxMensaje($pTxMensaje)
+    {
+        $this->pTxMensaje = $pTxMensaje;
+        return $this;
+    }   
+
+    public function setFeMensaje($pFeMensaje)
+    {
+        $this->pFeMensaje = $pFeMensaje;
+        return $this;
+    }   
+
+
+    public function setIdPadre($pIdPadre)
+    {
+        $this->pIdPadre = $pIdPadre;
+        return $this;
+    }   
+
 }
 
