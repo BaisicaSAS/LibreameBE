@@ -1,0 +1,39 @@
+2
+3
+4
+5
+7
+8
+9
+10
+12
+13
+15
+16
+17
+18
+19
+30
+31
+32
+33
+34
+35
+__________________________________
+6  Confirmacion registro mail
+11 Baja en el sistema
+_____________
+14 Deprecado
+20 Deprecado
+_____________
+21 Pendiente
+22 Pendiente
+23 Pendiente
+_____________
+24 Opcional
+25 Opcional
+26 Opcional
+27 Opcional
+____________
+28 Pendiente
+29 Pendiente
