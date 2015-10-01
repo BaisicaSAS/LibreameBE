@@ -34,7 +34,7 @@ class AccesoController extends Controller
     const inGenSinE =  2; //Genero del usuario: Sin especificar
     const inGenFeme =  1; //Genero del usuario: Femenino
     const inGenMasc =  0; //Genero del usuario: Masculino
-    const inTamVali =  40; //Tamaño del ID para confirmacion del Registro
+    const inTamVali =  128; //Tamaño del ID para confirmacion del Registro
     const inTamSesi =  30; //Tamaño del id de sesion generado
     const inJsonInv = -10; //Datos inconsistentes
     const txMensaje =  'Solicitud de registro de usuario en Ex4Read'; //Mensaje estandar para el registro de usuario

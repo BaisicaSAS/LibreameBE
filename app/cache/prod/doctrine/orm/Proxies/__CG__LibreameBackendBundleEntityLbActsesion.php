@@ -64,10 +64,10 @@ class LbActsesion extends \Libreame\BackendBundle\Entity\LbActsesion implements 
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', 'inactsesion', 'txactaccion', 'txactmensaje', 'feactfecha', 'inactfinalizada', 'inactsesiondisus');
+            return array('__isInitialized__', 'inactsesion', 'txactaccion', 'txactmensaje', 'feactfecha', 'inactfinalizada', 'inactsesiondisus', 'inactaccion');
         }
 
-        return array('__isInitialized__', 'inactsesion', 'txactaccion', 'txactmensaje', 'feactfecha', 'inactfinalizada', 'inactsesiondisus');
+        return array('__isInitialized__', 'inactsesion', 'txactaccion', 'txactmensaje', 'feactfecha', 'inactfinalizada', 'inactsesiondisus', 'inactaccion');
     }
 
     /**
@@ -296,6 +296,28 @@ class LbActsesion extends \Libreame\BackendBundle\Entity\LbActsesion implements 
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getInactsesiondisus', array());
 
         return parent::getInactsesiondisus();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setInactaccion($inactaccion)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setInactaccion', array($inactaccion));
+
+        return parent::setInactaccion($inactaccion);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getInactaccion()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getInactaccion', array());
+
+        return parent::getInactaccion();
     }
 
 }

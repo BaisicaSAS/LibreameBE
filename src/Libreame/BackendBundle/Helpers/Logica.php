@@ -327,7 +327,12 @@ class Logica {
                 ->setSubject('Bienvenido a ex4Read '.$usuario->getTxusunombre())
                 ->setFrom('baisicasas@gmail.com')
                 ->setTo($usuario->getTxusuemail())
-                ->setBody($usuario->gettxusuvalidacion());
+                ->setBody($this->renderView(
+                    // app/Resources/views/Emails/registration.html.twig
+                    'LibreameBackendBundle:Registro:registro.html.twig',
+                    array('usuario' => $usuario->getTxusuemail(), 
+                        'crurl' => "http://www.ex4read.co/web/registro/".$usuario->gettxusuvalidacion())
+            ),'text/html');
 
             $this->get('mailer')->send($message);
         

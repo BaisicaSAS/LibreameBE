@@ -64,10 +64,10 @@ class LbEjemplares extends \Libreame\BackendBundle\Entity\LbEjemplares implement
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', 'inejemplar', 'inejecantidad', 'dbejeavaluo', 'inejegenero', 'inejelibro', 'inejeusudueno');
+            return array('__isInitialized__', 'inejemplar', 'inejecantidad', 'dbejeavaluo', 'inejelibro', 'inejeusudueno');
         }
 
-        return array('__isInitialized__', 'inejemplar', 'inejecantidad', 'dbejeavaluo', 'inejegenero', 'inejelibro', 'inejeusudueno');
+        return array('__isInitialized__', 'inejemplar', 'inejecantidad', 'dbejeavaluo', 'inejelibro', 'inejeusudueno');
     }
 
     /**
@@ -230,28 +230,6 @@ class LbEjemplares extends \Libreame\BackendBundle\Entity\LbEjemplares implement
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getDbejeavaluo', array());
 
         return parent::getDbejeavaluo();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setInejegenero(\Libreame\BackendBundle\Entity\LbGeneros $inejegenero = NULL)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setInejegenero', array($inejegenero));
-
-        return parent::setInejegenero($inejegenero);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getInejegenero()
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getInejegenero', array());
-
-        return parent::getInejegenero();
     }
 
     /**
