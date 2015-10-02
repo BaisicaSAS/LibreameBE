@@ -5,125 +5,26 @@ namespace Libreame\BackendBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Libreame\BackendBundle\Helpers\Logica;
-use Libreame\BackendBundle\Helpers\Solicitud;
-use Libreame\BackendBundle\Helpers\Respuesta;
-use Libreame\BackendBundle\Entity\LbEjemplares;
-use Libreame\BackendBundle\Entity\LbLibros;
-use Libreame\BackendBundle\Entity\LbGeneros;
+
+
 /*
- * Controlador que contiene las funciones que validan, controlan y despachan 
- * el acceso a todas las url. Esto implica la generacion y validacion de Tokens
- * Las funciones involucradas:
- * GenerarSesion / EliminarSesion / VerificarAcceso / DespacharOpcion / Cifrar-Descifrar comunicaciones
- * Alta y Baja de usuarios / Recuperacion y cambio de clave
- * 
- * La información que recibe en formato JSON es la siguiente:
- * 
- * 
+ * Controlador que contiene las funciones que permiten que un usuario valide su 
+ * registro en el sistema, incluye el despliegue de la url, la captura de la clave,
+ * la activacion del usuario y el envio del correo que indica que se activó o no, 
+ * con todas las validaciones que implique
  *  
  */
-class AccesoController extends Controller
+class RegistroController extends Controller
 {   
-    //Constantes globales
-    const inFallido =  0; //Proceso fallido
-    const inDescone = -1; //Proceso fallido por conexión de plataforma
-    const inExitoso =  1; //Proceso existoso
-    const inDatoCer =  0; //Valor cero: Sirve para los datos Inactivo, Cerrado etc del modelo
-    const inDatoUno =  1; //Valor Uno: Sirve para los datos Activo, Abierto, etc del modelo
-    const inGenSinE =  2; //Genero del usuario: Sin especificar
-    const inGenFeme =  1; //Genero del usuario: Femenino
-    const inGenMasc =  0; //Genero del usuario: Masculino
-    const inTamVali =  128; //Tamaño del ID para confirmacion del Registro
-    const inTamSesi =  30; //Tamaño del id de sesion generado
-    const inJsonInv = -10; //Datos inconsistentes
-    const txMensaje =  'Solicitud de registro de usuario en Ex4Read'; //Mensaje estandar para el registro de usuario
-    const txMenNoId =  'Sin identificar'; //Mensaje estandar para datos sin identificar
-    const txMeNoIdS =  'Pendiente'; //Mensaje estandar para pendiente/Sin identificar, con campo Longitud menor a 10
-    //Estados del usuario
-    const inUsuConf =  0; //Usuario en proceso de confiormacion de registro
-    const inUsuActi =  1; //Usuario Activo
-    const inUsuCuar =  2; //Usuario en cuarentena
-    const inInactiv =  3; //Usuario inactivo
-    //Estados de sesion
-    const inSesActi =  1; //Usuario en proceso de confiormacion de registro
-    const inSesInac =  0; //Usuario Activo
-    
 
-    
-    //Acciones de la plataforma
-    const txAccRegistro =  '1'; //Registro en el sistema
-    const txAccIngresos =  '2'; //Login  (Ingreso)
-    const txAccRecParam =  '3'; //Recuperar datos y parámetros de usuario: incluye calificaciones
-    const txAccRecFeeds =  '4'; //Recuperar Feed (Todas las publicaciones de solicitudes y publicaciones de usuarios)...Lleva una marca de Fecha y hora para recuperar los últimos tipo twitter
-    const txAccRecOpera =  '5'; //Recuperar mi operación (Todas mis solicitudes publicaciones y mensajes)...Lleva una marca de Fecha y hora para recuperar los últimos tipo twitter
-    const txAccConfRegi =  '6'; //Confirmacion Registro en el sistema        
-    const txAccBusEjemp =  '7'; //Buscar Ejemplares        
-    const txAccRecOfert =  '8'; //Recuperar oferta
-    const txAccRecUsuar =  '9'; //Ver/Recuperar usuario: Incluye su calificacion
-    
-    const txAccCerraSes =  '10'; //Logout / Cerrar sesion
-    const txAccBajaSist =  '11'; //Dar de baja
-    const txAccActParam =  '12'; //Actualizar parámetros sistema y datos usuario
-    const txAccPubliEje =  '13'; //Publicar un ejemplar
-    //DEPRECADO: const txAccModifEje =  '14'; //Modificar un ejemplar
-    const txAccElimiPub =  '15'; //Eliminar una publicacion
-    const txAccVisuaBib =  '16'; //Visualizar Biblioteca
-    const txAccModifOfe =  '17'; //Modificar una oferta
-    const txAccElimiOfe =  '18'; //Eliminar una oferta
-    const txAccPubMensa =  '19'; //Interactuar con oferta::Enviar un mensaje a una solicitud especifica / Publicar o Responder
-    //DEPRECADO: const txAccConcNego =  '20'; //Concretar una negociación: Aceptar un usuario y descartar a los demás
-    //DEPRECADO: const txAccDesiNego =  '21'; //Desistir de una negociación ya realizada
-    const txAccCaliTrat =  '22'; //Calificar un trato
-    //DEPRECADO: const txAccModCalTr =  '23'; //Modificar calificación trato
-    const txAccEnviaPQR =  '24'; //Enviar una PQR
-    const txAccModifPQR =  '25'; //Modificar una PQR
-    const txAccElimiPQR =  '26'; //Eliminar una PQR
-    
-    const txAccSCISBNdb =  '27'; //Servicio de carga de libros desde ISBNdb
-    const txAccRecLista =  '28'; //recuperar listas del sistema
-    const txAccRecClave =  '29'; //Recuperar clave perdida
-    const txAccSolLibro =  '30'; //Solicitar Libro:: Automático
-    const txAccModifPub =  '31'; //modificar Publicacion
-    const txAccReaOfert =  '32'; //Realizar oferta
-    const txAccRecPubli =  '33'; //Recuperar publicacion
-    const txAccRecTrato =  '34'; //Recuperar informacion Trato
-    const txAccVerCalif =  '35'; //Ver comentarios-calificaciones
+    //var $objSolicitud;
 
-    const txEjemplarPub =  'P'; //Indica que es el ejemplar a publicar de la solicitud
-    const txEjemplarSol1 =  'S1'; //Indica que es el ejemplar a Solicitar de la solicitud
-    const txEjemplarSol2 =  'S2'; //Indica que es el ejemplar a Solicitar de la solicitud
-
-    //Constantes de la funcion Login
-    const inUsClInv =  0;  //Usuario o clave inválidos
-    const inULogged =  1;  //Usuario logeado exitosamente
-    const inPlatCai = -1; //Proceso fallido por conexión de plataforma
-    const inUSeActi = -2; //Usuario tiene sesion activa
-    const inSosAtaq = -3; //Sesion sospechosa de ser ataque ::: AUN NO SE IMPLEMENTA
-    const inUsInact = -4; //Usuario inactivo
-    const inUsSeIna = -5; //Sesión inactiva
-
-    const inIdGeneral = 1; //Id General para datos basicos :: Genero, Lugar, Grupo 
-
-    var $objSolicitud;
-    /*
-     * IngresarSistema es la UNICA funcion que recibe la información desde el cliente, para revisar y despachar
-     * Recibe un JSON, con la estructura definida como default mas los datos especificos de cada opcion.
-     * 
-     * @TODO: Es la mas importante para la integración con otros sistemas:: 
-     * Cualquier aplicación -por lo pronto las nuestras- solo acceden por esta funcion, el resto de 
-     * funciones del sistema son privadas
-
-     * La funcion recibe los datos de la interacción con el cliente.
-     * Su funcion es obtener la información de Usuario, Session y Opciones, validar que sean correctos o que 
-     * no estén repetidos. Registra el intento de acceso, valida los datos adicionales con respecto
-     * a la accion solicitada y en caso de estar todo en orden enviar la información a la Clase Logica para 
-     * que realice los solicitado y emita las respuestas al cliente
-     * Tambien es la responsable de generar todas las bitacoras de la aplicación
-     */
-    public function ingresarSistemaAction()
+    public function confirmarRegistroAction($id)
     {   
-        $request = $this->getRequest();
+        Hacer todas las validaciones y cambios antes de esto, no pedir clave, solo mostrar web de 
+                agradecimientos y confirmacion.
+        return $this->render('LibreameBackendBundle:Registro:confirmarRegistro.html.twig', array('id' => $id));
+        /*$request = $this->getRequest();
         $content = $request->getContent();
         $datos = json_decode($content, true);
         $em = $this->getDoctrine()->getManager();
@@ -134,7 +35,7 @@ class AccesoController extends Controller
         $texto = $fecha->format('YmdHis');*/
         //Aquí iniciaría el código en producción, el bloque anterior solo funciona para TEST
         //Se evalúa si se logró obtener la información de sesion desde el JSON
-        $jsonValido = $this->descomponerJson($datos);
+        /*$jsonValido = $this->descomponerJson($datos);
         try {
             //echo "<script>alert('Validación retornó: ".$jsonValido."')</script>"; 
             if ($jsonValido != self::inJsonInv) {
@@ -161,7 +62,7 @@ class AccesoController extends Controller
                     
         } catch (Exception $ex) {
             return new RESPONSE($jsonValido);
-        }    
+        } */   
              
     }
     

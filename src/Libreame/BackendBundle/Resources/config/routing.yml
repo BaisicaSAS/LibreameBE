@@ -1,4 +1,9 @@
-libreame_ingresarSistema:
+ex4read_ingresarSistema:
     pattern:  /ingreso
     defaults: { _controller: LibreameBackendBundle:Acceso:ingresarSistema, _format: json}
     methods: [POST] 
+
+ex4read_confirmarRegistro:
+    pattern:  /registro/{id}
+    defaults: { _controller: LibreameBackendBundle:Registro:confirmarRegistro}
+    #methods: [GET] 

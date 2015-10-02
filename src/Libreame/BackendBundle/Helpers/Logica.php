@@ -328,7 +328,6 @@ class Logica {
                 ->setFrom('baisicasas@gmail.com')
                 ->setTo($usuario->getTxusuemail())
                 ->setBody($this->renderView(
-                    // app/Resources/views/Emails/registration.html.twig
                     'LibreameBackendBundle:Registro:registro.html.twig',
                     array('usuario' => $usuario->getTxusuemail(), 
                         'crurl' => "http://www.ex4read.co/web/registro/".$usuario->gettxusuvalidacion())

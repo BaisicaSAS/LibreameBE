@@ -1,7 +1,7 @@
 <?php
 
-/* LibreameBackendBundle:Registro:registro.html.twig */
-class __TwigTemplate_5630dec6159ea616cb60a437a368d7a039de8c2b6e5d1943df0b4628d4e4f6cd extends Twig_Template
+/* LibreameBackendBundle:Registro:confirmarRegistro.html.twig */
+class __TwigTemplate_adf4b90860c8b42042655a4d2e203a6e4355ca1faeb658cdee6ebf47ef7bfae8 extends Twig_Template
 {
     public function __construct(Twig_Environment $env)
     {
@@ -32,10 +32,10 @@ class __TwigTemplate_5630dec6159ea616cb60a437a368d7a039de8c2b6e5d1943df0b4628d4e
     <br>
     <table width=\"583\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">
       <tr>
-        <td align=\"left\" valign=\"top\" bgcolor=\"#FFFFFF\" style=\"background-color:#FFFFFF;\"><img src=\"data:image/jpeg;base64, &lt; ?php echo base64_encode(file_get_contents('";
+        <td align=\"left\" valign=\"top\" bgcolor=\"#FFFFFF\" style=\"background-color:#FFFFFF;\"><img src=\"data:image/jpeg;base64, <?php echo base64_encode(file_get_contents('";
         // line 17
         echo twig_escape_filter($this->env, $this->env->getExtension('assets')->getAssetUrl("images/header.jpg"), "html", null, true);
-        echo "))? &gt;\" width=\"583\" height=\"118\"></td>
+        echo "')) ?>\" width=\"583\" height=\"118\"></td>
       </tr>
       <tr>
         <td align=\"left\" valign=\"top\" bgcolor=\"#FFFFFF\" style=\"background-color:#FFFFFF;\"><table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">
@@ -48,7 +48,7 @@ class __TwigTemplate_5630dec6159ea616cb60a437a368d7a039de8c2b6e5d1943df0b4628d4e
 \t\t\t\t\t\t<img src=\"data:image/jpeg;base64, <?php echo base64_encode(file_get_contents('";
         // line 27
         echo twig_escape_filter($this->env, $this->env->getExtension('assets')->getAssetUrl("images/400dpiLogo.png"), "html", null, true);
-        echo " ')) ?>\"  alt=\"ex4read\" width='135' height='134'/>
+        echo "')) ?>\"  alt=\"ex4read\" width='135' height='134'/>
 \t\t\t\t\t</div>
                 \t<div style=\"color:#EF3340; font-family:Times New Roman, Times, serif; font-size:48px;\">
 \t\t\t\t\t\tConfirmación de registro en ex4read
@@ -58,24 +58,20 @@ class __TwigTemplate_5630dec6159ea616cb60a437a368d7a039de8c2b6e5d1943df0b4628d4e
               <tr>
                 <td align=\"left\" valign=\"top\" style=\"font-family:Arial, Helvetica, sans-serif; font-size:12px; color:#525252;\">
                 
-                <div style=\"color:#00B08B; font-size:19px;\">Hola ";
-        // line 37
-        echo twig_escape_filter($this->env, (isset($context["usuario"]) ? $context["usuario"] : null), "html", null, true);
-        echo "</div>
+                <div style=\"color:#00B08B; font-size:19px;\">Digita tu clave</div>
                 <div style=\"color:#00B08B; font-size:17px;\">
-\t\t\t\t\t<br>Estamos casi listos para inciar en ex4read, solo confirma tu registro en la plataforma y comienza a disfrutar de nuestros servicios.<br>
 \t\t\t\t\t<br><li><a href=\"";
-        // line 40
+        // line 39
         echo twig_escape_filter($this->env, (isset($context["crurl"]) ? $context["crurl"] : null), "html", null, true);
         echo "\">Confirmar mi registro.</a></li><br>
 \t\t\t\t</div>
 <br>
 <table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">
   <tr>
-    <td width=\"13%\"><b><img src=\"data:image/jpeg;base64,<?php echo base64_encode(file_get_contents(''";
-        // line 45
+    <td width=\"13%\"><b><img src=\"data:image/jpeg;base64,<?php echo base64_encode(file_get_contents('";
+        // line 44
         echo twig_escape_filter($this->env, $this->env->getExtension('assets')->getAssetUrl("images/tweet.gif"), "html", null, true);
-        echo "''))?>\" alt=\"\" width=\"24\" height=\"23\"> <img src=\"data:image/jpeg;base64,<?php echo base64_encode(file_get_contents(''";
+        echo "'))?>\" alt=\"\" width=\"24\" height=\"23\"> <img src=\"data:image/jpeg;base64,<?php echo base64_encode(file_get_contents(''";
         echo twig_escape_filter($this->env, $this->env->getExtension('assets')->getAssetUrl("images/facebook.gif"), "html", null, true);
         echo "''))?>\" alt=\"\" width=\"24\" height=\"23\"></b></td>
     <td width=\"87%\" style=\"font-size:11px; color:#525252; font-family:Arial, Helvetica, sans-serif;\"><b>Servicio al cliente: <a href='servicio@ex4read.co'>servicio@ex4read.co</a></b></td>
@@ -114,7 +110,7 @@ class __TwigTemplate_5630dec6159ea616cb60a437a368d7a039de8c2b6e5d1943df0b4628d4e
 
     public function getTemplateName()
     {
-        return "LibreameBackendBundle:Registro:registro.html.twig";
+        return "LibreameBackendBundle:Registro:confirmarRegistro.html.twig";
     }
 
     public function isTraitable()
@@ -124,6 +120,6 @@ class __TwigTemplate_5630dec6159ea616cb60a437a368d7a039de8c2b6e5d1943df0b4628d4e
 
     public function getDebugInfo()
     {
-        return array (  77 => 45,  69 => 40,  63 => 37,  50 => 27,  37 => 17,  19 => 1,);
+        return array (  73 => 44,  65 => 39,  50 => 27,  37 => 17,  19 => 1,);
     }
 }

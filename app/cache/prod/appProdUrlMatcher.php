@@ -27,16 +27,21 @@ class appProdUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirecta
         $context = $this->context;
         $request = $this->request;
 
-        // libreame_ingresarSistema
+        // ex4read_ingresarSistema
         if ($pathinfo === '/ingreso') {
             if ($this->context->getMethod() != 'POST') {
                 $allow[] = 'POST';
-                goto not_libreame_ingresarSistema;
+                goto not_ex4read_ingresarSistema;
             }
 
-            return array (  '_controller' => 'Libreame\\BackendBundle\\Controller\\AccesoController::ingresarSistemaAction',  '_format' => 'json',  '_route' => 'libreame_ingresarSistema',);
+            return array (  '_controller' => 'Libreame\\BackendBundle\\Controller\\AccesoController::ingresarSistemaAction',  '_format' => 'json',  '_route' => 'ex4read_ingresarSistema',);
         }
-        not_libreame_ingresarSistema:
+        not_ex4read_ingresarSistema:
+
+        // ex4read_confirmarRegistro
+        if (0 === strpos($pathinfo, '/registro') && preg_match('#^/registro/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
+            return $this->mergeDefaults(array_replace($matches, array('_route' => 'ex4read_confirmarRegistro')), array (  '_controller' => 'Libreame\\BackendBundle\\Controller\\RegistroController::confirmarRegistroAction',));
+        }
 
         throw 0 < count($allow) ? new MethodNotAllowedException(array_unique($allow)) : new ResourceNotFoundException();
     }
