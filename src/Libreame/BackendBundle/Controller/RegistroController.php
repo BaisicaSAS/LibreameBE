@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\Response;
  *  
  */
 class RegistroController extends Controller
-{   
+{    
 
     //var $objSolicitud;
 
@@ -26,7 +26,7 @@ class RegistroController extends Controller
         3. Marcar el usuario como activo
         4. Cambiar en la BD el ID. 
         5. Crear los registros en movimientos y bitacoras.
-        6. Finalizar y mostrar.*/
+        6. Finalizar y mostrar web de confirmación.*/
         
         return $this->render('LibreameBackendBundle:Registro:confirmarRegistro.html.twig', array('id' => $id));
         /*$request = $this->getRequest();
