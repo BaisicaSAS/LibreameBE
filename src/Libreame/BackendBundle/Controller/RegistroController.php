@@ -21,8 +21,13 @@ class RegistroController extends Controller
 
     public function confirmarRegistroAction($id)
     {   
-        Hacer todas las validaciones y cambios antes de esto, no pedir clave, solo mostrar web de 
-                agradecimientos y confirmacion.
+        /*1. Separar usuario, e ID
+        2. Validar que sean coherentes y que el usuario ya no se encuentre activo
+        3. Marcar el usuario como activo
+        4. Cambiar en la BD el ID. 
+        5. Crear los registros en movimientos y bitacoras.
+        6. Finalizar y mostrar.*/
+        
         return $this->render('LibreameBackendBundle:Registro:confirmarRegistro.html.twig', array('id' => $id));
         /*$request = $this->getRequest();
         $content = $request->getContent();

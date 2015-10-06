@@ -6,4 +6,4 @@ ex4read_ingresarSistema:
 ex4read_confirmarRegistro:
     pattern:  /registro/{id}
     defaults: { _controller: LibreameBackendBundle:Registro:confirmarRegistro}
-    #methods: [GET] 
+    methods: [GET] 
