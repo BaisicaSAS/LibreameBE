@@ -340,7 +340,15 @@ class AccesoController extends Controller
                     }
                     case self::txAccPubliEje: { //Dato:13 : Publicar un Ejemplar
                         //echo "<script>alert('VAL ENTRA POR PUBLICAR')</script>";
-                        $resp = (isset($datos['idsolicitud']['email']) and isset($datos['idsolicitud']['clave']));
+                        
+                        $resp = (isset($datos['idsolicitud']['email']) and isset($datos['idsolicitud']['clave']) and 
+                                  isset($datos['idsolicitud']['idoferta']) and  isset($datos['idsolicitud']['titulo']) and 
+                                 isset($datos['idsolicitud']['idlibro']) and  isset($datos['idsolicitud']['idioma']) and 
+                                 isset($datos['idsolicitud']['avaluo']) and  isset($datos['idsolicitud']['valventa']) and 
+                                 isset($datos['idsolicitud']['titulosol1']) and  isset($datos['idsolicitud']['idlibrosol1']) and 
+                                 isset($datos['idsolicitud']['valadicsol1']) and  isset($datos['idsolicitud']['titulosol2']) and 
+                                 isset($datos['idsolicitud']['idlibrosol2']) and  isset($datos['idsolicitud']['valadicsol2']) and 
+                                 isset($datos['idsolicitud']['observasol']));
                         break;
                     }
                 }
@@ -351,3 +359,4 @@ class AccesoController extends Controller
     }
 
 }
+    

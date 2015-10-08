@@ -19,6 +19,14 @@ use Libreame\BackendBundle\Helpers\Respuesta;
 
 class Logica {   
 
+    const pos1mail = 2;
+    const pos2mail = 4;
+    const pos3mail = 6;
+
+    const pos1pat = 3;
+    const pos2pat = 5;
+    const pos3pat = 7;
+
     /*
      * Esta funcion configurada como servicio se encarga de recibir la información del cliente
      * luego de que ha sido validada por el controlador AccesoController. Luego de recibirla
@@ -330,7 +338,7 @@ class Logica {
                 ->setBody($this->renderView(
                     'LibreameBackendBundle:Registro:registro.html.twig',
                     array('usuario' => $usuario->getTxusuemail(), 
-                        'crurl' => "http://www.ex4read.co/web/registro/".$usuario->gettxusuvalidacion())
+                        'crurl' => "http://www.ex4read.co/web/registro/".$this->generaCadenaURL($usuario))
             ),'text/html');
 
             $this->get('mailer')->send($message);
@@ -339,6 +347,46 @@ class Logica {
         } catch (Exception $ex) {
                 return AccesoController::inPlatCai;
         } 
+    }
+    
+    /*
+     * enviaMailRegistro 
+     * Se encarga de enviar el email con el que el usuario confirmara su registro
+     */
+    public function generaCadenaURL(LbUsuarios $usuario)
+    {   
+        //Cantidad de caracteres del mail
+        $caracEmail = strlen($usuario->getTxusuemail());
+        //email
+        $email = $usuario->getTxusuemail();
+        //Inicializa la cadena
+        $cadena = array($usuario->gettxusuvalidacion());
+        //Obtener el patron de ocurrencia de datos
+        $patron = array(rand(0, 2), rand(0, 2), rand(0, 2));
+        if ($caracEmail <= 99)  {
+            $cadena = substr($cadena, 0, $this::pos1mail-1).'0'.$patron[0].$caracEmail[0].$patron[1]
+                    .$caracEmail[1].$patron[2].substr($cadena,8);
+        } else {
+            $cadena = substr($cadena, 0, $this::pos1mail-1).$caracEmail[0].$patron[0].$caracEmail[0].$patron[1]
+                    .$caracEmail[1].$patron[2].substr($cadena,8);
+        }
+
+        $pat = 0;
+        for ($n=0;$n<$caracEmail;$n++) {
+            if ($n==0) {
+                $posClave[] = $patron[$pat]+8;
+            } else {
+                $posClave[] = $posClave[$n]+$patron[$pat];
+            }
+            if ($pat==2) { $pat = 0; } else { $pat++; }
+        }
+        
+
+        for($i=0;$i<$caracEmail;$i++) {
+            $cadena = substr($cadena, 0, $posClave[$i]-1).$email[$i].substr($cadena, $posClave[$i]);
+        } 
+        echo $cadena;
+        return $cadena;
     }
     
     /*
