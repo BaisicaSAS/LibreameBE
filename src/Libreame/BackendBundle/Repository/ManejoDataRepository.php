@@ -148,13 +148,15 @@ class ManejoDataRepository extends EntityRepository {
      * Id/nombre dispositivo
      *  
      */
-    public function generaSesion($pEstado,$pFecIni,$pFecFin,$pDevice,$pIpAdd)
+    public function generaSesion($pEstado,$pFecIni,$pFecFin,$pDevice,$pIpAdd,$em)
     {
         //Guarda la sesion inactiva
         //echo "<script>alert('Ingresa a generar sesion".$pFecFin."-".$pFecIni."')</script>";
         try{
             $objLogica = $this->get('logica_service');
-            $em = $this->getDoctrine()->getManager();
+            if ($em == NULL) { $flEm = TRUE; } else  { $flEm = FALSE; }
+            
+            if ($flEm) $em = $this->getDoctrine()->getManager();
             $sesion = new LbSesiones();
             $sesion->setInsesactiva($pEstado);
             $sesion->setTxsesnumero($objLogica::generaRand(AccesoController::inTamSesi));
@@ -164,7 +166,7 @@ class ManejoDataRepository extends EntityRepository {
             $sesion->setTxipaddr($pIpAdd);
             $em->persist($sesion);
             //echo "<script>alert('Guardo sesion')</script>";
-            $em->flush();
+            if ($flEm) $em->flush();
             //echo "<script>alert('Retorna".$sesion->getTxsesnumero()."')</script>";
             return $sesion;
             
@@ -176,12 +178,13 @@ class ManejoDataRepository extends EntityRepository {
     /*
      * GeneraActSesion 
      */
-    public function generaActSesion($pSesion,$pFinalizada,$pMensaje,$pAccion,$pFecIni,$pFecFin)
+    public function generaActSesion($pSesion,$pFinalizada,$pMensaje,$pAccion,$pFecIni,$pFecFin,$em)
     {
         //Guarda la sesion inactiva
         //echo "<script>alert('Ingresa a generar actividad de sesion".$pFecFin."-".$pFecIni."')</script>";
         try{
-            $em = $this->getDoctrine()->getManager();
+            if ($em == NULL) { $flEm = TRUE; } else  { $flEm = FALSE; }
+            if ($flEm) $em = $this->getDoctrine()->getManager();
             
             //echo "<script>alert('::::Actividad Sesion".$pFecFin."-".$pFecIni."')</script>";
             //echo "<script>alert('::::Actividad accion ".$pAccion."')</script>";
@@ -195,7 +198,7 @@ class ManejoDataRepository extends EntityRepository {
             //echo "<script>alert('::::Antes de persist act sesion')</script>";
             $em->persist($actsesion);
             //echo "<script>alert('::::antes de flush act sesion')</script>";
-            $em->flush();
+            if ($flEm) $em->flush();
             //echo "<script>alert('::::despues de flush act sesion')</script>";
  
             return $actsesion;
@@ -216,7 +219,7 @@ class ManejoDataRepository extends EntityRepository {
      * de los anteriores cada uno con 4 digitos.
      * 
      */
-    public function recuperaSesionUsuario($pusuario, $psolicitud)
+    public function recuperaSesionUsuario($pusuario, $psolicitud, $em)
     {   
         try{
             //Verifica que el usuario exista, que esté activo, que la clave coincida
@@ -224,7 +227,8 @@ class ManejoDataRepository extends EntityRepository {
 
             //echo "<script>alert('Ingresa validar sesion :: ".$psolicitud->getEmail()." ::')</script>";
             $respuesta = AccesoController::inUsSeIna; //Inicializa como sesion logueada
-            $em = $this->getDoctrine()->getManager();
+            if ($em == NULL) { $flEm = TRUE; } else  { $flEm = FALSE; }
+            if ($flEm) $em = $this->getDoctrine()->getManager();
             
             if (!$em->getRepository('LibreameBackendBundle:LbUsuarios')->
                         findOneBy(array('txusuemail' => $psolicitud->getEmail()))){
@@ -269,7 +273,7 @@ class ManejoDataRepository extends EntityRepository {
                 }
             }       
             //Flush al entity manager
-            $em->flush(); 
+            if ($flEm) $em->flush(); 
 
             return ($respuesta);//Retorna objeto tipo Sesion
         } catch (Exception $ex) {
@@ -382,14 +386,21 @@ class ManejoDataRepository extends EntityRepository {
     }
     
     //Obtiene el Dispositivo del usuario 
-    public function getDispositivoUsuario($iddispositivo, LbUsuarios $usuario)
+    public function getDispositivoUsuario($iddispositivo, LbUsuarios $usuario, $em)
     {   
         try{
-            $em = $this->getDoctrine()->getManager();
-            return $em->getRepository('LibreameBackendBundle:LbDispusuarios')->findOneBy(array(
+            if ($em == NULL) { $flEm = TRUE; } else  { $flEm = FALSE; }
+            
+            if ($flEm) $em = $this->getDoctrine()->getManager();
+            if($iddispositivo == AccesoController::txAnyData) {
+                return $em->getRepository('LibreameBackendBundle:LbDispusuarios')->findOneBy(array(
+                        'indisusuario' => $usuario));
+            } else {
+                return $em->getRepository('LibreameBackendBundle:LbDispusuarios')->findOneBy(array(
                         'txdisid' => $iddispositivo, 
                         'indisusuario' => $usuario));
-            $em->flush();
+            }
+            if ($flEm) $em->flush();
         } catch (Exception $ex) {
                 return new LbDispusuarios();
         } 
@@ -787,7 +798,7 @@ class ManejoDataRepository extends EntityRepository {
             //Busca y recupera el objeto de la sesion:: 
             $sesion = ManejoDataRepository::recuperaSesionUsuario($usuario,$psolicitud);
             //Guarda la actividad de la sesion:: 
-            ManejoDataRepository::generaActSesion($sesion,AccesoController::inDatoUno,$libro->getTxlibtitulo()." publicado con éxito por ".$psolicitud->getEmail(),$psolicitud->getAccion(),$fecha,$fecha);
+            ManejoDataRepository::generaActSesion($sesion,AccesoController::inDatoUno,$libro->getTxlibtitulo()." publicado con éxito por ".$psolicitud->getEmail(),$psolicitud->getAccion(),$fecha,$fecha,$em);
             //echo "<script>alert('Generó actividad de sesion ')</script>";
             return $respuesta;
         } catch (Exception $ex)  {    
@@ -818,7 +829,7 @@ class ManejoDataRepository extends EntityRepository {
         } 
     }
 
-    
+    //Busca un Libro por su titulo
     public function buscarLibroByTitulo($titulo, $em)
     {
         try{
@@ -833,7 +844,63 @@ class ManejoDataRepository extends EntityRepository {
                     findOneBy(array('txlibtitulo' => $titulo));;
 
         } catch (Exception $ex) {
-                return new LbCalificausuarios();
+                return new LbLibros();
         } 
     }
+    
+    //Valida datos de registro de un usuario
+    public function datosUsuarioValidos($usuario, $clave)
+    {
+        try{
+            $em = $this->getDoctrine()->getManager();
+
+            $vUsuario = $em->getRepository('LibreameBackendBundle:LbUsuarios')->
+                    findOneBy(array('txusuemail' => $usuario, 
+                        'txusuvalidacion' => $clave, 
+                        'inusuestado' => AccesoController::inDatoCer));
+            
+            $em->flush();
+            
+            return $vUsuario;
+
+        } catch (Exception $ex) {
+                return NULL;
+        } 
+    }
+
+    //Activa un usuario en accion de Validacion de Registro
+    public function activarUsuarioRegistro(LbUsuarios $usuario)
+    {
+        try{
+            /*  3. Marcar el usuario como activo
+                4. Cambiar en la BD el ID. 
+                5. Crear los registros en movimientos y bitacoras.
+                6. Finalizar y mostrar web de confirmación.*/
+            $respuesta=  AccesoController::inFallido; 
+            $fecha = new \DateTime;
+            
+            $em = $this->getDoctrine()->getManager();
+            $em->getConnection()->beginTransaction();
+            $usuario->setInusuestado(AccesoController::inDatoUno);
+            $usuario->setTxusuvalidacion($usuario->getTxusuvalidacion().'OK');
+
+            $dispUsuario = ManejoDataRepository::getDispositivoUsuario(AccesoController::txAnyData,$usuario,$em);
+            //Genera la sesion:: $pEstado,$pFecIni,$pFecFin,$pDevice,$pIpAdd
+            $sesion = ManejoDataRepository::generaSesion(AccesoController::inSesInac, $fecha, $fecha, $dispUsuario, AccesoController::txMeNoIdS, $em);
+            //Guarda la actividad de la sesion:: 
+            ManejoDataRepository::generaActSesion($sesion,AccesoController::inDatoUno,'Registro confirmado para usuario '.$usuario->getTxusuemail(), AccesoController::txAccConfRegi, $fecha, $fecha, $em);
+            
+            $em->persist($usuario);
+            
+            $em->flush();
+            $em->getConnection()->commit();
+            $respuesta=  AccesoController::inExitoso; 
+            
+            return $respuesta;
+
+        } catch (Exception $ex) {
+                return  AccesoController::inFallido;
+        } 
+    }
+
 }

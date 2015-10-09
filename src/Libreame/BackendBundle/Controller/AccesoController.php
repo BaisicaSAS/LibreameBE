@@ -48,6 +48,7 @@ class AccesoController extends Controller
     //Estados de sesion
     const inSesActi =  1; //Usuario en proceso de confiormacion de registro
     const inSesInac =  0; //Usuario Activo
+    const txAnyData =  'ANY'; //String para indicar cualquier usuario
     
 
     

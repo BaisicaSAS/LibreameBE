@@ -1583,7 +1583,7 @@ class appProdProjectContainer extends Container
             'assetic.write_to' => 'C:/xampp/htdocs/Ex4ReadBE/app/../web',
             'assetic.variables' => array(
             ),
-            'assetic.java.bin' => 'C:\\Program Files (x86)\\Java\\jdk1.7.0_40\\bin\\java.EXE',
+            'assetic.java.bin' => 'C:\\ProgramData\\Oracle\\Java\\javapath\\java.EXE',
             'assetic.node.bin' => 'C:\\Program Files\\nodejs\\\\node.EXE',
             'assetic.ruby.bin' => '/usr/bin/ruby',
             'assetic.sass.bin' => '/usr/bin/sass',

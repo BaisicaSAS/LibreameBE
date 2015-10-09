@@ -26,7 +26,7 @@ Libreame\BackendBundle\Entity\LbActsesion:
         txactmensaje:
             type: string
             nullable: false
-            length: 50
+            length: 500
             fixed: false
             comment: 'Mensaje de exito / fallo de la acción'
             column: txActMensaje

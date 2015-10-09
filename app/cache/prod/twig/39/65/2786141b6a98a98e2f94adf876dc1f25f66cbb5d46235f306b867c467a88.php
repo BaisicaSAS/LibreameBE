@@ -1,7 +1,7 @@
 <?php
 
-/* LibreameBackendBundle:Registro:confirmarRegistro.html.twig */
-class __TwigTemplate_adf4b90860c8b42042655a4d2e203a6e4355ca1faeb658cdee6ebf47ef7bfae8 extends Twig_Template
+/* LibreameBackendBundle:Registro:failConfirmarRegistro.html.twig */
+class __TwigTemplate_39652786141b6a98a98e2f94adf876dc1f25f66cbb5d46235f306b867c467a88 extends Twig_Template
 {
     public function __construct(Twig_Environment $env)
     {
@@ -51,25 +51,23 @@ class __TwigTemplate_adf4b90860c8b42042655a4d2e203a6e4355ca1faeb658cdee6ebf47ef7
         echo "')) ?>\"  alt=\"ex4read\" width='135' height='134'/>
 \t\t\t\t\t</div>
                 \t<div style=\"color:#EF3340; font-family:Times New Roman, Times, serif; font-size:48px;\">
-\t\t\t\t\t\tConfirmación de registro en ex4read
+\t\t\t\t\t\tRegistro de ex4read
 \t\t\t\t\t</div>
                   <div style=\"font-family: Verdana, Geneva, sans-serif; color:#898989; font-size:12px;\"></div></td>
               </tr>
               <tr>
                 <td align=\"left\" valign=\"top\" style=\"font-family:Arial, Helvetica, sans-serif; font-size:12px; color:#525252;\">
                 
-                <div style=\"color:#00B08B; font-size:19px;\">Digita tu clave</div>
-                <div style=\"color:#00B08B; font-size:17px;\">
-\t\t\t\t\t<br><li><a href=\"";
-        // line 39
-        echo twig_escape_filter($this->env, (isset($context["crurl"]) ? $context["crurl"] : null), "html", null, true);
-        echo "\">Confirmar mi registro.</a></li><br>
-\t\t\t\t</div>
+                <div style=\"color:#525252; font-size:21px;\">Hola { usr }</div>
+                <div style=\"color:#EF3340; font-size:19px;\">Parece que algo anda mal con el registro!.</div>
+                <div style=\"color:#00B08B; font-size:19px;\">Por favor espera unos minutos e intenta de nuevo.</div>
+                <div style=\"color:#00B08B; font-size:15px;\">Por favor asegurate de utilizar el enlace del correo o de copiar el enlace completo.</div>
+                <div style=\"color:#00B08B; font-size:15px;\">Tambien es posible que ya estés activo, por favor intenta ingresar.</div>
 <br>
 <table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">
   <tr>
     <td width=\"13%\"><b><img src=\"data:image/jpeg;base64,<?php echo base64_encode(file_get_contents('";
-        // line 44
+        // line 45
         echo twig_escape_filter($this->env, $this->env->getExtension('assets')->getAssetUrl("images/tweet.gif"), "html", null, true);
         echo "'))?>\" alt=\"\" width=\"24\" height=\"23\"> <img src=\"data:image/jpeg;base64,<?php echo base64_encode(file_get_contents(''";
         echo twig_escape_filter($this->env, $this->env->getExtension('assets')->getAssetUrl("images/facebook.gif"), "html", null, true);
@@ -110,7 +108,7 @@ class __TwigTemplate_adf4b90860c8b42042655a4d2e203a6e4355ca1faeb658cdee6ebf47ef7
 
     public function getTemplateName()
     {
-        return "LibreameBackendBundle:Registro:confirmarRegistro.html.twig";
+        return "LibreameBackendBundle:Registro:failConfirmarRegistro.html.twig";
     }
 
     public function isTraitable()
@@ -120,6 +118,6 @@ class __TwigTemplate_adf4b90860c8b42042655a4d2e203a6e4355ca1faeb658cdee6ebf47ef7
 
     public function getDebugInfo()
     {
-        return array (  73 => 44,  65 => 39,  50 => 27,  37 => 17,  19 => 1,);
+        return array (  71 => 45,  50 => 27,  37 => 17,  19 => 1,);
     }
 }

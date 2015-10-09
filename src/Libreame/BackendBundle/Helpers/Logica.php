@@ -338,7 +338,7 @@ class Logica {
                 ->setBody($this->renderView(
                     'LibreameBackendBundle:Registro:registro.html.twig',
                     array('usuario' => $usuario->getTxusuemail(), 
-                        'crurl' => "http://www.ex4read.co/web/registro/".$this->generaCadenaURL($usuario))
+                        'crurl' => "http://www.ex4read.co/web/registro/".Logica::generaCadenaURL($usuario))
             ),'text/html');
 
             $this->get('mailer')->send($message);
@@ -350,44 +350,94 @@ class Logica {
     }
     
     /*
-     * enviaMailRegistro 
-     * Se encarga de enviar el email con el que el usuario confirmara su registro
+     * generaCadenaURL 
+     * Combina datos para entregar URL de Registro
      */
     public function generaCadenaURL(LbUsuarios $usuario)
     {   
         //Cantidad de caracteres del mail
         $caracEmail = strlen($usuario->getTxusuemail());
+        //Arreglo de caractéres email
+        if ($caracEmail > 99)  {
+            $arCarMail[0] = $caracEmail / 100;
+        } else {
+            $arCarMail[0] = 0;
+        }
+        if ($caracEmail > 99)  {
+            $arCarMail[1] = (100-$caracEmail) / 10;
+        } else {
+            $arCarMail[1] = $caracEmail / 10;
+        }
+        if ($caracEmail > 9)  {
+            $arCarMail[2] = ($arCarMail[1]*10)-$caracEmail;
+        } else {
+            $arCarMail[2] = $caracEmail;
+        }
         //email
         $email = $usuario->getTxusuemail();
         //Inicializa la cadena
-        $cadena = array($usuario->gettxusuvalidacion());
-        //Obtener el patron de ocurrencia de datos
-        $patron = array(rand(0, 2), rand(0, 2), rand(0, 2));
-        if ($caracEmail <= 99)  {
-            $cadena = substr($cadena, 0, $this::pos1mail-1).'0'.$patron[0].$caracEmail[0].$patron[1]
-                    .$caracEmail[1].$patron[2].substr($cadena,8);
-        } else {
-            $cadena = substr($cadena, 0, $this::pos1mail-1).$caracEmail[0].$patron[0].$caracEmail[0].$patron[1]
-                    .$caracEmail[1].$patron[2].substr($cadena,8);
-        }
+        $cadena = $usuario->gettxusuvalidacion();
 
+        //echo 'arreglo: '.$arCarMail[0].'-'.$arCarMail[1].'-'.$arCarMail[2].'carac email: '.$caracEmail.'    -   valida: '.$cadena;
+        //Obtener el patron de ocurrencia de datos
+        $patron[0] = rand(1, 3);
+        //echo 'P1: '.$patron[0];
+        $patron[1] = rand(1, 2);
+        //echo 'P2: '.$patron[1];
+        $patron[2] = rand(1, 3);
+        //echo 'P3: '.$patron[2];
+
+        $cadena = substr($cadena, 0, self::pos1mail).$arCarMail[0].$patron[0].$arCarMail[1].$patron[1]
+                .$arCarMail[2].$patron[2].substr($cadena,2);
+
+        //echo "con patron: ".$cadena;
+
+        /*for ($n=0;$n<$caracEmail;$n++) {
+                $posClave[] = $patron[$pat]+7;
+        }*/
+        
         $pat = 0;
         for ($n=0;$n<$caracEmail;$n++) {
             if ($n==0) {
-                $posClave[] = $patron[$pat]+8;
+                $posClave[$n] = $patron[$pat]+8;
             } else {
-                $posClave[] = $posClave[$n]+$patron[$pat];
+                $posClave[$n] = $posClave[$n-1]+$patron[$pat];
             }
+            
+            //echo 'posicion: '.$posClave[$n];
             if ($pat==2) { $pat = 0; } else { $pat++; }
         }
         
-
         for($i=0;$i<$caracEmail;$i++) {
-            $cadena = substr($cadena, 0, $posClave[$i]-1).$email[$i].substr($cadena, $posClave[$i]);
+            $complem = substr($cadena, $posClave[$i]);
+            //echo " \n ".$complem;
+            $cadena = substr($cadena, 0, $posClave[$i]).substr($email,$i,1).$complem;
+            //echo " \n ".$cadena;
         } 
-        echo $cadena;
+        //echo "\n cadena_def: ".$cadena;
         return $cadena;
     }
+    
+    /*
+     * validarRegistroUsuario: 
+     * Funcion que genera realiza la validación del registro de usuario en el sistema, desde el email enviado por ex4read
+     */
+    public function validarRegistroUsuario($usuario, $clave)
+    {
+        try {
+            $vUsuario = ManejoDataRepository::datosUsuarioValidos($usuario, $clave);
+            $respuesta = AccesoController::inExitoso;
+            if ($vUsuario == NULL) { $respuesta = AccesoController::inFallido; }
+            
+            if ($respuesta==AccesoController::inExitoso) {
+                $respuesta = ManejoDataRepository::activarUsuarioRegistro($vUsuario);
+            }
+            return $respuesta;
+        } catch (Exception $ex) {
+                return AccesoController::inPlatCai;
+        } 
+    }
+    
     
     /*
      * generaRand: 
