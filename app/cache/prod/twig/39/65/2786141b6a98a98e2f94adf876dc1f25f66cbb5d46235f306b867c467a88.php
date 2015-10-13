@@ -58,16 +58,21 @@ class __TwigTemplate_39652786141b6a98a98e2f94adf876dc1f25f66cbb5d46235f306b867c4
               <tr>
                 <td align=\"left\" valign=\"top\" style=\"font-family:Arial, Helvetica, sans-serif; font-size:12px; color:#525252;\">
                 
-                <div style=\"color:#525252; font-size:21px;\">Hola { usr }</div>
-                <div style=\"color:#EF3340; font-size:19px;\">Parece que algo anda mal con el registro!.</div>
-                <div style=\"color:#00B08B; font-size:19px;\">Por favor espera unos minutos e intenta de nuevo.</div>
-                <div style=\"color:#00B08B; font-size:15px;\">Por favor asegurate de utilizar el enlace del correo o de copiar el enlace completo.</div>
-                <div style=\"color:#00B08B; font-size:15px;\">Tambien es posible que ya estés activo, por favor intenta ingresar.</div>
+                <div style=\"color:#525252; font-size:21px;\">Hola ";
+        // line 37
+        echo twig_escape_filter($this->env, (isset($context["usr"]) ? $context["usr"] : null), "html", null, true);
+        echo "</div>
+                <div style=\"color:#EF3340; font-size:19px;\">Parece que algo anda mal con el registro. </div>
+                <div style=\"color:#EF3340; font-size:17px;\">Intentemos lo siguiente </div>
+                <div style=\"color:#EF3340; font-size:19px;\"></div>
+                <div style=\"color:#00B08B; font-size:15px;\">  Por favor espera unos minutos e intenta de nuevo.</div>
+                <div style=\"color:#00B08B; font-size:15px;\">  Asegurate tambien de utilizar el enlace del correo o de copiar el enlace completo.</div>
+                <div style=\"color:#00B08B; font-size:15px;\">  Es posible que ya estés activo, por favor intenta ingresar.</div>
 <br>
 <table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">
   <tr>
     <td width=\"13%\"><b><img src=\"data:image/jpeg;base64,<?php echo base64_encode(file_get_contents('";
-        // line 45
+        // line 47
         echo twig_escape_filter($this->env, $this->env->getExtension('assets')->getAssetUrl("images/tweet.gif"), "html", null, true);
         echo "'))?>\" alt=\"\" width=\"24\" height=\"23\"> <img src=\"data:image/jpeg;base64,<?php echo base64_encode(file_get_contents(''";
         echo twig_escape_filter($this->env, $this->env->getExtension('assets')->getAssetUrl("images/facebook.gif"), "html", null, true);
@@ -118,6 +123,6 @@ class __TwigTemplate_39652786141b6a98a98e2f94adf876dc1f25f66cbb5d46235f306b867c4
 
     public function getDebugInfo()
     {
-        return array (  71 => 45,  50 => 27,  37 => 17,  19 => 1,);
+        return array (  76 => 47,  63 => 37,  50 => 27,  37 => 17,  19 => 1,);
     }
 }
