@@ -1,7 +1,7 @@
 <?php
 
-/* LibreameBackendBundle:Registro:confirmarRegistro.html.twig */
-class __TwigTemplate_adf4b90860c8b42042655a4d2e203a6e4355ca1faeb658cdee6ebf47ef7bfae8 extends Twig_Template
+/* LibreameBackendBundle:Registro:registro.html.twig */
+class __TwigTemplate_5630dec6159ea616cb60a437a368d7a039de8c2b6e5d1943df0b4628d4e4f6cd extends Twig_Template
 {
     public function __construct(Twig_Environment $env)
     {
@@ -58,16 +58,22 @@ class __TwigTemplate_adf4b90860c8b42042655a4d2e203a6e4355ca1faeb658cdee6ebf47ef7
               <tr>
                 <td align=\"left\" valign=\"top\" style=\"font-family:Arial, Helvetica, sans-serif; font-size:12px; color:#525252;\">
                 
-                <div style=\"color:#00B08B; font-size:19px;\">Bienvenido ";
+                <div style=\"color:#00B08B; font-size:19px;\">Hola ";
         // line 37
-        echo twig_escape_filter($this->env, (isset($context["usr"]) ? $context["usr"] : null), "html", null, true);
+        echo twig_escape_filter($this->env, (isset($context["usuario"]) ? $context["usuario"] : null), "html", null, true);
         echo "</div>
-                <div style=\"color:#00B08B; font-size:17px;\">El proceso de registro concluyó con éxito, Por favor empieza a disfrutar de ex4read!</div>
+                <div style=\"color:#00B08B; font-size:17px;\">
+\t\t\t\t\t<br>Estamos casi listos para inciar en ex4read, solo confirma tu registro en la plataforma y comienza a disfrutar de nuestros servicios.<br>
+\t\t\t\t\t<br><li><a href=\"";
+        // line 40
+        echo twig_escape_filter($this->env, (isset($context["crurl"]) ? $context["crurl"] : null), "html", null, true);
+        echo "\">Confirmar mi registro.</a></li><br>
+\t\t\t\t</div>
 <br>
 <table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">
   <tr>
     <td width=\"13%\"><b><img src=\"data:image/jpeg;base64,<?php echo base64_encode(file_get_contents('";
-        // line 42
+        // line 45
         echo twig_escape_filter($this->env, $this->env->getExtension('assets')->getAssetUrl("images/tweet.gif"), "html", null, true);
         echo "'))?>\" alt=\"\" width=\"24\" height=\"23\"> <img src=\"data:image/jpeg;base64,<?php echo base64_encode(file_get_contents(''";
         echo twig_escape_filter($this->env, $this->env->getExtension('assets')->getAssetUrl("images/facebook.gif"), "html", null, true);
@@ -108,7 +114,7 @@ class __TwigTemplate_adf4b90860c8b42042655a4d2e203a6e4355ca1faeb658cdee6ebf47ef7
 
     public function getTemplateName()
     {
-        return "LibreameBackendBundle:Registro:confirmarRegistro.html.twig";
+        return "LibreameBackendBundle:Registro:registro.html.twig";
     }
 
     public function isTraitable()
@@ -118,6 +124,6 @@ class __TwigTemplate_adf4b90860c8b42042655a4d2e203a6e4355ca1faeb658cdee6ebf47ef7
 
     public function getDebugInfo()
     {
-        return array (  71 => 42,  63 => 37,  50 => 27,  37 => 17,  19 => 1,);
+        return array (  77 => 45,  69 => 40,  63 => 37,  50 => 27,  37 => 17,  19 => 1,);
     }
 }
