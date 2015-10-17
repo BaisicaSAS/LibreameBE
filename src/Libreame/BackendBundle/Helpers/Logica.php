@@ -335,8 +335,10 @@ class Logica {
             $message = \Swift_Message::newInstance()
                 ->setContentType('text/html')
                 ->setSubject('Bienvenido a ex4Read '.$usuario->getTxusunombre())
-                ->setFrom('baisicasas@gmail.com')
-                ->setBcc('baisicasas@gmail.com')
+                ->setFrom('registro@ex4read.co')
+                ->setBcc('registro@ex4read.co')
+                //->setFrom('baisicasas@gmail.com')
+                //->setBcc('baisicasas@gmail.com')
                 ->setTo($usuario->getTxusuemail())
                 ->setBody($this->renderView(
                     'LibreameBackendBundle:Registro:registro.html.twig',
