@@ -15,7 +15,7 @@ class LbMembresias
     /**
      * @var integer
      *
-     * @ORM\Column(name="inMembresia", type="integer")
+     * @ORM\Column(name="inMembresia", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -23,22 +23,22 @@ class LbMembresias
 
     /**
      * @var integer
-     * Default 0 - El usuario NO Es el creador del Grupo
+     *
      * @ORM\Column(name="inMemCreador", type="integer", nullable=false)
      */
-    protected $inmemcreador = 0;
+    protected $inmemcreador = '0';
 
     /**
      * @var integer
-     * Default 1 - Membresía activa
+     *
      * @ORM\Column(name="inMemActiva", type="integer", nullable=false)
      */
-    protected $inmemactiva = 1;
+    protected $inmemactiva = '1';
 
     /**
-     * @var \Libreame\BackendBundle\Entity\LbGrupos
+     * @var \LbGrupos
      *
-     * @ORM\ManyToOne(targetEntity="Libreame\BackendBundle\Entity\LbGrupos")
+     * @ORM\ManyToOne(targetEntity="LbGrupos")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="inMemGrupo", referencedColumnName="inGrupo")
      * })
@@ -46,9 +46,9 @@ class LbMembresias
     protected $inmemgrupo;
 
     /**
-     * @var \Libreame\BackendBundle\Entity\LbUsuarios
+     * @var \LbUsuarios
      *
-     * @ORM\ManyToOne(targetEntity="Libreame\BackendBundle\Entity\LbUsuarios")
+     * @ORM\ManyToOne(targetEntity="LbUsuarios")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="inMemUsuario", referencedColumnName="inUsuario")
      * })

@@ -15,16 +15,16 @@ class LbGenerosofrecidos
     /**
      * @var integer
      *
-     * @ORM\Column(name="inGeneroOfrecido", type="integer")
+     * @ORM\Column(name="inGeneroOfrecido", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     protected $ingeneroofrecido;
 
     /**
-     * @var \Libreame\BackendBundle\Entity\LbGeneros
+     * @var \LbGeneros
      *
-     * @ORM\ManyToOne(targetEntity="Libreame\BackendBundle\Entity\LbGeneros")
+     * @ORM\ManyToOne(targetEntity="LbGeneros")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="inGOfGenero", referencedColumnName="inGenero")
      * })
@@ -32,9 +32,9 @@ class LbGenerosofrecidos
     protected $ingofgenero;
 
     /**
-     * @var \Libreame\BackendBundle\Entity\LbOfrecidos
+     * @var \LbOfrecidos
      *
-     * @ORM\ManyToOne(targetEntity="Libreame\BackendBundle\Entity\LbOfrecidos")
+     * @ORM\ManyToOne(targetEntity="LbOfrecidos")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="inGOfOfrecido", referencedColumnName="inOfrecido")
      * })

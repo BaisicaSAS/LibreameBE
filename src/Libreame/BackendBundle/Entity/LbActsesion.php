@@ -15,18 +15,18 @@ class LbActsesion
     /**
      * @var integer
      *
-     * @ORM\Column(name="inActSesion", type="integer")
+     * @ORM\Column(name="inActSesion", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     protected $inactsesion;
 
     /**
-     * @var string
+     * @var integer
      *
-     * @ORM\Column(name="txActAccion", type="string", length=5, nullable=false)
+     * @ORM\Column(name="inActAccion", type="integer", nullable=false)
      */
-    protected $txactaccion;
+    protected $inactaccion = '0';
 
     /**
      * @var string
@@ -47,12 +47,12 @@ class LbActsesion
      *
      * @ORM\Column(name="inActFinalizada", type="integer", nullable=false)
      */
-    protected $inactfinalizada;
+    protected $inactfinalizada = '0';
 
     /**
-     * @var \Libreame\BackendBundle\Entity\LbSesiones
+     * @var \LbSesiones
      *
-     * @ORM\ManyToOne(targetEntity="Libreame\BackendBundle\Entity\LbSesiones")
+     * @ORM\ManyToOne(targetEntity="LbSesiones")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="inActSesionDisUs", referencedColumnName="inSesion")
      * })
@@ -72,26 +72,26 @@ class LbActsesion
     }
 
     /**
-     * Set txactaccion
+     * Set inactaccion
      *
-     * @param string $txactaccion
+     * @param integer $inactaccion
      * @return LbActsesion
      */
-    public function setTxactaccion($txactaccion)
+    public function setInactaccion($inactaccion)
     {
-        $this->txactaccion = $txactaccion;
+        $this->inactaccion = $inactaccion;
 
         return $this;
     }
 
     /**
-     * Get txactaccion
+     * Get inactaccion
      *
-     * @return string 
+     * @return integer 
      */
-    public function getTxactaccion()
+    public function getInactaccion()
     {
-        return $this->txactaccion;
+        return $this->inactaccion;
     }
 
     /**
@@ -184,33 +184,5 @@ class LbActsesion
     public function getInactsesiondisus()
     {
         return $this->inactsesiondisus;
-    }
-    /**
-     * @var integer
-     */
-    protected $inactaccion = 0;
-
-
-    /**
-     * Set inactaccion
-     *
-     * @param integer $inactaccion
-     * @return LbActsesion
-     */
-    public function setInactaccion($inactaccion)
-    {
-        $this->inactaccion = $inactaccion;
-
-        return $this;
-    }
-
-    /**
-     * Get inactaccion
-     *
-     * @return integer 
-     */
-    public function getInactaccion()
-    {
-        return $this->inactaccion;
     }
 }

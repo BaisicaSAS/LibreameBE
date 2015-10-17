@@ -15,7 +15,7 @@ class LbOfrecidos
     /**
      * @var integer
      *
-     * @ORM\Column(name="inOfrecido", type="integer")
+     * @ORM\Column(name="inOfrecido", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -26,7 +26,7 @@ class LbOfrecidos
      *
      * @ORM\Column(name="inOfrTransac", type="integer", nullable=false)
      */
-    protected $inofrtransac;
+    protected $inofrtransac = '1';
 
     /**
      * @var string
@@ -40,19 +40,19 @@ class LbOfrecidos
      *
      * @ORM\Column(name="dbOfrValOferta", type="float", precision=10, scale=0, nullable=false)
      */
-    protected $dbofrvaloferta;
+    protected $dbofrvaloferta = '0';
 
     /**
      * @var float
      *
      * @ORM\Column(name="dbOfrValAdic", type="float", precision=10, scale=0, nullable=false)
      */
-    protected $dbofrvaladic;
+    protected $dbofrvaladic = '0';
 
     /**
-     * @var \Libreame\BackendBundle\Entity\LbEjemplares
+     * @var \LbEjemplares
      *
-     * @ORM\ManyToOne(targetEntity="Libreame\BackendBundle\Entity\LbEjemplares")
+     * @ORM\ManyToOne(targetEntity="LbEjemplares")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="inOfrEjemplar", referencedColumnName="inEjemplar")
      * })
@@ -60,9 +60,9 @@ class LbOfrecidos
     protected $inofrejemplar;
 
     /**
-     * @var \Libreame\BackendBundle\Entity\LbOfertas
+     * @var \LbOfertas
      *
-     * @ORM\ManyToOne(targetEntity="Libreame\BackendBundle\Entity\LbOfertas")
+     * @ORM\ManyToOne(targetEntity="LbOfertas")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="inOfrOferta", referencedColumnName="inOferta")
      * })

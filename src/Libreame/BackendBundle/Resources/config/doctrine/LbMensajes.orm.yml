@@ -1,0 +1,65 @@
+Libreame\BackendBundle\Entity\LbMensajes:
+    type: entity
+    table: lb_mensajes
+    indexes:
+        fk_lb_mensajes_lb_usuarios1_idx:
+            columns:
+                - inMenUsuario
+    id:
+        inmensaje:
+            type: bigint
+            nullable: false
+            unsigned: false
+            comment: 'Id consecutivo del mensaje'
+            id: true
+            column: inMensaje
+            generator:
+                strategy: IDENTITY
+    fields:
+        txmensaje:
+            type: text
+            nullable: false
+            length: null
+            fixed: false
+            comment: 'Texto del Mensaje'
+            column: txMensaje
+        inmenorigen:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: "Indica el origen de cada mensaje:\n0: Publicacion de ejemplar\n1: Realizar oferta por Ejemplar\n2: Ver conversación trato - Oferta Aceptada\n3: Ver conversación trato - Oferta Recibida\n4: Ver comentarios - Recibido\n5: Ver conversación trato - Responder pregunta\n6: Ver oferta realizada"
+            column: inMenOrigen
+        inmenleido:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: "Leido: 1\nNo Leido: 0"
+            default: '0'
+            column: inMenLeido
+        inmenfecha:
+            type: datetime
+            nullable: false
+            comment: 'Fecha del mensaje'
+            column: inMenFecha
+        inmemidrelacionado:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: 'Id del registro relacionado, segun la tabla ORIGEN'
+            column: inMemIdRelacionado
+        inmenfechaleido:
+            type: datetime
+            nullable: true
+            comment: 'Fecha de lectura del mensaje'
+            column: inMenFechaLeido
+    manyToOne:
+        inmenusuario:
+            targetEntity: LbUsuarios
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                inMenUsuario:
+                    referencedColumnName: inUsuario
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

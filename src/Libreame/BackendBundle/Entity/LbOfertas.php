@@ -15,7 +15,7 @@ class LbOfertas
     /**
      * @var integer
      *
-     * @ORM\Column(name="inOferta", type="integer")
+     * @ORM\Column(name="inOferta", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -33,26 +33,26 @@ class LbOfertas
      *
      * @ORM\Column(name="inOfeVigencia", type="integer", nullable=false)
      */
-    protected $inofevigencia;
+    protected $inofevigencia = '1';
 
     /**
      * @var integer
      *
      * @ORM\Column(name="inOfeActiva", type="integer", nullable=true)
      */
-    protected $inofeactiva;
+    protected $inofeactiva = '1';
 
     /**
      * @var integer
      *
      * @ORM\Column(name="inOfeAbierta", type="integer", nullable=true)
      */
-    protected $inofeabierta;
+    protected $inofeabierta = '0';
 
     /**
-     * @var \Libreame\BackendBundle\Entity\LbMembresias
+     * @var \LbMembresias
      *
-     * @ORM\ManyToOne(targetEntity="Libreame\BackendBundle\Entity\LbMembresias")
+     * @ORM\ManyToOne(targetEntity="LbMembresias")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="inOfeMembresia", referencedColumnName="inMembresia")
      * })

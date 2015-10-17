@@ -62,15 +62,6 @@ Libreame\BackendBundle\Entity\LbSolicitados:
                 inSolEjemplar:
                     referencedColumnName: inEjemplar
             orphanRemoval: false
-        insoloferta:
-            targetEntity: LbOfertas
-            cascade: {  }
-            mappedBy: null
-            inversedBy: null
-            joinColumns:
-                inSolOferta:
-                    referencedColumnName: inOferta
-            orphanRemoval: false
         insollibro:
             targetEntity: LbLibros
             cascade: {  }
@@ -79,5 +70,14 @@ Libreame\BackendBundle\Entity\LbSolicitados:
             joinColumns:
                 inSolLibro:
                     referencedColumnName: inLibro
+            orphanRemoval: false
+        insoloferta:
+            targetEntity: LbOfertas
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                inSolOferta:
+                    referencedColumnName: inOferta
             orphanRemoval: false
     lifecycleCallbacks: {  }

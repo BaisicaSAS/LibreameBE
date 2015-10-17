@@ -15,7 +15,7 @@ class LbHistoriaejemplar
     /**
      * @var integer
      *
-     * @ORM\Column(name="inHistEjemplar", type="integer")
+     * @ORM\Column(name="inHistEjemplar", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -33,12 +33,12 @@ class LbHistoriaejemplar
      *
      * @ORM\Column(name="inHEjModo", type="integer", nullable=false)
      */
-    protected $inhejmodo;
+    protected $inhejmodo = '0';
 
     /**
-     * @var \Libreame\BackendBundle\Entity\LbEjemplares
+     * @var \LbEjemplares
      *
-     * @ORM\ManyToOne(targetEntity="Libreame\BackendBundle\Entity\LbEjemplares")
+     * @ORM\ManyToOne(targetEntity="LbEjemplares")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="inHEjEjemplar", referencedColumnName="inEjemplar")
      * })
@@ -46,9 +46,9 @@ class LbHistoriaejemplar
     protected $inhejejemplar;
 
     /**
-     * @var \Libreame\BackendBundle\Entity\LbUsuarios
+     * @var \LbUsuarios
      *
-     * @ORM\ManyToOne(targetEntity="Libreame\BackendBundle\Entity\LbUsuarios")
+     * @ORM\ManyToOne(targetEntity="LbUsuarios")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="inHEjUsuario", referencedColumnName="inUsuario")
      * })

@@ -15,7 +15,7 @@ class LbActividadofertas
     /**
      * @var integer
      *
-     * @ORM\Column(name="inActividadOferta", type="integer")
+     * @ORM\Column(name="inActividadOferta", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -40,12 +40,12 @@ class LbActividadofertas
      *
      * @ORM\Column(name="inActEstado", type="integer", nullable=true)
      */
-    protected $inactestado;
+    protected $inactestado = '0';
 
     /**
-     * @var \Libreame\BackendBundle\Entity\LbActividadofertas
+     * @var \LbActividadofertas
      *
-     * @ORM\ManyToOne(targetEntity="Libreame\BackendBundle\Entity\LbActividadofertas")
+     * @ORM\ManyToOne(targetEntity="LbActividadofertas")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="inActPadreAct", referencedColumnName="inActividadOferta")
      * })
@@ -53,9 +53,9 @@ class LbActividadofertas
     protected $inactpadreact;
 
     /**
-     * @var \Libreame\BackendBundle\Entity\LbOfertas
+     * @var \LbOfertas
      *
-     * @ORM\ManyToOne(targetEntity="Libreame\BackendBundle\Entity\LbOfertas")
+     * @ORM\ManyToOne(targetEntity="LbOfertas")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="inActOferta", referencedColumnName="inOferta")
      * })
@@ -63,9 +63,9 @@ class LbActividadofertas
     protected $inactoferta;
 
     /**
-     * @var \Libreame\BackendBundle\Entity\LbUsuarios
+     * @var \LbUsuarios
      *
-     * @ORM\ManyToOne(targetEntity="Libreame\BackendBundle\Entity\LbUsuarios")
+     * @ORM\ManyToOne(targetEntity="LbUsuarios")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="inActUsuario", referencedColumnName="inUsuario")
      * })

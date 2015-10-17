@@ -62,7 +62,7 @@ class Login
                 //echo "<script>alert('-----Estado usuario ".$estado."')</script>";
 
                 //Busca el dispositivo si no esta asociado al usuario lo crea y lo asocia
-                if (!ManejoDataRepository::getDispositivoUsuario($pSolicitud->getDeviceMAC(), $usuario)){
+                if (!ManejoDataRepository::getDispositivoUsuario($pSolicitud->getDeviceMAC(), $usuario, NULL)){
                     //echo "<script>alert('Dispositivo [".$pSolicitud->getDeviceMAC()."-guardadevice".$guardadevice." ] NO existe')</script>";
 
                     $device=$device->creaDispusuario($usuario, $pSolicitud);
@@ -70,7 +70,7 @@ class Login
                     !ManejoDataRepository::persistEntidad($device);
                 }
                 else {
-                    $device = ManejoDataRepository::getDispositivoUsuario($pSolicitud->getDeviceMAC(), $usuario);
+                    $device = ManejoDataRepository::getDispositivoUsuario($pSolicitud->getDeviceMAC(), $usuario, NULL);
                 }
 
                //echo "<script>alert('Dispositivo ".$device->getTxdisid()." - ".$device->getIndispusuario()."')</script>";
@@ -92,14 +92,14 @@ class Login
 
                             //Crea sesion
                             //echo "<script>alert('-----Creará sesion"  .AccesoController::inSesActi."')</script>";
-                            $sesion = ManejoDataRepository::generaSesion(AccesoController::inSesActi,$fecha,NULL,$device,$pSolicitud->getIPaddr());
+                            $sesion = ManejoDataRepository::generaSesion(AccesoController::inSesActi,$fecha,NULL,$device,$pSolicitud->getIPaddr(),NULL);
                             //Genera sesion activa sin fecha de finalización
-                            ManejoDataRepository::generaActSesion($sesion,AccesoController::inDatoUno,'Login usuario '.$usuario->getTxusuemail().' exitoso',$pSolicitud->getAccion(),$fecha,NULL);
+                            ManejoDataRepository::generaActSesion($sesion,AccesoController::inDatoUno,'Login usuario '.$usuario->getTxusuemail().' exitoso',$pSolicitud->getAccion(),$fecha,$fecha,NULL);
                             $respuesta->setRespuesta(AccesoController::inULogged);    
                             $respuesta->setSession($sesion->getTxsesnumero());  
                             
                             //Busca la cantidad de mensajes del usuario sin leer 
-                            $respuesta->setCantMensajes($usuario->cantMsgUsr($usuario));    
+                            $respuesta->setCantMensajes(ManejoDataRepository::cantMsgUsr($usuario));    
                             
                         }
                     }
@@ -146,7 +146,7 @@ class Login
                 //echo "<script>alert('-----Estado usuario ".$estado."')</script>";
 
                 //Busca el dispositivo si no esta asociado al usuario lo crea y lo asocia
-                if (!ManejoDataRepository::getDispositivoUsuario($pSolicitud->getDeviceMAC(), $usuario)){
+                if (!ManejoDataRepository::getDispositivoUsuario($pSolicitud->getDeviceMAC(), $usuario, NULL)){
                     //echo "<script>alert('Dispositivo [".$pSolicitud->getDeviceMAC()."-guardadevice".$guardadevice." ] NO existe')</script>";
 
                     $device=$device->creaDispusuario($usuario, $pSolicitud);
@@ -154,7 +154,7 @@ class Login
                     !ManejoDataRepository::persistEntidad($device);
                 }
                 else {
-                    $device = ManejoDataRepository::getDispositivoUsuario($pSolicitud->getDeviceMAC(), $usuario);
+                    $device = ManejoDataRepository::getDispositivoUsuario($pSolicitud->getDeviceMAC(), $usuario, NULL);
                 }
 
                //echo "<script>alert('Dispositivo ".$device->getTxdisid()." - ".$device->getIndispusuario()."')</script>";
@@ -167,7 +167,7 @@ class Login
                     //Verifica si la clave es correcta
                     if ($usuario->getTxusuclave() == $pSolicitud->getClave()){
                         //Verifica si el usuario NO tiene una sesion activa
-                        if (!ManejoDataRepository::usuarioSesionActiva($pSolicitud, $device)){
+                        if (ManejoDataRepository::usuarioSesionActiva($pSolicitud, $device) == FALSE){
                             $respuesta->setRespuesta(AccesoController::inUsSeIna);
                         }
                         else
@@ -175,9 +175,9 @@ class Login
                             //AQUI CIERRA SESION FINALMENTE
                             //echo "<script>alert('-----Creará sesion"  .AccesoController::inSesActi."')</script>";
                             //$sesion = ManejoDataRepository::recuperaSesionUsuario($usuario, $pSolicitud);
-                            $sesion = ManejoDataRepository::cerrarSesionUsuario(ManejoDataRepository::recuperaSesionUsuario($usuario, $pSolicitud));
+                            $sesion = ManejoDataRepository::cerrarSesionUsuario(ManejoDataRepository::recuperaSesionUsuario($usuario, $pSolicitud, NULL));
                             //Genera sesion activa sin fecha de finalización
-                            ManejoDataRepository::generaActSesion($sesion,AccesoController::inDatoUno,'Logout usuario '.$usuario->getTxusuemail().' exitoso',$pSolicitud->getAccion(),$fecha,$fecha);
+                            ManejoDataRepository::generaActSesion($sesion,AccesoController::inDatoUno,'Logout usuario '.$usuario->getTxusuemail().' exitoso',$pSolicitud->getAccion(),$fecha,$fecha, NULL);
                             $respuesta->setRespuesta(AccesoController::inULogged);    
                         }
                     }

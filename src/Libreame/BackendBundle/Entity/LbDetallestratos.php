@@ -15,7 +15,7 @@ class LbDetallestratos
     /**
      * @var integer
      *
-     * @ORM\Column(name="inDetalleTrato", type="integer")
+     * @ORM\Column(name="inDetalleTrato", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -26,19 +26,19 @@ class LbDetallestratos
      *
      * @ORM\Column(name="inDetValorUsr", type="float", precision=10, scale=0, nullable=false)
      */
-    protected $indetvalorusr;
+    protected $indetvalorusr = '0';
 
     /**
      * @var float
      *
      * @ORM\Column(name="inDetValorOtro", type="float", precision=10, scale=0, nullable=false)
      */
-    protected $indetvalorotro;
+    protected $indetvalorotro = '0';
 
     /**
-     * @var \Libreame\BackendBundle\Entity\LbEjemplares
+     * @var \LbEjemplares
      *
-     * @ORM\ManyToOne(targetEntity="Libreame\BackendBundle\Entity\LbEjemplares")
+     * @ORM\ManyToOne(targetEntity="LbEjemplares")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="inDetEjemplarUsr", referencedColumnName="inEjemplar")
      * })
@@ -46,9 +46,9 @@ class LbDetallestratos
     protected $indetejemplarusr;
 
     /**
-     * @var \Libreame\BackendBundle\Entity\LbEjemplares
+     * @var \LbEjemplares
      *
-     * @ORM\ManyToOne(targetEntity="Libreame\BackendBundle\Entity\LbEjemplares")
+     * @ORM\ManyToOne(targetEntity="LbEjemplares")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="inDetEjemplarOtro", referencedColumnName="inEjemplar")
      * })
@@ -56,9 +56,9 @@ class LbDetallestratos
     protected $indetejemplarotro;
 
     /**
-     * @var \Libreame\BackendBundle\Entity\LbTratos
+     * @var \LbTratos
      *
-     * @ORM\ManyToOne(targetEntity="Libreame\BackendBundle\Entity\LbTratos")
+     * @ORM\ManyToOne(targetEntity="LbTratos")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="inDetTrato", referencedColumnName="inTrato")
      * })
@@ -66,9 +66,9 @@ class LbDetallestratos
     protected $indettrato;
 
     /**
-     * @var \Libreame\BackendBundle\Entity\LbUsuarios
+     * @var \LbUsuarios
      *
-     * @ORM\ManyToOne(targetEntity="Libreame\BackendBundle\Entity\LbUsuarios")
+     * @ORM\ManyToOne(targetEntity="LbUsuarios")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="inDetUsuario", referencedColumnName="inUsuario")
      * })
@@ -76,9 +76,9 @@ class LbDetallestratos
     protected $indetusuario;
 
     /**
-     * @var \Libreame\BackendBundle\Entity\LbUsuarios
+     * @var \LbUsuarios
      *
-     * @ORM\ManyToOne(targetEntity="Libreame\BackendBundle\Entity\LbUsuarios")
+     * @ORM\ManyToOne(targetEntity="LbUsuarios")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="inDetUsuarioOtro", referencedColumnName="inUsuario")
      * })

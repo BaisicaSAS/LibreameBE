@@ -15,7 +15,7 @@ class LbTratos
     /**
      * @var integer
      *
-     * @ORM\Column(name="inTrato", type="integer")
+     * @ORM\Column(name="inTrato", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -33,12 +33,12 @@ class LbTratos
      *
      * @ORM\Column(name="inTraEstado", type="integer", nullable=false)
      */
-    protected $intraestado;
+    protected $intraestado = '0';
 
     /**
      * @var string
      *
-     * @ORM\Column(name="txTraAcuEntrega", type="string", length=300, nullable=false)
+     * @ORM\Column(name="txTraAcuEntrega", type="string", length=500, nullable=false)
      */
     protected $txtraacuentrega;
 
@@ -50,9 +50,9 @@ class LbTratos
     protected $fetrafecentrega;
 
     /**
-     * @var \Libreame\BackendBundle\Entity\LbOfertas
+     * @var \LbOfertas
      *
-     * @ORM\ManyToOne(targetEntity="Libreame\BackendBundle\Entity\LbOfertas")
+     * @ORM\ManyToOne(targetEntity="LbOfertas")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="inTraOferta", referencedColumnName="inOferta")
      * })
@@ -60,9 +60,9 @@ class LbTratos
     protected $intraoferta;
 
     /**
-     * @var \Libreame\BackendBundle\Entity\LbUsuarios
+     * @var \LbUsuarios
      *
-     * @ORM\ManyToOne(targetEntity="Libreame\BackendBundle\Entity\LbUsuarios")
+     * @ORM\ManyToOne(targetEntity="LbUsuarios")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="inTraUsuOfrecio", referencedColumnName="inUsuario")
      * })
@@ -70,9 +70,9 @@ class LbTratos
     protected $intrausuofrecio;
 
     /**
-     * @var \Libreame\BackendBundle\Entity\LbUsuarios
+     * @var \LbUsuarios
      *
-     * @ORM\ManyToOne(targetEntity="Libreame\BackendBundle\Entity\LbUsuarios")
+     * @ORM\ManyToOne(targetEntity="LbUsuarios")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="inTraUsuAcepto", referencedColumnName="inUsuario")
      * })

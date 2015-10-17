@@ -55,6 +55,7 @@ Libreame\BackendBundle\Entity\LbUsuarios:
         txusuimagen:
             type: blob
             nullable: false
+            length: null
             fixed: false
             comment: 'Cuando no se especifica el sistema pone una por defecto.'
             column: txUsuImagen

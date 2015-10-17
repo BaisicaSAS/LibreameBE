@@ -15,7 +15,7 @@ class LbSolicitados
     /**
      * @var integer
      *
-     * @ORM\Column(name="IdSolicitado", type="integer")
+     * @ORM\Column(name="IdSolicitado", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -26,12 +26,12 @@ class LbSolicitados
      *
      * @ORM\Column(name="inSolTransac", type="integer", nullable=false)
      */
-    protected $insoltransac;
+    protected $insoltransac = '1';
 
     /**
      * @var string
      *
-     * @ORM\Column(name="txSolObservacion", type="string", length=100, nullable=true)
+     * @ORM\Column(name="txSolObservacion", type="string", length=300, nullable=true)
      */
     protected $txsolobservacion;
 
@@ -40,19 +40,19 @@ class LbSolicitados
      *
      * @ORM\Column(name="dbSolValOferta", type="float", precision=10, scale=0, nullable=false)
      */
-    protected $dbsolvaloferta;
+    protected $dbsolvaloferta = '0';
 
     /**
      * @var float
      *
      * @ORM\Column(name="dbSolValAdic", type="float", precision=10, scale=0, nullable=false)
      */
-    protected $dbsolvaladic;
+    protected $dbsolvaladic = '0';
 
     /**
-     * @var \Libreame\BackendBundle\Entity\LbEjemplares
+     * @var \LbEjemplares
      *
-     * @ORM\ManyToOne(targetEntity="Libreame\BackendBundle\Entity\LbEjemplares")
+     * @ORM\ManyToOne(targetEntity="LbEjemplares")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="inSolEjemplar", referencedColumnName="inEjemplar")
      * })
@@ -60,9 +60,9 @@ class LbSolicitados
     protected $insolejemplar;
 
     /**
-     * @var \Libreame\BackendBundle\Entity\LbLibros
+     * @var \LbLibros
      *
-     * @ORM\ManyToOne(targetEntity="Libreame\BackendBundle\Entity\LbLibros")
+     * @ORM\ManyToOne(targetEntity="LbLibros")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="inSolLibro", referencedColumnName="inLibro")
      * })
@@ -70,9 +70,9 @@ class LbSolicitados
     protected $insollibro;
 
     /**
-     * @var \Libreame\BackendBundle\Entity\LbOfertas
+     * @var \LbOfertas
      *
-     * @ORM\ManyToOne(targetEntity="Libreame\BackendBundle\Entity\LbOfertas")
+     * @ORM\ManyToOne(targetEntity="LbOfertas")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="inSolOferta", referencedColumnName="inOferta")
      * })

@@ -15,7 +15,7 @@ class LbGeneros
     /**
      * @var integer
      *
-     * @ORM\Column(name="inGenero", type="integer")
+     * @ORM\Column(name="inGenero", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -24,7 +24,7 @@ class LbGeneros
     /**
      * @var string
      *
-     * @ORM\Column(name="txGenNombre", type="string", length=45, nullable=false)
+     * @ORM\Column(name="txGenNombre", type="string", length=100, nullable=false)
      */
     protected $txgennombre;
 
@@ -62,5 +62,4 @@ class LbGeneros
     {
         return $this->txgennombre;
     }
-    
 }

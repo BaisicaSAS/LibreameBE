@@ -3,6 +3,7 @@
 namespace Libreame\BackendBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+
 /**
  * LbEjemplares
  *
@@ -14,7 +15,7 @@ class LbEjemplares
     /**
      * @var integer
      *
-     * @ORM\Column(name="inEjemplar", type="integer")
+     * @ORM\Column(name="inEjemplar", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -25,20 +26,19 @@ class LbEjemplares
      *
      * @ORM\Column(name="inEjeCantidad", type="integer", nullable=false)
      */
-    protected $inejecantidad;
+    protected $inejecantidad = '1';
 
     /**
      * @var float
      *
      * @ORM\Column(name="dbEjeAvaluo", type="float", precision=10, scale=0, nullable=false)
      */
-    protected $dbejeavaluo;
-
+    protected $dbejeavaluo = '0';
 
     /**
-     * @var \Libreame\BackendBundle\Entity\LbLibros
+     * @var \LbLibros
      *
-     * @ORM\ManyToOne(targetEntity="Libreame\BackendBundle\Entity\LbLibros")
+     * @ORM\ManyToOne(targetEntity="LbLibros")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="inEjeLibro", referencedColumnName="inLibro")
      * })
@@ -46,9 +46,9 @@ class LbEjemplares
     protected $inejelibro;
 
     /**
-     * @var \Libreame\BackendBundle\Entity\LbUsuarios
+     * @var \LbUsuarios
      *
-     * @ORM\ManyToOne(targetEntity="Libreame\BackendBundle\Entity\LbUsuarios")
+     * @ORM\ManyToOne(targetEntity="LbUsuarios")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="inEjeUsuDueno", referencedColumnName="inUsuario")
      * })
@@ -158,5 +158,4 @@ class LbEjemplares
     {
         return $this->inejeusudueno;
     }
-    
 }

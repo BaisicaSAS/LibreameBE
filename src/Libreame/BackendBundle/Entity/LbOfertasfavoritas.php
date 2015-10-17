@@ -15,7 +15,7 @@ class LbOfertasfavoritas
     /**
      * @var integer
      *
-     * @ORM\Column(name="inOfertaFavorita", type="integer")
+     * @ORM\Column(name="inOfertaFavorita", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -29,9 +29,9 @@ class LbOfertasfavoritas
     protected $fefavfecha;
 
     /**
-     * @var \Libreame\BackendBundle\Entity\LbOfertas
+     * @var \LbOfertas
      *
-     * @ORM\ManyToOne(targetEntity="Libreame\BackendBundle\Entity\LbOfertas")
+     * @ORM\ManyToOne(targetEntity="LbOfertas")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="inFavOferta", referencedColumnName="inOferta")
      * })
@@ -39,9 +39,9 @@ class LbOfertasfavoritas
     protected $infavoferta;
 
     /**
-     * @var \Libreame\BackendBundle\Entity\LbUsuarios
+     * @var \LbUsuarios
      *
-     * @ORM\ManyToOne(targetEntity="Libreame\BackendBundle\Entity\LbUsuarios")
+     * @ORM\ManyToOne(targetEntity="LbUsuarios")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="inFavUsuario", referencedColumnName="inUsuario")
      * })

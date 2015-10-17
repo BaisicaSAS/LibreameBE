@@ -15,7 +15,7 @@ class LbLugares
     /**
      * @var integer
      *
-     * @ORM\Column(name="inLugar", type="integer")
+     * @ORM\Column(name="inLugar", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -36,9 +36,9 @@ class LbLugares
     protected $txlugnombre;
 
     /**
-     * @var \Libreame\BackendBundle\Entity\LbLugares
+     * @var \LbLugares
      *
-     * @ORM\ManyToOne(targetEntity="Libreame\BackendBundle\Entity\LbLugares")
+     * @ORM\ManyToOne(targetEntity="LbLugares")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="inLugPadre", referencedColumnName="inLugar")
      * })
@@ -125,13 +125,4 @@ class LbLugares
     {
         return $this->inlugpadre;
     }
-
-    //Constructor de la clase
-    function __construct(){ 
-        $strBlanco = "";
-        $this->inlugar = 0;
-        $this->txlugcodigo = $strBlanco;
-        $this->txlugnombre = $strBlanco;  
-    } 
-    
 }

@@ -25,15 +25,6 @@ Libreame\BackendBundle\Entity\LbOfertasfavoritas:
             comment: 'Fecha en la que la marque como favorita'
             column: feFavFecha
     manyToOne:
-        infavusuario:
-            targetEntity: LbUsuarios
-            cascade: {  }
-            mappedBy: null
-            inversedBy: null
-            joinColumns:
-                inFavUsuario:
-                    referencedColumnName: inUsuario
-            orphanRemoval: false
         infavoferta:
             targetEntity: LbOfertas
             cascade: {  }
@@ -42,5 +33,14 @@ Libreame\BackendBundle\Entity\LbOfertasfavoritas:
             joinColumns:
                 inFavOferta:
                     referencedColumnName: inOferta
+            orphanRemoval: false
+        infavusuario:
+            targetEntity: LbUsuarios
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                inFavUsuario:
+                    referencedColumnName: inUsuario
             orphanRemoval: false
     lifecycleCallbacks: {  }

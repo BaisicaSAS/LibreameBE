@@ -38,18 +38,18 @@ Libreame\BackendBundle\Entity\LbActividadofertas:
             type: integer
             nullable: true
             unsigned: false
-            comment: '0: No leido 1: Leido 2: Ofensivo-Oculto 3: Privado 4: Eliminado del hilo (No se eliminan pero estos no deben aparecer nunca.)'
+            comment: "0: No leido\n1: Leido\n2: Ofensivo/Oculto\n3: Privado\n4: Eliminado del hilo (No se eliminan pero estos no deben aparecer nunca.)\n"
             default: '0'
             column: inActEstado
     manyToOne:
-        inactusuario:
-            targetEntity: LbUsuarios
+        inactpadreact:
+            targetEntity: LbActividadofertas
             cascade: {  }
             mappedBy: null
             inversedBy: null
             joinColumns:
-                inActUsuario:
-                    referencedColumnName: inUsuario
+                inActPadreAct:
+                    referencedColumnName: inActividadOferta
             orphanRemoval: false
         inactoferta:
             targetEntity: LbOfertas
@@ -60,13 +60,13 @@ Libreame\BackendBundle\Entity\LbActividadofertas:
                 inActOferta:
                     referencedColumnName: inOferta
             orphanRemoval: false
-        inactpadreact:
-            targetEntity: LbActividadofertas
+        inactusuario:
+            targetEntity: LbUsuarios
             cascade: {  }
             mappedBy: null
             inversedBy: null
             joinColumns:
-                inActPadreAct:
-                    referencedColumnName: inActividadOferta
+                inActUsuario:
+                    referencedColumnName: inUsuario
             orphanRemoval: false
     lifecycleCallbacks: {  }

@@ -404,15 +404,4 @@ class LbUsuarios
         }
     }
     
-    //Función que retorna la cantidad de mensajes que un usuario tiene sin leer en la plataforma
-    public function cantMsgUsr($usuario)
-    {
-        //$em = $this->getDoctrine()->getManager();
-        //$usuario = $em->getRepository('LibreameBackendBundle:LbUsuarios')->
-        //                findOneBy(array('txusuemail' => $pSolicitud->getEmail()));
-
-        
-        return 10;
-    }
-    
 }

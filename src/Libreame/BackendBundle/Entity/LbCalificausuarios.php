@@ -15,7 +15,7 @@ class LbCalificausuarios
     /**
      * @var integer
      *
-     * @ORM\Column(name="inCalificacion", type="integer")
+     * @ORM\Column(name="inCalificacion", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -31,7 +31,7 @@ class LbCalificausuarios
     /**
      * @var string
      *
-     * @ORM\Column(name="txCalObservacion", type="string", length=100, nullable=true)
+     * @ORM\Column(name="txCalObservacion", type="string", length=500, nullable=true)
      */
     protected $txcalobservacion;
 
@@ -40,12 +40,12 @@ class LbCalificausuarios
      *
      * @ORM\Column(name="inCalReporteAbuso", type="integer", nullable=false)
      */
-    protected $incalreporteabuso;
+    protected $incalreporteabuso = '0';
 
     /**
-     * @var \Libreame\BackendBundle\Entity\LbUsuarios
+     * @var \LbUsuarios
      *
-     * @ORM\ManyToOne(targetEntity="Libreame\BackendBundle\Entity\LbUsuarios")
+     * @ORM\ManyToOne(targetEntity="LbUsuarios")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="inCalUsuCalifica", referencedColumnName="inUsuario")
      * })
@@ -53,9 +53,9 @@ class LbCalificausuarios
     protected $incalusucalifica;
 
     /**
-     * @var \Libreame\BackendBundle\Entity\LbUsuarios
+     * @var \LbUsuarios
      *
-     * @ORM\ManyToOne(targetEntity="Libreame\BackendBundle\Entity\LbUsuarios")
+     * @ORM\ManyToOne(targetEntity="LbUsuarios")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="inCalUsuCalificado", referencedColumnName="inUsuario")
      * })

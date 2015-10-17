@@ -15,7 +15,7 @@ class LbGrupos
     /**
      * @var integer
      *
-     * @ORM\Column(name="inGrupo", type="integer")
+     * @ORM\Column(name="inGrupo", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -24,7 +24,7 @@ class LbGrupos
     /**
      * @var string
      *
-     * @ORM\Column(name="inGruNombre", type="string", length=100, nullable=false)
+     * @ORM\Column(name="inGruNombre", type="string", length=200, nullable=false)
      */
     protected $ingrunombre;
 
@@ -40,7 +40,7 @@ class LbGrupos
      *
      * @ORM\Column(name="inGruCantMiem", type="integer", nullable=false)
      */
-    protected $ingrucantmiem;
+    protected $ingrucantmiem = '0';
 
 
 

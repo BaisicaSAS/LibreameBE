@@ -35,15 +35,6 @@ Libreame\BackendBundle\Entity\LbEjemplares:
             default: '0'
             column: dbEjeAvaluo
     manyToOne:
-        inejeusudueno:
-            targetEntity: LbUsuarios
-            cascade: {  }
-            mappedBy: null
-            inversedBy: null
-            joinColumns:
-                inEjeUsuDueno:
-                    referencedColumnName: inUsuario
-            orphanRemoval: false
         inejelibro:
             targetEntity: LbLibros
             cascade: {  }
@@ -52,5 +43,14 @@ Libreame\BackendBundle\Entity\LbEjemplares:
             joinColumns:
                 inEjeLibro:
                     referencedColumnName: inLibro
+            orphanRemoval: false
+        inejeusudueno:
+            targetEntity: LbUsuarios
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                inEjeUsuDueno:
+                    referencedColumnName: inUsuario
             orphanRemoval: false
     lifecycleCallbacks: {  }

@@ -15,7 +15,7 @@ class LbSesiones
     /**
      * @var integer
      *
-     * @ORM\Column(name="inSesion", type="integer")
+     * @ORM\Column(name="inSesion", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -33,7 +33,7 @@ class LbSesiones
      *
      * @ORM\Column(name="inSesActiva", type="integer", nullable=false)
      */
-    protected $insesactiva;
+    protected $insesactiva = '1';
 
     /**
      * @var \DateTime
@@ -54,12 +54,12 @@ class LbSesiones
      *
      * @ORM\Column(name="txIPAddr", type="string", length=30, nullable=false)
      */
-    protected $txipaddr;
+    protected $txipaddr = '000.000.000.000';
 
     /**
-     * @var \Libreame\BackendBundle\Entity\LbDispusuarios
+     * @var \LbDispusuarios
      *
-     * @ORM\ManyToOne(targetEntity="Libreame\BackendBundle\Entity\LbDispusuarios")
+     * @ORM\ManyToOne(targetEntity="LbDispusuarios")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="inSesDispUsuario", referencedColumnName="inDispUsuario")
      * })
@@ -215,15 +215,4 @@ class LbSesiones
     {
         return $this->insesdispusuario;
     }
-    
-    //Constructor de la clase
-    function __construct(){ 
-        $strBlanco = "";
-        $this->txsesnumero = $strBlanco;
-        $this->insesactiva = $strBlanco;  
-        $this->fesesfechaini = $strBlanco;
-        $this->fesesfechafin = $strBlanco;
-        $this->txipaddr = $strBlanco;
-    } 
-    
 }

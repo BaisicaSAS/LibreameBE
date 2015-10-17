@@ -6,28 +6,45 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * LbIndicepalabra
+ *
+ * @ORM\Table(name="lb_indicepalabra", indexes={@ORM\Index(name="fk_lb_indicepalabra_lb_libros1_idx", columns={"lbIndPalLibro"}), @ORM\Index(name="idx_palabra", columns={"lbIndPalPalabra"}), @ORM\Index(name="idx_palabraidioma", columns={"lbIndPalPalabra", "lbIndPalIdioma"}), @ORM\Index(name="idx_idiomapalabra", columns={"lbIndPalIdioma", "lbIndPalPalabra"})})
+ * @ORM\Entity
  */
 class LbIndicepalabra
 {
     /**
      * @var integer
+     *
+     * @ORM\Column(name="lbIndPalId", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $lbindpalid;
+    protected $lbindpalid;
 
     /**
      * @var string
+     *
+     * @ORM\Column(name="lbIndPalPalabra", type="string", length=100, nullable=false)
      */
-    private $lbindpalpalabra;
+    protected $lbindpalpalabra;
 
     /**
      * @var string
+     *
+     * @ORM\Column(name="lbIndPalIdioma", type="string", length=45, nullable=false)
      */
-    private $lbindpalidioma;
+    protected $lbindpalidioma;
 
     /**
-     * @var \Libreame\BackendBundle\Entity\LbLibros
+     * @var \LbLibros
+     *
+     * @ORM\ManyToOne(targetEntity="LbLibros")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="lbIndPalLibro", referencedColumnName="inLibro")
+     * })
      */
-    private $lbindpallibro;
+    protected $lbindpallibro;
+
 
 
     /**

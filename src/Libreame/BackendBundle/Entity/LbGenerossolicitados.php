@@ -15,16 +15,16 @@ class LbGenerossolicitados
     /**
      * @var integer
      *
-     * @ORM\Column(name="inGeneroSolicitado", type="integer")
+     * @ORM\Column(name="inGeneroSolicitado", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     protected $ingenerosolicitado;
 
     /**
-     * @var \Libreame\BackendBundle\Entity\LbGeneros
+     * @var \LbGeneros
      *
-     * @ORM\ManyToOne(targetEntity="Libreame\BackendBundle\Entity\LbGeneros")
+     * @ORM\ManyToOne(targetEntity="LbGeneros")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="inSolGenero", referencedColumnName="inGenero")
      * })
@@ -32,9 +32,9 @@ class LbGenerossolicitados
     protected $insolgenero;
 
     /**
-     * @var \Libreame\BackendBundle\Entity\LbSolicitados
+     * @var \LbSolicitados
      *
-     * @ORM\ManyToOne(targetEntity="Libreame\BackendBundle\Entity\LbSolicitados")
+     * @ORM\ManyToOne(targetEntity="LbSolicitados")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="inSolSolicitado", referencedColumnName="IdSolicitado")
      * })
