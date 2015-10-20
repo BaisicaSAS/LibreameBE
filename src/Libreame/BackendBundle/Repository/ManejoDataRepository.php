@@ -20,6 +20,7 @@ use Libreame\BackendBundle\Entity\LbOfertas;
 use Libreame\BackendBundle\Entity\LbSolicitados;
 use Libreame\BackendBundle\Entity\LbOfrecidos;
 use Libreame\BackendBundle\Entity\LbActividadofertas;
+use Libreame\BackendBundle\Entity\LbIndicepalabra;
 use Libreame\BackendBundle\Entity\LbMensajes;
 use Libreame\BackendBundle\Helpers\Solicitud;
 use Libreame\BackendBundle\Helpers\Respuesta;
@@ -699,18 +700,21 @@ class ManejoDataRepository extends EntityRepository {
             
 
             $em->persist($libro);
+            ManejoDataRepository::indexar($libro, $libro->getTxediciondescripcion()." ".$libro->getTxlibedicionpais()." ".$libro->getTxlibautores()." ".$libro->getTxlibeditorial()." ".$libro->getTxlibresumen()." ".$libro->getTxlibtitulo(),$em);
             if($regSol == 2)  { 
                 $em->persist($generolibro);
             }
 
             if($regSol1 == 2) { 
                 $em->persist($libro1);
+                ManejoDataRepository::indexar($libro1, $libro1->getTxediciondescripcion()." ".$libro1->getTxlibedicionpais()." ".$libro1->getTxlibautores()." ".$libro1->getTxlibeditorial()." ".$libro1->getTxlibresumen()." ".$libro1->getTxlibtitulo(),$em);
                 $em->persist($generolibro1);
                 
             }
             
             if($regSol2 == 2) { 
                 $em->persist($libro2);
+                ManejoDataRepository::indexar($libro2, $libro2->getTxediciondescripcion()." ".$libro2->getTxlibedicionpais()." ".$libro2->getTxlibautores()." ".$libro2->getTxlibeditorial()." ".$libro2->getTxlibresumen()." ".$libro2->getTxlibtitulo(),$em);
                 $em->persist($generolibro2);
             }
 
@@ -882,5 +886,41 @@ class ManejoDataRepository extends EntityRepository {
         } 
     }
     
-    
+    //Adiciona todo el texto de un libro, al indice 
+    public function indexar(LbLibros $libro, $texto, $em)
+    {
+        try{
+            echo "FULL: ".$texto."\n";
+            if ($em == NULL) { $flEm = TRUE; } else  { $flEm = FALSE; }
+            
+            if ($flEm) $em = $this->getDoctrine()->getManager();
+
+            $palabras = explode(" ", $texto);
+            $repetidos = [];
+            
+            foreach ($palabras as $palabra)
+            {   
+                echo "... ".$palabra."\n";
+                if(!in_array(strtolower($palabra), AccesoController::arPalDescartar) and 
+                        !in_array(strtolower($palabra), $repetidos) )
+                {
+                    if (!$em->getRepository('LibreameBackendBundle:LbIndicepalabra')->
+                        findOneBy(array('lbindpalpalabra' => $palabra)))
+                    {    
+                        echo "   SI   \n";
+                        $indice = new LbIndicepalabra();
+                        $indice->setLbindpallibro($libro);
+                        $indice->setLbindpalidioma($libro->getTxlibidioma());
+                        $indice->setLbindpalpalabra(strtolower($palabra));
+                        $em->persist($indice);
+                        $repetidos[] = $palabra; 
+                    }
+                }
+            }
+            
+            if ($flEm) $em->flush();
+        } catch (Exception $ex) {
+                return AccesoController::inDatoCer;
+        } 
+    }    
 }

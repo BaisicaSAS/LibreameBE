@@ -378,11 +378,11 @@ class Logica {
         } else {
             $arCarMail[2] = $caracEmail;
         }
-        echo "\nCaracteres Mail: ".$caracEmail;
+        //echo "\nCaracteres Mail: ".$caracEmail;
 
-        echo "\nCar Mail 0: ".$arCarMail[0];
-        echo "\nCar Mail 1: ".$arCarMail[1];
-        echo "\nCar Mail 2: ".$arCarMail[2];
+        //echo "\nCar Mail 0: ".$arCarMail[0];
+        //echo "\nCar Mail 1: ".$arCarMail[1];
+        //echo "\nCar Mail 2: ".$arCarMail[2];
         //email
         $email = $usuario->getTxusuemail();
         //Inicializa la cadena
@@ -391,16 +391,16 @@ class Logica {
         //echo 'arreglo: '.$arCarMail[0].'-'.$arCarMail[1].'-'.$arCarMail[2].'carac email: '.$caracEmail.'    -   valida: '.$cadena;
         //Obtener el patron de ocurrencia de datos
         $patron[0] = rand(1, 3);
-        echo "\nP1: ".$patron[0];
+        //echo "\nP1: ".$patron[0];
         $patron[1] = rand(1, 2);
-        echo "\nP2: ".$patron[1];
+        //echo "\nP2: ".$patron[1];
         $patron[2] = rand(1, 3);
-        echo "\nP3: ".$patron[2];
+        //echo "\nP3: ".$patron[2];
 
         $cadena = substr($cadena, 0, self::pos1mail).$arCarMail[0].$patron[0].$arCarMail[1].$patron[1]
                 .$arCarMail[2].$patron[2].substr($cadena,2);
 
-        echo "\ncon patron: ".$cadena;
+        //echo "\ncon patron: ".$cadena;
 
         /*for ($n=0;$n<$caracEmail;$n++) {
                 $posClave[] = $patron[$pat]+7;
@@ -414,17 +414,17 @@ class Logica {
                 $posClave[$n] = $posClave[$n-1]+$patron[$pat];
             }
             
-            echo 'posicion: '.$posClave[$n];
+            //echo 'posicion: '.$posClave[$n];
             if ($pat==2) { $pat = 0; } else { $pat++; }
         }
         
         for($i=0;$i<$caracEmail;$i++) {
             $complem = substr($cadena, $posClave[$i]);
-            echo " \n ".$complem;
+            //echo " \n ".$complem;
             $cadena = substr($cadena, 0, $posClave[$i]).substr($email,$i,1).$complem;
-            echo " \n ".$cadena;
+            //echo " \n ".$cadena;
         } 
-        echo "\n cadena_def: ".$cadena;
+        //echo "\n cadena_def: ".$cadena;
         return $cadena;
     }
     

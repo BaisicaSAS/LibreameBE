@@ -15,7 +15,7 @@ class LbDispusuarios
     /**
      * @var integer
      *
-     * @ORM\Column(name="inDispUsuario", type="integer", nullable=false)
+     * @ORM\Column(name="inDispUsuario", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -57,9 +57,9 @@ class LbDispusuarios
     protected $txdisso;
 
     /**
-     * @var \LbUsuarios
+     * @var \Libreame\BackendBundle\Entity\LbUsuarios
      *
-     * @ORM\ManyToOne(targetEntity="LbUsuarios")
+     * @ORM\ManyToOne(targetEntity="Libreame\BackendBundle\Entity\LbUsuarios")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="inDisUsuario", referencedColumnName="inUsuario")
      * })
@@ -215,4 +215,16 @@ class LbDispusuarios
     {
         return $this->indisusuario;
     }
+    
+    public function creaDispusuario($usuario, $pSolicitud)
+    {   
+        $device = new LbDispusuarios();
+        $device->setIndisusuario($usuario);
+        $device->setTxdisid($pSolicitud->getDeviceMAC());
+        $device->setTxdismarca($pSolicitud->getDeviceMarca());
+        $device->setTxdismodelo($pSolicitud->getDeviceModelo());
+        $device->setTxdisso($pSolicitud->getDeviceSO());
+        
+        return $device;        
+    }    
 }
