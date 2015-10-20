@@ -109,7 +109,8 @@ class AccesoController extends Controller
             'en', 'entre', 'hacia', 'hasta', 'para', 'por', 'segun', 'sin', 'so', 
             'sobre', 'tras', 'yo', 'tu', 'usted', 'el', 'nosotros', 'vosotros', 
             'ellos', 'ellas', 'ella', 'la', 'los', 'la', 'un', 'una', 'unos', 
-            'unas', 'es', 'del', 'de', 'mi', 'mis', 'su', 'sus', 'lo', 'le', 'se']; //Id General para datos basicos :: Genero, Lugar, Grupo 
+            'unas', 'es', 'del', 'de', 'mi', 'mis', 'su', 'sus', 'lo', 'le', 'se', 
+            'si', 'lo']; //Id General para datos basicos :: Genero, Lugar, Grupo 
 
     var $objSolicitud;
     /*
