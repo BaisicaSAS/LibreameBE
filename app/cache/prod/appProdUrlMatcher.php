@@ -38,16 +38,30 @@ class appProdUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirecta
         }
         not_ex4read_ingresarSistema:
 
-        // ex4read_confirmarRegistro
-        if (0 === strpos($pathinfo, '/registro') && preg_match('#^/registro/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
-            if (!in_array($this->context->getMethod(), array('GET', 'HEAD'))) {
-                $allow = array_merge($allow, array('GET', 'HEAD'));
-                goto not_ex4read_confirmarRegistro;
-            }
+        if (0 === strpos($pathinfo, '/re')) {
+            // ex4read_confirmarRegistro
+            if (0 === strpos($pathinfo, '/registro') && preg_match('#^/registro/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
+                if (!in_array($this->context->getMethod(), array('GET', 'HEAD'))) {
+                    $allow = array_merge($allow, array('GET', 'HEAD'));
+                    goto not_ex4read_confirmarRegistro;
+                }
 
-            return $this->mergeDefaults(array_replace($matches, array('_route' => 'ex4read_confirmarRegistro')), array (  '_controller' => 'Libreame\\BackendBundle\\Controller\\RegistroController::confirmarRegistroAction',));
+                return $this->mergeDefaults(array_replace($matches, array('_route' => 'ex4read_confirmarRegistro')), array (  '_controller' => 'Libreame\\BackendBundle\\Controller\\RegistroController::confirmarRegistroAction',));
+            }
+            not_ex4read_confirmarRegistro:
+
+            // ex4read_resetUsuario
+            if (0 === strpos($pathinfo, '/reset') && preg_match('#^/reset/(?P<usuario>[^/]++)$#s', $pathinfo, $matches)) {
+                if (!in_array($this->context->getMethod(), array('GET', 'HEAD'))) {
+                    $allow = array_merge($allow, array('GET', 'HEAD'));
+                    goto not_ex4read_resetUsuario;
+                }
+
+                return $this->mergeDefaults(array_replace($matches, array('_route' => 'ex4read_resetUsuario')), array (  '_controller' => 'Libreame\\BackendBundle\\Controller\\PruebasController::resetUsuarioAction',));
+            }
+            not_ex4read_resetUsuario:
+
         }
-        not_ex4read_confirmarRegistro:
 
         throw 0 < count($allow) ? new MethodNotAllowedException(array_unique($allow)) : new ResourceNotFoundException();
     }

@@ -49,7 +49,7 @@ class AccesoController extends Controller
     const inSesActi =  1; //Usuario en proceso de confiormacion de registro
     const inSesInac =  0; //Usuario Activo
     const txAnyData =  'ANY'; //String para indicar cualquier usuario
-    
+   
 
     
     //Acciones de la plataforma
@@ -104,13 +104,7 @@ class AccesoController extends Controller
     const inUsInact = -4; //Usuario inactivo
     const inUsSeIna = -5; //Sesión inactiva
 
-    const inIdGeneral = 1; //Id General para datos basicos :: Genero, Lugar, Grupo 
-    const arPalDescartar = ['a', 'ante', 'bajo', 'con', 'contra', 'de', 'desde', 
-            'en', 'entre', 'hacia', 'hasta', 'para', 'por', 'segun', 'sin', 'so', 
-            'sobre', 'tras', 'yo', 'tu', 'usted', 'el', 'nosotros', 'vosotros', 
-            'ellos', 'ellas', 'ella', 'la', 'los', 'la', 'un', 'una', 'unos', 
-            'unas', 'es', 'del', 'de', 'mi', 'mis', 'su', 'sus', 'lo', 'le', 'se', 
-            'si', 'lo']; //Id General para datos basicos :: Genero, Lugar, Grupo 
+    const inIdGeneral = 1; //Id General para datos basicos :: Genero, Lugar, Grupo
 
     var $objSolicitud;
     /*
@@ -161,7 +155,7 @@ class AccesoController extends Controller
                //echo "<script>alert('Encontramos un problema con tu registro: ".$this->$objSolicitud->getSession()."-".$jsonValido."')</script>"; 
                 //@TODO: Debemos revisar que hacer cuando se detecta actividad sospechosa: Cierro sesion?. Bloqueo usuario e informo?
             }
-            //echo "<script>alert('RESPUESTA ingresarSistemaAction: ".$respuesta."')</script>"; 
+            //echo "<script>alert('RESPUESTA ingresarSistemaAction: ".$respuesta."')</script>";
 
             return new RESPONSE($respuesta);
             //return new RESPONSE("Normal ".$datos);
@@ -242,6 +236,13 @@ class AccesoController extends Controller
                         $this->objSolicitud->setEmail($json_datos['idsolicitud']['email']);
                         $this->objSolicitud->setClave($json_datos['idsolicitud']['clave']);
                         $this->objSolicitud->setUltEjemplar($json_datos['idsolicitud']['ultejemplar']);
+                        break;
+                    }
+                    case self::txAccBusEjemp: { //Dato:7 : Buscar Ejemplar
+                        //echo "<script>alert('ENTRA POR BUSCAR EJEMPLAR')</script>";
+                        $this->objSolicitud->setEmail($json_datos['idsolicitud']['email']);
+                        $this->objSolicitud->setClave($json_datos['idsolicitud']['clave']);
+                        $this->objSolicitud->setTextoBuscar($json_datos['idsolicitud']['buscar']);
                         break;
                     }
                     case self::txAccCerraSes: { //Dato:10 : Cerrar sesion
@@ -340,6 +341,12 @@ class AccesoController extends Controller
                                 and isset($datos['idsolicitud']['ultejemplar']));
                         break;
                     }
+                    case self::txAccBusEjemp: { //Dato:7 : Buscar ejemplares
+                        //echo "<script>alert('VAL ENTRA POR BUSCAR')</script>";
+                        $resp = (isset($datos['idsolicitud']['email']) and isset($datos['idsolicitud']['clave']) 
+                                and isset($datos['idsolicitud']['buscar']));
+                        break;
+                    }
                     case self::txAccCerraSes: { //Dato:10 : Cerrar Sesion
                         //echo "<script>alert('VAL ENTRA POR CERRAR SESION')</script>";
                         $resp = (isset($datos['idsolicitud']['email']) and isset($datos['idsolicitud']['clave']));
@@ -366,4 +373,3 @@ class AccesoController extends Controller
     }
 
 }
-    

@@ -70,6 +70,13 @@ class Logica {
                     break;
                 } 
 
+                case AccesoController::txAccBusEjemp: {//Dato:7 : Buscar
+                    //echo "<script>alert('Antes de entrar a Buscar Ejemplares Usuario-".$solicitud->getEmail()."')</script>";
+                    $objGestEjemplares = $this->get('gest_ejemplares_service');
+                    $respuesta = $objGestEjemplares::buscarEjemplares($solicitud);
+                    break;
+                } 
+
                 case AccesoController::txAccCerraSes: {//Dato:10 : Cerrar Sesion
                     //echo "<script>alert('Antes de entrar a Logout-".$solicitud->getEmail()."')</script>";
                     $objLogin = $this->get('login_service');
@@ -119,6 +126,11 @@ class Logica {
                 //accion de recuperar los feeds de publicaciones nuevas
                 case AccesoController::txAccRecFeeds:  //Dato: 4
                     $JSONResp = Logica::respuestaFeedEjemplares($respuesta, $pSolicitud, $parreglo);
+                    break;
+
+                //accion de buscar ejemplares
+                case AccesoController::txAccBusEjemp:  //Dato: 7
+                    $JSONResp = Logica::respuestaBuscarEjemplares($respuesta, $pSolicitud, $parreglo);
                     break;
 
                 //accion de cerrar sesion de usuario
@@ -248,6 +260,53 @@ class Logica {
             $arrGeneros = array();
             $arrTmp = array();
             $ejemplar = new LbEjemplares();
+            foreach ($parreglo as $ejemplar){
+                //Recupera nombre del genero, Nombre del libro, Nombre del uduario Dueño
+                $genero = new LbGeneros();
+                $generolibro = new LbGeneroslibros();
+                $libro = new LbLibros();
+                $usuario = new LbUsuarios();
+                if ($respuesta->getRespuesta()== AccesoController::inULogged){
+                    $libro = ManejoDataRepository::getLibro($ejemplar->getInejelibro());
+                    $generolibro = ManejoDataRepository::getGeneroLibro($ejemplar->getInejelibro());
+                    $usuario = ManejoDataRepository::getUsuarioById($ejemplar->getInejeusudueno());
+                }
+                //Guarda los generos
+                foreach ($generolibro as $gen){
+                    $genero = ManejoDataRepository::getGenero($gen->getIngligenero());
+                    $arrGeneros[] = array('ingenero' => $genero->getIngenero(), 'txgenero' => $genero->getTxgennombre());
+                }
+                
+                $arrTmp[] = array('idejemplar' => $ejemplar->getInejemplar(), 
+                  'idgenero' => $arrGeneros, 'inejecantidad' => $ejemplar->getInejecantidad(),
+                  'dbavaluo' => $ejemplar->getDbejeavaluo(), 'indueno' => $usuario->getInusuario(),
+                  'inlibro' => $libro->getInlibro(), 'txlibro' => $libro->getTxlibtitulo(), 
+                  'txdueno' => $usuario->getTxusunombre()
+                ) ;
+            }
+
+            return array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
+                    'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr(), 
+                    'iddevice'=> $pSolicitud->getDeviceMac(), 'marca'=>$pSolicitud->getDeviceMarca(), 
+                    'modelo'=>$pSolicitud->getDeviceModelo(), 'so'=>$pSolicitud->getDeviceSO()), 
+                    'idrespuesta' => array('respuesta' => $respuesta->getRespuesta(), 
+                    'ejemplares' => $arrTmp));
+        } catch (Exception $ex) {
+                return AccesoController::inPlatCai;
+        } 
+    }    
+    
+    /*
+     * respuestaBuscarEjemplares: 
+     * Funcion que genera el JSON de respuesta para la accion de Buscar ejemplares :: AccesoController::txAccBusEjem:
+     */
+    public function respuestaBuscarEjemplares(Respuesta $respuesta, Solicitud $pSolicitud, $parreglo){
+        try{
+            $arrGeneros = array();
+            $arrTmp = array();
+            $ejemplar = new LbEjemplares();
+            
+            
             foreach ($parreglo as $ejemplar){
                 //Recupera nombre del genero, Nombre del libro, Nombre del uduario Dueño
                 $genero = new LbGeneros();

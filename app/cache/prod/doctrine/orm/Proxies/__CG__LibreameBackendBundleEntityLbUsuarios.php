@@ -441,15 +441,4 @@ class LbUsuarios extends \Libreame\BackendBundle\Entity\LbUsuarios implements \D
         return parent::creaUsuario($pSolicitud, $Lugar);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function cantMsgUsr($usuario)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'cantMsgUsr', array($usuario));
-
-        return parent::cantMsgUsr($usuario);
-    }
-
 }

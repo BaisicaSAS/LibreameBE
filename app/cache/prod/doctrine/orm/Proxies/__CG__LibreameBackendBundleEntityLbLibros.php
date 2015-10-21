@@ -64,10 +64,10 @@ class LbLibros extends \Libreame\BackendBundle\Entity\LbLibros implements \Doctr
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', 'inlibro', 'txlibtipopublica', 'txlibtitulo', 'txlibautores', 'txlibidioma', 'txlibeditorial', 'txlibedicionanio', 'txlibedicionnum', 'txlibedicionpais', 'txlibcodigoofic', 'txlibresumen', 'txlibtomo', 'txlibvolumen', 'txpaginas', 'txediciondescripcion', 'txlibcodigoofic13');
+            return array('__isInitialized__', 'inlibro', 'txlibtipopublica', 'txlibtitulo', 'txlibautores', 'txlibidioma', 'txlibeditorial', 'txlibedicionanio', 'txlibedicionnum', 'txlibedicionpais', 'txediciondescripcion', 'txlibcodigoofic', 'txlibcodigoofic13', 'txlibresumen', 'txlibtomo', 'txlibvolumen', 'txpaginas');
         }
 
-        return array('__isInitialized__', 'inlibro', 'txlibtipopublica', 'txlibtitulo', 'txlibautores', 'txlibidioma', 'txlibeditorial', 'txlibedicionanio', 'txlibedicionnum', 'txlibedicionpais', 'txlibcodigoofic', 'txlibresumen', 'txlibtomo', 'txlibvolumen', 'txpaginas', 'txediciondescripcion', 'txlibcodigoofic13');
+        return array('__isInitialized__', 'inlibro', 'txlibtipopublica', 'txlibtitulo', 'txlibautores', 'txlibidioma', 'txlibeditorial', 'txlibedicionanio', 'txlibedicionnum', 'txlibedicionpais', 'txediciondescripcion', 'txlibcodigoofic', 'txlibcodigoofic13', 'txlibresumen', 'txlibtomo', 'txlibvolumen', 'txpaginas');
     }
 
     /**
@@ -367,6 +367,28 @@ class LbLibros extends \Libreame\BackendBundle\Entity\LbLibros implements \Doctr
     /**
      * {@inheritDoc}
      */
+    public function setTxediciondescripcion($txediciondescripcion)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setTxediciondescripcion', array($txediciondescripcion));
+
+        return parent::setTxediciondescripcion($txediciondescripcion);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getTxediciondescripcion()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getTxediciondescripcion', array());
+
+        return parent::getTxediciondescripcion();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function setTxlibcodigoofic($txlibcodigoofic)
     {
 
@@ -384,6 +406,28 @@ class LbLibros extends \Libreame\BackendBundle\Entity\LbLibros implements \Doctr
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getTxlibcodigoofic', array());
 
         return parent::getTxlibcodigoofic();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setTxlibcodigoofic13($txlibcodigoofic13)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setTxlibcodigoofic13', array($txlibcodigoofic13));
+
+        return parent::setTxlibcodigoofic13($txlibcodigoofic13);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getTxlibcodigoofic13()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getTxlibcodigoofic13', array());
+
+        return parent::getTxlibcodigoofic13();
     }
 
     /**
@@ -472,50 +516,6 @@ class LbLibros extends \Libreame\BackendBundle\Entity\LbLibros implements \Doctr
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getTxpaginas', array());
 
         return parent::getTxpaginas();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setTxediciondescripcion($txediciondescripcion)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setTxediciondescripcion', array($txediciondescripcion));
-
-        return parent::setTxediciondescripcion($txediciondescripcion);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getTxediciondescripcion()
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getTxediciondescripcion', array());
-
-        return parent::getTxediciondescripcion();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setTxlibcodigoofic13($txlibcodigoofic13)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setTxlibcodigoofic13', array($txlibcodigoofic13));
-
-        return parent::setTxlibcodigoofic13($txlibcodigoofic13);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getTxlibcodigoofic13()
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getTxlibcodigoofic13', array());
-
-        return parent::getTxlibcodigoofic13();
     }
 
 }

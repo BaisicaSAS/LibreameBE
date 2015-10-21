@@ -32,6 +32,7 @@ use Libreame\BackendBundle\Helpers\Respuesta;
 class ManejoDataRepository extends EntityRepository {
 
     
+    private $arPalDescartar = [];
     /*
      * validaSesionUsuario 
      * Valida los datos de la sesion verificando que sea veridica
@@ -102,7 +103,7 @@ class ManejoDataRepository extends EntityRepository {
             }
 
             //Flush al entity manager
-            $em->flush(); 
+            $em->flush();
 
             return ($respuesta);
         } catch (Exception $ex) {
@@ -236,7 +237,7 @@ class ManejoDataRepository extends EntityRepository {
                             'insesdispusuario' => $device,
                             'insesactiva' => AccesoController::inSesActi));
             //Flush al entity manager
-            if ($flEm) $em->flush(); 
+            if ($flEm) $em->flush();
 
             return ($respuesta);//Retorna objeto tipo Sesion
         } catch (Exception $ex) {
@@ -431,6 +432,44 @@ class ManejoDataRepository extends EntityRepository {
         } 
     }
                 
+    //Obtiene todos los Ejemplares, que coincidan con el texto OFRECIDOS, o SOLICITADOS
+    public function getBuscarEjemplares(Array $grupos, $texto)
+    {   
+        $vtexto = explode(" ", $texto);
+        $arLibros =[];
+        
+        try{
+            foreach ($vtexto as $palabra)
+            {   
+                //Recupera cada uno de los ejemplares con ID > al del parametro
+                $em = $this->getDoctrine()->getManager();
+                $sql = "SELECT e FROM LibreameBackendBundle:LbIndicepalabra e,"
+                        . " WHERE e.lbindpalpalabra = :palabra";
+                $query = $em->createQuery($sql)->setParameter('palabra', strtolower($palabra));
+                $palabrasindice = $query->getResult();
+                foreach ($palabrasindice as $indice) {
+                    $arLibros[] = $palabrasindice->getLbindpallibro();
+                }
+            }
+            
+            $sql1 = "SELECT e FROM LibreameBackendBundle:LbEjemplares e,"
+                    . " LibreameBackendBundle:LbMembresias m,"
+                    . " LibreameBackendBundle:LbUsuarios u,"
+                    . " LibreameBackendBundle:LbOfrecidos o "
+                    . "WHERE e.inejeusudueno = m.inmemusuario "
+                    . " and e.inejelibro in (:libros)"
+                    . " and o.inofrejemplar = e.inejemplar"
+                    . " and m.inmemgrupo in (:grupos) ";
+
+            $query1 = $em->createQuery($sql1)->setParameter('grupos', $grupos);
+            $query1 = $em->createQuery($sql1)->setParameter('libros', $arLibros);
+
+            return $query1->getResult();
+        } catch (Exception $ex) {
+                return new LbEjemplares();
+        } 
+    }
+                
     //Obtiene las calificaciones RECIBIDAS por un usuario
     public function getCalificaUsuarioRecibidas(LbUsuarios $usuario)
     {
@@ -451,7 +490,7 @@ class ManejoDataRepository extends EntityRepository {
             $em = $this->getDoctrine()->getManager();
             return $em->getRepository('LibreameBackendBundle:LbCalificausuarios')->
                     findBy(array('incalusucalifica' => $usuario));;
-            $em->flush();    
+            $em->flush();   
 
         } catch (Exception $ex) {
                 return new LbCalificausuarios();
@@ -481,7 +520,7 @@ class ManejoDataRepository extends EntityRepository {
             $em = $this->getDoctrine()->getManager();
             return $em->getRepository('LibreameBackendBundle:LbLibros')->
                     findOneBy(array('inlibro' => $idlibro));
-            $em->flush();    
+            $em->flush();   
 
         } catch (Exception $ex) {
                 return new LbLibros();
@@ -542,7 +581,7 @@ class ManejoDataRepository extends EntityRepository {
             $libro->setTxlibvolumen(AccesoController::txMenNoId);  
             $libro->setTxpaginas(AccesoController::txMenNoId);  
             //$em->persist($libro);
-            //$em->flush();    
+            //$em->flush();   
 
             return $libro;
         } catch (Exception $ex)  {    
@@ -697,7 +736,7 @@ class ManejoDataRepository extends EntityRepository {
             $actoferta->setTxactdescripcion($psolicitud->getObservasol());
             $actoferta->setInactoferta($oferta);
             $actoferta->setInactusuario($usuario);
-            
+           
 
             $em->persist($libro);
             ManejoDataRepository::indexar($libro, $libro->getTxediciondescripcion()." ".$libro->getTxlibedicionpais()." ".$libro->getTxlibautores()." ".$libro->getTxlibeditorial()." ".$libro->getTxlibresumen()." ".$libro->getTxlibtitulo(),$em);
@@ -890,24 +929,30 @@ class ManejoDataRepository extends EntityRepository {
     public function indexar(LbLibros $libro, $texto, $em)
     {
         try{
-            echo "FULL: ".$texto."\n";
+            //echo "FULL: ".$texto."\n";
+            $arPalDescartar = array('a', 'ante', 'bajo', 'con', 'contra', 'de', 'desde', 
+                'en', 'entre', 'hacia', 'hasta', 'para', 'por', 'segun', 'sin', 'so', 
+                'sobre', 'tras', 'yo', 'tu', 'usted', 'el', 'nosotros', 'vosotros', 
+                'ellos', 'ellas', 'ella', 'la', 'los', 'la', 'un', 'una', 'unos', 
+                'unas', 'es', 'del', 'de', 'mi', 'mis', 'su', 'sus', 'lo', 'le', 'se', 
+                'si', 'lo'); 
             if ($em == NULL) { $flEm = TRUE; } else  { $flEm = FALSE; }
             
-            if ($flEm) $em = $this->getDoctrine()->getManager();
+            if ($flEm) $em = $this->getDoctrie()->getManager();
 
             $palabras = explode(" ", $texto);
             $repetidos = [];
             
             foreach ($palabras as $palabra)
             {   
-                echo "... ".$palabra."\n";
-                if(!in_array(strtolower($palabra), AccesoController::arPalDescartar) and 
+                //echo "... ".$palabra."\n";
+                if(!in_array(strtolower($palabra), $arPalDescartar) and 
                         !in_array(strtolower($palabra), $repetidos) )
                 {
                     if (!$em->getRepository('LibreameBackendBundle:LbIndicepalabra')->
                         findOneBy(array('lbindpalpalabra' => $palabra)))
                     {    
-                        echo "   SI   \n";
+                        //echo "   SI   \n";
                         $indice = new LbIndicepalabra();
                         $indice->setLbindpallibro($libro);
                         $indice->setLbindpalidioma($libro->getTxlibidioma());

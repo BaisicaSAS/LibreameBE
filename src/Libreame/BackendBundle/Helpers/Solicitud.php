@@ -43,7 +43,8 @@ class Solicitud {
     private $pIdlibroSol2; //Segundo id del libro Solicitado
     private $pValAdicSol2; //Valor adicional para el segundo libro
     private $pObservaSol; //Observaciones de la oferta
-    
+    //Parametros para la búsqueda
+    private $pTextoBuscar; //Texto a buscar
 
     /*
      *  Bloque de getter para los atributos de la clase
@@ -147,6 +148,10 @@ class Solicitud {
 
     public function getObservaSol() {
         return $this->pObservaSol;
+    }
+    
+    public function getTextoBuscar() {
+        return $this->pTextoBuscar;
     }
     
 
@@ -279,6 +284,11 @@ class Solicitud {
 
     public function setObservaSol($pObservaSol) {
         $this->pObservaSol = $pObservaSol;
+        return $this;
+    }
+    
+    public function setTextoBuscar($pTextoBus) {
+        $this->pTextoBuscar = $pTextoBus;
         return $this;
     }
     

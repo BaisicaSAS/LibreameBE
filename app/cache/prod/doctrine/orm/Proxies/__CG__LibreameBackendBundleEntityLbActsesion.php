@@ -64,10 +64,10 @@ class LbActsesion extends \Libreame\BackendBundle\Entity\LbActsesion implements 
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', 'inactsesion', 'txactaccion', 'txactmensaje', 'feactfecha', 'inactfinalizada', 'inactsesiondisus', 'inactaccion');
+            return array('__isInitialized__', 'inactsesion', 'inactaccion', 'txactmensaje', 'feactfecha', 'inactfinalizada', 'inactsesiondisus');
         }
 
-        return array('__isInitialized__', 'inactsesion', 'txactaccion', 'txactmensaje', 'feactfecha', 'inactfinalizada', 'inactsesiondisus', 'inactaccion');
+        return array('__isInitialized__', 'inactsesion', 'inactaccion', 'txactmensaje', 'feactfecha', 'inactfinalizada', 'inactsesiondisus');
     }
 
     /**
@@ -191,23 +191,23 @@ class LbActsesion extends \Libreame\BackendBundle\Entity\LbActsesion implements 
     /**
      * {@inheritDoc}
      */
-    public function setTxactaccion($txactaccion)
+    public function setInactaccion($inactaccion)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setTxactaccion', array($txactaccion));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setInactaccion', array($inactaccion));
 
-        return parent::setTxactaccion($txactaccion);
+        return parent::setInactaccion($inactaccion);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getTxactaccion()
+    public function getInactaccion()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getTxactaccion', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getInactaccion', array());
 
-        return parent::getTxactaccion();
+        return parent::getInactaccion();
     }
 
     /**
@@ -296,28 +296,6 @@ class LbActsesion extends \Libreame\BackendBundle\Entity\LbActsesion implements 
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getInactsesiondisus', array());
 
         return parent::getInactsesiondisus();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setInactaccion($inactaccion)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setInactaccion', array($inactaccion));
-
-        return parent::setInactaccion($inactaccion);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getInactaccion()
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getInactaccion', array());
-
-        return parent::getInactaccion();
     }
 
 }

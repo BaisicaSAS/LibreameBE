@@ -7,3 +7,8 @@ ex4read_confirmarRegistro:
     pattern:  /registro/{id}
     defaults: { _controller: LibreameBackendBundle:Registro:confirmarRegistro}
     methods: [GET] 
+
+ex4read_resetUsuario:
+    pattern:  /reset/{usuario}
+    defaults: { _controller: LibreameBackendBundle:Pruebas:resetUsuario}
+    methods: [GET] 
