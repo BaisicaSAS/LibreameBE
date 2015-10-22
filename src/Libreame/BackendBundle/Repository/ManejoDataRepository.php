@@ -443,12 +443,12 @@ class ManejoDataRepository extends EntityRepository {
             {   
                 //Recupera cada uno de los ejemplares con ID > al del parametro
                 $em = $this->getDoctrine()->getManager();
-                $sql = "SELECT e FROM LibreameBackendBundle:LbIndicepalabra e,"
+                $sql = "SELECT e FROM LibreameBackendBundle:LbIndicepalabra e"
                         . " WHERE e.lbindpalpalabra = :palabra";
                 $query = $em->createQuery($sql)->setParameter('palabra', strtolower($palabra));
                 $palabrasindice = $query->getResult();
                 foreach ($palabrasindice as $indice) {
-                    $arLibros[] = $palabrasindice->getLbindpallibro();
+                    $arLibros[] = $indice->getLbindpallibro();
                 }
             }
             
@@ -460,9 +460,7 @@ class ManejoDataRepository extends EntityRepository {
                     . " and e.inejelibro in (:libros)"
                     . " and o.inofrejemplar = e.inejemplar"
                     . " and m.inmemgrupo in (:grupos) ";
-
-            $query1 = $em->createQuery($sql1)->setParameter('grupos', $grupos);
-            $query1 = $em->createQuery($sql1)->setParameter('libros', $arLibros);
+            $query1 = $em->createQuery($sql1)->setParameters(array('libros' => $arLibros,'grupos' => $grupos));
 
             return $query1->getResult();
         } catch (Exception $ex) {
@@ -950,7 +948,7 @@ class ManejoDataRepository extends EntityRepository {
                         !in_array(strtolower($palabra), $repetidos) )
                 {
                     if (!$em->getRepository('LibreameBackendBundle:LbIndicepalabra')->
-                        findOneBy(array('lbindpalpalabra' => $palabra)))
+                        findOneBy(array('lbindpalpalabra' => $palabra, 'lbindpallibro' => $libro)))
                     {    
                         //echo "   SI   \n";
                         $indice = new LbIndicepalabra();

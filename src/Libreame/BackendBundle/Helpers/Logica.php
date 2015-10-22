@@ -73,7 +73,7 @@ class Logica {
                 case AccesoController::txAccBusEjemp: {//Dato:7 : Buscar
                     //echo "<script>alert('Antes de entrar a Buscar Ejemplares Usuario-".$solicitud->getEmail()."')</script>";
                     $objGestEjemplares = $this->get('gest_ejemplares_service');
-                    $respuesta = $objGestEjemplares::buscarEjemplares($solicitud);
+                    $respuesta = $objGestEjemplares::buscarFeedEjemplares($solicitud);
                     break;
                 } 
 
