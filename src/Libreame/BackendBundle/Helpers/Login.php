@@ -83,7 +83,7 @@ class Login
                     //Verifica si la clave es correcta
                     if ($usuario->getTxusuclave() == $pSolicitud->getClave()){
                         //Verifica si el usuario tiene una sesion activa
-                        if (ManejoDataRepository::usuarioSesionActiva($pSolicitud, $device)){
+                        if (ManejoDataRepository::usuarioSesionActiva($pSolicitud, $device, NULL)){
                             $respuesta->setRespuesta(AccesoController::inUSeActi);
                         }
                         else
@@ -166,8 +166,8 @@ class Login
                     
                     //Verifica si la clave es correcta
                     if ($usuario->getTxusuclave() == $pSolicitud->getClave()){
-                        //Verifica si el usuario NO tiene una sesion activa
-                        if (ManejoDataRepository::usuarioSesionActiva($pSolicitud, $device) == FALSE){
+                        //Verifica si el usuario NO tiene la sesion activa
+                        if (ManejoDataRepository::usuarioSesionActiva($pSolicitud, $device, $pSolicitud->getSession()) == FALSE){
                             $respuesta->setRespuesta(AccesoController::inUsSeIna);
                         }
                         else

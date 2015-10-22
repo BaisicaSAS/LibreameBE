@@ -113,33 +113,42 @@ class ManejoDataRepository extends EntityRepository {
 
     /*
      * usuarioSesionActiva 
-     *Indica si un usuario tiene una sesion activa
+     *Indica si una sesion para un usuario esta activa
      * 
      */
-    public function usuarioSesionActiva($psolicitud, $device)
+    public function usuarioSesionActiva($psolicitud, $device, $idsesion)
     {   
         try {
             $em = $this->getDoctrine()->getManager();
             //Identifica el dispositivo // a este es al que se asocia la sesion
 
-            //echo "<script>alert('Dispositivo MAC ".$psolicitud->getDeviceMAC()."')</script>";
+            //echo "<script>alert('usuarioSesionActiva - Dispositivo MAC ".$psolicitud->getDeviceMAC()."')</script>";
             $id = $device->getIndispusuario();
             //echo "<script>alert('Dispositivo ID ".$id." - MAC: ".$psolicitud->getDeviceMAC()."')</script>";
             //echo "<script>alert('EXISTE Sesion activa ".$device->getIndispusuario()."')</script>";
-
-            $sesion = $em->getRepository('LibreameBackendBundle:LbSesiones')->findOneBy(array(
+            
+            if ($idsesion == NULL)
+            {
+                $sesion = $em->getRepository('LibreameBackendBundle:LbSesiones')->findOneBy(array(
                 'insesdispusuario' => $id,
-                'txsesnumero' => $psolicitud->getSession(),
                 'insesactiva' => AccesoController::inSesActi));
-
+            } else {
+                $sesion = $em->getRepository('LibreameBackendBundle:LbSesiones')->findOneBy(array(
+                'insesdispusuario' => $id,
+                'txsesnumero' => $idsesion,
+                'insesactiva' => AccesoController::inSesActi));
+            }
+            
+            
             //if ($sesion != NULL) {echo "<script>alert('EXISTE Sesion activa ".$device->getIndispusuario()."')</script>";}
 
             //Flush al entity manager
             $em->flush(); 
             
-            if ($sesion == NULL) {return FALSE;} else {return TRUE;}
+            if ($sesion == NULL) {/*echo "retorna FALSE";*/return FALSE;  } else {/*echo "retorna TRUE";*/return TRUE;}
             
         } catch (Exception $ex) {
+            echo $ex->getMessage();
             return (FALSE);
         }    
             
@@ -444,21 +453,24 @@ class ManejoDataRepository extends EntityRepository {
                 //Recupera cada uno de los ejemplares con ID > al del parametro
                 $em = $this->getDoctrine()->getManager();
                 $sql = "SELECT e FROM LibreameBackendBundle:LbIndicepalabra e"
-                        . " WHERE e.lbindpalpalabra = :palabra";
-                $query = $em->createQuery($sql)->setParameter('palabra', strtolower($palabra));
+                        . " WHERE e.lbindpalpalabra LIKE :palabra";
+                $query = $em->createQuery($sql)->setParameter('palabra', "%".strtolower($palabra)."%");
+                //$libro = new LbLibros();
                 $palabrasindice = $query->getResult();
                 foreach ($palabrasindice as $indice) {
                     $arLibros[] = $indice->getLbindpallibro();
+                    //$libro = $indice->getLbindpallibro();
+                    //echo "LIBRO :".$libro->getTxlibtitulo()."\n";
                 }
             }
             
-            $sql1 = "SELECT e FROM LibreameBackendBundle:LbEjemplares e,"
-                    . " LibreameBackendBundle:LbMembresias m,"
-                    . " LibreameBackendBundle:LbUsuarios u,"
+            $sql1 = "SELECT e FROM LibreameBackendBundle:LbEjemplares e, "
+                    . " LibreameBackendBundle:LbMembresias m, "
+                    . " LibreameBackendBundle:LbUsuarios u, "
                     . " LibreameBackendBundle:LbOfrecidos o "
                     . "WHERE e.inejeusudueno = m.inmemusuario "
-                    . " and e.inejelibro in (:libros)"
-                    . " and o.inofrejemplar = e.inejemplar"
+                    . " and e.inejelibro in (:libros) "
+                    . " and o.inofrejemplar = e.inejemplar "
                     . " and m.inmemgrupo in (:grupos) ";
             $query1 = $em->createQuery($sql1)->setParameters(array('libros' => $arLibros,'grupos' => $grupos));
 
@@ -676,7 +688,7 @@ class ManejoDataRepository extends EntityRepository {
             } else {
                 if ($psolicitud->getTituloSol2() != ''){ 
                     if ($libro2=ManejoDataRepository::buscarLibroByTitulo($psolicitud->getTituloSol2(),$em)){
-                        $regSol1 = 1;
+                        $regSol2 = 1;
                     } else {
                         $libro2 = ManejoDataRepository::crearLibro($psolicitud, AccesoController::txEjemplarSol2);
                         //Crear la asociación del libro con genero, si no existe el libro
@@ -709,8 +721,8 @@ class ManejoDataRepository extends EntityRepository {
             $ofrecido->setDbofrvaladic($psolicitud->getAvaluo());
             $ofrecido->setDbofrvaloferta($psolicitud->getValVenta());
             
-            //Registra el libro solicitado
-            if ($regSol > 0){
+            //Registra los libros solicitado
+            if ($regSol1 > 0){
                 $solicitado1 = new LbSolicitados();
                 $solicitado1->setInsoltransac(2);
                 $solicitado1->setTxsolobservacion($psolicitud->getObservaSol());
@@ -933,7 +945,7 @@ class ManejoDataRepository extends EntityRepository {
                 'sobre', 'tras', 'yo', 'tu', 'usted', 'el', 'nosotros', 'vosotros', 
                 'ellos', 'ellas', 'ella', 'la', 'los', 'la', 'un', 'una', 'unos', 
                 'unas', 'es', 'del', 'de', 'mi', 'mis', 'su', 'sus', 'lo', 'le', 'se', 
-                'si', 'lo'); 
+                'si', 'lo', 'identificar', 'no', 'al', 'que'); 
             if ($em == NULL) { $flEm = TRUE; } else  { $flEm = FALSE; }
             
             if ($flEm) $em = $this->getDoctrie()->getManager();

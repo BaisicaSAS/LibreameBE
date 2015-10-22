@@ -126,7 +126,7 @@ class GestionEjemplares {
         try {
             //Valida que la sesión corresponda y se encuentre activa
             $respSesionVali=  ManejoDataRepository::validaSesionUsuario($psolicitud);
-            //echo "<script>alert(' recuperarFeedEjemplares :: Validez de sesion ".$respSesionVali." ')</script>";
+            //echo "<script>alert(' buscarFeedEjemplares :: Validez de sesion ".$respSesionVali." ')</script>";
             if ($respSesionVali==AccesoController::inULogged) 
             {    
                 //echo "<script>alert(' recuperarFeedEjemplares :: FindAll ')</script>";
