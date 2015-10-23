@@ -73,6 +73,26 @@ class LbMensajes
      */
     protected $inmenusuario;
 
+    /**
+     * @var \LbMensajes
+     *
+     * @ORM\ManyToOne(targetEntity="LbMensajes")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="inMensajePadre", referencedColumnName="inMensaje")
+     * })
+     */
+    protected $inmensajepadre;
+
+    /**
+     * @var \LbUsuarios
+     *
+     * @ORM\ManyToOne(targetEntity="LbUsuarios")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="inMenUsuarioOrigen", referencedColumnName="inUsuario")
+     * })
+     */
+    protected $inmenusuarioorigen;
+
 
 
     /**
@@ -245,4 +265,51 @@ class LbMensajes
     {
         return $this->inmenusuario;
     }
+    
+    /**
+     * Set inmenusuarioorigen
+     *
+     * @param \Libreame\BackendBundle\Entity\LbUsuarios $inmenusuarioorigen
+     * @return LbMensajes
+     */
+    public function setInmenusuarioorigen(\Libreame\BackendBundle\Entity\LbUsuarios $inmenusuarioorigen = null)
+    {
+        $this->inmenusuarioorigen = $inmenusuarioorigen;
+
+        return $this;
+    }
+
+    /**
+     * Get inmensajepadre
+     *
+     * @return \Libreame\BackendBundle\Entity\LbUsuarios 
+     */
+    public function getInmenusuarioorigen()
+    {
+        return $this->inmenusuarioorigen;
+    }
+    
+    /**
+     * Set inmensajepadre
+     *
+     * @param \Libreame\BackendBundle\Entity\LbMensajes $inmensajepadre
+     * @return LbMensajes
+     */
+    public function setInmensajepadre(\Libreame\BackendBundle\Entity\LbUsuarios $inmensajepadre = null)
+    {
+        $this->inmensajepadre = $inmensajepadre;
+
+        return $this;
+    }
+
+    /**
+     * Get inmensajepadre
+     *
+     * @return \Libreame\BackendBundle\Entity\LbMensajes 
+     */
+    public function getInmensajepadre()
+    {
+        return $this->inmensajepadre;
+    }
+    
 }

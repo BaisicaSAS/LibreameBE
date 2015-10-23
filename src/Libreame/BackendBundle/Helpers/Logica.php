@@ -14,6 +14,7 @@ use Libreame\BackendBundle\Entity\LbUsuarios;
 use Libreame\BackendBundle\Entity\LbSesiones;
 use Libreame\BackendBundle\Entity\LbEjemplares;
 use Libreame\BackendBundle\Entity\LbActsesion;
+use Libreame\BackendBundle\Entity\LbMensajes;
 use Libreame\BackendBundle\Helpers\Respuesta;
 
 
@@ -70,10 +71,17 @@ class Logica {
                     break;
                 } 
 
+                case AccesoController::txAccRecOpera: {//Dato:5 : Recuperar Mensajes
+                    //echo "<script>alert('Antes de entrar a Recuperar Mensajes Usuario-".$solicitud->getEmail()."')</script>";
+                    $objGestUsuarios = $this->get('gest_usuarios_service');
+                    $respuesta = $objGestUsuarios::recuperarMensajes($solicitud);
+                    break;
+                } 
+
                 case AccesoController::txAccBusEjemp: {//Dato:7 : Buscar
                     //echo "<script>alert('Antes de entrar a Buscar Ejemplares Usuario-".$solicitud->getEmail()."')</script>";
                     $objGestEjemplares = $this->get('gest_ejemplares_service');
-                    $respuesta = $objGestEjemplares::buscarFeedEjemplares($solicitud);
+                    $respuesta = $objGestEjemplares::buscarEjemplares($solicitud);
                     break;
                 } 
 
@@ -126,6 +134,11 @@ class Logica {
                 //accion de recuperar los feeds de publicaciones nuevas
                 case AccesoController::txAccRecFeeds:  //Dato: 4
                     $JSONResp = Logica::respuestaFeedEjemplares($respuesta, $pSolicitud, $parreglo);
+                    break;
+
+                //accion de recuperar mensajes
+                case AccesoController::txAccRecOpera:  //Dato: 5
+                    $JSONResp = Logica::respuestaRecuperarMensajes($respuesta, $pSolicitud, $parreglo);
                     break;
 
                 //accion de buscar ejemplares
@@ -283,6 +296,9 @@ class Logica {
                   'inlibro' => $libro->getInlibro(), 'txlibro' => $libro->getTxlibtitulo(), 
                   'txdueno' => $usuario->getTxusunombre()
                 ) ;
+                
+                unset($arrGeneros);
+                
             }
 
             return array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
@@ -295,6 +311,54 @@ class Logica {
                 return AccesoController::inPlatCai;
         } 
     }    
+    
+    
+        /*
+     * respuestaRecuperarMensajes: 
+     * Funcion que genera el JSON de respuesta para la accion de recuperar mensajes:: AccesoController::txAccRecOpera:
+     */
+    public function respuestaRecuperarMensajes(Respuesta $respuesta, Solicitud $pSolicitud, $parreglo){
+        try{
+            $arUsuario = array();
+            $arrTmp = array();
+            $mensaje = new LbMensajes();
+            
+            foreach ($parreglo as $mensaje){
+                echo $mensaje->getTxmensaje();
+                //Recupera los usuarios ID + Nombre
+                $usuario = ManejoDataRepository::getUsuarioById($mensaje->getInmenusuarioorigen());
+                $arUsuario[0] = array('idusuario' => $usuario->getInusuario(), 'nombre' => $usuario->getTxusunommostrar());  
+                
+                $usuario2 = ManejoDataRepository::getUsuarioById($mensaje->getInmenusuario());
+                $arUsuario[1] = array('idusuario' => $usuario2->getInusuario(), 'nombre' => $usuario2->getTxusunommostrar());  
+                
+                $padre = new LbMensajes();
+                $padre = $mensaje->getInmensajepadre();
+                
+                $arrTmp[] = array('idmensaje' => $mensaje->getInmensaje(), 
+                  'mensaje' => $mensaje->getTxmensaje(),'tipomensaje' => $mensaje->getInmenorigen(), 
+                  'idorigen' => $mensaje->getInmemidrelacionado(),
+                  'padre' => $padre->getInmensaje(), 'remitente' => $arUsuario[0], 
+                  'destinatario' => $arUsuario[1], 'leido' => $mensaje->getInmenleido()
+                ) ;
+                
+                unset($arUsuario);
+
+            }
+
+            return array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
+                    'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr(), 
+                    'iddevice'=> $pSolicitud->getDeviceMac(), 'marca'=>$pSolicitud->getDeviceMarca(), 
+                    'modelo'=>$pSolicitud->getDeviceModelo(), 'so'=>$pSolicitud->getDeviceSO()), 
+                    'idrespuesta' => array('respuesta' => $respuesta->getRespuesta(), 
+                    'mensaje' => $arrTmp));
+        } catch (Exception $ex) {
+                return AccesoController::inPlatCai;
+        } 
+    }    
+    
+
+    
     
     /*
      * respuestaBuscarEjemplares: 
@@ -330,6 +394,9 @@ class Logica {
                   'inlibro' => $libro->getInlibro(), 'txlibro' => $libro->getTxlibtitulo(), 
                   'txdueno' => $usuario->getTxusunombre()
                 ) ;
+                
+                unset($arrGeneros);
+
             }
 
             return array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),

@@ -114,7 +114,7 @@ class GestionEjemplares {
     }
 
     
-    public function buscarFeedEjemplares(Solicitud $psolicitud)
+    public function buscarEjemplares(Solicitud $psolicitud)
     {   
         /*setlocale (LC_TIME, "es_CO");
         $fecha = new \DateTime;*/
@@ -126,7 +126,7 @@ class GestionEjemplares {
         try {
             //Valida que la sesión corresponda y se encuentre activa
             $respSesionVali=  ManejoDataRepository::validaSesionUsuario($psolicitud);
-            //echo "<script>alert(' buscarFeedEjemplares :: Validez de sesion ".$respSesionVali." ')</script>";
+            //echo "<script>alert(' buscarEjemplares :: Validez de sesion ".$respSesionVali." ')</script>";
             if ($respSesionVali==AccesoController::inULogged) 
             {    
                 //echo "<script>alert(' recuperarFeedEjemplares :: FindAll ')</script>";

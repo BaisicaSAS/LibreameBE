@@ -5,6 +5,13 @@ Libreame\BackendBundle\Entity\LbMensajes:
         fk_lb_mensajes_lb_usuarios1_idx:
             columns:
                 - inMenUsuario
+        fk_lb_mensajes_lb_mensajes1_idx:
+            columns:
+                - inMensajePadre
+        fk_lb_mensajes_lb_usuarios2_idx:
+            columns:
+                - inMenUsuarioOrigen
+                
     id:
         inmensaje:
             type: bigint
@@ -62,4 +69,23 @@ Libreame\BackendBundle\Entity\LbMensajes:
                 inMenUsuario:
                     referencedColumnName: inUsuario
             orphanRemoval: false
+        inmensajepadre:
+            targetEntity: LbMensajes
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                inMensaje:
+                    referencedColumnName: inMensaje
+            orphanRemoval: false
+        inmenusuarioorigen:
+            targetEntity: LbUsuarios
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                inMenUsuario:
+                    referencedColumnName: inUsuario
+            orphanRemoval: false
+
     lifecycleCallbacks: {  }

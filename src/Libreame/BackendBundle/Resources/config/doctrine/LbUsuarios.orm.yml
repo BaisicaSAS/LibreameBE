@@ -33,7 +33,7 @@ Libreame\BackendBundle\Entity\LbUsuarios:
         txusutelefono:
             type: string
             nullable: false
-            length: 45
+            length: 200
             fixed: false
             comment: 'Numero de telefono'
             default: '0'

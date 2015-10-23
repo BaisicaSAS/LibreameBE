@@ -57,7 +57,7 @@ class AccesoController extends Controller
     const txAccIngresos =  '2'; //Login  (Ingreso)
     const txAccRecParam =  '3'; //Recuperar datos y parámetros de usuario: incluye calificaciones
     const txAccRecFeeds =  '4'; //Recuperar Feed (Todas las publicaciones de solicitudes y publicaciones de usuarios)...Lleva una marca de Fecha y hora para recuperar los últimos tipo twitter
-    const txAccRecOpera =  '5'; //Recuperar mi operación (Todas mis solicitudes publicaciones y mensajes)...Lleva una marca de Fecha y hora para recuperar los últimos tipo twitter
+    const txAccRecOpera =  '5'; //Recuperar mis mensajes ...Lleva una marca de Fecha y hora para recuperar los últimos tipo twitter
     const txAccConfRegi =  '6'; //Confirmacion Registro en el sistema        
     const txAccBusEjemp =  '7'; //Buscar Ejemplares        
     const txAccRecOfert =  '8'; //Recuperar oferta
@@ -238,6 +238,12 @@ class AccesoController extends Controller
                         $this->objSolicitud->setUltEjemplar($json_datos['idsolicitud']['ultejemplar']);
                         break;
                     }
+                    case self::txAccRecOpera: { //Dato:5 : RECUPERAR MENSAJES(NOTIFICACIONES)
+                        //echo "<script>alert('ENTRA POR RECUPERAR MENSAJES')</script>";
+                        $this->objSolicitud->setEmail($json_datos['idsolicitud']['email']);
+                        $this->objSolicitud->setClave($json_datos['idsolicitud']['clave']);
+                        break;
+                    }
                     case self::txAccBusEjemp: { //Dato:7 : Buscar Ejemplar
                         //echo "<script>alert('ENTRA POR BUSCAR EJEMPLAR')</script>";
                         $this->objSolicitud->setEmail($json_datos['idsolicitud']['email']);
@@ -339,6 +345,11 @@ class AccesoController extends Controller
                         //echo "<script>alert('VAL ENTRA POR FEED')</script>";
                         $resp = (isset($datos['idsolicitud']['email']) and isset($datos['idsolicitud']['clave']) 
                                 and isset($datos['idsolicitud']['ultejemplar']));
+                        break;
+                    }
+                    case self::txAccRecOpera: { //Dato:5 : RECUPERAR MENSAJES(NOTIFICACIONES)
+                        //echo "<script>alert('ENTRA POR RECUPERAR MENSAJES')</script>";
+                        $resp = (isset($datos['idsolicitud']['email']) and isset($datos['idsolicitud']['clave']));
                         break;
                     }
                     case self::txAccBusEjemp: { //Dato:7 : Buscar ejemplares

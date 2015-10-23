@@ -32,7 +32,6 @@ use Libreame\BackendBundle\Helpers\Respuesta;
 class ManejoDataRepository extends EntityRepository {
 
     
-    private $arPalDescartar = [];
     /*
      * validaSesionUsuario 
      * Valida los datos de la sesion verificando que sea veridica
@@ -492,6 +491,26 @@ class ManejoDataRepository extends EntityRepository {
                 return new LbCalificausuarios();
         } 
     }
+    
+    //Obtiene los mensajes asociados a un usuario
+    public function getMensajesUsuario(LbUsuarios $usuario)
+    {   
+        try{
+            $em = $this->getDoctrine()->getManager();
+            $sql = "SELECT e FROM LibreameBackendBundle:LbMensajes e "
+                    . " WHERE e.inmenusuarioorigen = :usr";
+            /*$sql = "SELECT e FROM LibreameBackendBundle:LbMensajes e "
+                    . " WHERE e.inmenusuario = :usr"
+                    . " OR e.inmenusuarioorigen = :usr";*/
+
+            $query = $em->createQuery($sql)->setParameter('usr', $usuario);
+            return $query->getResult();
+            
+        } catch (Exception $ex) {
+                return new LbMensajes();
+        } 
+    }
+    
 
     //Obtiene las calificaciones REALIZADAS por un usuario
     public function getCalificaUsuarioRealizadas(LbUsuarios $usuario)
