@@ -147,7 +147,7 @@ class ManejoDataRepository extends EntityRepository {
             if ($sesion == NULL) {/*echo "retorna FALSE";*/return FALSE;  } else {/*echo "retorna TRUE";*/return TRUE;}
             
         } catch (Exception $ex) {
-            echo $ex->getMessage();
+            //echo $ex->getMessage();
             return (FALSE);
         }    
             
@@ -312,7 +312,6 @@ class ManejoDataRepository extends EntityRepository {
             $em = $this->getDoctrine()->getManager();
             return $em->getRepository('LibreameBackendBundle:LbGrupos')->
                 findOneBy(array('ingrupo' => $ingrupo));
-            $em->flush();
         } catch (Exception $ex) {
                 return new LbGrupos();
         } 
@@ -324,8 +323,7 @@ class ManejoDataRepository extends EntityRepository {
         try{
             $em = $this->getDoctrine()->getManager();
             return $em->getRepository('LibreameBackendBundle:LbUsuarios')->
-                findOneBy(array('inusuario' => $inusuario));
-            $em->flush();
+                findOneBy(array('inusuario' => $inusuario, 'inusuestado' => AccesoController::inExitoso));
         } catch (Exception $ex) {
                 return new LbUsuarios();
         } 
@@ -338,7 +336,6 @@ class ManejoDataRepository extends EntityRepository {
             $em = $this->getDoctrine()->getManager();
             return $em->getRepository('LibreameBackendBundle:LbUsuarios')->
                 findOneBy(array('txusuemail' => $txemail));
-            $em->flush();
         } catch (Exception $ex) {
                 return new LbUsuarios();
         } 
@@ -351,7 +348,6 @@ class ManejoDataRepository extends EntityRepository {
             $em = $this->getDoctrine()->getManager();
             return $em->getRepository('LibreameBackendBundle:LbUsuarios')->
                 findOneBy(array('txusutelefono' => $txtelefono));
-            $em->flush();
         } catch (Exception $ex) {
                 return new LbUsuarios();
         } 
@@ -385,7 +381,6 @@ class ManejoDataRepository extends EntityRepository {
             $em = $this->getDoctrine()->getManager();
             return $em->getRepository('LibreameBackendBundle:LbMembresias')->
                     findBy(array('inmemusuario' => $usuario));;
-            $em->flush();
         } catch (Exception $ex) {
                 return new LbMembresias();
         } 
@@ -486,7 +481,6 @@ class ManejoDataRepository extends EntityRepository {
             $em = $this->getDoctrine()->getManager();
             return $em->getRepository('LibreameBackendBundle:LbCalificausuarios')->
                     findBy(array('incalusucalificado' => $usuario));;
-            $em->flush();
         } catch (Exception $ex) {
                 return new LbCalificausuarios();
         } 
@@ -497,19 +491,44 @@ class ManejoDataRepository extends EntityRepository {
     {   
         try{
             $em = $this->getDoctrine()->getManager();
-            /*$sql = "SELECT e FROM LibreameBackendBundle:LbMensajes e "
-                    . " WHERE e.inmenusuarioorigen = :usr";*/
             
+            //echo "[id: ".$usuario->getInusuario()."]\n";
+            //echo "[USUARIO: ".$usuario->getTxusuemail()."]\n";
             
-            echo "[USUARIO: ".$usuario->getTxusuemail()."]\n";
             $sql = "SELECT e FROM LibreameBackendBundle:LbMensajes e "
-                    . " WHERE e.inmenusuario = :usrDe"
-                    . " OR (e.inmenusuarioorigen = :usrOr ))";
+                    . " WHERE e.inmenusuario = :usr"
+                    . " OR e.inmenusuarioorigen = :usr";
 
-            $query = $em->createQuery($sql)->setParameters(array('usrOr' => $usuario,'usrDe' => $usuario));
+            $query = $em->createQuery($sql)->setParameter('usr', $usuario);
             //echo $sql;
             return $query->getResult();
+
+        } catch (Exception $ex) {
+                return new LbMensajes();
+        } 
+    }
+    
+    //Marca un mensaje como Leído / No leído
+    public function setMarcaMensaje($psolicitud)
+    {   
+        try{
+            $em = $this->getDoctrine()->getManager();
             
+            $usuario = ManejoDataRepository::getUsuarioByEmail($psolicitud->getEmail());
+            
+            $mensaje = $em->getRepository('LibreameBackendBundle:LbMensajes')->
+                    findOneBy(array('inmensaje' => $psolicitud->getIdmensaje(), 'inmenusuario' => $usuario));
+            
+            if ($mensaje != NULL) {
+                $mensaje->setInmenleido($psolicitud->getMarcacomo());
+                $em->persist($mensaje);
+                $em->flush();
+                $resp = AccesoController::inExitoso;
+            } else {
+                $resp = AccesoController::inMenNoEx;
+            }
+            
+            return $resp;
         } catch (Exception $ex) {
                 return new LbMensajes();
         } 

@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * LbMensajes
  *
- * @ORM\Table(name="lb_mensajes", indexes={@ORM\Index(name="fk_lb_mensajes_lb_usuarios1_idx", columns={"inMenUsuario"})})
+ * @ORM\Table(name="lb_mensajes", indexes={@ORM\Index(name="fk_lb_mensajes_lb_usuarios1_idx", columns={"inMenUsuario"}), @ORM\Index(name="fk_lb_mensajes_lb_usuarios2_idx", columns={"inMenUsuarioOrigen"}), @ORM\Index(name="fk_lb_mensajes_lb_mensajes1_idx", columns={"inMensajePadre"})})
  * @ORM\Entity
  */
 class LbMensajes
@@ -295,7 +295,7 @@ class LbMensajes
      * @param \Libreame\BackendBundle\Entity\LbMensajes $inmensajepadre
      * @return LbMensajes
      */
-    public function setInmensajepadre(\Libreame\BackendBundle\Entity\LbUsuarios $inmensajepadre = null)
+    public function setInmensajepadre(\Libreame\BackendBundle\Entity\LbMensajes $inmensajepadre = null)
     {
         $this->inmensajepadre = $inmensajepadre;
 

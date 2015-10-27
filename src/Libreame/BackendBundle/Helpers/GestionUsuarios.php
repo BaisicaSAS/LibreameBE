@@ -9,6 +9,7 @@ use Libreame\BackendBundle\Repository\ManejoDataRepository;
 use Libreame\BackendBundle\Entity\LbUsuarios;
 use Libreame\BackendBundle\Entity\LbSesiones;
 use Libreame\BackendBundle\Entity\LbMensajes;
+use Libreame\BackendBundle\Entity\LbCalificausuarios;
 /**
  * Description of Gestion Usuarios
  *
@@ -16,10 +17,8 @@ use Libreame\BackendBundle\Entity\LbMensajes;
  */
 class GestionUsuarios {
     
-    /*
-     * ObtenerParametros 
+    /* ObtenerParametros 
      * Retorna la información del usuario que se encuentra logueado, para visualización
-     * 
      */
 
     public function obtenerParametros($psolicitud)
@@ -30,6 +29,7 @@ class GestionUsuarios {
         $objLogica = $this->get('logica_service');
         $usuario = new LbUsuarios();
         $sesion = new LbSesiones();
+        $califica = new LbCalificausuarios();
         try {
             //Valida que la sesión corresponda y se encuentre activa
             $respSesionVali=ManejoDataRepository::validaSesionUsuario($psolicitud);
@@ -38,31 +38,38 @@ class GestionUsuarios {
             {    
                 //Busca el usuario 
                 $usuario = ManejoDataRepository::getUsuarioByEmail($psolicitud->getEmail());
-                $califica = ManejoDataRepository::getCalificaUsuarioRecibidas($usuario);
-                //echo "<script>alert('RESP cali ".count($califica)." ')</script>";
-                $grupos = ManejoDataRepository::getGruposUsuario($usuario);
-                //echo "<script>alert('RESP grup ".count($grupos)." ')</script>";
-                //echo "<script>alert('La sesion es ".$usuario->getTxusuemail()."')</script>";
+                if ($usuario != NULL) 
+                {
+                    $califica = ManejoDataRepository::getCalificaUsuarioRecibidas($usuario);
+                    //echo "<script>alert('RESP cali ".count($califica)." ')</script>";
+                    $grupos = ManejoDataRepository::getGruposUsuario($usuario);
+                    //echo "<script>alert('RESP grup ".count($grupos)." ')</script>";
+                    //echo "<script>alert('La sesion es ".$usuario->getTxusuemail()."')</script>";
 
-                //SE INACTIVA PORQUE PUEDE GENERAR UNA GRAN CANTIDAD DE REGISTROS EN UNA SOLA SESION
-                //Busca y recupera el objeto de la sesion:: 
-                //$sesion = ManejoDataRepository::recuperaSesionUsuario($usuario,$psolicitud);
-                //Guarda la actividad de la sesion:: 
-                //ManejoDataRepository::generaActSesion($sesion,AccesoController::inDatoUno,"Datos de usuario ".$psolicitud->getEmail()." recuperados con éxito",$psolicitud->getAccion(),$fecha,$fecha);
-                //echo "<script>alert('Generó actividad de sesion ')</script>";
-                
-                $respuesta->setRespuesta(AccesoController::inExitoso);
+                    //SE INACTIVA PORQUE PUEDE GENERAR UNA GRAN CANTIDAD DE REGISTROS EN UNA SOLA SESION
+                    //Busca y recupera el objeto de la sesion:: 
+                    //$sesion = ManejoDataRepository::recuperaSesionUsuario($usuario,$psolicitud);
+                    //Guarda la actividad de la sesion:: 
+                    //ManejoDataRepository::generaActSesion($sesion,AccesoController::inDatoUno,"Datos de usuario ".$psolicitud->getEmail()." recuperados con éxito",$psolicitud->getAccion(),$fecha,$fecha);
+                    //echo "<script>alert('Generó actividad de sesion ')</script>";
 
-                //echo "<script>alert('2 Validez de sesion ".$respuesta." ')</script>";
-                //Ingresa el usuario en el arreglo de la Clase respuesta
-                //echo "<script>alert('ALEX ')</script>";
-                $respuesta->setArrUsuarios($usuario);
-                //echo "<script>alert('ALEX ".$respuesta->RespUsuarios[0]->getTxusunombre()." ')</script>";
+                    $respuesta->setRespuesta(AccesoController::inExitoso);
 
-                $respuesta->setArrCalificaciones($califica);
-                $respuesta->setArrGrupos($grupos);
-                
+                    //echo "<script>alert('2 Validez de sesion ".$respuesta." ')</script>";
+                    //Ingresa el usuario en el arreglo de la Clase respuesta
+                    //echo "<script>alert('ALEX ')</script>";
+                    $respuesta->setArrUsuarios($usuario);
+                    //echo "<script>alert('ALEX ".$respuesta->RespUsuarios[0]->getTxusunombre()." ')</script>";
+
+                    $respuesta->setArrCalificaciones($califica);
+                    $respuesta->setArrGrupos($grupos);
+                } else {
+                    $usuario = new LbUsuarios();
+                    $respuesta->setRespuesta(AccesoController::inMenNoEx);
+                    $respuesta->setArrUsuarios($usuario);
+                }
             } else {
+                $usuario = new LbUsuarios();
                 $respuesta->setRespuesta($respSesionVali);
                 $respuesta->setArrUsuarios($usuario);
             }
@@ -73,6 +80,9 @@ class GestionUsuarios {
         }
     }
     
+    /* recuperarMensajes 
+     * Retorna la información de los mensajes del usuario
+     */
     
     public function recuperarMensajes($psolicitud)
     {
@@ -111,5 +121,95 @@ class GestionUsuarios {
         }
     }
     
+    /* marcarMensajes 
+     * Marca un mensaje como leído o no leído según el usuario lo indique
+     */
+
+    public function marcarMensajes(Solicitud $psolicitud)
+    {   
+        /*setlocale (LC_TIME, "es_CO");
+        $fecha = new \DateTime;*/
+        $respuesta = new Respuesta();
+        $objLogica = $this->get('logica_service');
+        try {
+            //Valida que la sesión corresponda y se encuentre activa
+            $respSesionVali=  ManejoDataRepository::validaSesionUsuario($psolicitud);
+            //echo "<script>alert(' marcarMensajes :: Validez de sesion ".$respSesionVali." ')</script>";
+            if ($respSesionVali==AccesoController::inULogged) 
+            {    
+                //Genera la oferta para el ejemplar
+                $marca = ManejoDataRepository::setMarcaMensaje($psolicitud);
+                if ($marca == AccesoController::inMenNoEx)
+                    $respuesta->setRespuesta(AccesoController::inMenNoEx);
+                else
+                    $respuesta->setRespuesta($respSesionVali);
+                
+                return $objLogica::generaRespuesta($respuesta, $psolicitud, NULL);
+            } else {
+                $respuesta->setRespuesta($respSesionVali);
+                return $objLogica::generaRespuesta($respuesta, $psolicitud, NULL);
+            }
+        } catch (Exception $ex) {
+            $respuesta->setRespuesta(AccesoController::inPlatCai);
+            return $objLogica::generaRespuesta($respuesta, $psolicitud, NULL);
+        }
+       
+    }
+    
+    public function verUsuarioOtro($psolicitud)
+    {   
+        /*setlocale (LC_TIME, "es_CO");
+        $fecha = new \DateTime;*/
+        $respuesta = new Respuesta();
+        $objLogica = $this->get('logica_service');
+        $usuario = new LbUsuarios();
+        $sesion = new LbSesiones();
+        $califica = new LbCalificausuarios();
+        try {
+            //Valida que la sesión corresponda y se encuentre activa
+            $respSesionVali=ManejoDataRepository::validaSesionUsuario($psolicitud);
+           //echo "<script>alert(' obtenerParametros :: Validez de sesion ".$respSesionVali." ')</script>";
+            if ($respSesionVali==AccesoController::inULogged) 
+            {    
+                //Busca el usuario 
+                $usuario = ManejoDataRepository::getUsuarioById($psolicitud->getIdusuariover());
+                if ($usuario != NULL)
+                {
+                    $califica = ManejoDataRepository::getCalificaUsuarioRecibidas($usuario);
+                    //echo "<script>alert('RESP cali ".count($califica)." ')</script>";
+                    //echo "<script>alert('La sesion es ".$usuario->getTxusuemail()."')</script>";
+
+                    //SE INACTIVA PORQUE PUEDE GENERAR UNA GRAN CANTIDAD DE REGISTROS EN UNA SOLA SESION
+                    //Busca y recupera el objeto de la sesion:: 
+                    //$sesion = ManejoDataRepository::recuperaSesionUsuario($usuario,$psolicitud);
+                    //Guarda la actividad de la sesion:: 
+                    //ManejoDataRepository::generaActSesion($sesion,AccesoController::inDatoUno,"Datos de usuario ".$psolicitud->getEmail()." recuperados con éxito",$psolicitud->getAccion(),$fecha,$fecha);
+                    //echo "<script>alert('Generó actividad de sesion ')</script>";
+
+                    $respuesta->setRespuesta(AccesoController::inExitoso);
+
+                    //echo "<script>alert('2 Validez de sesion ".$respuesta." ')</script>";
+                    //Ingresa el usuario en el arreglo de la Clase respuesta
+                    //echo "<script>alert('ALEX ')</script>";
+                    $respuesta->setArrUsuarios($usuario);
+                    //echo "<script>alert('ALEX ".$respuesta->RespUsuarios[0]->getTxusunombre()." ')</script>";
+
+                    $respuesta->setArrCalificaciones($califica);
+                } else {
+                    $usuario = new LbUsuarios();
+                    $respuesta->setRespuesta(AccesoController::inMenNoEx);
+                    $respuesta->setArrUsuarios($usuario);
+                }
+            } else {
+                $usuario = new LbUsuarios();
+                $respuesta->setRespuesta($respSesionVali);
+                $respuesta->setArrUsuarios($usuario);
+            }
+        } catch (Exception $ex) {
+            $respuesta->setRespuesta(AccesoController::inPlatCai);
+        } finally {
+            return $objLogica::generaRespuesta($respuesta, $psolicitud, $usuario);
+        }
+    }
     
 }

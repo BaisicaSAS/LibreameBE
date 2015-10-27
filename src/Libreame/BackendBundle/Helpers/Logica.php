@@ -15,6 +15,7 @@ use Libreame\BackendBundle\Entity\LbSesiones;
 use Libreame\BackendBundle\Entity\LbEjemplares;
 use Libreame\BackendBundle\Entity\LbActsesion;
 use Libreame\BackendBundle\Entity\LbMensajes;
+use Libreame\BackendBundle\Entity\LbCalificausuarios;
 use Libreame\BackendBundle\Helpers\Respuesta;
 
 
@@ -85,6 +86,13 @@ class Logica {
                     break;
                 } 
 
+                case AccesoController::txAccRecUsuar: {//Dato:9 : Ver usuario otro
+                    //echo "<script>alert('Antes de entrar a Ver Usuario Otro-".$solicitud->getEmail()."')</script>";
+                    $objGestUsuarios = $this->get('gest_usuarios_service');
+                    $respuesta = $objGestUsuarios::verUsuarioOtro($solicitud);
+                    break;
+                } 
+
                 case AccesoController::txAccCerraSes: {//Dato:10 : Cerrar Sesion
                     //echo "<script>alert('Antes de entrar a Logout-".$solicitud->getEmail()."')</script>";
                     $objLogin = $this->get('login_service');
@@ -96,6 +104,13 @@ class Logica {
                     //echo "<script>alert('Antes de entrar a Publicar Ejemplar Usuario-".$solicitud->getEmail()."')</script>";
                     $objGestEjemplares = $this->get('gest_ejemplares_service');
                     $respuesta = $objGestEjemplares::publicarEjemplar($solicitud);
+                    break;
+                } 
+
+                case AccesoController::txAccMarcMens: {//Dato:36 : Marcar Mensaje
+                    //echo "<script>alert('Antes de entrar a Marcar Mensajes Usuario-".$solicitud->getEmail()."')</script>";
+                    $objGestUsuarios = $this->get('gest_usuarios_service');
+                    $respuesta = $objGestUsuarios::marcarMensajes($solicitud);
                     break;
                 } 
 
@@ -146,9 +161,9 @@ class Logica {
                     $JSONResp = Logica::respuestaBuscarEjemplares($respuesta, $pSolicitud, $parreglo);
                     break;
 
-                //accion de cerrar sesion de usuario
-                case AccesoController::txAccCerraSes:  //Dato: 10
-                    $JSONResp = Logica::respuestaCerrarSesion($respuesta, $pSolicitud);
+                //accion de ver usuario otro
+                case AccesoController::txAccRecUsuar:  //Dato: 9
+                    $JSONResp = Logica::respuestaVerUsuarioOtro($respuesta, $pSolicitud, $parreglo);
                     break;
 
                 //accion de cerrar sesion de usuario
@@ -160,6 +175,11 @@ class Logica {
                 case AccesoController::txAccPubliEje:  //Dato: 13
                     $JSONResp = Logica::respuestaPublicarEjemplar($respuesta, $pSolicitud);
                     break;
+
+                case AccesoController::txAccMarcMens: //Dato:36 : Marcar Mensaje
+                    $JSONResp = Logica::respuestaMarcarMensaje($respuesta, $pSolicitud);
+                    break;
+                
             }
 
             return json_encode($JSONResp);
@@ -213,6 +233,7 @@ class Logica {
                             'iddevice'=> $pSolicitud->getDeviceMac(), 'marca'=>$pSolicitud->getDeviceMarca(), 
                             'modelo'=>$pSolicitud->getDeviceModelo(), 'so'=>$pSolicitud->getDeviceSO()), 
                             'idrespuesta' => (array('respuesta' => $respuesta->getRespuesta(),
+                            'idusuario' => $respuesta->RespUsuarios[0]->getInusuario(),
                             'idsesion' => $respuesta->getSession(), 
                             'cantmensajes' => $respuesta->getCantMensajes())));
         } catch (Exception $ex) {
@@ -240,7 +261,8 @@ class Logica {
                     'iddevice'=> $pSolicitud->getDeviceMac(), 'marca'=>$pSolicitud->getDeviceMarca(), 
                     'modelo'=>$pSolicitud->getDeviceModelo(), 'so'=>$pSolicitud->getDeviceSO()), 
                     'idrespuesta' => array('respuesta' => $respuesta->getRespuesta(),
-                    'usuario' => array('nomusuario' => $respuesta->RespUsuarios[0]->getTxusunombre(),
+                    'usuario' => array('idusuario' => $respuesta->RespUsuarios[0]->getInusuario(), 
+                        'nomusuario' => $respuesta->RespUsuarios[0]->getTxusunombre(),
                         'nommostusuario' => $respuesta->RespUsuarios[0]->getTxusunommostrar(), 
                         'email' => $respuesta->RespUsuarios[0]->getTxusuemail(),
                         'usutelefono' => $respuesta->RespUsuarios[0]->getTxusutelefono(), 
@@ -324,30 +346,37 @@ class Logica {
             $mensaje = new LbMensajes();
             
             foreach ($parreglo as $mensaje){
-                echo $mensaje->getTxmensaje()."\n";
+                //echo $mensaje->getTxmensaje()."\n";
                 //Recupera los usuarios ID + Nombre
-                echo "[ID_ORIGEN: ".$mensaje->getInmenusuarioorigen()->getInusuario()."]\n";
-                $usuario = ManejoDataRepository::getUsuarioById($mensaje->getInmenusuarioorigen());
-                $u1 = array('idusuario' => $usuario->getInusuario(), 'nombre' => $usuario->getTxusunommostrar());  
-                
-                echo "[ID_DESTINO: ".$mensaje->getInmenusuario()->getInusuario()."]\n";
-                $usuario2 = ManejoDataRepository::getUsuarioById($mensaje->getInmenusuario());
+                if ($mensaje->getInmenusuarioorigen() != NULL)
+                {
+                    //echo "[ID_ORIGEN: ".$mensaje->getInmenusuarioorigen()->getInusuario()."]\n";
+                    $usuario = ManejoDataRepository::getUsuarioById($mensaje->getInmenusuarioorigen()->getInusuario());
+                    $u1 = array('idusuario' => $usuario->getInusuario(), 'nombre' => $usuario->getTxusunommostrar());  
+                } else {
+                    $u1 = array('idusuario' => "", 'nombre' => "");                      
+                } 
+                    
+                //echo "[ID_DESTINO: ".$mensaje->getInmenusuario()->getInusuario()."]\n";
+                $usuario2 = ManejoDataRepository::getUsuarioById($mensaje->getInmenusuario()->getInusuario());
                 $u2 = array('idusuario' => $usuario2->getInusuario(), 'nombre' => $usuario2->getTxusunommostrar());  
                 
-                $padre = new LbMensajes();
-                $padre = $mensaje->getInmensajepadre();
+                if ($mensaje->getInmensajepadre() == NULL)
+                    $idpadre = $mensaje->getInmensajepadre();
+                else
+                    $idpadre = "";
                 
                 $arrTmp[] = array('idmensaje' => $mensaje->getInmensaje(), 
                   'mensaje' => $mensaje->getTxmensaje(),'tipomensaje' => $mensaje->getInmenorigen(), 
                   'idorigen' => $mensaje->getInmemidrelacionado(),
-                  'padre' => $padre->getInmensaje(), 'remitente' => $u1, 
+                  'padre' => $idpadre, 'remitente' => $u1, 
                   'destinatario' => $u2, 'leido' => $mensaje->getInmenleido()
                 ) ;
                 
-                echo "ID Mensaje".$mensaje->getInmensaje();
+                //echo "ID Mensaje ".$mensaje->getInmensaje()."\n";
                 
-                unset($arUsuario1);
-                unset($arUsuario2);
+                unset($u1);
+                unset($u2);
 
             }
 
@@ -363,6 +392,43 @@ class Logica {
     }    
     
 
+    /*
+     * respuestaVerUsuarioOtro: 
+     * Funcion que genera el JSON de respuesta para la accion de Recuperar Usuario Otro:: AccesoController::txAccRecUsuar
+     */
+    public function respuestaVerUsuarioOtro(Respuesta $respuesta, Solicitud $pSolicitud, $parreglo){
+
+        try {
+            //$calificacion = new LbCalificausuarios();
+            $usuario = new LbUsuarios();
+            foreach ($respuesta->getArrCalificaciones() as $calificacion){
+                echo "AEI";
+                //$usuario = ManejoDataRepository::getUsuarioById($calificacion->getIncalusucalifica()->getInusuario());
+                
+                $arrTmp[] = array('usucalifica' => $usuario->getInusuario(), 
+                    'califica' => $calificacion->getIncalcalificacion(),
+                    'mensaje' => $calificacion->getTxcalobservacion()
+                ) ;
+                
+            }
+            
+            return array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
+                    'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr(), 
+                    'iddevice'=> $pSolicitud->getDeviceMac(), 'marca'=>$pSolicitud->getDeviceMarca(), 
+                    'modelo'=>$pSolicitud->getDeviceModelo(), 'so'=>$pSolicitud->getDeviceSO()), 
+                    'idrespuesta' => array('respuesta' => $respuesta->getRespuesta(),
+                    'usuario' => array('idusuario' => $respuesta->RespUsuarios[0]->getInusuario(), 
+                        'nommostusuario' => $respuesta->RespUsuarios[0]->getTxusunommostrar(), 
+                        'email' => $respuesta->RespUsuarios[0]->getTxusuemail(),
+                        //La siguiente línea debe habilitarse, e integrar el CAST de BLOB a TEXT??
+                        //'usuimagen' => $respuesta->RespUsuarios[0]->getTxusuimagen(), 
+                        'usuimagen' => "DUMMY", 
+                        'comentarios' => $arrTmp))
+                );
+        } catch (Exception $ex) {
+                return AccesoController::inPlatCai;
+        } 
+    }    
     
     
     /*
@@ -454,6 +520,23 @@ class Logica {
                     'mensaje'=>array('idmensaje'=>$respuesta->getIdMensaje(),
                         'fecha'=>$respuesta->getFeMensaje(), 'padre'=>$respuesta->getIdPadre(),
                         'descripcion'=>$respuesta->getTxMensaje())));
+    }    
+    
+    
+    /*
+        * respuestaMarcarMensaje: 
+     * Funcion que genera el JSON de respuesta para la accion de Marcar el mensaje como Leído o No leído:: AccesoController::txAccMarcMens
+     */
+    public function respuestaMarcarMensaje(Respuesta $respuesta, Solicitud $pSolicitud){
+        try {
+            return array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
+                            'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr(), 
+                            'iddevice'=> $pSolicitud->getDeviceMac(), 'marca'=>$pSolicitud->getDeviceMarca(), 
+                            'modelo'=>$pSolicitud->getDeviceModelo(), 'so'=>$pSolicitud->getDeviceSO()), 
+                            'idrespuesta' => (array('respuesta' => $respuesta->getRespuesta())));
+        } catch (Exception $ex) {
+                return AccesoController::inPlatCai;
+        } 
     }    
     
     /*

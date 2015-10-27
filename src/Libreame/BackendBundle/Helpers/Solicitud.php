@@ -45,6 +45,11 @@ class Solicitud {
     private $pObservaSol; //Observaciones de la oferta
     //Parametros para la búsqueda
     private $pTextoBuscar; //Texto a buscar
+    //Parametros para marcar mensaje como leído
+    private $pIdMensaje; //Id del mensaje
+    private $pMarcaComo; //Marcar usuario como : Leido = 1, No leido = 0
+    //Parametros para recuperar usuario otro
+    private $pIdUsuarioVer; //Id del mensaje
 
     /*
      *  Bloque de getter para los atributos de la clase
@@ -152,6 +157,18 @@ class Solicitud {
     
     public function getTextoBuscar() {
         return $this->pTextoBuscar;
+    }
+    
+    public function getIdmensaje() {
+        return $this->pIdMensaje;
+    }
+    
+    public function getMarcacomo() {
+        return $this->pMarcaComo;
+    }
+
+    public function getIdusuariover() {
+        return $this->pIdUsuarioVer;
     }
     
 
@@ -289,6 +306,21 @@ class Solicitud {
     
     public function setTextoBuscar($pTextoBus) {
         $this->pTextoBuscar = $pTextoBus;
+        return $this;
+    }
+    
+    public function setIdmensaje($pIdMens) {
+        $this->pIdMensaje = $pIdMens;
+        return $this;
+    }
+    
+    public function setMarcarcomo($pMarcar) {
+        $this->pMarcaComo = $pMarcar;
+        return $this;
+    }
+    
+    public function setIdusuariover($pIdUsrVer) {
+        $this->pIdUsuarioVer = $pIdUsrVer;
         return $this;
     }
     

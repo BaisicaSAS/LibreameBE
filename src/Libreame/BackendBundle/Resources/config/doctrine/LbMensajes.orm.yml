@@ -75,7 +75,7 @@ Libreame\BackendBundle\Entity\LbMensajes:
             mappedBy: null
             inversedBy: null
             joinColumns:
-                inMensaje:
+                inMensajePadre:
                     referencedColumnName: inMensaje
             orphanRemoval: false
         inmenusuarioorigen:
@@ -84,7 +84,7 @@ Libreame\BackendBundle\Entity\LbMensajes:
             mappedBy: null
             inversedBy: null
             joinColumns:
-                inMenUsuario:
+                inMenUsuarioOrigen:
                     referencedColumnName: inUsuario
             orphanRemoval: false
 

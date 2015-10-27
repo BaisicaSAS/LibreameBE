@@ -90,6 +90,7 @@ class AccesoController extends Controller
     const txAccRecPubli =  '33'; //Recuperar publicacion
     const txAccRecTrato =  '34'; //Recuperar informacion Trato
     const txAccVerCalif =  '35'; //Ver comentarios-calificaciones
+    const txAccMarcMens =  '36'; //Marcar mensaje como No leido / Leido
 
     const txEjemplarPub =  'P'; //Indica que es el ejemplar a publicar de la solicitud
     const txEjemplarSol1 =  'S1'; //Indica que es el ejemplar a Solicitar de la solicitud
@@ -103,6 +104,8 @@ class AccesoController extends Controller
     const inSosAtaq = -3; //Sesion sospechosa de ser ataque ::: AUN NO SE IMPLEMENTA
     const inUsInact = -4; //Usuario inactivo
     const inUsSeIna = -5; //Sesión inactiva
+    //Constante funcion marcar mensaje
+    const inMenNoEx = -6; //Mensaje no existe
 
     const inIdGeneral = 1; //Id General para datos basicos :: Genero, Lugar, Grupo
 
@@ -251,6 +254,13 @@ class AccesoController extends Controller
                         $this->objSolicitud->setTextoBuscar($json_datos['idsolicitud']['buscar']);
                         break;
                     }
+                    case self::txAccRecUsuar: { //Dato:9 : Recuperar Usuario Otro
+                        //echo "<script>alert('ENTRA POR RECUPERAR USUARIO OTRO')</script>";
+                        $this->objSolicitud->setEmail($json_datos['idsolicitud']['email']);
+                        $this->objSolicitud->setClave($json_datos['idsolicitud']['clave']);
+                        $this->objSolicitud->setIdUsuarioVer($json_datos['idsolicitud']['idusuariover']);
+                        break;
+                    }
                     case self::txAccCerraSes: { //Dato:10 : Cerrar sesion
                         //echo "<script>alert('ENTRA POR CERRAR SESION')</script>";
                         $this->objSolicitud->setEmail($json_datos['idsolicitud']['email']);
@@ -276,6 +286,14 @@ class AccesoController extends Controller
                         $this->objSolicitud->setValAdicSol2($json_datos['idsolicitud']['valadicsol2']);
                         $this->objSolicitud->setObservaSol($json_datos['idsolicitud']['observasol']);
 
+                        break;
+                    }
+                    case self::txAccMarcMens: { //Dato:36 : Marcar mensaje / Leído - No leído
+                        //echo "<script>alert('ENTRA POR MARCAR MENSAJES')</script>";
+                        $this->objSolicitud->setEmail($json_datos['idsolicitud']['email']);
+                        $this->objSolicitud->setClave($json_datos['idsolicitud']['clave']);
+                        $this->objSolicitud->setIdmensaje($json_datos['idsolicitud']['idmensaje']);
+                        $this->objSolicitud->setMarcarcomo($json_datos['idsolicitud']['marcacomo']);
                         break;
                     }
 
@@ -358,6 +376,12 @@ class AccesoController extends Controller
                                 and isset($datos['idsolicitud']['buscar']));
                         break;
                     }
+                    case self::txAccRecUsuar: { //Dato:9 : Recuperar Usuario Otro
+                        //echo "<script>alert('VAL ENTRA POR RECUPERAR USUARIO OTRO')</script>";
+                        $resp = (isset($datos['idsolicitud']['email']) and isset($datos['idsolicitud']['clave'])
+                                 and isset($datos['idsolicitud']['idusuariover']));
+                        break;
+                    }
                     case self::txAccCerraSes: { //Dato:10 : Cerrar Sesion
                         //echo "<script>alert('VAL ENTRA POR CERRAR SESION')</script>";
                         $resp = (isset($datos['idsolicitud']['email']) and isset($datos['idsolicitud']['clave']));
@@ -365,7 +389,6 @@ class AccesoController extends Controller
                     }
                     case self::txAccPubliEje: { //Dato:13 : Publicar un Ejemplar
                         //echo "<script>alert('VAL ENTRA POR PUBLICAR')</script>";
-                        
                         $resp = (isset($datos['idsolicitud']['email']) and isset($datos['idsolicitud']['clave']) and 
                                   isset($datos['idsolicitud']['idoferta']) and  isset($datos['idsolicitud']['titulo']) and 
                                  isset($datos['idsolicitud']['idlibro']) and  isset($datos['idsolicitud']['idioma']) and 
@@ -376,6 +399,15 @@ class AccesoController extends Controller
                                  isset($datos['idsolicitud']['observasol']));
                         break;
                     }
+                    
+                    case self::txAccMarcMens: { //Dato:36 : Marcar mensaje / Leído - No leído
+                        //echo "<script>alert('VAL ENTRA POR MARCAR MENSAJES')</script>";
+                        $resp = (isset($datos['idsolicitud']['email']) and isset($datos['idsolicitud']['clave']) and
+                                isset($datos['idsolicitud']['idmensaje']) and isset($datos['idsolicitud']['marcacomo']));
+                        break;
+                    }
+
+                    
                 }
             }
         }
