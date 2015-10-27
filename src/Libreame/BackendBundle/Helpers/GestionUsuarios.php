@@ -8,6 +8,7 @@ use Libreame\BackendBundle\Repository\ManejoDataRepository;
 
 use Libreame\BackendBundle\Entity\LbUsuarios;
 use Libreame\BackendBundle\Entity\LbSesiones;
+use Libreame\BackendBundle\Entity\LbMensajes;
 /**
  * Description of Gestion Usuarios
  *
@@ -77,6 +78,7 @@ class GestionUsuarios {
     {
         /*setlocale (LC_TIME, "es_CO");
         $fecha = new \DateTime;*/
+        $mensaje = new LbMensajes();
         $respuesta = new Respuesta();
         $objLogica = $this->get('logica_service');
         $usuario = new LbUsuarios();
@@ -88,6 +90,7 @@ class GestionUsuarios {
             {    
                 //Busca el usuario 
                 $usuario = ManejoDataRepository::getUsuarioByEmail($psolicitud->getEmail());
+                //echo "[".$usuario->getTxusuemail()."]";
                 $mensaje = ManejoDataRepository::getMensajesUsuario($usuario);
 
                 //SE INACTIVA PORQUE PUEDE GENERAR UNA GRAN CANTIDAD DE REGISTROS EN UNA SOLA SESION

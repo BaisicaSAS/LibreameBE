@@ -324,13 +324,15 @@ class Logica {
             $mensaje = new LbMensajes();
             
             foreach ($parreglo as $mensaje){
-                echo $mensaje->getTxmensaje();
+                echo $mensaje->getTxmensaje()."\n";
                 //Recupera los usuarios ID + Nombre
+                echo "[ID_ORIGEN: ".$mensaje->getInmenusuarioorigen()->getInusuario()."]\n";
                 $usuario = ManejoDataRepository::getUsuarioById($mensaje->getInmenusuarioorigen());
-                $arUsuario[0] = array('idusuario' => $usuario->getInusuario(), 'nombre' => $usuario->getTxusunommostrar());  
+                $u1 = array('idusuario' => $usuario->getInusuario(), 'nombre' => $usuario->getTxusunommostrar());  
                 
+                echo "[ID_DESTINO: ".$mensaje->getInmenusuario()->getInusuario()."]\n";
                 $usuario2 = ManejoDataRepository::getUsuarioById($mensaje->getInmenusuario());
-                $arUsuario[1] = array('idusuario' => $usuario2->getInusuario(), 'nombre' => $usuario2->getTxusunommostrar());  
+                $u2 = array('idusuario' => $usuario2->getInusuario(), 'nombre' => $usuario2->getTxusunommostrar());  
                 
                 $padre = new LbMensajes();
                 $padre = $mensaje->getInmensajepadre();
@@ -338,11 +340,14 @@ class Logica {
                 $arrTmp[] = array('idmensaje' => $mensaje->getInmensaje(), 
                   'mensaje' => $mensaje->getTxmensaje(),'tipomensaje' => $mensaje->getInmenorigen(), 
                   'idorigen' => $mensaje->getInmemidrelacionado(),
-                  'padre' => $padre->getInmensaje(), 'remitente' => $arUsuario[0], 
-                  'destinatario' => $arUsuario[1], 'leido' => $mensaje->getInmenleido()
+                  'padre' => $padre->getInmensaje(), 'remitente' => $u1, 
+                  'destinatario' => $u2, 'leido' => $mensaje->getInmenleido()
                 ) ;
                 
-                unset($arUsuario);
+                echo "ID Mensaje".$mensaje->getInmensaje();
+                
+                unset($arUsuario1);
+                unset($arUsuario2);
 
             }
 

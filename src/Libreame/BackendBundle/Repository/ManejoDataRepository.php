@@ -497,13 +497,17 @@ class ManejoDataRepository extends EntityRepository {
     {   
         try{
             $em = $this->getDoctrine()->getManager();
-            $sql = "SELECT e FROM LibreameBackendBundle:LbMensajes e "
-                    . " WHERE e.inmenusuarioorigen = :usr";
             /*$sql = "SELECT e FROM LibreameBackendBundle:LbMensajes e "
-                    . " WHERE e.inmenusuario = :usr"
-                    . " OR e.inmenusuarioorigen = :usr";*/
+                    . " WHERE e.inmenusuarioorigen = :usr";*/
+            
+            
+            echo "[USUARIO: ".$usuario->getTxusuemail()."]\n";
+            $sql = "SELECT e FROM LibreameBackendBundle:LbMensajes e "
+                    . " WHERE e.inmenusuario = :usrDe"
+                    . " OR (e.inmenusuarioorigen = :usrOr ))";
 
-            $query = $em->createQuery($sql)->setParameter('usr', $usuario);
+            $query = $em->createQuery($sql)->setParameters(array('usrOr' => $usuario,'usrDe' => $usuario));
+            //echo $sql;
             return $query->getResult();
             
         } catch (Exception $ex) {
