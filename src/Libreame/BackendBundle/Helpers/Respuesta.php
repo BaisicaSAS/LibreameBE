@@ -191,15 +191,15 @@ class Respuesta {
     }
 
 
-    public function setArrCalificaciones(LbCalificausuarios $califica)
+    public function setArrCalificaciones(array $califica)
     {
-        $this->RespCalifUsu[] = $califica;
+        $this->RespCalifUsu = $califica;
         return $this;
     }   
 
-    public function setArrGrupos(LbGrupos $grupos)
+    public function setArrGrupos(array $grupos)
     {
-        $this->RespGrupos[] = $grupos;
+        $this->RespGrupos = $grupos;
         return $this;
     }   
 

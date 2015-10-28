@@ -401,11 +401,11 @@ class Logica {
         try {
             //$calificacion = new LbCalificausuarios();
             $usuario = new LbUsuarios();
+            $arrTmp = array();
             foreach ($respuesta->getArrCalificaciones() as $calificacion){
-                echo "AEI";
                 //$usuario = ManejoDataRepository::getUsuarioById($calificacion->getIncalusucalifica()->getInusuario());
                 
-                $arrTmp[] = array('usucalifica' => $usuario->getInusuario(), 
+                $arrTmp[] = array('usucalifica' => $calificacion->getIncalusucalifica()->getInusuario(), 
                     'califica' => $calificacion->getIncalcalificacion(),
                     'mensaje' => $calificacion->getTxcalobservacion()
                 ) ;

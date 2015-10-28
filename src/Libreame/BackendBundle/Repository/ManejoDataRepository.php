@@ -169,7 +169,7 @@ class ManejoDataRepository extends EntityRepository {
             $objLogica = $this->get('logica_service');
             if ($em == NULL) { $flEm = TRUE; } else  { $flEm = FALSE; }
             
-            if ($flEm) $em = $this->getDoctrine()->getManager();
+            if ($flEm) {$em = $this->getDoctrine()->getManager();}
             $sesion = new LbSesiones();
             $sesion->setInsesactiva($pEstado);
             $sesion->setTxsesnumero($objLogica::generaRand(AccesoController::inTamSesi));
@@ -179,7 +179,7 @@ class ManejoDataRepository extends EntityRepository {
             $sesion->setTxipaddr($pIpAdd);
             $em->persist($sesion);
             //echo "<script>alert('Guardo sesion')</script>";
-            if ($flEm) $em->flush();
+            if ($flEm) {$em->flush();}
             //echo "<script>alert('Retorna".$sesion->getTxsesnumero()."')</script>";
             return $sesion;
             
@@ -196,7 +196,7 @@ class ManejoDataRepository extends EntityRepository {
         //echo "<script>alert('Ingresa a generar actividad de sesion".$pFecFin."-".$pFecIni."')</script>";
         try{
             if ($em == NULL) { $flEm = TRUE; } else  { $flEm = FALSE; }
-            if ($flEm) $em = $this->getDoctrine()->getManager();
+            if ($flEm) {$em = $this->getDoctrine()->getManager();}
             
             //echo "<script>alert('::::Actividad Sesion".$pFecFin."-".$pFecIni."')</script>";
             //echo "<script>alert('::::Actividad accion ".$pAccion."')</script>";
@@ -210,7 +210,7 @@ class ManejoDataRepository extends EntityRepository {
             //echo "<script>alert('::::Antes de persist act sesion')</script>";
             $em->persist($actsesion);
             //echo "<script>alert('::::antes de flush act sesion')</script>";
-            if ($flEm) $em->flush();
+            if ($flEm) {$em->flush();}
             //echo "<script>alert('::::despues de flush act sesion')</script>";
  
             return $actsesion;
@@ -233,7 +233,7 @@ class ManejoDataRepository extends EntityRepository {
         try{
             //echo "<script>alert('Ingresa validar sesion :: ".$psolicitud->getEmail()." ::')</script>";
             if ($em == NULL) { $flEm = TRUE; } else  { $flEm = FALSE; }
-            if ($flEm) $em = $this->getDoctrine()->getManager();
+            if ($flEm) {$em = $this->getDoctrine()->getManager();}
 
             //Busca el dispositivo si no esta asociado al usuario envia mensaje de sesion no existe
             $device = $em->getRepository('LibreameBackendBundle:LbDispusuarios')->findOneBy(array(
@@ -245,7 +245,7 @@ class ManejoDataRepository extends EntityRepository {
                             'insesdispusuario' => $device,
                             'insesactiva' => AccesoController::inSesActi));
             //Flush al entity manager
-            if ($flEm) $em->flush();
+            if ($flEm) {$em->flush();}
 
             return ($respuesta);//Retorna objeto tipo Sesion
         } catch (Exception $ex) {
@@ -259,8 +259,7 @@ class ManejoDataRepository extends EntityRepository {
         try{
             $em = $this->getDoctrine()->getManager();
             return $em->getRepository('LibreameBackendBundle:LbLugares')->
-                findOneBy(array('inlugar' => $inlugar));
-            $em->flush();
+                findOneBy('inlugar', $inlugar);
         } catch (Exception $ex) {
                 return new LbLugares();
         } 
@@ -273,7 +272,6 @@ class ManejoDataRepository extends EntityRepository {
             $em = $this->getDoctrine()->getManager();
             return $em->getRepository('LibreameBackendBundle:LbGenerosLibros')->
                 findBy(array('inglilibro' => $inlibro));
-            $em->flush();
         } catch (Exception $ex) {
                 return new LbGeneroslibros();
         } 
@@ -285,8 +283,7 @@ class ManejoDataRepository extends EntityRepository {
         try{
             $em = $this->getDoctrine()->getManager();
             return $em->getRepository('LibreameBackendBundle:LbGeneros')->
-                findOneBy(array('ingenero' => $genero));
-            $em->flush();
+                findOneBy('ingenero', $genero);
         } catch (Exception $ex) {
                 return new LbGeneros();
         } 
@@ -298,8 +295,7 @@ class ManejoDataRepository extends EntityRepository {
         try{
             $em = $this->getDoctrine()->getManager();
             return $em->getRepository('LibreameBackendBundle:LbLibros')->
-                findOneBy(array('inlibro' => $inlibro));
-            $em->flush();
+                findOneBy('inlibro', $inlibro);
         } catch (Exception $ex) {
                 return new LbLibros();
         } 
@@ -311,7 +307,7 @@ class ManejoDataRepository extends EntityRepository {
         try{
             $em = $this->getDoctrine()->getManager();
             return $em->getRepository('LibreameBackendBundle:LbGrupos')->
-                findOneBy(array('ingrupo' => $ingrupo));
+                findOneBy('ingrupo', $ingrupo);
         } catch (Exception $ex) {
                 return new LbGrupos();
         } 
@@ -335,7 +331,7 @@ class ManejoDataRepository extends EntityRepository {
         try{
             $em = $this->getDoctrine()->getManager();
             return $em->getRepository('LibreameBackendBundle:LbUsuarios')->
-                findOneBy(array('txusuemail' => $txemail));
+                findOneBy('txusuemail', $txemail);
         } catch (Exception $ex) {
                 return new LbUsuarios();
         } 
@@ -347,7 +343,7 @@ class ManejoDataRepository extends EntityRepository {
         try{
             $em = $this->getDoctrine()->getManager();
             return $em->getRepository('LibreameBackendBundle:LbUsuarios')->
-                findOneBy(array('txusutelefono' => $txtelefono));
+                findOneBy('txusutelefono', $txtelefono);
         } catch (Exception $ex) {
                 return new LbUsuarios();
         } 
@@ -359,16 +355,16 @@ class ManejoDataRepository extends EntityRepository {
         try{
             if ($em == NULL) { $flEm = TRUE; } else  { $flEm = FALSE; }
             
-            if ($flEm) $em = $this->getDoctrine()->getManager();
+            if ($flEm) {$em = $this->getDoctrine()->getManager();}
             if($iddispositivo == AccesoController::txAnyData) {
-                return $em->getRepository('LibreameBackendBundle:LbDispusuarios')->findOneBy(array(
-                        'indisusuario' => $usuario));
+                return $em->getRepository('LibreameBackendBundle:LbDispusuarios')->findOneBy(
+                        'indisusuario', $usuario);
             } else {
                 return $em->getRepository('LibreameBackendBundle:LbDispusuarios')->findOneBy(array(
                         'txdisid' => $iddispositivo, 
                         'indisusuario' => $usuario));
             }
-            if ($flEm) $em->flush();
+            if ($flEm) {$em->flush();}
         } catch (Exception $ex) {
                 return new LbDispusuarios();
         } 
@@ -380,7 +376,7 @@ class ManejoDataRepository extends EntityRepository {
         try{
             $em = $this->getDoctrine()->getManager();
             return $em->getRepository('LibreameBackendBundle:LbMembresias')->
-                    findBy(array('inmemusuario' => $usuario));;
+                    findBy(array('inmemusuario' => $usuario));
         } catch (Exception $ex) {
                 return new LbMembresias();
         } 
@@ -480,12 +476,26 @@ class ManejoDataRepository extends EntityRepository {
         try{
             $em = $this->getDoctrine()->getManager();
             return $em->getRepository('LibreameBackendBundle:LbCalificausuarios')->
-                    findBy(array('incalusucalificado' => $usuario));;
+                    findBy(array('incalusucalificado' => $usuario));
         } catch (Exception $ex) {
                 return new LbCalificausuarios();
         } 
     }
     
+    //Obtiene las calificaciones REALIZADAS por un usuario
+    public function getCalificaUsuarioRealizadas(LbUsuarios $usuario)
+    {
+        try{
+            $em = $this->getDoctrine()->getManager();
+            return $em->getRepository('LibreameBackendBundle:LbCalificausuarios')->
+                    findBy(array('incalusucalifica' => $usuario));
+
+        } catch (Exception $ex) {
+                return new LbCalificausuarios();
+        } 
+    }
+
+
     //Obtiene los mensajes asociados a un usuario
     public function getMensajesUsuario(LbUsuarios $usuario)
     {   
@@ -534,21 +544,6 @@ class ManejoDataRepository extends EntityRepository {
         } 
     }
     
-
-    //Obtiene las calificaciones REALIZADAS por un usuario
-    public function getCalificaUsuarioRealizadas(LbUsuarios $usuario)
-    {
-        try{
-            $em = $this->getDoctrine()->getManager();
-            return $em->getRepository('LibreameBackendBundle:LbCalificausuarios')->
-                    findBy(array('incalusucalifica' => $usuario));;
-            $em->flush();   
-
-        } catch (Exception $ex) {
-                return new LbCalificausuarios();
-        } 
-    }
-
                 
     //Guarda CUALQUIER ENTIDAD del parametro
     public function persistEntidad($entidad)
@@ -571,8 +566,7 @@ class ManejoDataRepository extends EntityRepository {
         try{
             $em = $this->getDoctrine()->getManager();
             return $em->getRepository('LibreameBackendBundle:LbLibros')->
-                    findOneBy(array('inlibro' => $idlibro));
-            $em->flush();   
+                    findOneBy('inlibro', $idlibro);
 
         } catch (Exception $ex) {
                 return new LbLibros();
@@ -898,7 +892,7 @@ class ManejoDataRepository extends EntityRepository {
             return $libro;*/
 
             return $em->getRepository('LibreameBackendBundle:LbLibros')->
-                    findOneBy(array('txlibtitulo' => $titulo));;
+                    findOneBy('txlibtitulo', $titulo);
 
         } catch (Exception $ex) {
                 return new LbLibros();
@@ -990,7 +984,7 @@ class ManejoDataRepository extends EntityRepository {
                 'si', 'lo', 'identificar', 'no', 'al', 'que'); 
             if ($em == NULL) { $flEm = TRUE; } else  { $flEm = FALSE; }
             
-            if ($flEm) $em = $this->getDoctrie()->getManager();
+            if ($flEm) {$em = $this->getDoctrie()->getManager();}
 
             $palabras = explode(" ", $texto);
             $repetidos = [];
@@ -1015,7 +1009,7 @@ class ManejoDataRepository extends EntityRepository {
                 }
             }
             
-            if ($flEm) $em->flush();
+            if ($flEm) {$em->flush();}
         } catch (Exception $ex) {
                 return AccesoController::inDatoCer;
         } 
