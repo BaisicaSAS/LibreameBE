@@ -168,5 +168,64 @@ class GestionEjemplares {
         }
        
     }
+
+    public function recuperarOferta(Solicitud $psolicitud)
+    {   
+        /*setlocale (LC_TIME, "es_CO");
+        $fecha = new \DateTime;*/
+        $respuesta = new Respuesta();
+        $objLogica = $this->get('logica_service');
+        $usuario = new LbUsuarios();
+        $sesion = new LbSesiones();
+        $ejemplares = new LbEjemplares();
+        try {
+            //Valida que la sesión corresponda y se encuentre activa
+            $respSesionVali=  ManejoDataRepository::validaSesionUsuario($psolicitud);
+            //echo "<script>alert(' recuperarFeedEjemplares :: Validez de sesion ".$respSesionVali." ')</script>";
+            if ($respSesionVali==AccesoController::inULogged) 
+            {    
+                //echo "<script>alert(' recuperarFeedEjemplares :: FindAll ')</script>";
+                //Busca el usuario 
+                $usuario = ManejoDataRepository::getUsuarioByEmail($psolicitud->getEmail());
+                
+                //$membresia= ManejoDataRepository::getMembresiasUsuario($usuario);
+                
+                //echo "<script>alert('MEM ".count($membresia)." regs ')</script>";
+                
+                $grupo= ManejoDataRepository::getObjetoGruposUsuario($usuario);
+
+                $arrGru = array();
+                foreach ($grupo as $gru){
+                    $arrGru[] = $gru->getIngrupo();
+                }
+
+
+                $ejemplares = ManejoDataRepository::getEjemplaresDisponibles($arrGru, $psolicitud->getUltEjemplar());
+                $respuesta->setRespuesta(AccesoController::inExitoso);
+
+                //SE INACTIVA PORQUE PUEDE GENERAR UNA GRAN CANTIDAD DE REGISTROS EN UNA SOLA SESION
+                //Busca y recupera el objeto de la sesion:: 
+                //$sesion = ManejoDataRepository::recuperaSesionUsuario($usuario,$psolicitud);
+                //echo "<script>alert('La sesion es ".$sesion->getTxsesnumero()." ')</script>";
+                //Guarda la actividad de la sesion:: 
+                //ManejoDataRepository::generaActSesion($sesion,AccesoController::inDatoUno,"Recupera Feed de Ejemplares".$psolicitud->getEmail()." recuperados con éxito ",$psolicitud->getAccion(),$fecha,$fecha);
+                //echo "<script>alert('Generó actividad de sesion ')</script>";
+                
+                return $objLogica::generaRespuesta($respuesta, $psolicitud, $ejemplares);
+            } else {
+                $respuesta->setRespuesta($respSesionVali);
+                $ejemplares = array();
+                return $objLogica::generaRespuesta($respuesta, $psolicitud, $ejemplares);
+            }
+        } catch (Exception $ex) {
+            $respuesta->setRespuesta(AccesoController::inPlatCai);
+            $ejemplares = array();
+            return $objLogica::generaRespuesta($respuesta, $psolicitud, $ejemplares);
+        }
+       
+    }
+    
+    
+    
     
 }

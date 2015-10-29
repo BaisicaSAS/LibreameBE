@@ -50,6 +50,7 @@ class Solicitud {
     private $pMarcaComo; //Marcar usuario como : Leido = 1, No leido = 0
     //Parametros para recuperar usuario otro
     private $pIdUsuarioVer; //Id del mensaje
+    //Parametros para recuperar oferta
 
     /*
      *  Bloque de getter para los atributos de la clase

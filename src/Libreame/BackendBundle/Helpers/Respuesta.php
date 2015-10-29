@@ -21,6 +21,10 @@ class Respuesta {
     public  $RespUsuarios; //Arreglo de Usuarios 
     private $RespCalifUsu; //Arreglo de calificaciones de usuario
     private $RespGrupos; //Arreglo de calificaciones de usuario
+    private $RespOfertas; //Arreglo de ofertas
+    private $RespOfrecidos; //Arreglo de ejemplares ofrecidos
+    private $RespSolicitados; //Arreglo de ejemplares ofrecidos
+    private $RespActOfertas; //Arreglo de ejemplares ofrecidos
     private $CalifPromedio; //CAlificacion promedio que ha obtenido el usuario
     //Respuestas para PublicarEjemplar
     private $pIdOferta; //Id Oferta
@@ -74,6 +78,26 @@ class Respuesta {
     public function getArrGrupos()
     {
         return $this->RespGrupos;
+    }   
+
+    public function getArrOfertas()
+    {
+        return $this->RespOfertas;
+    }   
+
+    public function getArrOfrecidos()
+    {
+        return $this->RespOfrecidos;
+    }   
+
+    public function getArrSolicitados()
+    {
+        return $this->RespSolicitados;
+    }   
+
+    public function getArrActOferta()
+    {
+        return $this->RespActOfertas;
     }   
 
     public function getIdOferta()
@@ -209,6 +233,30 @@ class Respuesta {
         return $this;
     }   
     
+    public function setArrOfertas(array $ofertas)
+    {
+        $this->RespOfertas = $ofertas;
+        return $this;
+    }   
+
+    public function setArrSolicitados(array $solicitados)
+    {
+        $this->RespSolicitados = $solicitados;
+        return $this;
+    }   
+
+    public function setArrOfrecidos(array $ofrecidos)
+    {
+        $this->RespOfrecidos = $ofrecidos;
+        return $this;
+    }   
+
+    public function setArrActOfertas(array $actOfertas)
+    {
+        $this->RespActOfertas = $actOfertas;
+        return $this;
+    }   
+
     public function setIdOferta($pIdOferta)
     {
         $this->pIdOferta = $pIdOferta;

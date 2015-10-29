@@ -86,6 +86,13 @@ class Logica {
                     break;
                 } 
 
+                case AccesoController::txAccRecOfert: {//Dato:8 : Recuperar oferta
+                    //echo "<script>alert('Antes de entrar a Recuperar oferta Usuario-".$solicitud->getEmail()."')</script>";
+                    $objGestEjemplares = $this->get('gest_ejemplares_service');
+                    $respuesta = $objGestEjemplares::recuperarOferta($solicitud);
+                    break;
+                } 
+
                 case AccesoController::txAccRecUsuar: {//Dato:9 : Ver usuario otro
                     //echo "<script>alert('Antes de entrar a Ver Usuario Otro-".$solicitud->getEmail()."')</script>";
                     $objGestUsuarios = $this->get('gest_usuarios_service');
@@ -159,6 +166,11 @@ class Logica {
                 //accion de buscar ejemplares
                 case AccesoController::txAccBusEjemp:  //Dato: 7
                     $JSONResp = Logica::respuestaBuscarEjemplares($respuesta, $pSolicitud, $parreglo);
+                    break;
+
+                //accion de recuperar oferta
+                case AccesoController::txAccRecOfert:  //Dato: 8
+                    $JSONResp = Logica::respuestaRecuperarOferta($respuesta, $pSolicitud, $parreglo);
                     break;
 
                 //accion de ver usuario otro
@@ -430,6 +442,56 @@ class Logica {
         } 
     }    
     
+    
+    /*
+     * respuestaRecuperarOferta: 
+     * Funcion que genera el JSON de respuesta para la accion de Recuperar Oferta:: AccesoController::txAccRecOferta:
+     */
+    public function respuestaRecuperarOferta(Respuesta $respuesta, Solicitud $pSolicitud, $parreglo){
+        try{
+            $arrGeneros = array();
+            $arrTmp = array();
+            $ejemplar = new LbEjemplares();
+            
+            
+            foreach ($parreglo as $ejemplar){
+                //Recupera nombre del genero, Nombre del libro, Nombre del uduario Dueño
+                $genero = new LbGeneros();
+                $generolibro = new LbGeneroslibros();
+                $libro = new LbLibros();
+                $usuario = new LbUsuarios();
+                if ($respuesta->getRespuesta()== AccesoController::inULogged){
+                    $libro = ManejoDataRepository::getLibro($ejemplar->getInejelibro());
+                    $generolibro = ManejoDataRepository::getGeneroLibro($ejemplar->getInejelibro());
+                    $usuario = ManejoDataRepository::getUsuarioById($ejemplar->getInejeusudueno());
+                }
+                //Guarda los generos
+                foreach ($generolibro as $gen){
+                    $genero = ManejoDataRepository::getGenero($gen->getIngligenero());
+                    $arrGeneros[] = array('ingenero' => $genero->getIngenero(), 'txgenero' => $genero->getTxgennombre());
+                }
+                
+                $arrTmp[] = array('idejemplar' => $ejemplar->getInejemplar(), 
+                  'idgenero' => $arrGeneros, 'inejecantidad' => $ejemplar->getInejecantidad(),
+                  'dbavaluo' => $ejemplar->getDbejeavaluo(), 'indueno' => $usuario->getInusuario(),
+                  'inlibro' => $libro->getInlibro(), 'txlibro' => $libro->getTxlibtitulo(), 
+                  'txdueno' => $usuario->getTxusunombre()
+                ) ;
+                
+                unset($arrGeneros);
+
+            }
+
+            return array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
+                    'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr(), 
+                    'iddevice'=> $pSolicitud->getDeviceMac(), 'marca'=>$pSolicitud->getDeviceMarca(), 
+                    'modelo'=>$pSolicitud->getDeviceModelo(), 'so'=>$pSolicitud->getDeviceSO()), 
+                    'idrespuesta' => array('respuesta' => $respuesta->getRespuesta(), 
+                    'ejemplares' => $arrTmp));
+        } catch (Exception $ex) {
+                return AccesoController::inPlatCai;
+        } 
+    }    
     
     /*
      * respuestaBuscarEjemplares: 

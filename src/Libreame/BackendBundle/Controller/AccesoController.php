@@ -254,6 +254,13 @@ class AccesoController extends Controller
                         $this->objSolicitud->setTextoBuscar($json_datos['idsolicitud']['buscar']);
                         break;
                     }
+                    case self::txAccRecOfert: { //Dato:8 : Recuperar Oferta
+                        //echo "<script>alert('ENTRA POR RECUPERAR OFERTA')</script>";
+                        $this->objSolicitud->setEmail($json_datos['idsolicitud']['email']);
+                        $this->objSolicitud->setClave($json_datos['idsolicitud']['clave']);
+                        $this->objSolicitud->setIdOferta($json_datos['idsolicitud']['idoferta']);
+                        break;
+                    }
                     case self::txAccRecUsuar: { //Dato:9 : Recuperar Usuario Otro
                         //echo "<script>alert('ENTRA POR RECUPERAR USUARIO OTRO')</script>";
                         $this->objSolicitud->setEmail($json_datos['idsolicitud']['email']);
@@ -374,6 +381,12 @@ class AccesoController extends Controller
                         //echo "<script>alert('VAL ENTRA POR BUSCAR')</script>";
                         $resp = (isset($datos['idsolicitud']['email']) and isset($datos['idsolicitud']['clave']) 
                                 and isset($datos['idsolicitud']['buscar']));
+                        break;
+                    }
+                    case self::txAccRecOfert: { //Dato:8 : Recuperar Oferta
+                        //echo "<script>alert('ENTRA POR RECUPERAR OFERTA')</script>";
+                        $resp = (isset($datos['idsolicitud']['email']) and isset($datos['idsolicitud']['clave'])
+                                 and isset($datos['idsolicitud']['idoferta']));
                         break;
                     }
                     case self::txAccRecUsuar: { //Dato:9 : Recuperar Usuario Otro
