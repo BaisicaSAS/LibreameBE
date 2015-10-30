@@ -58,6 +58,7 @@ class Login
             //Verifica si el usuario existe
             if ($usuario = ManejoDataRepository::getUsuarioByEmail($pSolicitud->getEmail())){
                 
+                $respuesta->setArrUsuarios($usuario);
                 $estado = $usuario->getInusuestado();
                 //echo "<script>alert('-----Estado usuario ".$estado."')</script>";
 
@@ -113,8 +114,6 @@ class Login
             //Usuario no existe
             else {$respuesta->setRespuesta(AccesoController::inUsClInv);}
 
-            //Flush al entity manager
-            
             return $objLogica::generaRespuesta($respuesta, $pSolicitud, NULL);
             
         }
