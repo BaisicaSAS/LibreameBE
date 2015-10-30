@@ -259,7 +259,7 @@ class ManejoDataRepository extends EntityRepository {
         try{
             $em = $this->getDoctrine()->getManager();
             return $em->getRepository('LibreameBackendBundle:LbLugares')->
-                findOneBy('inlugar', $inlugar);
+                findOneBy(array('inlugar' => $inlugar));
         } catch (Exception $ex) {
                 return new LbLugares();
         } 
@@ -283,7 +283,7 @@ class ManejoDataRepository extends EntityRepository {
         try{
             $em = $this->getDoctrine()->getManager();
             return $em->getRepository('LibreameBackendBundle:LbGeneros')->
-                findOneBy('ingenero', $genero);
+                findOneBy(array('ingenero' => $genero));
         } catch (Exception $ex) {
                 return new LbGeneros();
         } 
@@ -295,7 +295,7 @@ class ManejoDataRepository extends EntityRepository {
         try{
             $em = $this->getDoctrine()->getManager();
             return $em->getRepository('LibreameBackendBundle:LbLibros')->
-                findOneBy('inlibro', $inlibro);
+                findOneBy(array('inlibro' => $inlibro));
         } catch (Exception $ex) {
                 return new LbLibros();
         } 
@@ -307,7 +307,7 @@ class ManejoDataRepository extends EntityRepository {
         try{
             $em = $this->getDoctrine()->getManager();
             return $em->getRepository('LibreameBackendBundle:LbGrupos')->
-                findOneBy('ingrupo', $ingrupo);
+                findOneBy(array('ingrupo' => $ingrupo));
         } catch (Exception $ex) {
                 return new LbGrupos();
         } 
@@ -331,7 +331,7 @@ class ManejoDataRepository extends EntityRepository {
         try{
             $em = $this->getDoctrine()->getManager();
             return $em->getRepository('LibreameBackendBundle:LbUsuarios')->
-                findOneBy('txusuemail', $txemail);
+                findOneBy(array('txusuemail' => $txemail));
         } catch (Exception $ex) {
                 return new LbUsuarios();
         } 
@@ -343,7 +343,7 @@ class ManejoDataRepository extends EntityRepository {
         try{
             $em = $this->getDoctrine()->getManager();
             return $em->getRepository('LibreameBackendBundle:LbUsuarios')->
-                findOneBy('txusutelefono', $txtelefono);
+                findOneBy(array('txusutelefono' => $txtelefono));
         } catch (Exception $ex) {
                 return new LbUsuarios();
         } 
@@ -358,7 +358,7 @@ class ManejoDataRepository extends EntityRepository {
             if ($flEm) {$em = $this->getDoctrine()->getManager();}
             if($iddispositivo == AccesoController::txAnyData) {
                 return $em->getRepository('LibreameBackendBundle:LbDispusuarios')->findOneBy(
-                        'indisusuario', $usuario);
+                        array('indisusuario' => $usuario));
             } else {
                 return $em->getRepository('LibreameBackendBundle:LbDispusuarios')->findOneBy(array(
                         'txdisid' => $iddispositivo, 
@@ -566,7 +566,7 @@ class ManejoDataRepository extends EntityRepository {
         try{
             $em = $this->getDoctrine()->getManager();
             return $em->getRepository('LibreameBackendBundle:LbLibros')->
-                    findOneBy('inlibro', $idlibro);
+                    findOneBy(array('inlibro' => $idlibro));
 
         } catch (Exception $ex) {
                 return new LbLibros();
@@ -892,7 +892,7 @@ class ManejoDataRepository extends EntityRepository {
             return $libro;*/
 
             return $em->getRepository('LibreameBackendBundle:LbLibros')->
-                    findOneBy('txlibtitulo', $titulo);
+                    findOneBy(array('txlibtitulo' => $titulo));
 
         } catch (Exception $ex) {
                 return new LbLibros();
