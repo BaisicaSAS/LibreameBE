@@ -431,6 +431,56 @@ class ManejoDataRepository extends EntityRepository {
         } 
     }
                 
+    //Obtiene todas las Ofertas, sobre un ejemplar específico
+    public function getOfertasByEjemplar(LbEjemplares $ejemplar)
+    {   
+        try{
+            //Recupera cada uno de los ejemplares con ID > al del parametro
+            $em = $this->getDoctrine()->getManager();
+            
+            $ofrecido = $em->getRepository('LibreameBackendBundle:LbOfrecidos')->
+                    findOneBy(array('inofrejemplar' => $ejemplar->getInejemplar()));
+            
+            
+            $ofertas = $em->getRepository('LibreameBackendBundle:LbOfertas')->
+                    findOneBy(array('inoferta' => $ofrecido->getInofroferta()->getInoferta()));
+
+            return $ofertas;
+        } catch (Exception $ex) {
+                return new LbOfertas();
+        } 
+    }
+                
+    //Obtiene todos los Ejemplares SOLICITADOS, de una oferta
+    public function getSolicitadosByOferta(LbOfertas $oferta)
+    {   
+        try{
+            //Recupera cada uno de los ejemplares con ID > al del parametro
+            $em = $this->getDoctrine()->getManager();
+
+            return  $em->getRepository('LibreameBackendBundle:LbSolicitados')->
+                    findBy(array('insoloferta' => $oferta));
+
+        } catch (Exception $ex) {
+                return new LbSolicitados();
+        } 
+    }
+                
+    //Obtiene todos los Ejemplares OFRECIDOS, de una oferta
+    public function getOfrecidosByOferta(LbOfertas $oferta)
+    {   
+        try{
+            //Recupera cada uno de los ejemplares con ID > al del parametro
+            $em = $this->getDoctrine()->getManager();
+
+            return  $em->getRepository('LibreameBackendBundle:LbOfrecidos')->
+                    findOneBy(array('inofroferta' => $oferta));
+
+         } catch (Exception $ex) {
+                return new LbOfrecidos();
+        } 
+    }
+                
     //Obtiene todos los Ejemplares, que coincidan con el texto OFRECIDOS, o SOLICITADOS
     public function getBuscarEjemplares(Array $grupos, $texto)
     {   

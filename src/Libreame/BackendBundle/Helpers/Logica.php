@@ -15,6 +15,9 @@ use Libreame\BackendBundle\Entity\LbSesiones;
 use Libreame\BackendBundle\Entity\LbEjemplares;
 use Libreame\BackendBundle\Entity\LbActsesion;
 use Libreame\BackendBundle\Entity\LbMensajes;
+use Libreame\BackendBundle\Entity\LbSolicitados;
+use Libreame\BackendBundle\Entity\LbOfrecidos;
+use Libreame\BackendBundle\Entity\LbOfertas;
 use Libreame\BackendBundle\Entity\LbCalificausuarios;
 use Libreame\BackendBundle\Helpers\Respuesta;
 
@@ -306,7 +309,7 @@ class Logica {
         try{
             $arrGeneros = array();
             $arrTmp = array();
-            $ejemplar = new LbEjemplares();
+            //$ejemplar = new LbEjemplares();
             foreach ($parreglo as $ejemplar){
                 //Recupera nombre del genero, Nombre del libro, Nombre del uduario Dueño
                 $genero = new LbGeneros();
@@ -314,20 +317,61 @@ class Logica {
                 $libro = new LbLibros();
                 $usuario = new LbUsuarios();
                 if ($respuesta->getRespuesta()== AccesoController::inULogged){
-                    echo "ejemplar: [".$ejemplar->getInejelibro()->getInlibro()."]";
-                    //$libro = ManejoDataRepository::getLibro($ejemplar->getInejelibro()->getInlibro());
-                    //$generolibro = ManejoDataRepository::getGeneroLibro($ejemplar->getInejelibro()->getInlibro());
-                    //$usuario = ManejoDataRepository::getUsuarioById($ejemplar->getInejeusudueno()->getInusuario());
-                    //$libro = ManejoDataRepository::getLibro($ejemplar->getInejelibro());
-                    //$generolibro = ManejoDataRepository::getGeneroLibro($ejemplar['e.inejelibro']);
-                    //$usuario = ManejoDataRepository::getUsuarioById($ejemplar['Inejeusudueno']);
+                    //echo "ejemplar: [".$ejemplar->getInejelibro()->getInlibro()."]\n";
+                    $libro = ManejoDataRepository::getLibro($ejemplar->getInejelibro()->getInlibro());
+                    $generolibro = ManejoDataRepository::getGeneroLibro($ejemplar->getInejelibro()->getInlibro());
+                    $usuario = ManejoDataRepository::getUsuarioById($ejemplar->getInejeusudueno()->getInusuario());
+                    //echo "RECUPERO DATOS\n";
                 }
                 //Guarda los generos
                 foreach ($generolibro as $gen){
                     $genero = ManejoDataRepository::getGenero($gen->getIngligenero());
                     $arrGeneros[] = array('ingenero' => $genero->getIngenero(), 'txgenero' => $genero->getTxgennombre());
                 }
+                //echo "ANTES OFERTA RECUPERO DATOS\n";
+
                 
+
+                $oferta = new LbOfertas();
+                $oferta = ManejoDataRepository::getOfertasByEjemplar($ejemplar);
+                //echo "RECUPERO OFERTA = ".$oferta->getInoferta()."\n";
+
+                $ofrecidos = new LbOfrecidos();
+                $ofrecidos = ManejoDataRepository::getOfrecidosByOferta($oferta);
+                //echo "RECUPERO OFRECIDOS \n";
+
+                $solicitados = new LbSolicitados();
+                $solicitados = ManejoDataRepository::getSolicitadosByOferta($oferta);
+                //echo "RECUPERO SOLICITADOS \n";
+                
+                $inContador = 0;
+                $sol1 = "";
+                $sol2 = "";
+                $vsol1 = 0;
+                $vsol2 = 0;
+                $mensaje = "";
+                foreach ($solicitados as $solicitado){
+                    if($inContador == 0) {
+                        $sol1 = $solicitado->getInsollibro()->getTxlibtitulo();
+                        $vsol1 = $solicitado->getDbsolvaladic();
+                        $mensaje = $solicitado->getTxsolobservacion();
+                    } else {
+                        $sol2 = $solicitado->getInsollibro()->getTxlibtitulo();
+                        $vsol2 = $solicitado->getDbsolvaladic();
+                    }
+                    //echo $inContador." - ".$solicitado->getInsollibro()->getTxlibtitulo();
+                    $inContador++;
+                }
+                
+                $arrOferta = array('inoferta' => $oferta->getInoferta(), 
+                    'soli1' => $sol1, 
+                    'valadic1' => $vsol1, 
+                    'soli2' => $sol2, 
+                    'valadic2' => $vsol2, 
+                    'valventa' => $ejemplar->getDbejeavaluo(), 
+                    'mensaje' => $mensaje 
+                );
+                        
                 $arrTmp[] = array('idejemplar' => $ejemplar->getInejemplar(), 
                     'titulo' => $ejemplar->getInejelibro()->getTxlibtitulo(), 
                     'autor' => $ejemplar->getInejelibro()->getTxlibautores(),
@@ -508,9 +552,7 @@ class Logica {
         try{
             $arrGeneros = array();
             $arrTmp = array();
-            $ejemplar = new LbEjemplares();
-            
-            
+            //$ejemplar = new LbEjemplares();
             foreach ($parreglo as $ejemplar){
                 //Recupera nombre del genero, Nombre del libro, Nombre del uduario Dueño
                 $genero = new LbGeneros();
@@ -518,25 +560,73 @@ class Logica {
                 $libro = new LbLibros();
                 $usuario = new LbUsuarios();
                 if ($respuesta->getRespuesta()== AccesoController::inULogged){
-                    $libro = ManejoDataRepository::getLibro($ejemplar->getInejelibro());
-                    $generolibro = ManejoDataRepository::getGeneroLibro($ejemplar->getInejelibro());
-                    $usuario = ManejoDataRepository::getUsuarioById($ejemplar->getInejeusudueno());
+                    //echo "ejemplar: [".$ejemplar->getInejelibro()->getInlibro()."]\n";
+                    $libro = ManejoDataRepository::getLibro($ejemplar->getInejelibro()->getInlibro());
+                    $generolibro = ManejoDataRepository::getGeneroLibro($ejemplar->getInejelibro()->getInlibro());
+                    $usuario = ManejoDataRepository::getUsuarioById($ejemplar->getInejeusudueno()->getInusuario());
+                    //echo "RECUPERO DATOS\n";
                 }
                 //Guarda los generos
                 foreach ($generolibro as $gen){
                     $genero = ManejoDataRepository::getGenero($gen->getIngligenero());
                     $arrGeneros[] = array('ingenero' => $genero->getIngenero(), 'txgenero' => $genero->getTxgennombre());
                 }
+                //echo "ANTES OFERTA RECUPERO DATOS\n";
+
                 
+
+                $oferta = new LbOfertas();
+                $oferta = ManejoDataRepository::getOfertasByEjemplar($ejemplar);
+                //echo "RECUPERO OFERTA = ".$oferta->getInoferta()."\n";
+
+                $ofrecidos = new LbOfrecidos();
+                $ofrecidos = ManejoDataRepository::getOfrecidosByOferta($oferta);
+                //echo "RECUPERO OFRECIDOS \n";
+
+                $solicitados = new LbSolicitados();
+                $solicitados = ManejoDataRepository::getSolicitadosByOferta($oferta);
+                //echo "RECUPERO SOLICITADOS \n";
+                
+                $inContador = 0;
+                $sol1 = "";
+                $sol2 = "";
+                $vsol1 = 0;
+                $vsol2 = 0;
+                $mensaje = "";
+                foreach ($solicitados as $solicitado){
+                    if($inContador == 0) {
+                        $sol1 = $solicitado->getInsollibro()->getTxlibtitulo();
+                        $vsol1 = $solicitado->getDbsolvaladic();
+                        $mensaje = $solicitado->getTxsolobservacion();
+                    } else {
+                        $sol2 = $solicitado->getInsollibro()->getTxlibtitulo();
+                        $vsol2 = $solicitado->getDbsolvaladic();
+                    }
+                    //echo $inContador." - ".$solicitado->getInsollibro()->getTxlibtitulo();
+                    $inContador++;
+                }
+                
+                $arrOferta = array('inoferta' => $oferta->getInoferta(), 
+                    'soli1' => $sol1, 
+                    'valadic1' => $vsol1, 
+                    'soli2' => $sol2, 
+                    'valadic2' => $vsol2, 
+                    'valventa' => $ejemplar->getDbejeavaluo(), 
+                    'mensaje' => $mensaje 
+                );
+                        
                 $arrTmp[] = array('idejemplar' => $ejemplar->getInejemplar(), 
-                  'idgenero' => $arrGeneros, 'inejecantidad' => $ejemplar->getInejecantidad(),
-                  'dbavaluo' => $ejemplar->getDbejeavaluo(), 'indueno' => $usuario->getInusuario(),
-                  'inlibro' => $libro->getInlibro(), 'txlibro' => $libro->getTxlibtitulo(), 
-                  'txdueno' => $usuario->getTxusunombre()
-                ) ;
+                    'titulo' => $ejemplar->getInejelibro()->getTxlibtitulo(), 
+                    'autor' => $ejemplar->getInejelibro()->getTxlibautores(),
+                    'edicion' => $ejemplar->getInejelibro()->getTxlibedicionnum(), 
+                    'editorial' => $ejemplar->getInejelibro()->getTxlibeditorial(),
+                    'idioma' => $ejemplar->getInejelibro()->getTxlibidioma(),
+                    'indueno' => $usuario->getInusuario(), 'oferta' => $arrOferta
+                ); 
+
                 
                 unset($arrGeneros);
-
+                
             }
 
             return array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
