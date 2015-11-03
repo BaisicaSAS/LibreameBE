@@ -314,9 +314,13 @@ class Logica {
                 $libro = new LbLibros();
                 $usuario = new LbUsuarios();
                 if ($respuesta->getRespuesta()== AccesoController::inULogged){
-                    $libro = ManejoDataRepository::getLibro($ejemplar->getInejelibro());
-                    $generolibro = ManejoDataRepository::getGeneroLibro($ejemplar->getInejelibro());
-                    $usuario = ManejoDataRepository::getUsuarioById($ejemplar->getInejeusudueno());
+                    echo "ejemplar: [".$ejemplar->getInejelibro()->getInlibro()."]";
+                    //$libro = ManejoDataRepository::getLibro($ejemplar->getInejelibro()->getInlibro());
+                    //$generolibro = ManejoDataRepository::getGeneroLibro($ejemplar->getInejelibro()->getInlibro());
+                    //$usuario = ManejoDataRepository::getUsuarioById($ejemplar->getInejeusudueno()->getInusuario());
+                    //$libro = ManejoDataRepository::getLibro($ejemplar->getInejelibro());
+                    //$generolibro = ManejoDataRepository::getGeneroLibro($ejemplar['e.inejelibro']);
+                    //$usuario = ManejoDataRepository::getUsuarioById($ejemplar['Inejeusudueno']);
                 }
                 //Guarda los generos
                 foreach ($generolibro as $gen){
@@ -325,11 +329,14 @@ class Logica {
                 }
                 
                 $arrTmp[] = array('idejemplar' => $ejemplar->getInejemplar(), 
-                  'idgenero' => $arrGeneros, 'inejecantidad' => $ejemplar->getInejecantidad(),
-                  'dbavaluo' => $ejemplar->getDbejeavaluo(), 'indueno' => $usuario->getInusuario(),
-                  'inlibro' => $libro->getInlibro(), 'txlibro' => $libro->getTxlibtitulo(), 
-                  'txdueno' => $usuario->getTxusunombre()
-                ) ;
+                    'titulo' => $ejemplar->getInejelibro()->getTxlibtitulo(), 
+                    'autor' => $ejemplar->getInejelibro()->getTxlibautores(),
+                    'edicion' => $ejemplar->getInejelibro()->getTxlibedicionnum(), 
+                    'editorial' => $ejemplar->getInejelibro()->getTxlibeditorial(),
+                    'idioma' => $ejemplar->getInejelibro()->getTxlibidioma(),
+                    'indueno' => $usuario->getInusuario(), 'oferta' => $arrOferta
+                ); 
+
                 
                 unset($arrGeneros);
                 
