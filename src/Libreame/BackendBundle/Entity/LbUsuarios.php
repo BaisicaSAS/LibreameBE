@@ -391,8 +391,12 @@ class LbUsuarios
         try {
             $usuario->settxusuemail($pSolicitud->getEmail());  
             $usuario->settxusunombre($pSolicitud->getEmail());  
-            $usuario->settxusunommostrar($pSolicitud->getEmail());  
-            $usuario->settxusutelefono($pSolicitud->getTelefono());  
+            $usuario->settxusunommostrar($pSolicitud->getEmail());
+            if (trim($pSolicitud->getTelefono()) == ""){
+                $usuario->settxusutelefono(AccesoController::txMenNoId);  
+            } else {
+                $usuario->settxusutelefono($pSolicitud->getTelefono());  
+            }
             $usuario->settxusuclave($pSolicitud->getClave());  
             $usuario->settxusuimagen('DEFAULT IMAGE URL');  
             $usuario->setinusulugar($Lugar);  
