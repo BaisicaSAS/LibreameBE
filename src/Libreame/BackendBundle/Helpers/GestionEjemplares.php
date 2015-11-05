@@ -14,6 +14,7 @@ use Libreame\BackendBundle\Entity\LbDispusuarios;
 use Libreame\BackendBundle\Entity\LbMembresias;
 use Libreame\BackendBundle\Entity\LbSesiones;
 use Libreame\BackendBundle\Entity\LbActsesion;
+use Libreame\BackendBundle\Entity\LbOfertas;
 use Libreame\BackendBundle\Entity\LbGeneroslibros;
 /**
  * Description of Feeds
@@ -177,11 +178,11 @@ class GestionEjemplares {
         $objLogica = $this->get('logica_service');
         $usuario = new LbUsuarios();
         $sesion = new LbSesiones();
-        $ejemplares = new LbEjemplares();
+        $oferta = new LbOfertas();
         try {
             //Valida que la sesión corresponda y se encuentre activa
             $respSesionVali=  ManejoDataRepository::validaSesionUsuario($psolicitud);
-            //echo "<script>alert(' recuperarFeedEjemplares :: Validez de sesion ".$respSesionVali." ')</script>";
+            //echo "<script>alert(' buscarEjemplares :: Validez de sesion ".$respSesionVali." ')</script>";
             if ($respSesionVali==AccesoController::inULogged) 
             {    
                 //echo "<script>alert(' recuperarFeedEjemplares :: FindAll ')</script>";
@@ -191,17 +192,14 @@ class GestionEjemplares {
                 //$membresia= ManejoDataRepository::getMembresiasUsuario($usuario);
                 
                 //echo "<script>alert('MEM ".count($membresia)." regs ')</script>";
-                
-                $grupo= ManejoDataRepository::getObjetoGruposUsuario($usuario);
 
-                $arrGru = array();
-                foreach ($grupo as $gru){
-                    $arrGru[] = $gru->getIngrupo();
+                $oferta = ManejoDataRepository::getOfertaById($psolicitud->getIdOferta());
+                if ($oferta != NULL){
+                    $respuesta->setRespuesta(AccesoController::inExitoso);
+                } else {
+                    $respuesta->setRespuesta(AccesoController::inFallido);
                 }
-
-
-                $ejemplares = ManejoDataRepository::getEjemplaresDisponibles($arrGru, $psolicitud->getUltEjemplar());
-                $respuesta->setRespuesta(AccesoController::inExitoso);
+                
 
                 //SE INACTIVA PORQUE PUEDE GENERAR UNA GRAN CANTIDAD DE REGISTROS EN UNA SOLA SESION
                 //Busca y recupera el objeto de la sesion:: 
@@ -211,16 +209,16 @@ class GestionEjemplares {
                 //ManejoDataRepository::generaActSesion($sesion,AccesoController::inDatoUno,"Recupera Feed de Ejemplares".$psolicitud->getEmail()." recuperados con éxito ",$psolicitud->getAccion(),$fecha,$fecha);
                 //echo "<script>alert('Generó actividad de sesion ')</script>";
                 
-                return $objLogica::generaRespuesta($respuesta, $psolicitud, $ejemplares);
+                return $objLogica::generaRespuesta($respuesta, $psolicitud, $oferta);
             } else {
                 $respuesta->setRespuesta($respSesionVali);
-                $ejemplares = array();
-                return $objLogica::generaRespuesta($respuesta, $psolicitud, $ejemplares);
+                $oferta = array();
+                return $objLogica::generaRespuesta($respuesta, $psolicitud, $oferta);
             }
         } catch (Exception $ex) {
             $respuesta->setRespuesta(AccesoController::inPlatCai);
-            $ejemplares = array();
-            return $objLogica::generaRespuesta($respuesta, $psolicitud, $ejemplares);
+            $oferta = array();
+            return $objLogica::generaRespuesta($respuesta, $psolicitud, $oferta);
         }
        
     }

@@ -330,8 +330,6 @@ class Logica {
                 }
                 //echo "ANTES OFERTA RECUPERO DATOS\n";
 
-                
-
                 $oferta = new LbOfertas();
                 $oferta = ManejoDataRepository::getOfertasByEjemplar($ejemplar);
                 //echo "RECUPERO OFERTA = ".$oferta->getInoferta()."\n";
@@ -500,45 +498,94 @@ class Logica {
      */
     public function respuestaRecuperarOferta(Respuesta $respuesta, Solicitud $pSolicitud, $parreglo){
         try{
-            $arrGeneros = array();
             $arrTmp = array();
-            $ejemplar = new LbEjemplares();
+            //$ejemplar = new LbEjemplares();
+            $oferta = new LbOfertas();
+            $oferta = $parreglo;
             
-            
-            foreach ($parreglo as $ejemplar){
-                //Recupera nombre del genero, Nombre del libro, Nombre del uduario Dueño
-                $genero = new LbGeneros();
-                $generolibro = new LbGeneroslibros();
-                $libro = new LbLibros();
-                $usuario = new LbUsuarios();
-                if ($respuesta->getRespuesta()== AccesoController::inULogged){
-                    $libro = ManejoDataRepository::getLibro($ejemplar->getInejelibro());
-                    $generolibro = ManejoDataRepository::getGeneroLibro($ejemplar->getInejelibro());
-                    $usuario = ManejoDataRepository::getUsuarioById($ejemplar->getInejeusudueno());
-                }
-                //Guarda los generos
-                foreach ($generolibro as $gen){
-                    $genero = ManejoDataRepository::getGenero($gen->getIngligenero());
-                    $arrGeneros[] = array('ingenero' => $genero->getIngenero(), 'txgenero' => $genero->getTxgennombre());
-                }
-                
+            if ($oferta == NULL){
+                $ejemplar = new LbEjemplares();
+                $ofrecidos = new LbOfrecidos();
+                $solicitados = new LbSolicitados();
+                $arrOferta = array('inoferta' => $oferta->getInoferta(), 
+                    'soli1' => $sol1, 
+                    'valadic1' => $vsol1, 
+                    'soli2' => $sol2, 
+                    'valadic2' => $vsol2, 
+                    'valventa' => $ejemplar->getDbejeavaluo(), 
+                    'mensaje' => $mensaje 
+                );
                 $arrTmp[] = array('idejemplar' => $ejemplar->getInejemplar(), 
-                  'idgenero' => $arrGeneros, 'inejecantidad' => $ejemplar->getInejecantidad(),
-                  'dbavaluo' => $ejemplar->getDbejeavaluo(), 'indueno' => $usuario->getInusuario(),
-                  'inlibro' => $libro->getInlibro(), 'txlibro' => $libro->getTxlibtitulo(), 
-                  'txdueno' => $usuario->getTxusunombre()
-                ) ;
-                
-                unset($arrGeneros);
+                    'titulo' => (String)$ejemplar->getInejelibro()->getTxlibtitulo(), 
+                    'autor' => $ejemplar->getInejelibro()->getTxlibautores(),
+                    'edicion' => $ejemplar->getInejelibro()->getTxlibedicionnum(), 
+                    'editorial' => $ejemplar->getInejelibro()->getTxlibeditorial(),
+                    'idioma' => $ejemplar->getInejelibro()->getTxlibidioma(),
+                    'indueno' => $ejemplar->getInejeusudueno()->getInusuario(), 'oferta' => $arrOferta
+                ); 
 
+
+                return array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
+                        'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr(), 
+                        'iddevice'=> $pSolicitud->getDeviceMac(), 'marca'=>$pSolicitud->getDeviceMarca(), 
+                        'modelo'=>$pSolicitud->getDeviceModelo(), 'so'=>$pSolicitud->getDeviceSO()), 
+                        'idrespuesta' => array('respuesta' => $respuesta->getRespuesta(), 
+                        'ejemplares' => $arrTmp));
+            } else {
+                //$ofrecidos = new LbOfrecidos();
+                $ofrecidos = ManejoDataRepository::getOfrecidosByOferta($oferta);
+
+                //echo "RECUPERO OFRECIDOS \n";
+                //$solicitados = new LbSolicitados();
+                $solicitados = ManejoDataRepository::getSolicitadosByOferta($oferta);
+                //echo "RECUPERO SOLICITADOS \n";
+
+                $inContador = 0;
+                $sol1 = "";
+                $sol2 = "";
+                $vsol1 = 0;
+                $vsol2 = 0;
+                $mensaje = "";
+                foreach ($solicitados as $solicitado){
+                    if($inContador == 0) {
+                        $sol1 = (String)$solicitado->getInsollibro()->getTxlibtitulo();
+                        $vsol1 = $solicitado->getDbsolvaladic();
+                        $mensaje = $solicitado->getTxsolobservacion();
+                    } else {
+                        $sol2 = (String)$solicitado->getInsollibro()->getTxlibtitulo();
+                        $vsol2 = $solicitado->getDbsolvaladic();
+                    }
+                    //echo $inContador." - ".$solicitado->getInsollibro()->getTxlibtitulo();
+                    $inContador++;
+                }
+
+                $arrOferta = array('inoferta' => $oferta->getInoferta(), 
+                    'soli1' => $sol1, 
+                    'valadic1' => $vsol1, 
+                    'soli2' => $sol2, 
+                    'valadic2' => $vsol2, 
+                    'valventa' => $ejemplar->getDbejeavaluo(), 
+                    'mensaje' => $mensaje 
+                );
+
+                $ejemplar = new LbEjemplares();
+                $ejemplar = $ofrecidos->getInofrejemplar();
+                $arrTmp[] = array('idejemplar' => $ejemplar->getInejemplar(), 
+                    'titulo' => $ejemplar->getInejelibro()->getTxlibtitulo(), 
+                    'autor' => $ejemplar->getInejelibro()->getTxlibautores(),
+                    'edicion' => $ejemplar->getInejelibro()->getTxlibedicionnum(), 
+                    'editorial' => $ejemplar->getInejelibro()->getTxlibeditorial(),
+                    'idioma' => $ejemplar->getInejelibro()->getTxlibidioma(),
+                    'indueno' => $usuario->getInusuario(), 'oferta' => $arrOferta
+                ); 
+
+                return array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
+                        'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr(), 
+                        'iddevice'=> $pSolicitud->getDeviceMac(), 'marca'=>$pSolicitud->getDeviceMarca(), 
+                        'modelo'=>$pSolicitud->getDeviceModelo(), 'so'=>$pSolicitud->getDeviceSO()), 
+                        'idrespuesta' => array('respuesta' => $respuesta->getRespuesta(), 
+                        'ejemplares' => $arrTmp));
             }
-
-            return array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
-                    'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr(), 
-                    'iddevice'=> $pSolicitud->getDeviceMac(), 'marca'=>$pSolicitud->getDeviceMarca(), 
-                    'modelo'=>$pSolicitud->getDeviceModelo(), 'so'=>$pSolicitud->getDeviceSO()), 
-                    'idrespuesta' => array('respuesta' => $respuesta->getRespuesta(), 
-                    'ejemplares' => $arrTmp));
         } catch (Exception $ex) {
                 return AccesoController::inPlatCai;
         } 

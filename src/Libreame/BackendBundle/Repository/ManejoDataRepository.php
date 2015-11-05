@@ -451,6 +451,22 @@ class ManejoDataRepository extends EntityRepository {
         } 
     }
                 
+    //Obtiene todas la Oferta por su id
+    public function getOfertaById($idoferta)
+    {   
+        try{
+            //Recupera cada uno de los ejemplares con ID > al del parametro
+            $em = $this->getDoctrine()->getManager();
+            
+            $ofertas = $em->getRepository('LibreameBackendBundle:LbOfertas')->
+                    findOneBy(array('inoferta' => $idoferta));
+
+            return $ofertas;
+        } catch (Exception $ex) {
+                return new LbOfertas();
+        } 
+    }
+                
     //Obtiene todos los Ejemplares SOLICITADOS, de una oferta
     public function getSolicitadosByOferta(LbOfertas $oferta)
     {   
