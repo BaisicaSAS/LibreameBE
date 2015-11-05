@@ -106,6 +106,7 @@ class AccesoController extends Controller
     const inUsSeIna = -5; //Sesión inactiva
     //Constante funcion marcar mensaje
     const inMenNoEx = -6; //Mensaje no existe
+    const inMenNoAc = -7; //Mensaje no activo - inactivo
 
     const inIdGeneral = 1; //Id General para datos basicos :: Genero, Lugar, Grupo
 

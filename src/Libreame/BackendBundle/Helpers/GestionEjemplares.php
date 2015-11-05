@@ -194,10 +194,16 @@ class GestionEjemplares {
                 //echo "<script>alert('MEM ".count($membresia)." regs ')</script>";
 
                 $oferta = ManejoDataRepository::getOfertaById($psolicitud->getIdOferta());
+                //echo "<script>alert('Oferta ".$psolicitud->getIdOferta()." ')</script>";
+                
                 if ($oferta != NULL){
-                    $respuesta->setRespuesta(AccesoController::inExitoso);
+                    if ($oferta->getInofeactiva() == AccesoController::inExitoso){
+                        $respuesta->setRespuesta(AccesoController::inExitoso);
+                    } else {
+                        $respuesta->setRespuesta(AccesoController::inMenNoAc);
+                    }    
                 } else {
-                    $respuesta->setRespuesta(AccesoController::inFallido);
+                    $respuesta->setRespuesta(AccesoController::inMenNoEx);
                 }
                 
 

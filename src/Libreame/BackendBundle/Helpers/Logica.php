@@ -504,24 +504,21 @@ class Logica {
             $oferta = $parreglo;
             
             if ($oferta == NULL){
-                $ejemplar = new LbEjemplares();
-                $ofrecidos = new LbOfrecidos();
-                $solicitados = new LbSolicitados();
-                $arrOferta = array('inoferta' => $oferta->getInoferta(), 
-                    'soli1' => $sol1, 
-                    'valadic1' => $vsol1, 
-                    'soli2' => $sol2, 
-                    'valadic2' => $vsol2, 
-                    'valventa' => $ejemplar->getDbejeavaluo(), 
-                    'mensaje' => $mensaje 
+                $arrOferta = array('inoferta' => '', 
+                    'soli1' => '', 
+                    'valadic1' => '', 
+                    'soli2' => '', 
+                    'valadic2' => '', 
+                    'valventa' => '', 
+                    'mensaje' => '' 
                 );
-                $arrTmp[] = array('idejemplar' => $ejemplar->getInejemplar(), 
-                    'titulo' => (String)$ejemplar->getInejelibro()->getTxlibtitulo(), 
-                    'autor' => $ejemplar->getInejelibro()->getTxlibautores(),
-                    'edicion' => $ejemplar->getInejelibro()->getTxlibedicionnum(), 
-                    'editorial' => $ejemplar->getInejelibro()->getTxlibeditorial(),
-                    'idioma' => $ejemplar->getInejelibro()->getTxlibidioma(),
-                    'indueno' => $ejemplar->getInejeusudueno()->getInusuario(), 'oferta' => $arrOferta
+                $arrTmp[] = array('idejemplar' => '', 
+                    'titulo' => '', 
+                    'autor' => '',
+                    'edicion' => '', 
+                    'editorial' => '',
+                    'idioma' => '',
+                    'indueno' => '', 'oferta' => $arrOferta
                 ); 
 
 
@@ -533,7 +530,7 @@ class Logica {
                         'ejemplares' => $arrTmp));
             } else {
                 //$ofrecidos = new LbOfrecidos();
-                $ofrecidos = ManejoDataRepository::getOfrecidosByOferta($oferta);
+                $ofrecido = ManejoDataRepository::getOfrecidoByOferta($oferta);
 
                 //echo "RECUPERO OFRECIDOS \n";
                 //$solicitados = new LbSolicitados();
@@ -559,17 +556,23 @@ class Logica {
                     $inContador++;
                 }
 
+                $ejemplar = new LbEjemplares();
+                if ($ofrecido != NULL) {
+                    $ejemplar = $ofrecido->getInofrejemplar()->getInejemplar();
+                }
+                
+                //$precio = $ejemplar->getDbejeavaluo();
+                $precio = 0;
+                
                 $arrOferta = array('inoferta' => $oferta->getInoferta(), 
                     'soli1' => $sol1, 
                     'valadic1' => $vsol1, 
                     'soli2' => $sol2, 
                     'valadic2' => $vsol2, 
-                    'valventa' => $ejemplar->getDbejeavaluo(), 
+                    'valventa' => $precio, 
                     'mensaje' => $mensaje 
                 );
 
-                $ejemplar = new LbEjemplares();
-                $ejemplar = $ofrecidos->getInofrejemplar();
                 $arrTmp[] = array('idejemplar' => $ejemplar->getInejemplar(), 
                     'titulo' => $ejemplar->getInejelibro()->getTxlibtitulo(), 
                     'autor' => $ejemplar->getInejelibro()->getTxlibautores(),
