@@ -110,8 +110,6 @@ class AccesoController extends Controller
     const inMenNoAc = -7; //Mensaje no activo - inactivo
 
     const inIdGeneral = 1; //Id General para datos basicos :: Genero, Lugar, Grupo
-    const arIdiomas = array("Español","Inglés","Frances","Alemán","Ruso","Portugues",
-                    "Catalán","Árabe","Bosnio","Croata","Serbio","Italiano","Griego","Turco","Húngaro","Hindi");
 
     var $objSolicitud;
     /*

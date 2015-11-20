@@ -252,16 +252,20 @@ class GestionEjemplares {
                 //echo "<script>alert('Generó actividad de sesion ')</script>";
                 
                 $respuesta->setRespuesta(AccesoController::inExitoso);
-                return $objLogica::generaRespuesta($respuesta, $psolicitud, NULL);
+                $arIdiomas = array("Español","Inglés","Frances","Alemán","Ruso","Portugues",
+                    "Catalán","Árabe","Bosnio","Croata","Serbio","Italiano","Griego","Turco","Húngaro","Hindi");
+            
+                
+                return $objLogica::generaRespuesta($respuesta, $psolicitud, $arIdiomas);
             } else {
                 $respuesta->setRespuesta($respSesionVali);
-                $oferta = array();
-                return $objLogica::generaRespuesta($respuesta, $psolicitud, NULL);
+                $arIdiomas = array();
+                return $objLogica::generaRespuesta($respuesta, $psolicitud, $arIdiomas);
             }
         } catch (Exception $ex) {
             $respuesta->setRespuesta(AccesoController::inPlatCai);
-            $oferta = array();
-            return $objLogica::generaRespuesta($respuesta, $psolicitud, NULL);
+            $arIdiomas = array();
+            return $objLogica::generaRespuesta($respuesta, $psolicitud, $arIdiomas);
         }
        
     }

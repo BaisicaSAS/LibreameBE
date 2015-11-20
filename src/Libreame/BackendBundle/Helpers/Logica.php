@@ -763,13 +763,13 @@ class Logica {
         * respuestaMarcarMensaje: 
      * Funcion que genera el JSON de respuesta para la accion de Marcar el mensaje como Leído o No leído:: AccesoController::txAccMarcMens
      */
-    public function respuestaListaIdiomas(Respuesta $respuesta, Solicitud $pSolicitud){
+    public function respuestaListaIdiomas(Respuesta $respuesta, Solicitud $pSolicitud, $parreglo){
         try {
             return array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
                             'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr(), 
                             'iddevice'=> $pSolicitud->getDeviceMac(), 'marca'=>$pSolicitud->getDeviceMarca(), 
                             'modelo'=>$pSolicitud->getDeviceModelo(), 'so'=>$pSolicitud->getDeviceSO()), 
-                            'idrespuesta' => (array('respuesta' => $respuesta->getRespuesta())), 'idiomas' => AccesoController::arIdiomas);
+                            'idrespuesta' => (array('respuesta' => $respuesta->getRespuesta(), 'idiomas' => $parreglo)));
         } catch (Exception $ex) {
                 return AccesoController::inPlatCai;
         } 
