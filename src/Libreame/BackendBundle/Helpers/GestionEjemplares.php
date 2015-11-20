@@ -230,6 +230,41 @@ class GestionEjemplares {
     }
     
     
+    public function listarIdiomas(Solicitud $psolicitud)
+    {   
+        /*setlocale (LC_TIME, "es_CO");
+        $fecha = new \DateTime;*/
+        $respuesta = new Respuesta();
+        $objLogica = $this->get('logica_service');
+        try {
+            //Valida que la sesión corresponda y se encuentre activa
+            $respSesionVali=  ManejoDataRepository::validaSesionUsuario($psolicitud);
+            //echo "<script>alert(' buscarEjemplares :: Validez de sesion ".$respSesionVali." ')</script>";
+            if ($respSesionVali==AccesoController::inULogged) 
+            {    
+
+                //SE INACTIVA PORQUE PUEDE GENERAR UNA GRAN CANTIDAD DE REGISTROS EN UNA SOLA SESION
+                //Busca y recupera el objeto de la sesion:: 
+                //$sesion = ManejoDataRepository::recuperaSesionUsuario($usuario,$psolicitud);
+                //echo "<script>alert('La sesion es ".$sesion->getTxsesnumero()." ')</script>";
+                //Guarda la actividad de la sesion:: 
+                //ManejoDataRepository::generaActSesion($sesion,AccesoController::inDatoUno,"Recupera Feed de Ejemplares".$psolicitud->getEmail()." recuperados con éxito ",$psolicitud->getAccion(),$fecha,$fecha);
+                //echo "<script>alert('Generó actividad de sesion ')</script>";
+                
+                $respuesta->setRespuesta(AccesoController::inExitoso);
+                return $objLogica::generaRespuesta($respuesta, $psolicitud, NULL);
+            } else {
+                $respuesta->setRespuesta($respSesionVali);
+                $oferta = array();
+                return $objLogica::generaRespuesta($respuesta, $psolicitud, NULL);
+            }
+        } catch (Exception $ex) {
+            $respuesta->setRespuesta(AccesoController::inPlatCai);
+            $oferta = array();
+            return $objLogica::generaRespuesta($respuesta, $psolicitud, NULL);
+        }
+       
+    }
     
     
 }

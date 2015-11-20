@@ -124,6 +124,13 @@ class Logica {
                     break;
                 } 
 
+                case AccesoController::txAccListaIdi: {//Dato:37 : Listar idiomas
+                    //echo "<script>alert('Antes de entrar a Listar idiomas Usuario-".$solicitud->getEmail()."')</script>";
+                    $objGestEjemplares = $this->get('gest_ejemplares_service');
+                    $respuesta = $objGestEjemplares::listarIdiomas($solicitud);
+                    break;
+                } 
+
             }
             //echo "<script>alert('ejecuta Accion: ".$respuesta."')</script>";
             return $respuesta;
@@ -193,6 +200,10 @@ class Logica {
 
                 case AccesoController::txAccMarcMens: //Dato:36 : Marcar Mensaje
                     $JSONResp = Logica::respuestaMarcarMensaje($respuesta, $pSolicitud);
+                    break;
+                
+                case AccesoController::txAccListaIdi: //Dato:37 : Listar idiomas
+                    $JSONResp = Logica::respuestaListaIdiomas($respuesta, $pSolicitud);
                     break;
                 
             }
@@ -335,7 +346,7 @@ class Logica {
                 //echo "RECUPERO OFERTA = ".$oferta->getInoferta()."\n";
 
                 $ofrecidos = new LbOfrecidos();
-                $ofrecidos = ManejoDataRepository::getOfrecidosByOferta($oferta);
+                $ofrecidos = ManejoDataRepository::getOfrecidoByOferta($oferta);
                 //echo "RECUPERO OFRECIDOS \n";
 
                 $solicitados = new LbSolicitados();
@@ -483,7 +494,7 @@ class Logica {
                         'email' => $respuesta->RespUsuarios[0]->getTxusuemail(),
                         //La siguiente línea debe habilitarse, e integrar el CAST de BLOB a TEXT??
                         //'usuimagen' => $respuesta->RespUsuarios[0]->getTxusuimagen(), 
-                        'usuimagen' => "DUMMY", 
+                        'usuimagen' => "DUMMY", "calificacion" => "4,5",
                         'comentarios' => $arrTmp))
                 );
         } catch (Exception $ex) {
@@ -743,6 +754,22 @@ class Logica {
                             'iddevice'=> $pSolicitud->getDeviceMac(), 'marca'=>$pSolicitud->getDeviceMarca(), 
                             'modelo'=>$pSolicitud->getDeviceModelo(), 'so'=>$pSolicitud->getDeviceSO()), 
                             'idrespuesta' => (array('respuesta' => $respuesta->getRespuesta())));
+        } catch (Exception $ex) {
+                return AccesoController::inPlatCai;
+        } 
+    }    
+    
+    /*
+        * respuestaMarcarMensaje: 
+     * Funcion que genera el JSON de respuesta para la accion de Marcar el mensaje como Leído o No leído:: AccesoController::txAccMarcMens
+     */
+    public function respuestaListaIdiomas(Respuesta $respuesta, Solicitud $pSolicitud){
+        try {
+            return array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
+                            'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr(), 
+                            'iddevice'=> $pSolicitud->getDeviceMac(), 'marca'=>$pSolicitud->getDeviceMarca(), 
+                            'modelo'=>$pSolicitud->getDeviceModelo(), 'so'=>$pSolicitud->getDeviceSO()), 
+                            'idrespuesta' => (array('respuesta' => $respuesta->getRespuesta())), 'idiomas' => AccesoController::arIdiomas);
         } catch (Exception $ex) {
                 return AccesoController::inPlatCai;
         } 

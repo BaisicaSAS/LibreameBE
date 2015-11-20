@@ -91,6 +91,7 @@ class AccesoController extends Controller
     const txAccRecTrato =  '34'; //Recuperar informacion Trato
     const txAccVerCalif =  '35'; //Ver comentarios-calificaciones
     const txAccMarcMens =  '36'; //Marcar mensaje como No leido / Leido
+    const txAccListaIdi =  '37'; //Listar idiomas
 
     const txEjemplarPub =  'P'; //Indica que es el ejemplar a publicar de la solicitud
     const txEjemplarSol1 =  'S1'; //Indica que es el ejemplar a Solicitar de la solicitud
@@ -109,6 +110,8 @@ class AccesoController extends Controller
     const inMenNoAc = -7; //Mensaje no activo - inactivo
 
     const inIdGeneral = 1; //Id General para datos basicos :: Genero, Lugar, Grupo
+    const arIdiomas = array("Español","Inglés","Frances","Alemán","Ruso","Portugues",
+                    "Catalán","Árabe","Bosnio","Croata","Serbio","Italiano","Griego","Turco","Húngaro","Hindi");
 
     var $objSolicitud;
     /*
@@ -304,6 +307,12 @@ class AccesoController extends Controller
                         $this->objSolicitud->setMarcarcomo($json_datos['idsolicitud']['marcacomo']);
                         break;
                     }
+                    case self::txAccListaIdi: { //Dato:37 : Listar Idiomas
+                        //echo "<script>alert('ENTRA POR LISTAR DE IDIOMAS')</script>";
+                        $this->objSolicitud->setEmail($json_datos['idsolicitud']['email']);
+                        $this->objSolicitud->setClave($json_datos['idsolicitud']['clave']);
+                        break;
+                    }
 
                 }
                 //echo "<script>alert('SESION: ".$this->objSolicitud->getSession().": Finalizó')</script>"; 
@@ -413,11 +422,15 @@ class AccesoController extends Controller
                                  isset($datos['idsolicitud']['observasol']));
                         break;
                     }
-                    
                     case self::txAccMarcMens: { //Dato:36 : Marcar mensaje / Leído - No leído
                         //echo "<script>alert('VAL ENTRA POR MARCAR MENSAJES')</script>";
                         $resp = (isset($datos['idsolicitud']['email']) and isset($datos['idsolicitud']['clave']) and
                                 isset($datos['idsolicitud']['idmensaje']) and isset($datos['idsolicitud']['marcacomo']));
+                        break;
+                    }
+                    case self::txAccListaIdi: { //Dato:37 : LISTAR IDIOMAS
+                        //echo "<script>alert('ENTRA POR LISTAR IDIOMAS')</script>";
+                        $resp = (isset($datos['idsolicitud']['email']) and isset($datos['idsolicitud']['clave']));
                         break;
                     }
 
