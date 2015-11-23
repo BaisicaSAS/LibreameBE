@@ -64,10 +64,10 @@ class LbMensajes extends \Libreame\BackendBundle\Entity\LbMensajes implements \D
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', 'inmensaje', 'txmensaje', 'inmenorigen', 'inmenleido', 'inmenfecha', 'inmemidrelacionado', 'inmenfechaleido', 'inmenusuario');
+            return array('__isInitialized__', 'inmensaje', 'txmensaje', 'inmenorigen', 'inmenleido', 'inmenfecha', 'inmemidrelacionado', 'inmenfechaleido', 'inmenusuario', 'inmensajepadre', 'inmenusuarioorigen');
         }
 
-        return array('__isInitialized__', 'inmensaje', 'txmensaje', 'inmenorigen', 'inmenleido', 'inmenfecha', 'inmemidrelacionado', 'inmenfechaleido', 'inmenusuario');
+        return array('__isInitialized__', 'inmensaje', 'txmensaje', 'inmenorigen', 'inmenleido', 'inmenfecha', 'inmemidrelacionado', 'inmenfechaleido', 'inmenusuario', 'inmensajepadre', 'inmenusuarioorigen');
     }
 
     /**
@@ -340,6 +340,50 @@ class LbMensajes extends \Libreame\BackendBundle\Entity\LbMensajes implements \D
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getInmenusuario', array());
 
         return parent::getInmenusuario();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setInmenusuarioorigen(\Libreame\BackendBundle\Entity\LbUsuarios $inmenusuarioorigen = NULL)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setInmenusuarioorigen', array($inmenusuarioorigen));
+
+        return parent::setInmenusuarioorigen($inmenusuarioorigen);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getInmenusuarioorigen()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getInmenusuarioorigen', array());
+
+        return parent::getInmenusuarioorigen();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setInmensajepadre(\Libreame\BackendBundle\Entity\LbMensajes $inmensajepadre = NULL)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setInmensajepadre', array($inmensajepadre));
+
+        return parent::setInmensajepadre($inmensajepadre);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getInmensajepadre()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getInmensajepadre', array());
+
+        return parent::getInmensajepadre();
     }
 
 }

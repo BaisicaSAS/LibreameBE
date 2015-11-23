@@ -130,7 +130,7 @@ class GestionEjemplares {
             //echo "<script>alert(' buscarEjemplares :: Validez de sesion ".$respSesionVali." ')</script>";
             if ($respSesionVali==AccesoController::inULogged) 
             {    
-                //echo "<script>alert(' recuperarFeedEjemplares :: FindAll ')</script>";
+                //echo "<script>alert(' buscaEjemplares :: FindAll ')</script>";
                 //Busca el usuario 
                 $usuario = ManejoDataRepository::getUsuarioByEmail($psolicitud->getEmail());
                 
@@ -255,7 +255,6 @@ class GestionEjemplares {
                 $arIdiomas = array("Español","Inglés","Frances","Alemán","Ruso","Portugues",
                     "Catalán","Árabe","Bosnio","Croata","Serbio","Italiano","Griego","Turco","Húngaro","Hindi");
             
-                
                 return $objLogica::generaRespuesta($respuesta, $psolicitud, $arIdiomas);
             } else {
                 $respuesta->setRespuesta($respSesionVali);

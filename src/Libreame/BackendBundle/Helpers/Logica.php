@@ -137,7 +137,7 @@ class Logica {
         } catch (Exception $ex) {
                 return AccesoController::inPlatCai;
         } 
-    }
+    }   
     
     public function generaRespuesta(Respuesta $respuesta, Solicitud $pSolicitud, $parreglo){
 
@@ -203,7 +203,7 @@ class Logica {
                     break;
                 
                 case AccesoController::txAccListaIdi: //Dato:37 : Listar idiomas
-                    $JSONResp = Logica::respuestaListaIdiomas($respuesta, $pSolicitud);
+                    $JSONResp = Logica::respuestaListaIdiomas($respuesta, $pSolicitud, $parreglo);
                     break;
                 
             }
@@ -346,7 +346,7 @@ class Logica {
                 //echo "RECUPERO OFERTA = ".$oferta->getInoferta()."\n";
 
                 $ofrecidos = new LbOfrecidos();
-                $ofrecidos = ManejoDataRepository::getOfrecidoByOferta($oferta);
+                $ofrecidos = ManejoDataRepository::getOfrecidosByOferta($oferta);
                 //echo "RECUPERO OFRECIDOS \n";
 
                 $solicitados = new LbSolicitados();
@@ -541,7 +541,7 @@ class Logica {
                         'ejemplares' => $arrTmp));
             } else {
                 //$ofrecidos = new LbOfrecidos();
-                $ofrecido = ManejoDataRepository::getOfrecidoByOferta($oferta);
+                $ofrecido = ManejoDataRepository::getOfrecidosByOferta($oferta);
 
                 //echo "RECUPERO OFRECIDOS \n";
                 //$solicitados = new LbSolicitados();

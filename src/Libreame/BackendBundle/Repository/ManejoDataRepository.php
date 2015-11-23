@@ -483,7 +483,7 @@ class ManejoDataRepository extends EntityRepository {
     }
                 
     //Obtiene todos los Ejemplares OFRECIDOS, de una oferta
-    public function getOfrecidoByOferta(LbOfertas $oferta)
+    public function getOfrecidosByOferta(LbOfertas $oferta)
     {   
         try{
             //Recupera cada uno de los ejemplares con ID > al del parametro
