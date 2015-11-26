@@ -53,9 +53,9 @@ class LbUsuarios
     protected $inusugenero = 2;
 
     /**
-     * @var string
+     * @var blob
      *
-     * @ORM\Column(name="txUsuImagen", type="string", length=50, nullable=false)
+     * @ORM\Column(name="txUsuImagen", type="blob", nullable=false)
      */
     protected $txusuimagen;
 
