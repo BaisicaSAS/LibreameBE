@@ -432,6 +432,23 @@ class ManejoDataRepository extends EntityRepository {
     }
                 
     //Obtiene todas las Ofertas, sobre un ejemplar específico
+    public function getOfertaById($idoferta)
+    {   
+        try{
+            //Recupera cada uno de los ejemplares con ID > al del parametro
+            $em = $this->getDoctrine()->getManager();
+            
+           
+            $ofertas = $em->getRepository('LibreameBackendBundle:LbOfertas')->
+                    findOneBy(array('inoferta' => $idoferta));
+
+            return $ofertas;
+        } catch (Exception $ex) {
+                return new LbOfertas();
+        } 
+    }
+                
+    //Obtiene todas las Ofertas, sobre un ejemplar específico
     public function getOfertasByEjemplar(LbEjemplares $ejemplar)
     {   
         try{
@@ -451,19 +468,54 @@ class ManejoDataRepository extends EntityRepository {
         } 
     }
                 
-    //Obtiene todas la Oferta por su id
-    public function getOfertaById($idoferta)
+    //Obtiene id de ofrecido por ejemplar y oferta
+    public function getOfrecidoByOfrEjemplar($idejemplar, $idoferta)
     {   
         try{
             //Recupera cada uno de los ejemplares con ID > al del parametro
             $em = $this->getDoctrine()->getManager();
             
-            $ofertas = $em->getRepository('LibreameBackendBundle:LbOfertas')->
-                    findOneBy(array('inoferta' => $idoferta));
+            $ofrecido = $em->getRepository('LibreameBackendBundle:LbOfrecidos')->
+                    findOneBy(array('inofroferta' => $idoferta, 'inofrejemplar' => $idejemplar));
 
-            return $ofertas;
+            return $ofrecido;
         } catch (Exception $ex) {
-                return new LbOfertas();
+                return new LbOfrecidos();
+        } 
+    }
+                
+    public function getSolicitadoByOfrEjemplar($idlibro, $idoferta)
+    {   
+        try{
+            //Recupera cada uno de los ejemplares con ID > al del parametro
+            $em = $this->getDoctrine()->getManager();
+            
+            $solicitado = $em->getRepository('LibreameBackendBundle:LbSolicitados')->
+                    findOneBy(array('insoloferta' => $idoferta, 'insollibro' => $idlibro));
+
+            return $solicitado;
+        } catch (Exception $ex) {
+                return new LbSolicitados();
+        } 
+    }
+                
+    public function getEjemplar($idlibro, $idoferta)
+    {   
+        try{
+            //Recupera cada uno de los ejemplares con ID > al del parametro
+            $em = $this->getDoctrine()->getManager();
+            
+            $ofrecido = $em->getRepository('LibreameBackendBundle:LbOfrecidos')->
+                    findOneBy(array('inofroferta' => $idoferta));
+            
+            //echo "El ejemplar a buscar : Libro : ".$idlibro."  -  La oferta es:".$idoferta;
+            
+            $ejemplar = $em->getRepository('LibreameBackendBundle:LbEjemplares')->
+                    findOneBy(array('inejemplar' => $ofrecido->getInofrejemplar() ));
+
+            return $ejemplar;
+        } catch (Exception $ex) {
+                return new LbSolicitados();
         } 
     }
                 
@@ -748,33 +800,43 @@ class ManejoDataRepository extends EntityRepository {
             $usuario = ManejoDataRepository::getUsuarioByEmail($psolicitud->getEmail());
             if($psolicitud->getIdlibro() != '') {
                 $libro = ManejoDataRepository::getLibroById($psolicitud->getIdlibro());
+                //echo "<script>alert('By Id ')</script>"; 
                 $regSol = 1;
             } else {
                 if ($libro=ManejoDataRepository::buscarLibroByTitulo($psolicitud->getTitulo(),$em)){
+                    //echo "<script>alert('By Titulo')</script>"; 
                     $regSol = 1;
                 } else {
                     $libro = ManejoDataRepository::crearLibro($psolicitud, AccesoController::txEjemplarPub);
                     //Crear la asociación del libro con genero, si no existe el libro
+                    //echo "<script>alert('Crea libro')</script>"; 
                     $generolibro = ManejoDataRepository::asociarGeneroBasicoLibro($libro, $em);
                     $regSol = 2;
                 }
             }
 
             //Crea elejemplar
-            $ejemplar = ManejoDataRepository::crearEjemplar($psolicitud,$libro,$usuario);
+            if ($psolicitud->getIdOferta() == "") {
+                $ejemplar = ManejoDataRepository::crearEjemplar($psolicitud,$libro,$usuario);
+            } else {
+                $ejemplar = ManejoDataRepository::getEjemplar($libro->getInlibro(),$psolicitud->getIdOferta());
+            }
 
             //Si hay solicitud de libros en cambio se registran como Libro1 y Libro2
             $regSol1 = 0; //Variable para identificar si se debe registrar un ejemplar Solicitado: inicia en false
             $libro1 = new LbLibros();
             if($psolicitud->getIdlibroSol1() != '') {
                 $libro1 = ManejoDataRepository::getLibroById($psolicitud->getIdlibroSol1());
+                //echo "<script>alert('By Id')</script>"; 
                 $regSol1 = 1;
             } else {
                 if ($psolicitud->getTitulosol1() != ''){ 
                     if ($libro1=ManejoDataRepository::buscarLibroByTitulo($psolicitud->getTituloSol1(),$em)){
+                        //echo "<script>alert('By Titulo')</script>"; 
                         $regSol1 = 1;
                     } else {
                         $libro1 = ManejoDataRepository::crearLibro($psolicitud, AccesoController::txEjemplarSol1);
+                        //echo "<script>alert('Crea')</script>"; 
                         //Crear la asociación del libro con genero, si no existe el libro
                         $generolibro1 = ManejoDataRepository::asociarGeneroBasicoLibro($libro1, $em);
                         $regSol1 = 2;
@@ -807,42 +869,73 @@ class ManejoDataRepository extends EntityRepository {
                     findOneBy(array('inmemgrupo' => $grupo, 'inmemusuario' => $usuario));
             
             //Registro de oferta
-            $oferta->setFeofefecha($fecha);
-            $oferta->setInofemembresia($membresia);
-            //Por ahora no se utilizará este dato, hay que revisar periodicamente 
-            //si la oferta lleva mas de x días para informar al usuario
-            $oferta->setInofevigencia(0); 
-            $oferta->setInofeabierta(AccesoController::inIdGeneral); //Se utiliza esta constante porque su valor es 1 
-            $oferta->setInofeactiva(AccesoController::inIdGeneral); //Se utiliza esta constante porque su valor es 1
-            
-            //Registro de ofrecidos
-            $ofrecido->setInofrejemplar($ejemplar);
-            $ofrecido->setInofrtransac(2);
-            $ofrecido->setInofroferta($oferta);
-            $ofrecido->setTxofrobservacion($psolicitud->getObservaSol());
-            $ofrecido->setDbofrvaladic($psolicitud->getAvaluo());
-            $ofrecido->setDbofrvaloferta($psolicitud->getValVenta());
-            
-            //Registra los libros solicitado
-            if ($regSol1 > 0){
-                $solicitado1 = new LbSolicitados();
-                $solicitado1->setInsoltransac(2);
-                $solicitado1->setTxsolobservacion($psolicitud->getObservaSol());
-                $solicitado1->setDbsolvaloferta($psolicitud->getValAdicSol1());
-                $solicitado1->setDbsolvaladic($psolicitud->getValAdicSol1());
-                $solicitado1->setInsollibro($libro1);
-                $solicitado1->setInsoloferta($oferta);
+            //Variable para guardar o actualizar los datos según sea el caso....
+            $nuevoReg = 0;
+            if ($psolicitud->getIdOferta() == "") {
+                $nuevoReg = 1;
+                $oferta->setFeofefecha($fecha);
+                $oferta->setInofemembresia($membresia);
+                //Por ahora no se utilizará este dato, hay que revisar periodicamente 
+                //si la oferta lleva mas de x días para informar al usuario
+                $oferta->setInofevigencia(0); 
+                $oferta->setInofeabierta(AccesoController::inIdGeneral); //Se utiliza esta constante porque su valor es 1 
+                $oferta->setInofeactiva(AccesoController::inIdGeneral); //Se utiliza esta constante porque su valor es 1
+                
+                //Registro de ofrecidos
+                $ofrecido->setInofrejemplar($ejemplar);
+                $ofrecido->setInofrtransac(2);
+                $ofrecido->setInofroferta($oferta);
+                $ofrecido->setTxofrobservacion($psolicitud->getObservaSol());
+                $ofrecido->setDbofrvaladic($psolicitud->getAvaluo());
+                $ofrecido->setDbofrvaloferta($psolicitud->getValVenta());
+
+                //Registra los libros solicitado
+                if ($regSol1 > 0){
+                    $solicitado1 = new LbSolicitados();
+                    $solicitado1->setInsoltransac(2);
+                    $solicitado1->setTxsolobservacion($psolicitud->getObservaSol());
+                    $solicitado1->setDbsolvaloferta($psolicitud->getValAdicSol1());
+                    $solicitado1->setDbsolvaladic($psolicitud->getValAdicSol1());
+                    $solicitado1->setInsollibro($libro1);
+                    $solicitado1->setInsoloferta($oferta);
+                }
+
+                if ($regSol2 > 0){
+                    $solicitado2 = new LbSolicitados();
+                    $solicitado2->setInsoltransac(2);
+                    $solicitado2->setTxsolobservacion($psolicitud->getObservaSol());
+                    $solicitado2->setDbsolvaloferta($psolicitud->getValAdicSol2());
+                    $solicitado2->setDbsolvaladic($psolicitud->getValAdicSol2());
+                    $solicitado2->setInsollibro($libro2);
+                    $solicitado2->setInsoloferta($oferta);
+                }
+            } else {
+                $nuevoReg = 0;
+                $oferta = ManejoDataRepository::getOfertaById($psolicitud->getIdOferta());
+                
+                if($psolicitud->getTituloSol1() != '') {
+                    $solicitado1 = ManejoDataRepository::getSolicitadoByOfrEjemplar($libro1->getInlibro(), $psolicitud->getIdOferta());
+                    $solicitado1->setTxsolobservacion($psolicitud->getObservaSol());
+                    $solicitado1->setDbsolvaloferta($psolicitud->getValAdicSol1());
+                    $solicitado1->setDbsolvaladic($psolicitud->getValAdicSol1());
+                    $solicitado1->setInsollibro($libro1);
+                }
+                if($psolicitud->getTituloSol2() != '') {
+                    $solicitado2 = ManejoDataRepository::getSolicitadoByOfrEjemplar($libro2->getInlibro(), $psolicitud->getIdOferta());
+                    $solicitado2->setTxsolobservacion($psolicitud->getObservaSol());
+                    $solicitado2->setDbsolvaloferta($psolicitud->getValAdicSol2());
+                    $solicitado2->setDbsolvaladic($psolicitud->getValAdicSol2());
+                    $solicitado2->setInsollibro($libro2);
+                }
+                
+                $ofrecido = ManejoDataRepository::getOfrecidoByOfrEjemplar($ejemplar->getInejemplar(), $psolicitud->getIdOferta());
+                $ofrecido->setTxofrobservacion($psolicitud->getObservaSol());
+                $ofrecido->setDbofrvaladic($psolicitud->getAvaluo());
+                $ofrecido->setDbofrvaloferta($psolicitud->getValVenta());
+                //echo "El ejemplar = ".$ejemplar->getInejemplar();
             }
-            
-            if ($regSol2 > 0){
-                $solicitado2 = new LbSolicitados();
-                $solicitado2->setInsoltransac(2);
-                $solicitado2->setTxsolobservacion($psolicitud->getObservaSol());
-                $solicitado2->setDbsolvaloferta($psolicitud->getValAdicSol2());
-                $solicitado2->setDbsolvaladic($psolicitud->getValAdicSol2());
-                $solicitado2->setInsollibro($libro2);
-                $solicitado2->setInsoloferta($oferta);
-            }
+            //echo "La oferta = ".$oferta->getInoferta()." - Parametro = ".$psolicitud->getIdOferta();
+                    
             //Actividad ofertas
             $actoferta->setFeactfechahora($fecha);
             $actoferta->setTxactdescripcion($psolicitud->getObservasol());
@@ -850,6 +943,7 @@ class ManejoDataRepository extends EntityRepository {
             $actoferta->setInactusuario($usuario);
            
 
+            //echo "<script>alert('-".$regSol."-".$regSol1."-".$regSol2.")</script>"; 
             $em->persist($libro);
             ManejoDataRepository::indexar($libro, $libro->getTxediciondescripcion()." ".$libro->getTxlibedicionpais()." ".$libro->getTxlibautores()." ".$libro->getTxlibeditorial()." ".$libro->getTxlibresumen()." ".$libro->getTxlibtitulo(),$em);
             if($regSol == 2)  { 
@@ -868,12 +962,16 @@ class ManejoDataRepository extends EntityRepository {
                 ManejoDataRepository::indexar($libro2, $libro2->getTxediciondescripcion()." ".$libro2->getTxlibedicionpais()." ".$libro2->getTxlibautores()." ".$libro2->getTxlibeditorial()." ".$libro2->getTxlibresumen()." ".$libro2->getTxlibtitulo(),$em);
                 $em->persist($generolibro2);
             }
+            
+            //Si los registros no exístían se persisten
+            if ($nuevoReg == 1) {
+                $em->persist($ejemplar);
 
-            $em->persist($ejemplar);
-            
-            $em->persist($oferta);
-            
-            $em->persist($ofrecido);
+                $em->persist($oferta);
+
+                $em->persist($ofrecido);
+            }
+
 
             if ($regSol1 > 0){
                 $em->persist($solicitado1);
@@ -885,29 +983,47 @@ class ManejoDataRepository extends EntityRepository {
             
             $em->persist($actoferta);
 
-            /*
-             * Setea la respuesta
-             */            
             $em->flush();
             $em->getConnection()->commit();
-            
+
             $fecha = $actoferta->getFeactfechahora();
             $textofecha = $fecha->format('Y/m/d H:i:s');
-            $respuesta->setIdOferta($actoferta->getInactividadoferta());
+            $respuesta->setIdOferta($oferta->getInoferta());
             $respuesta->setTitulo($libro->getTxlibtitulo());
             $respuesta->setIdlibro($libro->getInlibro());
             $respuesta->setIdEjemplar($ejemplar->getInejemplar());
             $respuesta->setIdioma($libro->getTxlibidioma());
             $respuesta->setAvaluo($ejemplar->getDbejeavaluo());
             $respuesta->setValVenta($ofrecido->getDbofrvaloferta());
-            $respuesta->setTituloSol1($libro1->getTxlibtitulo());
-            $respuesta->setIdLibroSol1($libro1->getInlibro());
-            $respuesta->setValAdicSol1($solicitado1->getDbsolvaladic());
-            $respuesta->setTituloSol2($libro2->getTxlibtitulo());
-            $respuesta->setIdLibroSol2($libro2->getInlibro());
-            $respuesta->setValAdicSol2($solicitado1->getDbsolvaladic());
+            if ($libro1 != null) {
+                $respuesta->setTituloSol1($libro1->getTxlibtitulo());
+                $respuesta->setIdLibroSol1($libro1->getInlibro());
+                if ($regSol1 > 0) {
+                    $respuesta->setValAdicSol1($solicitado1->getDbsolvaladic());
+                } else {
+                    $respuesta->setValAdicSol1("");
+                }
+            } else {
+                $respuesta->setTituloSol1("");
+                $respuesta->setIdLibroSol1("");
+                $respuesta->setValAdicSol1("");
+            }
+            if ($libro2 != null) {
+                $respuesta->setTituloSol2($libro2->getTxlibtitulo());
+                $respuesta->setIdLibroSol2($libro2->getInlibro());
+                if ($regSol2 > 0) {
+                    $respuesta->setValAdicSol2($solicitado2->getDbsolvaladic());
+                } else {
+                    $respuesta->setValAdicSol2("");
+                }
+            } else {
+                $respuesta->setTituloSol2("");
+                $respuesta->setIdLibroSol2("");
+                $respuesta->setValAdicSol2("");
+            }
+            
             $respuesta->setObservaSol($ofrecido->getTxofrobservacion());
-            $respuesta->setIdMensaje($actoferta->getInactividadoferta());
+            $respuesta->setIdMensaje($oferta->getInoferta());
             $respuesta->setTxMensaje($actoferta->getTxactdescripcion());
             $respuesta->setFeMensaje($textofecha);
             $respuesta->setIdPadre($actoferta->getInactpadreact());
@@ -917,6 +1033,10 @@ class ManejoDataRepository extends EntityRepository {
             //Guarda la actividad de la sesion:: 
             ManejoDataRepository::generaActSesion($sesion,AccesoController::inDatoUno,$libro->getTxlibtitulo()." publicado con éxito por ".$psolicitud->getEmail(),$psolicitud->getAccion(),$fecha,$fecha,$em);
             //echo "<script>alert('Generó actividad de sesion ')</script>";
+            /*
+             * Setea la respuesta
+             */            
+            
             return $respuesta;
         } catch (Exception $ex)  {    
             $em->getConnection()->rollback();
@@ -950,18 +1070,18 @@ class ManejoDataRepository extends EntityRepository {
     public function buscarLibroByTitulo($titulo, $em)
     {
         try{
-            /*$libro = new LbLibros();
+            $libro = new LbLibros();
             $sql = "SELECT l FROM LibreameBackendBundle:LbLibros l"
-                    ." WHERE l.txlibtitulo LIKE :titulo";
-            $query = $em->createQuery($sql)->setParameter('titulo', "%$titulo%");
-            $libro = $query->getResult();
-            return $libro;*/
+                    ." WHERE lower(l.txlibtitulo) LIKE lower(:titulo)";
+            $query = $em->createQuery($sql)->setParameter('titulo', '%'.$titulo.'%');
+            $libro = $query->getOneOrNullResult();
+            return $libro;
 
-            return $em->getRepository('LibreameBackendBundle:LbLibros')->
-                    findOneBy(array('txlibtitulo' => $titulo));
+            /*return $em->getRepository('LibreameBackendBundle:LbLibros')->
+                    findOneBy(array('lower(txlibtitulo)' => '%'.$titulo.'%'));*/
 
         } catch (Exception $ex) {
-                return new LbLibros();
+            return new LbLibros();
         } 
     }
     
