@@ -569,7 +569,7 @@ class Logica {
 
                 $ejemplar = new LbEjemplares();
                 if ($ofrecido != NULL) {
-                    $ejemplar = $ofrecido->getInofrejemplar()->getInejemplar();
+                    $ejemplar = $ofrecido->getInofrejemplar();
                 }
                 
                 //$precio = $ejemplar->getDbejeavaluo();
@@ -590,7 +590,8 @@ class Logica {
                     'edicion' => $ejemplar->getInejelibro()->getTxlibedicionnum(), 
                     'editorial' => $ejemplar->getInejelibro()->getTxlibeditorial(),
                     'idioma' => $ejemplar->getInejelibro()->getTxlibidioma(),
-                    'indueno' => $usuario->getInusuario(), 'oferta' => $arrOferta
+                    'indueno' => $ejemplar->getInejeusudueno()->getInusuario(), 
+                    'oferta' => $arrOferta
                 ); 
 
                 return array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
