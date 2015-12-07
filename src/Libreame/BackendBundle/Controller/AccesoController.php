@@ -110,6 +110,15 @@ class AccesoController extends Controller
     const inMenNoAc = -7; //Mensaje no activo - inactivo
 
     const inIdGeneral = 1; //Id General para datos basicos :: Genero, Lugar, Grupo
+    //
+    //Constantes para origen de mensajes:::
+    const inMsPubEjem = 0;//Mensaje de publicación de ejemplar
+    const inMsRealOfe = 1;//Mensaje de Realización de oferta por ejemplar
+    const inMsVerOfAc = 2;//Mensaje de oferta aceptada
+    const inMsVerOfRe = 3;//Mensaje de oferta recibida
+    const inMsVerComR = 4;//Mensaje de comentario recibido
+    const inMsVerCReP = 5;//Mensaje de comentario para responder pregunta
+    const inMsVerOfRz = 6;//Mensaje de oferta realizada
 
     var $objSolicitud;
     /*

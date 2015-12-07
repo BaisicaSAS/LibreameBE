@@ -85,7 +85,17 @@ class Login
                     if ($usuario->getTxusuclave() == $pSolicitud->getClave()){
                         //Verifica si el usuario tiene una sesion activa
                         if (ManejoDataRepository::usuarioSesionActiva($pSolicitud, $device, NULL)){
-                            $respuesta->setRespuesta(AccesoController::inUSeActi);
+                            
+                            //$respuesta->setRespuesta(AccesoController::inUSeActi);
+                            //Si tiene sesion activa, la recupera para reutilizarla
+                            $sesion = ManejoDataRepository::recuperaSesionUsuario($usuario,$pSolicitud,NULL);
+                            //Genera sesion activa sin fecha de finalización
+                            ManejoDataRepository::generaActSesion($sesion,AccesoController::inDatoUno,'Login usuario : Sesion ACTIVA Retomada por el sistema '.$usuario->getTxusuemail().'[Sesion: '.$sesion->getTxsesnumero().'] -  exitoso',$pSolicitud->getAccion(),$fecha,$fecha,NULL);
+                            $respuesta->setRespuesta(AccesoController::inULogged);    
+                            $respuesta->setSession($sesion->getTxsesnumero());  
+                            
+                            //Busca la cantidad de mensajes del usuario sin leer 
+                            $respuesta->setCantMensajes(ManejoDataRepository::cantMsgUsr($usuario));    
                         }
                         else
                         {

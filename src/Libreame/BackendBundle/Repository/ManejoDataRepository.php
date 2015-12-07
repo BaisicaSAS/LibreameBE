@@ -244,6 +244,11 @@ class ManejoDataRepository extends EntityRepository {
                             'txsesnumero' =>  $psolicitud->getSession(),
                             'insesdispusuario' => $device,
                             'insesactiva' => AccesoController::inSesActi));
+            if ($respuesta == NULL) {
+                $respuesta = $em->getRepository('LibreameBackendBundle:LbSesiones')->findOneBy(array(
+                                'insesdispusuario' => $device,
+                                'insesactiva' => AccesoController::inSesActi));            
+            }
             //Flush al entity manager
             if ($flEm) {$em->flush();}
 
@@ -613,6 +618,28 @@ class ManejoDataRepository extends EntityRepository {
         } 
     }
 
+    //Publica un mensaje
+    public function publicaMensajes(LbMensajes $mensaje)
+    {   
+        try{
+            $em = $this->getDoctrine()->getManager();
+            
+            //Verifica el tipo de mensaje para determinar si tiene que enviar a más 
+            //destinatarios tambien envía correos.
+            $tipomensaje = $mensaje->getInmenorigen();
+            switch ($tipomensaje) {
+                case AccesoController::inMsPubEjem:
+                    
+                
+            }
+            
+            return $query->getResult();
+
+        } catch (Exception $ex) {
+                return new LbMensajes();
+        } 
+    }
+    
 
     //Obtiene los mensajes asociados a un usuario
     public function getMensajesUsuario(LbUsuarios $usuario)
@@ -628,7 +655,7 @@ class ManejoDataRepository extends EntityRepository {
                     . " OR e.inmenusuarioorigen = :usr";
 
             $query = $em->createQuery($sql)->setParameter('usr', $usuario);
-            //echo $sql;
+            //echo $sql;ge
             return $query->getResult();
 
         } catch (Exception $ex) {
@@ -1033,6 +1060,11 @@ class ManejoDataRepository extends EntityRepository {
             //Guarda la actividad de la sesion:: 
             ManejoDataRepository::generaActSesion($sesion,AccesoController::inDatoUno,$libro->getTxlibtitulo()." publicado con éxito por ".$psolicitud->getEmail(),$psolicitud->getAccion(),$fecha,$fecha,$em);
             //echo "<script>alert('Generó actividad de sesion ')</script>";
+            //::: GENERA MENSAJE :::
+            
+            
+            
+            ManejoDataRepository::publicaMensajes();
             /*
              * Setea la respuesta
              */            
