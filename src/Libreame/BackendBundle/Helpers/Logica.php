@@ -361,7 +361,10 @@ class Logica {
                 $mensaje = "";
                 foreach ($solicitados as $solicitado){
                     if($inContador == 0) {
-                        $sol1 = $solicitado->getInsollibro()->getTxlibtitulo();
+                        $libroTMP = new LbLibros();
+                        $libroTMP = ManejoDataRepository::getLibro($solicitado->getInsollibro());
+                        
+                        $sol1 = $libroTMP->getTxlibtitulo();
                         $vsol1 = $solicitado->getDbsolvaladic();
                         $mensaje = $solicitado->getTxsolobservacion();
                     } else {

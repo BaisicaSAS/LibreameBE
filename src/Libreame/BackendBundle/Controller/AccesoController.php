@@ -138,6 +138,7 @@ class AccesoController extends Controller
      */
     public function ingresarSistemaAction()
     {   
+        error_reporting(E_ALL & ~E_STRICT & ~E_DEPRECATED );
         $request = $this->getRequest();
         $content = $request->getContent();
         $datos = json_decode($content, true);
@@ -159,7 +160,8 @@ class AccesoController extends Controller
                 $objLogica = $this->get('logica_service');
                 //$objLogica = new Logica($em);
                 //$objLogica = $this->get('logica_service')->container->setParameter("@doctrine.orm.default_entity_manager", $em);
-                $respuesta = $objLogica::ejecutaAccion($this->objSolicitud);
+                //$respuesta = $objLogica::ejecutaAccion($this->objSolicitud);
+                $respuesta = Logica::ejecutaAccion($this->objSolicitud);
             } else { //JSON INVALIDO RESPUESTA GENERAL : -10
                 //echo "<script>alert('.......ELSE..........')</script>";
                 $objLogica = $this->get('logica_service');
