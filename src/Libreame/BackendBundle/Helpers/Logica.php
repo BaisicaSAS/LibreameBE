@@ -360,14 +360,16 @@ class Logica {
                 $vsol2 = 0;
                 $mensaje = "";
                 foreach ($solicitados as $solicitado){
+                    //echo "SOLICITADO # ".$inContador." - ".$solicitado->getInsollibro()->getTxlibtitulo();
+                    
                     if($inContador == 0) {
-                        $libroTMP = new LbLibros();
-                        $libroTMP = ManejoDataRepository::getLibro($solicitado->getInsollibro());
+                        //echo "Libro - ".$solicitado->getInsollibro()->getInlibro();
                         
-                        $sol1 = $libroTMP->getTxlibtitulo();
+                        $sol1 = $solicitado->getInsollibro()->getTxlibtitulo();
                         $vsol1 = $solicitado->getDbsolvaladic();
                         $mensaje = $solicitado->getTxsolobservacion();
                     } else {
+                        //echo "Libro - ".$solicitado->getInsollibro()->getInlibro();
                         $sol2 = $solicitado->getInsollibro()->getTxlibtitulo();
                         $vsol2 = $solicitado->getDbsolvaladic();
                     }
