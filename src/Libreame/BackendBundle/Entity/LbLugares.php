@@ -45,6 +45,13 @@ class LbLugares
      */
     protected $inlugpadre;
 
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="inLugElegible", type="integer", nullable=false)
+     */
+    protected $inlugelegible = '0';
+
 
 
     /**
@@ -125,4 +132,30 @@ class LbLugares
     {
         return $this->inlugpadre;
     }
+    
+    
+    
+        /**
+     * Set inlugelegible
+     *
+     * @param integer $inlugelegible
+     * @return LbLugares
+     */
+    public function setInlugelegible($inlugelegible)
+    {
+        $this->inlugelegible = $inlugelegible;
+
+        return $this;
+    }
+
+    /**
+     * Get inlugelegible
+     *
+     * @return integer 
+     */
+    public function getInlugelegible()
+    {
+        return $this->inlugelegible;
+    }
+
 }

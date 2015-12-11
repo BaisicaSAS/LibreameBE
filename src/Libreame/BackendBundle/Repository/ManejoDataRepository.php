@@ -270,6 +270,18 @@ class ManejoDataRepository extends EntityRepository {
         } 
     }
     
+    //Obtiene todos los objetos lugar
+    public function getLugares()
+    {   
+        try{
+            $em = $this->getDoctrine()->getManager();
+            return $em->getRepository('LibreameBackendBundle:LbLugares')->
+                findBy(array('inlugelegible' => "1"));
+        } catch (Exception $ex) {
+                return new LbLugares();
+        } 
+    }
+    
     //Obtiene varios objetos Genero según el ID del libro 
     public function getGeneroLibro($inlibro)
     {   

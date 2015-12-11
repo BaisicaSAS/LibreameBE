@@ -131,6 +131,13 @@ class Logica {
                     break;
                 } 
 
+                case AccesoController::txAccListaLug: {//Dato:38 : Listar lugares
+                    //echo "<script>alert('Antes de entrar a Listar idiomas Usuario-".$solicitud->getEmail()."')</script>";
+                    $objGestUsuarios = $this->get('gest_usuarios_service');
+                    $respuesta = $objGestUsuarios::listarLugares($solicitud);
+                    break;
+                } 
+
             }
             //echo "<script>alert('ejecuta Accion: ".$respuesta."')</script>";
             return $respuesta;

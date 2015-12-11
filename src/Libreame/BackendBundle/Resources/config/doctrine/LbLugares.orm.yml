@@ -30,6 +30,13 @@ Libreame\BackendBundle\Entity\LbLugares:
             fixed: false
             comment: 'Nombre del lugar, Ciudad, Depto, etc.'
             column: txLugNombre
+        inlugelegible:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: 'Indica si el registro puede ser elegido por un usuario 0: No elegible - 1 : Elegible'
+            default: '0'
+            column: inLugElegible
     manyToOne:
         inlugpadre:
             targetEntity: LbLugares

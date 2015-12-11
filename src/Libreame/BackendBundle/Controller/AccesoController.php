@@ -92,6 +92,7 @@ class AccesoController extends Controller
     const txAccVerCalif =  '35'; //Ver comentarios-calificaciones
     const txAccMarcMens =  '36'; //Marcar mensaje como No leido / Leido
     const txAccListaIdi =  '37'; //Listar idiomas
+    const txAccListaLug =  '38'; //Listar lugares
 
     const txEjemplarPub =  'P'; //Indica que es el ejemplar a publicar de la solicitud
     const txEjemplarSol1 =  'S1'; //Indica que es el ejemplar a Solicitar de la solicitud
