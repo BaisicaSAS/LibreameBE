@@ -55,6 +55,14 @@ class LbEjemplares
      */
     protected $inejeusudueno;
 
+    /**
+     * @var blob
+     *
+     * @ORM\Column(name="txEjeImagen", type="blob", nullable=true)
+     */
+    protected $txejeimagen;
+
+
 
 
     /**
@@ -158,4 +166,27 @@ class LbEjemplares
     {
         return $this->inejeusudueno;
     }
+    
+    /**
+     * Set txejeimagen
+     *
+     * @param string $txejeimagen
+     * @return LbEjemplares
+     */
+    public function setTxejeimagen($txejeimagen)
+    {
+        $this->txejeimagen = $txejeimagen;
+
+        return $this;
+    }
+
+    /**
+     * Get txejeimagen
+     *
+     * @return string 
+     */
+    public function getTxejeimagen()
+    {
+        return $this->txejeimagen;
+    }    
 }

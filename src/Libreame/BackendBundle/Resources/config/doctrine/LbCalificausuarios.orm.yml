@@ -39,6 +39,11 @@ Libreame\BackendBundle\Entity\LbCalificausuarios:
             comment: "0: No es reporte de abuso\n1: Si es reporte de abuso"
             default: '0'
             column: inCalReporteAbuso
+        fefecha:
+            type: datetime
+            nullable: false
+            comment: 'Fecha calificacion'
+            column: feFecha
     manyToOne:
         incalusucalifica:
             targetEntity: LbUsuarios

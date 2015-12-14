@@ -306,6 +306,7 @@ class AccesoController extends Controller
                         $this->objSolicitud->setIdLibroSol2($json_datos['idsolicitud']['idlibrosol2']);
                         $this->objSolicitud->setValAdicSol2($json_datos['idsolicitud']['valadicsol2']);
                         $this->objSolicitud->setObservaSol($json_datos['idsolicitud']['observasol']);
+                        $this->objSolicitud->setImageneje($json_datos['idsolicitud']['foto']);
 
                         break;
                     }
@@ -319,6 +320,13 @@ class AccesoController extends Controller
                     }
                     case self::txAccListaIdi: { //Dato:37 : Listar Idiomas
                         //echo "<script>alert('ENTRA POR LISTAR DE IDIOMAS')</script>";
+                        $this->objSolicitud->setEmail($json_datos['idsolicitud']['email']);
+                        $this->objSolicitud->setClave($json_datos['idsolicitud']['clave']);
+                        break;
+                    }
+
+                    case self::txAccListaLug: { //Dato:38 : Listar Lugares
+                        //echo "<script>alert('ENTRA POR LISTAR DE LUGARES')</script>";
                         $this->objSolicitud->setEmail($json_datos['idsolicitud']['email']);
                         $this->objSolicitud->setClave($json_datos['idsolicitud']['clave']);
                         break;
@@ -429,7 +437,7 @@ class AccesoController extends Controller
                                  isset($datos['idsolicitud']['titulosol1']) and  isset($datos['idsolicitud']['idlibrosol1']) and 
                                  isset($datos['idsolicitud']['valadicsol1']) and  isset($datos['idsolicitud']['titulosol2']) and 
                                  isset($datos['idsolicitud']['idlibrosol2']) and  isset($datos['idsolicitud']['valadicsol2']) and 
-                                 isset($datos['idsolicitud']['observasol']));
+                                 isset($datos['idsolicitud']['observasol']) and isset($datos['idsolicitud']['foto']));
                         break;
                     }
                     case self::txAccMarcMens: { //Dato:36 : Marcar mensaje / Leído - No leído
@@ -440,6 +448,12 @@ class AccesoController extends Controller
                     }
                     case self::txAccListaIdi: { //Dato:37 : LISTAR IDIOMAS
                         //echo "<script>alert('ENTRA POR LISTAR IDIOMAS')</script>";
+                        $resp = (isset($datos['idsolicitud']['email']) and isset($datos['idsolicitud']['clave']));
+                        break;
+                    }
+
+                    case self::txAccListaLug: { //Dato:38 : LISTAR LUGARES
+                        //echo "<script>alert('ENTRA POR LISTAR LUGARES')</script>";
                         $resp = (isset($datos['idsolicitud']['email']) and isset($datos['idsolicitud']['clave']));
                         break;
                     }

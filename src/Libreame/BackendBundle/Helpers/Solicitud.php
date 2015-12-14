@@ -43,6 +43,7 @@ class Solicitud {
     private $pIdlibroSol2; //Segundo id del libro Solicitado
     private $pValAdicSol2; //Valor adicional para el segundo libro
     private $pObservaSol; //Observaciones de la oferta
+    private $pImagenEje; //Imagen del ejemplar
     //Parametros para la búsqueda
     private $pTextoBuscar; //Texto a buscar
     //Parametros para marcar mensaje como leído
@@ -172,6 +173,10 @@ class Solicitud {
         return $this->pIdUsuarioVer;
     }
     
+    public function getImageneje() {
+        return $this->pImagenEje;
+    }
+
 
     /*
      *  Bloque de setter para los atributos de la clase
@@ -322,6 +327,11 @@ class Solicitud {
     
     public function setIdusuariover($pIdUsrVer) {
         $this->pIdUsuarioVer = $pIdUsrVer;
+        return $this;
+    }
+    
+    public function setImageneje($pimageneje) {
+        $this->pImagenEje = $pimageneje;
         return $this;
     }
     

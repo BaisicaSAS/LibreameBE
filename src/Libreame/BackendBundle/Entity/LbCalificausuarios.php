@@ -62,6 +62,12 @@ class LbCalificausuarios
      */
     protected $incalusucalificado;
 
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="feFecha", type="datetime", nullable=false)
+     */
+    protected $fefecha;
 
 
     /**
@@ -188,4 +194,27 @@ class LbCalificausuarios
     {
         return $this->incalusucalificado;
     }
+    
+    /**
+     * Set fefecha
+     *
+     * @param \DateTime $fefecha
+     * @return LbUsuarios
+     */
+    public function setFefecha($feefcha)
+    {
+        $this->fefecha = $fefecha;
+
+        return $this;
+    }
+
+    /**
+     * Get fefecha
+     *
+     * @return \DateTime 
+     */
+    public function getFefecha()
+    {
+        return $this->fefecha;
+    }    
 }

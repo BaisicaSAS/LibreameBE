@@ -797,6 +797,7 @@ class ManejoDataRepository extends EntityRepository {
      */
     public function crearEjemplar(Solicitud $psolicitud, LbLibros $libro, LbUsuarios $usuario)
     {
+        $imagen = base64_encode($psolicitud->getImageneje());
         $ejemplar = new LbEjemplares();
         try {
             //$em = $this->getDoctrine()->getManager();
@@ -804,6 +805,7 @@ class ManejoDataRepository extends EntityRepository {
             $ejemplar->setDbejeavaluo($psolicitud->getAvaluo());  
             $ejemplar->setInejelibro($libro);  
             $ejemplar->setInejeusudueno($usuario);  
+            $ejemplar->setTxejeimagen($imagen);  
      
             //$em->persist($ejemplar);
             //$em->flush();    

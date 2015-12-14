@@ -213,6 +213,10 @@ class Logica {
                     $JSONResp = Logica::respuestaListaIdiomas($respuesta, $pSolicitud, $parreglo);
                     break;
                 
+                case AccesoController::txAccListaLug: //Dato:38 : Listar Lugares
+                    $JSONResp = Logica::respuestaListaLugares($respuesta, $pSolicitud, $parreglo);
+                    break;
+                
             }
 
             return json_encode($JSONResp);
@@ -773,8 +777,9 @@ class Logica {
     }    
     
     /*
-        * respuestaMarcarMensaje: 
-     * Funcion que genera el JSON de respuesta para la accion de Marcar el mensaje como Leído o No leído:: AccesoController::txAccMarcMens
+        * respuestaListaIdiomas: 
+     * Funcion que genera el JSON de respuesta para la accion de Listar Idiomas:: AccesoController::inListarIdi
+
      */
     public function respuestaListaIdiomas(Respuesta $respuesta, Solicitud $pSolicitud, $parreglo){
         try {
@@ -783,6 +788,23 @@ class Logica {
                             'iddevice'=> $pSolicitud->getDeviceMac(), 'marca'=>$pSolicitud->getDeviceMarca(), 
                             'modelo'=>$pSolicitud->getDeviceModelo(), 'so'=>$pSolicitud->getDeviceSO()), 
                             'idrespuesta' => (array('respuesta' => $respuesta->getRespuesta(), 'idiomas' => $parreglo)));
+        } catch (Exception $ex) {
+                return AccesoController::inPlatCai;
+        } 
+    }    
+    
+    /*
+        * respuestaListaLugares: 
+     * Funcion que genera el JSON de respuesta para la accion de Listar Lugares:: AccesoController::inListarIdi
+
+     */
+    public function respuestaListaLugares(Respuesta $respuesta, Solicitud $pSolicitud, $parreglo){
+        try {
+            return array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
+                            'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr(), 
+                            'iddevice'=> $pSolicitud->getDeviceMac(), 'marca'=>$pSolicitud->getDeviceMarca(), 
+                            'modelo'=>$pSolicitud->getDeviceModelo(), 'so'=>$pSolicitud->getDeviceSO()), 
+                            'idrespuesta' => (array('respuesta' => $respuesta->getRespuesta(), 'lugares' => $parreglo)));
         } catch (Exception $ex) {
                 return AccesoController::inPlatCai;
         } 

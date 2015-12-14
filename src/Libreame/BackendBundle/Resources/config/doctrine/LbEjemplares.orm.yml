@@ -34,6 +34,14 @@ Libreame\BackendBundle\Entity\LbEjemplares:
             comment: 'Valor en el que el usuario avalua su libro'
             default: '0'
             column: dbEjeAvaluo
+        txejeimagen:
+            type: blob
+            nullable: true
+            length: null
+            fixed: false
+            comment: 'imagen del ejemplar.'
+            column: txEjeImagen
+            
     manyToOne:
         inejelibro:
             targetEntity: LbLibros

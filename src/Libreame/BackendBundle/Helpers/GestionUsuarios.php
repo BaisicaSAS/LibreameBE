@@ -10,6 +10,7 @@ use Libreame\BackendBundle\Entity\LbUsuarios;
 use Libreame\BackendBundle\Entity\LbSesiones;
 use Libreame\BackendBundle\Entity\LbMensajes;
 use Libreame\BackendBundle\Entity\LbCalificausuarios;
+use Libreame\BackendBundle\Entity\LbLugares;
 /**
  * Description of Gestion Usuarios
  *
@@ -40,7 +41,7 @@ class GestionUsuarios {
                 $usuario = ManejoDataRepository::getUsuarioByEmail($psolicitud->getEmail());
                 if ($usuario != NULL) 
                 {
-                    $califica = ManejoDataRepository::getCalificaUsuarioRecibidas($usuario);
+                    $calificaciones = ManejoDataRepository::getCalificaUsuarioRecibidas($usuario);
                     //echo "<script>alert('RESP cali ".count($califica)." ')</script>";
                     $grupos = ManejoDataRepository::getGruposUsuario($usuario);
                     //echo "<script>alert('RESP grup ".count($grupos)." ')</script>";
@@ -60,8 +61,18 @@ class GestionUsuarios {
                     //echo "<script>alert('ALEX ')</script>";
                     $respuesta->setArrUsuarios($usuario);
                     //echo "<script>alert('ALEX ".$respuesta->RespUsuarios[0]->getTxusunombre()." ')</script>";
-
-                    $respuesta->setArrCalificaciones($califica);
+                    
+                    $arrCalifica = array();
+                    foreach ($calificaciones as $califica) {
+                       $arrCalifica[] = array("idcalifica"=>$califica->getIncalificacion(),
+                                            "idusrcalif" => $califica->getIncalusucalifica()->getInusuario(),
+                                            "nomusrcalif" => $califica->getIncalusucalifica()->getTxusunommostrar(),
+                                            "incalificacion" => $califica->getIncalcalificacion(),
+                                            "comentario" => $califica->getTxcalobservacion(),
+                                            "fecha" => $califica->getfeFecha()->format('d/m/Y H:i:s'));
+                    }
+                    
+                    $respuesta->setArrCalificaciones($arrCalifica);
                     $respuesta->setArrGrupos($grupos);
                 } else {
                     $usuario = new LbUsuarios();
@@ -235,23 +246,27 @@ class GestionUsuarios {
                 
                 $respuesta->setRespuesta(AccesoController::inExitoso);
                 
+                //$arLugares = new array();
+                
                 $lugares = ManejoDataRepository::getLugares();
+                $lugar = new LbLugares();
+                $arLugares = array();
                 
-                for ($lugares )
+                foreach ($lugares as $lugar) {
                 
-                $arLugares = array("Español","Inglés","Frances","Alemán","Ruso","Portugues",
-                    "Catalán","Árabe","Bosnio","Croata","Serbio","Italiano","Griego","Turco","Húngaro","Hindi");
+                    $arLugares[] = array($lugar->getInlugar(),$lugar->getTxlugnombre());
+                }
             
-                return $objLogica::generaRespuesta($respuesta, $psolicitud, $arIdiomas);
+                return $objLogica::generaRespuesta($respuesta, $psolicitud, $arLugares);
             } else {
                 $respuesta->setRespuesta($respSesionVali);
-                $arIdiomas = array();
-                return $objLogica::generaRespuesta($respuesta, $psolicitud, $arIdiomas);
+                $arLugares = array();
+                return $objLogica::generaRespuesta($respuesta, $psolicitud, $arLugares);
             }
         } catch (Exception $ex) {
             $respuesta->setRespuesta(AccesoController::inPlatCai);
-            $arIdiomas = array();
-            return $objLogica::generaRespuesta($respuesta, $psolicitud, $arIdiomas);
+            $arLugares = array();
+            return $objLogica::generaRespuesta($respuesta, $psolicitud, $arLugares);
         }
        
     }
