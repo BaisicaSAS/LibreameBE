@@ -41,7 +41,7 @@ class AccesoController extends Controller
     const txMenNoId =  'Sin identificar'; //Mensaje estandar para datos sin identificar
     const txMeNoIdS =  'Pendiente'; //Mensaje estandar para pendiente/Sin identificar, con campo Longitud menor a 10
     //Estados del usuario
-    const inUsuConf =  0; //Usuario en proceso de confiormacion de registro
+    const inUsuConf =  0; //Usuario en proceso de confirmacion de registro
     const inUsuActi =  1; //Usuario Activo
     const inUsuCuar =  2; //Usuario en cuarentena
     const inInactiv =  3; //Usuario inactivo
@@ -288,6 +288,21 @@ class AccesoController extends Controller
                         $this->objSolicitud->setClave($json_datos['idsolicitud']['clave']);
                         break;
                     }
+                    
+                    case self::txAccActParam: { //Dato:12 : Actualizar datos parametros usuario
+                        //echo "<script>alert('ENTRA POR ACTUALIZAR DATOS USUARIO')</script>";
+                        $this->objSolicitud->setEmail($json_datos['idsolicitud']['email']);
+                        $this->objSolicitud->setClave($json_datos['idsolicitud']['clave']);
+                        $this->objSolicitud->setTelefono($json_datos['idsolicitud']['telefono']);
+                        $this->objSolicitud->setNomUsuario($json_datos['idsolicitud']['nomusuario']);
+                        $this->objSolicitud->setNomMostUsuario($json_datos['idsolicitud']['nommostusuario']);
+                        $this->objSolicitud->setUsuGenero($json_datos['idsolicitud']['usugenero']);
+                        $this->objSolicitud->setUsuImagen($json_datos['idsolicitud']['usuimagen']);
+                        $this->objSolicitud->setUsuFecNac($json_datos['idsolicitud']['usufecnac']);
+                        $this->objSolicitud->setUsuLugar($json_datos['idsolicitud']['usulugar']);
+                        break;
+                    }
+                    
                     case self::txAccPubliEje: { //Dato:13 : Publicar un ejemplar
                         //echo "<script>alert('ENTRA POR PUBLICAR')</script>";
                         $this->objSolicitud->setEmail($json_datos['idsolicitud']['email']);
@@ -426,6 +441,15 @@ class AccesoController extends Controller
                     case self::txAccCerraSes: { //Dato:10 : Cerrar Sesion
                         //echo "<script>alert('VAL ENTRA POR CERRAR SESION')</script>";
                         $resp = (isset($datos['idsolicitud']['email']) and isset($datos['idsolicitud']['clave']));
+                        break;
+                    }
+                    case self::txAccActParam: { //Dato:12 : Actualizar datos parametros usuario
+                        //echo "<script>alert('ENTRA POR ACTUALIZAR DATOS USUARIO')</script>";
+                        $resp = (isset($datos['idsolicitud']['email']) and isset($datos['idsolicitud']['clave']) and 
+                                isset($datos['idsolicitud']['telefono']) and 
+                                isset($datos['idsolicitud']['nomusuario']) and  isset($datos['idsolicitud']['nommostusuario']) and 
+                                isset($datos['idsolicitud']['usugenero']) and  isset($datos['idsolicitud']['usuimagen']) and 
+                                isset($datos['idsolicitud']['usufecnac']) and  isset($datos['idsolicitud']['usulugar']));
                         break;
                     }
                     case self::txAccPubliEje: { //Dato:13 : Publicar un Ejemplar

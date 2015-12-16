@@ -254,7 +254,7 @@ class GestionUsuarios {
                 
                 foreach ($lugares as $lugar) {
                 
-                    $arLugares[] = array($lugar->getInlugar(),$lugar->getTxlugnombre());
+                    $arLugares[] = array("idlugar"=>$lugar->getInlugar(),"nomlugar"=>$lugar->getTxlugnombre());
                 }
             
                 return $objLogica::generaRespuesta($respuesta, $psolicitud, $arLugares);
@@ -270,4 +270,67 @@ class GestionUsuarios {
         }
        
     }
+
+    
+    public function actualizarDatosUsuario(Solicitud $psolicitud)
+    {   
+        /*setlocale (LC_TIME, "es_CO");
+        $fecha = new \DateTime;*/
+        $respuesta = new Respuesta();
+        $objLogica = $this->get('logica_service');
+        try {
+            //Valida que la sesión corresponda y se encuentre activa
+            $respSesionVali=  ManejoDataRepository::validaSesionUsuario($psolicitud);
+            //echo "<script>alert(' marcarMensajes :: Validez de sesion ".$respSesionVali." ')</script>";
+            if ($respSesionVali==AccesoController::inULogged) 
+            {    
+                //Genera la oferta para el ejemplar
+                $actualiza = ManejoDataRepository::setActualizaUsuario($psolicitud);
+                if ($actualiza == AccesoController::inFallido)
+                    $respuesta->setRespuesta(AccesoController::inFallido);
+                else
+                    $respuesta->setRespuesta($respSesionVali);
+                
+                return $objLogica::generaRespuesta($respuesta, $psolicitud, NULL);
+            } else {
+                $respuesta->setRespuesta($respSesionVali);
+                return $objLogica::generaRespuesta($respuesta, $psolicitud, NULL);
+            }
+        } catch (Exception $ex) {
+            $respuesta->setRespuesta(AccesoController::inPlatCai);
+            return $objLogica::generaRespuesta($respuesta, $psolicitud, NULL);
+        }
+       
+    }    
+
+    public function cambiarClave(Solicitud $psolicitud)
+    {   
+        /*setlocale (LC_TIME, "es_CO");
+        $fecha = new \DateTime;*/
+        $respuesta = new Respuesta();
+        $objLogica = $this->get('logica_service');
+        try {
+            //Valida que la sesión corresponda y se encuentre activa
+            $respSesionVali=  ManejoDataRepository::validaSesionUsuario($psolicitud);
+            //echo "<script>alert(' marcarMensajes :: Validez de sesion ".$respSesionVali." ')</script>";
+            if ($respSesionVali==AccesoController::inULogged) 
+            {    
+                //Genera la oferta para el ejemplar
+                $actualiza = ManejoDataRepository::setActualizaUsuario($psolicitud);
+                if ($actualiza == AccesoController::inFallido)
+                    $respuesta->setRespuesta(AccesoController::inFallido);
+                else
+                    $respuesta->setRespuesta($respSesionVali);
+                
+                return $objLogica::generaRespuesta($respuesta, $psolicitud, NULL);
+            } else {
+                $respuesta->setRespuesta($respSesionVali);
+                return $objLogica::generaRespuesta($respuesta, $psolicitud, NULL);
+            }
+        } catch (Exception $ex) {
+            $respuesta->setRespuesta(AccesoController::inPlatCai);
+            return $objLogica::generaRespuesta($respuesta, $psolicitud, NULL);
+        }
+       
+    }    
 }

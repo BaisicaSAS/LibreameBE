@@ -26,6 +26,13 @@ class Solicitud {
     private $pTelefono; //Numero telefónico 
     //$pClave se utiliza tambien para C02: Login
     private $pClave; //Clave del usuario
+    private $pClaveNueva; //Clave Nueva del usuario
+    private $pNomUsuario; //Nombre de usuario
+    private $pNomMostUsuario; //Nombre para mostrar de usuario
+    private $pUsuGenero; //Genero del usuario
+    private $pUsuImagen; //Imagen
+    private $pUsuFecNac; //Fecha de nacimiento
+    private $pUsuLugar; //Lugar del usuario
     //$pUltEjemplar
     private $pUltEjemplar;
     //Parametros para la creación de un Ejemplar, cargue o búsqueda del libro y de los generos
@@ -52,7 +59,7 @@ class Solicitud {
     //Parametros para recuperar usuario otro
     private $pIdUsuarioVer; //Id del mensaje
     //Parametros para recuperar oferta
-
+    
     /*
      *  Bloque de getter para los atributos de la clase
      */
@@ -91,6 +98,34 @@ class Solicitud {
     
     public function getClave() {
         return $this->pClave;
+    }
+
+    public function getClaveNueva() {
+        return $this->pClaveNueva;
+    }
+
+    public function getNomUsuario() {
+        return $this->pNomUsuario;
+    }
+
+    public function getNomMostUsuario() {
+        return $this->pNomMostUsuario;
+    }
+
+    public function getUsuGenero() {
+        return $this->pUsuGenero;
+    }
+
+    public function getUsuImagen() {
+        return $this->pUsuImagen;
+    }
+
+    public function getUsuFecNac() {
+        return $this->pUsuFecNac;
+    }
+
+    public function getUsuLugar() {
+        return $this->pUsuLugar;
     }
 
     public function getTelefono() {
@@ -226,6 +261,43 @@ class Solicitud {
         return $this;
     }
 
+    public function setClaveNueva($pClaveNueva) {
+        $this->pClaveNueva = $pClaveNueva;
+        return $this;
+    }
+
+    
+    public function setNomUsuario($pNomUsuario) {
+        $this->pNomUsuario = $pNomUsuario;
+        return $this;
+    }
+
+    public function setNomMostUsuario($pNomMostUsuario) {
+        $this->pNomMostUsuario= $pNomMostUsuario;
+        return $this;
+    }
+
+    public function setUsuGenero($pUsugenero) {
+        $this->pUsuGenero = $pUsugenero;
+        return $this;
+    }
+
+    public function setUsuImagen($pUsuImagen) {
+        $this->pUsuImagen = $pUsuImagen;
+        return $this;
+    }
+
+    public function setUsuFecNac($pUsuFecNac) {
+        $this->pUsuFecNac = $pUsuFecNac;
+        return $this;
+    }
+
+    public function setUsuLugar($pUsuLugar) {
+        $this->pUsuLugar = $pUsuLugar;
+        return $this;
+    }
+
+    
     public function setTelefono($pTelefono) {
         $this->pTelefono = $pTelefono;
         return $this;

@@ -3,6 +3,7 @@
 namespace Libreame\BackendBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use DateTime;
 use Libreame\BackendBundle\Controller\AccesoController;
 use Libreame\BackendBundle\Entity\LbLugares;
 use Libreame\BackendBundle\Entity\LbEjemplares;
@@ -701,6 +702,71 @@ class ManejoDataRepository extends EntityRepository {
         } 
     }
     
+    //Actualiza datos de usuario
+    public function setActualizaUsuario(Solicitud $psolicitud)
+    {   
+        try{
+            $em = $this->getDoctrine()->getManager();
+            
+            $usuario = ManejoDataRepository::getUsuarioByEmail($psolicitud->getEmail());
+            $lugar = ManejoDataRepository::getLugar($psolicitud->getUsuLugar());
+            
+            if ($psolicitud->getUsuFecNac() != ""){
+                $d = new DateTime($psolicitud->getUsuFecNac());
+            }
+            
+            $usuario->setTxusutelefono($psolicitud->getTelefono());
+            $usuario->setInusulugar($lugar);
+            $usuario->setInusugenero($psolicitud->getUsuGenero());
+            $usuario->setTxusuimagen($psolicitud->getUsuImagen());
+            $usuario->setTxusunombre($psolicitud->getNomUsuario());
+            $usuario->setTxusunommostrar($psolicitud->getNomMostUsuario());
+            if ($psolicitud->getUsuFecNac() != ""){
+                $usuario->setFeusunacimiento($d);
+            }
+           
+            $em->persist($usuario);
+            $em->flush();
+            $resp = AccesoController::inExitoso;
+            
+            return $resp;
+        } catch (Exception $ex) {
+                return new LbUsuarios();
+        } 
+    }
+    
+    //Actualiza datos de usuario
+    public function setCambiarClave(Solicitud $psolicitud)
+    {   
+        try{
+            $em = $this->getDoctrine()->getManager();
+            
+            $usuario = ManejoDataRepository::getUsuarioByEmail($psolicitud->getEmail());
+            $lugar = ManejoDataRepository::getLugar($psolicitud->getUsuLugar());
+            
+            if ($psolicitud->getUsuFecNac() != ""){
+                $d = new DateTime($psolicitud->getUsuFecNac());
+            }
+            
+            $usuario->setTxusutelefono($psolicitud->getTelefono());
+            $usuario->setInusulugar($lugar);
+            $usuario->setInusugenero($psolicitud->getUsuGenero());
+            $usuario->setTxusuimagen($psolicitud->getUsuImagen());
+            $usuario->setTxusunombre($psolicitud->getNomUsuario());
+            $usuario->setTxusunommostrar($psolicitud->getNomMostUsuario());
+            if ($psolicitud->getUsuFecNac() != ""){
+                $usuario->setFeusunacimiento($d);
+            }
+           
+            $em->persist($usuario);
+            $em->flush();
+            $resp = AccesoController::inExitoso;
+            
+            return $resp;
+        } catch (Exception $ex) {
+                return new LbUsuarios();
+        } 
+    }
                 
     //Guarda CUALQUIER ENTIDAD del parametro
     public function persistEntidad($entidad)

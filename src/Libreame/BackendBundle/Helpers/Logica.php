@@ -110,6 +110,13 @@ class Logica {
                     break;
                 } 
 
+                case AccesoController::txAccActParam: {//Dato:12 : Actualizar datos parametros usuario
+                    //echo "<script>alert('Antes de entrar a Actualizar datos parametros usuario-".$solicitud->getEmail()."')</script>";
+                    $objGestUsuarios = $this->get('gest_usuarios_service');
+                    $respuesta = $objGestUsuarios::actualizarDatosUsuario($solicitud);
+                    break;
+                } 
+
                 case AccesoController::txAccPubliEje: {//Dato:13 : Publicar ejemplar
                     //echo "<script>alert('Antes de entrar a Publicar Ejemplar Usuario-".$solicitud->getEmail()."')</script>";
                     $objGestEjemplares = $this->get('gest_ejemplares_service');
@@ -117,6 +124,13 @@ class Logica {
                     break;
                 } 
 
+                case AccesoController::txAccRecClave: {//Dato:29 : Cambio de clave
+                    //echo "<script>alert('Antes de entrar a Cambio de clave -".$solicitud->getEmail()."')</script>";
+                    $objGestUsuarios = $this->get('gest_usuarios_service');
+                    $respuesta = $objGestUsuarios::actualizarClaveUsuario($solicitud);
+                    break;
+                } 
+                
                 case AccesoController::txAccMarcMens: {//Dato:36 : Marcar Mensaje
                     //echo "<script>alert('Antes de entrar a Marcar Mensajes Usuario-".$solicitud->getEmail()."')</script>";
                     $objGestUsuarios = $this->get('gest_usuarios_service');
@@ -201,8 +215,17 @@ class Logica {
                     break;
 
                 //accion de publicar un ejemplar
+                case AccesoController::txAccActParam: //Dato:12 : Actualizar datos usuario
+                    $JSONResp = Logica::respuestaActualizarDatosUsuario($respuesta, $pSolicitud);
+                    break;
+                
+                //accion de publicar un ejemplar
                 case AccesoController::txAccPubliEje:  //Dato: 13
                     $JSONResp = Logica::respuestaPublicarEjemplar($respuesta, $pSolicitud);
+                    break;
+
+                case AccesoController::txAccRecClave: //Dato:29 : Cambio de clave
+                    $JSONResp = Logica::respuestaCambiarClave($respuesta, $pSolicitud);
                     break;
 
                 case AccesoController::txAccMarcMens: //Dato:36 : Marcar Mensaje
@@ -736,6 +759,22 @@ class Logica {
 
 
     /*
+        * respuestaActualizarDatosUsuario: 
+     * Funcion que genera el JSON de respuesta para la accion de Actualizar datos de usuario:: AccesoController::txAccActParam
+     */
+    public function respuestaActualizarDatosUsuario(Respuesta $respuesta, Solicitud $pSolicitud){
+        try {
+            return array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
+                            'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr(), 
+                            'iddevice'=> $pSolicitud->getDeviceMac(), 'marca'=>$pSolicitud->getDeviceMarca(), 
+                            'modelo'=>$pSolicitud->getDeviceModelo(), 'so'=>$pSolicitud->getDeviceSO()), 
+                            'idrespuesta' => (array('respuesta' => $respuesta->getRespuesta())));
+        } catch (Exception $ex) {
+                return AccesoController::inPlatCai;
+        } 
+    }    
+    
+    /*
      * respuestaPublicaeEjemplar: 
      * Funcion que genera el JSON de respuesta para la accion de Publicar un ejemplar :: AccesoController::txAccPubliEje:
      */
@@ -759,6 +798,23 @@ class Logica {
                         'descripcion'=>$respuesta->getTxMensaje())));
     }    
     
+    /*
+        * respuestaCambiarClave: 
+     * Funcion que genera el JSON de respuesta para la accion de Cambiar clave de usuario:: AccesoController::txAccRecClave
+     */
+    public function respuestaCambiarClave(Respuesta $respuesta, Solicitud $pSolicitud){
+        try {
+            return array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
+                            'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr(), 
+                            'iddevice'=> $pSolicitud->getDeviceMac(), 'marca'=>$pSolicitud->getDeviceMarca(), 
+                            'modelo'=>$pSolicitud->getDeviceModelo(), 'so'=>$pSolicitud->getDeviceSO()), 
+                            'idrespuesta' => (array('respuesta' => $respuesta->getRespuesta())));
+        } catch (Exception $ex) {
+                return AccesoController::inPlatCai;
+        } 
+    }    
+    
+
     
     /*
         * respuestaMarcarMensaje: 
