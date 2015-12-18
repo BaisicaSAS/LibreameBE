@@ -316,6 +316,9 @@ class Logica {
                 $lugar = ManejoDataRepository::getLugar($respuesta->RespUsuarios[0]->getInusulugar());
             }
 
+            $fecha = $respuesta->RespUsuarios[0]->getFeusunacimiento()->format('d-m-Y');
+            
+            
             return array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
                     'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr(), 
                     'iddevice'=> $pSolicitud->getDeviceMac(), 'marca'=>$pSolicitud->getDeviceMarca(), 
@@ -329,17 +332,17 @@ class Logica {
                         'usugenero' => $respuesta->RespUsuarios[0]->getInusugenero(),
                         //La siguiente línea debe habilitarse, e integrar el CAST de BLOB a TEXT??
                         //'usuimagen' => $respuesta->RespUsuarios[0]->getTxusuimagen(), 
-                        'usuimagen' => "DUMMY", 
-                        'usufecnac' => $respuesta->RespUsuarios[0]->getFeusunacimiento(),
+                        'usuimagen' => base64_decode($respuesta->RespUsuarios[0]->getTxusuimagen()), 
+                        'usufecnac' => $fecha,
                         'usulugar' => $lugar->getInlugar(), 
                         'usunomlugar' => $lugar->getTxlugnombre(),
+                        'usupromcalifica' => $respuesta->getPromCalificaciones(),
                         'comentarios' => $respuesta->getArrCalificaciones(),
-                        'grupos' => $respuesta->getArrGrupos(),
                         'resumen' => array('ejemplares' => '5', 'vendidos' => '4', 'comprados' => '0', 
                             'cambiados' => '3', 'donados' => '1'),
-                        'preferencias' => array('generos' => array(array('genero'=>'Genero 1'), array('genero'=>'Genero 2') ), 
-                            'autores' => array(array('autor'=>'Autor 1'), array('autor'=>'Autor 2') ), 
-                            'editoriales' => array(array('editorial'=>'editorial 1'), array('editorial'=>'editorial 2') ))))
+                        'preferencias' => array('generos' => 'Genero 1, Genero 2',
+                            'autores' => 'Autor 1, Autor 2', 
+                            'editoriales' => 'editorial 1, editorial 2')))
                 );
         } catch (Exception $ex) {
                 return AccesoController::inPlatCai;

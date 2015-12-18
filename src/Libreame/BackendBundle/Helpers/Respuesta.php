@@ -45,6 +45,8 @@ class Respuesta {
     private $pTxMensaje; //Mensaje recibido (La plataforma publica el ejemplar)
     private $pFeMensaje; //Fecha Mensaje recibido (La plataforma publica el ejemplar)
     private $pIdPadre; //Id Mensaje padre del hilo
+    private $pPromCalificaciones; //Id Mensaje padre del hilo
+    
     /*
      *  Bloque de getter para los atributos de la clase
      */
@@ -189,6 +191,11 @@ class Respuesta {
     public function getIdPadre()
     {
         return $this->pIdPadre;
+    }   
+
+    public function getPromCalificaciones()
+    {
+        return $this->pPromCalificaciones;
     }   
 
     /*
@@ -363,6 +370,12 @@ class Respuesta {
     public function setIdPadre($pIdPadre)
     {
         $this->pIdPadre = $pIdPadre;
+        return $this;
+    }   
+
+    public function setPromCalificaciones($pPromCalifica)
+    {
+        $this->pPromCalificaciones = $pPromCalifica = "4";
         return $this;
     }   
 

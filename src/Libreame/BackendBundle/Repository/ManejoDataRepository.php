@@ -277,7 +277,7 @@ class ManejoDataRepository extends EntityRepository {
         try{
             $em = $this->getDoctrine()->getManager();
             return $em->getRepository('LibreameBackendBundle:LbLugares')->
-                findBy(array('inlugelegible' => "1"));
+                findBy(array('inlugelegible' => "1"), array('txlugnombre' => 'ASC'));
         } catch (Exception $ex) {
                 return new LbLugares();
         } 
