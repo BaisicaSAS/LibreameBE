@@ -41,7 +41,8 @@ class GestionUsuarios {
                 $usuario = ManejoDataRepository::getUsuarioByEmail($psolicitud->getEmail());
                 if ($usuario != NULL) 
                 {
-                    $calificaciones = ManejoDataRepository::getCalificaUsuarioRecibidas($usuario);
+                    $calificacionesRec = ManejoDataRepository::getCalificaUsuarioRecibidas($usuario);
+                    $calificacionesRea = ManejoDataRepository::getCalificaUsuarioRealizadas($usuario);
                     //echo "<script>alert('RESP cali ".count($califica)." ')</script>";
                     $grupos = ManejoDataRepository::getGruposUsuario($usuario);
                     //echo "<script>alert('RESP grup ".count($grupos)." ')</script>";
@@ -63,7 +64,7 @@ class GestionUsuarios {
                     //echo "<script>alert('ALEX ".$respuesta->RespUsuarios[0]->getTxusunombre()." ')</script>";
                     
                     $arrCalifica = array();
-                    foreach ($calificaciones as $califica) {
+                    foreach ($calificacionesRec as $califica) {
                        $arrCalifica[] = array("idcalifica"=>$califica->getIncalificacion(),
                                             "idusrcalif" => $califica->getIncalusucalifica()->getInusuario(),
                                             "nomusrcalif" => $califica->getIncalusucalifica()->getTxusunommostrar(),
@@ -72,7 +73,18 @@ class GestionUsuarios {
                                             "fecha" => $califica->getfeFecha()->format('d/m/Y H:i:s'));
                     }
                     
-                    $respuesta->setArrCalificaciones($arrCalifica);
+                    $arrCalificaRea = array();
+                    foreach ($calificacionesRea as $califica) {
+                    $arrCalificaRea[] = array("idcalifica"=>$califica->getIncalificacion(),
+                                            "idusrcalif" => $califica->getIncalusucalifica()->getInusuario(),
+                                            "nomusrcalif" => $califica->getIncalusucalifica()->getTxusunommostrar(),
+                                            "incalificacion" => $califica->getIncalcalificacion(),
+                                            "comentario" => $califica->getTxcalobservacion(),
+                                            "fecha" => $califica->getfeFecha()->format('d/m/Y H:i:s'));
+                    }
+                    
+                    $respuesta->setArrCalificacionesRec($arrCalifica);
+                    $respuesta->setArrCalificacionesRea($arrCalificaRea);
                     $respuesta->setArrGrupos($grupos);
                 } else {
                     $usuario = new LbUsuarios();
