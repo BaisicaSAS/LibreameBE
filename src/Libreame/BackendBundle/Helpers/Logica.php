@@ -315,10 +315,12 @@ class Logica {
             if ($respuesta->getRespuesta()== AccesoController::inULogged){
                 $lugar = ManejoDataRepository::getLugar($respuesta->RespUsuarios[0]->getInusulugar());
             }
-
-            $fecha = $respuesta->RespUsuarios[0]->getFeusunacimiento()->format('d-m-Y');
             
-            
+            if ($respuesta->RespUsuarios[0]->getFeusunacimiento() == NULL) {
+                $fecha = "";
+            } else {
+                $fecha = $respuesta->RespUsuarios[0]->getFeusunacimiento()->format('d-m-Y');
+            }
             return array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
                     'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr(), 
                     'iddevice'=> $pSolicitud->getDeviceMac(), 'marca'=>$pSolicitud->getDeviceMarca(), 
@@ -337,7 +339,8 @@ class Logica {
                         'usulugar' => $lugar->getInlugar(), 
                         'usunomlugar' => $lugar->getTxlugnombre(),
                         'usupromcalifica' => $respuesta->getPromCalificaciones(),
-                        'comentarios' => $respuesta->getArrCalificaciones(),
+                        'comentariosreci' => $respuesta->getArrCalificaciones(),
+                        'comentariosreali' => $respuesta->getArrCalificaciones(),
                         'resumen' => array('ejemplares' => '5', 'vendidos' => '4', 'comprados' => '0', 
                             'cambiados' => '3', 'donados' => '1'),
                         'preferencias' => array('generos' => 'Genero 1, Genero 2',
