@@ -64,10 +64,10 @@ class LbLugares extends \Libreame\BackendBundle\Entity\LbLugares implements \Doc
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', 'inlugar', 'txlugcodigo', 'txlugnombre', 'inlugpadre');
+            return array('__isInitialized__', 'inlugar', 'txlugcodigo', 'txlugnombre', 'inlugpadre', 'inlugelegible');
         }
 
-        return array('__isInitialized__', 'inlugar', 'txlugcodigo', 'txlugnombre', 'inlugpadre');
+        return array('__isInitialized__', 'inlugar', 'txlugcodigo', 'txlugnombre', 'inlugpadre', 'inlugelegible');
     }
 
     /**
@@ -252,6 +252,28 @@ class LbLugares extends \Libreame\BackendBundle\Entity\LbLugares implements \Doc
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getInlugpadre', array());
 
         return parent::getInlugpadre();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setInlugelegible($inlugelegible)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setInlugelegible', array($inlugelegible));
+
+        return parent::setInlugelegible($inlugelegible);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getInlugelegible()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getInlugelegible', array());
+
+        return parent::getInlugelegible();
     }
 
 }

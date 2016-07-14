@@ -64,10 +64,10 @@ class LbEjemplares extends \Libreame\BackendBundle\Entity\LbEjemplares implement
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', 'inejemplar', 'inejecantidad', 'dbejeavaluo', 'inejelibro', 'inejeusudueno');
+            return array('__isInitialized__', 'inejemplar', 'inejecantidad', 'dbejeavaluo', 'inejelibro', 'inejeusudueno', 'txejeimagen');
         }
 
-        return array('__isInitialized__', 'inejemplar', 'inejecantidad', 'dbejeavaluo', 'inejelibro', 'inejeusudueno');
+        return array('__isInitialized__', 'inejemplar', 'inejecantidad', 'dbejeavaluo', 'inejelibro', 'inejeusudueno', 'txejeimagen');
     }
 
     /**
@@ -274,6 +274,28 @@ class LbEjemplares extends \Libreame\BackendBundle\Entity\LbEjemplares implement
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getInejeusudueno', array());
 
         return parent::getInejeusudueno();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setTxejeimagen($txejeimagen)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setTxejeimagen', array($txejeimagen));
+
+        return parent::setTxejeimagen($txejeimagen);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getTxejeimagen()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getTxejeimagen', array());
+
+        return parent::getTxejeimagen();
     }
 
 }

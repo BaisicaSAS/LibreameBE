@@ -64,10 +64,10 @@ class LbCalificausuarios extends \Libreame\BackendBundle\Entity\LbCalificausuari
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', 'incalificacion', 'incalcalificacion', 'txcalobservacion', 'incalreporteabuso', 'incalusucalifica', 'incalusucalificado');
+            return array('__isInitialized__', 'incalificacion', 'incalcalificacion', 'txcalobservacion', 'incalreporteabuso', 'incalusucalifica', 'incalusucalificado', 'fefecha');
         }
 
-        return array('__isInitialized__', 'incalificacion', 'incalcalificacion', 'txcalobservacion', 'incalreporteabuso', 'incalusucalifica', 'incalusucalificado');
+        return array('__isInitialized__', 'incalificacion', 'incalcalificacion', 'txcalobservacion', 'incalreporteabuso', 'incalusucalifica', 'incalusucalificado', 'fefecha');
     }
 
     /**
@@ -296,6 +296,28 @@ class LbCalificausuarios extends \Libreame\BackendBundle\Entity\LbCalificausuari
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getIncalusucalificado', array());
 
         return parent::getIncalusucalificado();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setFefecha($feefcha)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setFefecha', array($feefcha));
+
+        return parent::setFefecha($feefcha);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getFefecha()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getFefecha', array());
+
+        return parent::getFefecha();
     }
 
 }
