@@ -1,0 +1,91 @@
+Libreame\BackendBundle\Entity\LbNegociacion:
+    type: entity
+    table: lb_negociacion
+    indexes:
+        fk_lb_negociacion_lb_ejemplares1_idx:
+            columns:
+                - inNegEjemplar
+        fk_lb_negociacion_lb_usuarios1_idx:
+            columns:
+                - inNegUsuDuenho
+        fk_lb_negociacion_lb_usuarios2_idx:
+            columns:
+                - inNegUsuSolicita
+        fk_lb_negociacion_lb_usuarios3_idx:
+            columns:
+                - inNegUsuEscribe
+    id:
+        inidnegociacion:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: 'Id del chat de negociacion'
+            id: true
+            column: inIDNegociacion
+            generator:
+                strategy: IDENTITY
+    fields:
+        txnegmensaje:
+            type: text
+            nullable: false
+            length: null
+            fixed: false
+            comment: 'Texto del mensaje'
+            column: txNegMensaje
+        innegmensleido:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: 'Leido: 1, No leido : 0'
+            default: '0'
+            column: inNegMensLeido
+        fenegfechamens:
+            type: datetime
+            nullable: false
+            comment: 'Fecha y hora del mensaje'
+            column: feNegFechaMens
+        innegmenseliminado:
+            type: integer
+            nullable: true
+            unsigned: false
+            comment: 'Eliminado por remitente : 1, Eliminado por receptor : 2, No eliminado : 0'
+            default: '0'
+            column: inNegMensEliminado
+    manyToOne:
+        innegejemplar:
+            targetEntity: LbEjemplares
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                inNegEjemplar:
+                    referencedColumnName: inEjemplar
+            orphanRemoval: false
+        innegusuduenho:
+            targetEntity: LbUsuarios
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                inNegUsuDuenho:
+                    referencedColumnName: inUsuario
+            orphanRemoval: false
+        innegususolicita:
+            targetEntity: LbUsuarios
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                inNegUsuSolicita:
+                    referencedColumnName: inUsuario
+            orphanRemoval: false
+        innegusuescribe:
+            targetEntity: LbUsuarios
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                inNegUsuEscribe:
+                    referencedColumnName: inUsuario
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

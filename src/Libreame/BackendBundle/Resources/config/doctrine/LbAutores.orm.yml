@@ -1,0 +1,46 @@
+Libreame\BackendBundle\Entity\LbAutores:
+    type: entity
+    table: lb_autores
+    id:
+        inidautor:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: 'Id del autor'
+            id: true
+            column: inIdAutor
+            generator:
+                strategy: IDENTITY
+    fields:
+        txautnombre:
+            type: string
+            nullable: false
+            length: 100
+            fixed: false
+            comment: 'Nombre del autor'
+            column: txAutNombre
+        txautpais:
+            type: string
+            nullable: true
+            length: 100
+            fixed: false
+            comment: 'Nacionalidad del autor - se cambiara luego por un id'
+            column: txAutPais
+    manyToMany:
+        lbLibrosInlibro:
+            targetEntity: LbLibros
+            cascade: {  }
+            mappedBy: null
+            inversedBy: lbAutoresInidautor
+            joinTable:
+                name: lb_autoreslibros
+                joinColumns:
+                    -
+                        name: lb_autores_inIdAutor
+                        referencedColumnName: inIdAutor
+                inverseJoinColumns:
+                    -
+                        name: lb_libros_inLibro
+                        referencedColumnName: inLibro
+            orderBy: null
+    lifecycleCallbacks: {  }

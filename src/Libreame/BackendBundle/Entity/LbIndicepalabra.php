@@ -15,35 +15,35 @@ class LbIndicepalabra
     /**
      * @var integer
      *
-     * @ORM\Column(name="lbIndPalId", type="integer", nullable=false)
+     * @ORM\Column(name="lbIndPalId", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $lbindpalid;
+    private $lbindpalid;
 
     /**
      * @var string
      *
      * @ORM\Column(name="lbIndPalPalabra", type="string", length=100, nullable=false)
      */
-    protected $lbindpalpalabra;
+    private $lbindpalpalabra;
 
     /**
      * @var string
      *
      * @ORM\Column(name="lbIndPalIdioma", type="string", length=45, nullable=false)
      */
-    protected $lbindpalidioma;
+    private $lbindpalidioma;
 
     /**
-     * @var \LbLibros
+     * @var \Libreame\BackendBundle\Entity\LbLibros
      *
-     * @ORM\ManyToOne(targetEntity="LbLibros")
+     * @ORM\ManyToOne(targetEntity="Libreame\BackendBundle\Entity\LbLibros")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="lbIndPalLibro", referencedColumnName="inLibro")
      * })
      */
-    protected $lbindpallibro;
+    private $lbindpallibro;
 
 
 

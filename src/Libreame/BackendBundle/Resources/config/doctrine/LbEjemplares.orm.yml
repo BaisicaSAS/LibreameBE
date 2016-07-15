@@ -23,7 +23,7 @@ Libreame\BackendBundle\Entity\LbEjemplares:
             type: integer
             nullable: false
             unsigned: false
-            comment: 'En algun momento se va a ctivar la posibilidad de que un usuario pueda publicar varios ejemplares de un mismo libro'
+            comment: 'En algun momento se va a activar la posibilidad de que un usuario pueda publicar varios ejemplares de un mismo libro'
             default: '1'
             column: inEjeCantidad
         dbejeavaluo:
@@ -35,13 +35,54 @@ Libreame\BackendBundle\Entity\LbEjemplares:
             default: '0'
             column: dbEjeAvaluo
         txejeimagen:
-            type: blob
-            nullable: true
+            type: text
+            nullable: false
             length: null
             fixed: false
-            comment: 'imagen del ejemplar.'
+            comment: 'Guarda la url de la imagen'
             column: txEjeImagen
-            
+        inejepuntos:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: 'Puntos que cuesta el ejemplar'
+            default: '0'
+            column: inEjePuntos
+        inejepublicado:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: 'Indica si el ejemplar esta publicado : Publicado :1 / No publicado : 0'
+            default: '1'
+            column: inEjePublicado
+        inejebloqueado:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: 'Un ejemplar se bloquea cuando un usuario ya ha gastado sus puntos pero no ha entregado ningun ejemplar, entonces el sistema bloquea tantos ejemplares requiera para asegurar que el usuario no los baje de dotEx4read: No bloqueado : 0 , Bloqueado : 1'
+            default: '0'
+            column: inEjeBloqueado
+        inejeestado:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: 'Estado de 1 a 10: 10 Excelente 1 : Muy deteriorado'
+            default: '1'
+            column: inEjeEstado
+        inejecondicion:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: 'Condicion del ejemplar: 0: Nuevo / 1: Usado'
+            default: '1'
+            column: inEjeCondicion
+        inejesoloventa:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: 'Indica si el ejemplar solo esta disponible para venta - 1: solo venta, 2: Venta y cambio'
+            default: '0'
+            column: inEjeSoloventa
     manyToOne:
         inejelibro:
             targetEntity: LbLibros

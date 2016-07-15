@@ -1,0 +1,71 @@
+Libreame\BackendBundle\Entity\LbHistejemplar:
+    type: entity
+    table: lb_histejemplar
+    indexes:
+        fk_table1_lb_ejemplares2_idx:
+            columns:
+                - inHisEjeEjemplar
+        fk_lb_histEjemplar_lb_usuarios1_idx:
+            columns:
+                - inHisEjeUsuario
+        fk_lb_histEjemplar_lb_histEjemplar1_idx:
+            columns:
+                - inHisEjePadre
+    id:
+        inhistejemplar:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: 'Id del registro historico'
+            id: true
+            column: inHistEjemplar
+            generator:
+                strategy: IDENTITY
+    fields:
+        fehisejeregistro:
+            type: datetime
+            nullable: false
+            comment: 'Fecha del movimiento de historia del ejemplar'
+            column: feHisEjeRegistro
+        inhisejemovimiento:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: 'Movimiento que realiza el usuario = 1: Publicacion del ejemplar 2: Bloqueo del ejemplar (Lo hace el sistema, el usr que queda es el que debe), 3: Solicita ejemplar, 4: Entrega ejemplar: Puntos, 5: Recibe ejemplar: Puntos, 6: Activa - Ofrece, 7: Inactiva, 8: Comenta, 9: Me gusta, 10: No me gusta, 11: Cambia estado (mejora o empeora de 1 a 10), 12: Mejora contenido: Idioma, ISBN, Autor etc., 13: Baja del sistema, 14: Vista del ejemplar (Consulta del detalle),15: Vendio ejemplar (trato cerrado), 16: Compro ejemplar(trato cerrado), 17: Acepta solicitud de ejemplar '
+            default: '0'
+            column: inHisEjeMovimiento
+        inhisejemodoentrega:
+            type: integer
+            nullable: true
+            unsigned: false
+            comment: '0: En el domicilio, 1: Encontrandose, 3. Courrier local, 4: Courrier Nacional, 5: Courrier internacional'
+            column: inHisEjeModoEntrega
+    manyToOne:
+        inhisejepadre:
+            targetEntity: LbHistejemplar
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                inHisEjePadre:
+                    referencedColumnName: inHistEjemplar
+            orphanRemoval: false
+        inhisejeusuario:
+            targetEntity: LbUsuarios
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                inHisEjeUsuario:
+                    referencedColumnName: inUsuario
+            orphanRemoval: false
+        inhisejeejemplar:
+            targetEntity: LbEjemplares
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                inHisEjeEjemplar:
+                    referencedColumnName: inEjemplar
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

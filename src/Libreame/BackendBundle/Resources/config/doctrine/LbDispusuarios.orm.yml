@@ -19,35 +19,35 @@ Libreame\BackendBundle\Entity\LbDispusuarios:
         txdisid:
             type: string
             nullable: false
-            length: 45
+            length: 100
             fixed: false
             comment: 'Identificacion del dispositivo'
             column: txDisID
         txdisnombre:
             type: string
             nullable: true
-            length: 45
+            length: 100
             fixed: false
             comment: 'Nombre del dispositivo'
             column: txDisNombre
         txdismarca:
             type: string
             nullable: true
-            length: 45
+            length: 100
             fixed: false
             comment: 'Marca del dispositivo'
             column: txDisMarca
         txdismodelo:
             type: string
             nullable: true
-            length: 45
+            length: 100
             fixed: false
             comment: 'Modelo del dispositivo'
             column: txDisModelo
         txdisso:
             type: string
             nullable: true
-            length: 45
+            length: 100
             fixed: false
             comment: 'Sistema operativo del dispositivo'
             column: txDisSO

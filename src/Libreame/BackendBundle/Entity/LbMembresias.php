@@ -15,45 +15,45 @@ class LbMembresias
     /**
      * @var integer
      *
-     * @ORM\Column(name="inMembresia", type="integer", nullable=false)
+     * @ORM\Column(name="inMembresia", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $inmembresia;
+    private $inmembresia;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="inMemCreador", type="integer", nullable=false)
      */
-    protected $inmemcreador = '0';
+    private $inmemcreador;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="inMemActiva", type="integer", nullable=false)
      */
-    protected $inmemactiva = '1';
+    private $inmemactiva;
 
     /**
-     * @var \LbGrupos
+     * @var \Libreame\BackendBundle\Entity\LbGrupos
      *
-     * @ORM\ManyToOne(targetEntity="LbGrupos")
+     * @ORM\ManyToOne(targetEntity="Libreame\BackendBundle\Entity\LbGrupos")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="inMemGrupo", referencedColumnName="inGrupo")
      * })
      */
-    protected $inmemgrupo;
+    private $inmemgrupo;
 
     /**
-     * @var \LbUsuarios
+     * @var \Libreame\BackendBundle\Entity\LbUsuarios
      *
-     * @ORM\ManyToOne(targetEntity="LbUsuarios")
+     * @ORM\ManyToOne(targetEntity="Libreame\BackendBundle\Entity\LbUsuarios")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="inMemUsuario", referencedColumnName="inUsuario")
      * })
      */
-    protected $inmemusuario;
+    private $inmemusuario;
 
 
 

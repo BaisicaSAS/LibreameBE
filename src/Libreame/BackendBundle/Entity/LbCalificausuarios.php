@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * LbCalificausuarios
  *
- * @ORM\Table(name="lb_calificausuarios", indexes={@ORM\Index(name="fk_lb_calificausuarios_lb_usuarios1_idx", columns={"inCalUsuCalifica"}), @ORM\Index(name="fk_lb_calificausuarios_lb_usuarios2_idx", columns={"inCalUsuCalificado"})})
+ * @ORM\Table(name="lb_calificausuarios", indexes={@ORM\Index(name="fk_table1_lb_usuarios2_idx", columns={"inCalUsuCalificado"}), @ORM\Index(name="fk_lb_calificausuarios_lb_usuarios3_idx", columns={"inCalUsuCalifica"}), @ORM\Index(name="fk_lb_calificausuarios_lb_histEjemplar1_idx", columns={"inCalHisEjemplar"})})
  * @ORM\Entity
  */
 class LbCalificausuarios
@@ -15,69 +15,73 @@ class LbCalificausuarios
     /**
      * @var integer
      *
-     * @ORM\Column(name="inCalificacion", type="integer", nullable=false)
+     * @ORM\Column(name="inIDCalifica", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $incalificacion;
+    private $inidcalifica;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="inCalCalificacion", type="integer", nullable=false)
      */
-    protected $incalcalificacion;
+    private $incalcalificacion;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="txCalObservacion", type="string", length=500, nullable=true)
+     * @ORM\Column(name="txCalComentario", type="string", length=500, nullable=false)
      */
-    protected $txcalobservacion;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="inCalReporteAbuso", type="integer", nullable=false)
-     */
-    protected $incalreporteabuso = '0';
-
-    /**
-     * @var \LbUsuarios
-     *
-     * @ORM\ManyToOne(targetEntity="LbUsuarios")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="inCalUsuCalifica", referencedColumnName="inUsuario")
-     * })
-     */
-    protected $incalusucalifica;
-
-    /**
-     * @var \LbUsuarios
-     *
-     * @ORM\ManyToOne(targetEntity="LbUsuarios")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="inCalUsuCalificado", referencedColumnName="inUsuario")
-     * })
-     */
-    protected $incalusucalificado;
+    private $txcalcomentario;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="feFecha", type="datetime", nullable=false)
+     * @ORM\Column(name="feCalFecha", type="datetime", nullable=false)
      */
-    protected $fefecha;
+    private $fecalfecha;
+
+    /**
+     * @var \Libreame\BackendBundle\Entity\LbHistejemplar
+     *
+     * @ORM\ManyToOne(targetEntity="Libreame\BackendBundle\Entity\LbHistejemplar")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="inCalHisEjemplar", referencedColumnName="inHistEjemplar")
+     * })
+     */
+    private $incalhisejemplar;
+
+    /**
+     * @var \Libreame\BackendBundle\Entity\LbUsuarios
+     *
+     * @ORM\ManyToOne(targetEntity="Libreame\BackendBundle\Entity\LbUsuarios")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="inCalUsuCalifica", referencedColumnName="inUsuario")
+     * })
+     */
+    private $incalusucalifica;
+
+    /**
+     * @var \Libreame\BackendBundle\Entity\LbUsuarios
+     *
+     * @ORM\ManyToOne(targetEntity="Libreame\BackendBundle\Entity\LbUsuarios")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="inCalUsuCalificado", referencedColumnName="inUsuario")
+     * })
+     */
+    private $incalusucalificado;
+
 
 
     /**
-     * Get incalificacion
+     * Get inidcalifica
      *
      * @return integer 
      */
-    public function getIncalificacion()
+    public function getInidcalifica()
     {
-        return $this->incalificacion;
+        return $this->inidcalifica;
     }
 
     /**
@@ -104,49 +108,72 @@ class LbCalificausuarios
     }
 
     /**
-     * Set txcalobservacion
+     * Set txcalcomentario
      *
-     * @param string $txcalobservacion
+     * @param string $txcalcomentario
      * @return LbCalificausuarios
      */
-    public function setTxcalobservacion($txcalobservacion)
+    public function setTxcalcomentario($txcalcomentario)
     {
-        $this->txcalobservacion = $txcalobservacion;
+        $this->txcalcomentario = $txcalcomentario;
 
         return $this;
     }
 
     /**
-     * Get txcalobservacion
+     * Get txcalcomentario
      *
      * @return string 
      */
-    public function getTxcalobservacion()
+    public function getTxcalcomentario()
     {
-        return $this->txcalobservacion;
+        return $this->txcalcomentario;
     }
 
     /**
-     * Set incalreporteabuso
+     * Set fecalfecha
      *
-     * @param integer $incalreporteabuso
+     * @param \DateTime $fecalfecha
      * @return LbCalificausuarios
      */
-    public function setIncalreporteabuso($incalreporteabuso)
+    public function setFecalfecha($fecalfecha)
     {
-        $this->incalreporteabuso = $incalreporteabuso;
+        $this->fecalfecha = $fecalfecha;
 
         return $this;
     }
 
     /**
-     * Get incalreporteabuso
+     * Get fecalfecha
      *
-     * @return integer 
+     * @return \DateTime 
      */
-    public function getIncalreporteabuso()
+    public function getFecalfecha()
     {
-        return $this->incalreporteabuso;
+        return $this->fecalfecha;
+    }
+
+    /**
+     * Set incalhisejemplar
+     *
+     * @param \Libreame\BackendBundle\Entity\LbHistejemplar $incalhisejemplar
+     * @return LbCalificausuarios
+     */
+    public function setIncalhisejemplar(\Libreame\BackendBundle\Entity\LbHistejemplar $incalhisejemplar = null)
+    {
+        $this->incalhisejemplar = $incalhisejemplar;
+
+        return $this;
+    }
+
+    /**
+     * Get incalhisejemplar
+     *
+     * @return \Libreame\BackendBundle\Entity\LbHistejemplar 
+     */
+    public function getIncalhisejemplar()
+    {
+        return $this->incalhisejemplar;
     }
 
     /**
@@ -194,27 +221,4 @@ class LbCalificausuarios
     {
         return $this->incalusucalificado;
     }
-    
-    /**
-     * Set fefecha
-     *
-     * @param \DateTime $fefecha
-     * @return LbUsuarios
-     */
-    public function setFefecha($feefcha)
-    {
-        $this->fefecha = $fefecha;
-
-        return $this;
-    }
-
-    /**
-     * Get fefecha
-     *
-     * @return \DateTime 
-     */
-    public function getFefecha()
-    {
-        return $this->fefecha;
-    }    
 }

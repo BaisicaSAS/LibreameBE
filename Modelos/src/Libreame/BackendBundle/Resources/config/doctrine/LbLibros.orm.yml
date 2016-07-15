@@ -1,0 +1,136 @@
+Libreame\BackendBundle\Entity\LbLibros:
+    type: entity
+    table: lb_libros
+    indexes:
+        idx_tipopublica:
+            columns:
+                - txLibTipoPublica
+        idx_titulo:
+            columns:
+                - txLibTitulo
+        idx_editorial:
+            columns:
+                - txLibEditorial
+        idx_ISBN10:
+            columns:
+                - txLibCodigoOfic
+        idx_ISBN13:
+            columns:
+                - txLibCodigoOfic13
+    id:
+        inlibro:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: Id
+            id: true
+            column: inLibro
+            generator:
+                strategy: IDENTITY
+    fields:
+        txlibtipopublica:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: "Tipo publicacion\n0:Libro\n1:Revista....."
+            default: '0'
+            column: txLibTipoPublica
+        txlibtitulo:
+            type: string
+            nullable: false
+            length: 200
+            fixed: false
+            comment: 'Titulo del libro'
+            column: txLibTitulo
+        txlibautores:
+            type: string
+            nullable: true
+            length: 700
+            fixed: false
+            comment: 'Autores del libro separados por coma'
+            column: txLibAutores
+        txlibidioma:
+            type: string
+            nullable: false
+            length: 45
+            fixed: false
+            comment: 'Una tabla de idiomas o de parametros'
+            column: txLibIdioma
+        txlibeditorial:
+            type: string
+            nullable: true
+            length: 100
+            fixed: false
+            comment: 'Editorial que imprimió el libro'
+            column: txLibEditorial
+        txlibedicionanio:
+            type: string
+            nullable: true
+            length: 10
+            fixed: false
+            comment: 'Año de la edición'
+            column: txLibEdicionAnio
+        txlibedicionnum:
+            type: string
+            nullable: true
+            length: 10
+            fixed: false
+            comment: 'Número de la edicion'
+            column: txLibEdicionNum
+        txlibedicionpais:
+            type: string
+            nullable: true
+            length: 100
+            fixed: false
+            comment: 'País donde fue editado'
+            column: txLibEdicionPais
+        txediciondescripcion:
+            type: string
+            nullable: true
+            length: 45
+            fixed: false
+            comment: 'Descripcion de la edicion: Pasta dura...de lujo, etc'
+            column: txEdicionDescripcion
+        txlibcodigoofic:
+            type: string
+            nullable: true
+            length: 45
+            fixed: false
+            comment: 'ISBN - ISSN 10'
+            column: txLibCodigoOfic
+        txlibcodigoofic13:
+            type: string
+            nullable: true
+            length: 45
+            fixed: false
+            comment: 'ISBN - ISSN 13'
+            column: txLibCodigoOfic13
+        txlibresumen:
+            type: string
+            nullable: true
+            length: 300
+            fixed: false
+            comment: 'Muy pequeño Resumen del libro'
+            column: txLibResumen
+        txlibtomo:
+            type: string
+            nullable: true
+            length: 45
+            fixed: false
+            comment: 'Tomo o numero del libro'
+            column: txLibTomo
+        txlibvolumen:
+            type: string
+            nullable: true
+            length: 45
+            fixed: false
+            comment: 'Volumen del libro'
+            column: txLibVolumen
+        txpaginas:
+            type: string
+            nullable: true
+            length: 45
+            fixed: false
+            comment: 'Numero de páginas del libro'
+            column: txPaginas
+    lifecycleCallbacks: {  }

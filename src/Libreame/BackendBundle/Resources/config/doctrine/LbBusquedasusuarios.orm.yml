@@ -1,0 +1,41 @@
+Libreame\BackendBundle\Entity\LbBusquedasusuarios:
+    type: entity
+    table: lb_busquedasusuarios
+    indexes:
+        fk_lb_busquedasusuarios_lb_usuarios1_idx:
+            columns:
+                - inBusUsuario
+    id:
+        inbusqueda:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: 'Id de la busqueda'
+            id: true
+            column: inBusqueda
+            generator:
+                strategy: IDENTITY
+    fields:
+        txbuspalabra:
+            type: string
+            nullable: false
+            length: 100
+            fixed: false
+            comment: 'Palabra buscada'
+            column: txBusPalabra
+        febusfecha:
+            type: datetime
+            nullable: false
+            comment: 'Fecha en que se realiza la busqueda'
+            column: feBusFecha
+    manyToOne:
+        inbususuario:
+            targetEntity: LbUsuarios
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                inBusUsuario:
+                    referencedColumnName: inUsuario
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

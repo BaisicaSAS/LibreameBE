@@ -15,42 +15,42 @@ class LbLugares
     /**
      * @var integer
      *
-     * @ORM\Column(name="inLugar", type="integer", nullable=false)
+     * @ORM\Column(name="inLugar", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $inlugar;
+    private $inlugar;
 
     /**
      * @var string
      *
      * @ORM\Column(name="txLugCodigo", type="string", length=45, nullable=false)
      */
-    protected $txlugcodigo;
+    private $txlugcodigo;
 
     /**
      * @var string
      *
      * @ORM\Column(name="txLugNombre", type="string", length=100, nullable=false)
      */
-    protected $txlugnombre;
-
-    /**
-     * @var \LbLugares
-     *
-     * @ORM\ManyToOne(targetEntity="LbLugares")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="inLugPadre", referencedColumnName="inLugar")
-     * })
-     */
-    protected $inlugpadre;
+    private $txlugnombre;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="inLugElegible", type="integer", nullable=false)
      */
-    protected $inlugelegible = '0';
+    private $inlugelegible;
+
+    /**
+     * @var \Libreame\BackendBundle\Entity\LbLugares
+     *
+     * @ORM\ManyToOne(targetEntity="Libreame\BackendBundle\Entity\LbLugares")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="inLugPadre", referencedColumnName="inLugar")
+     * })
+     */
+    private $inlugpadre;
 
 
 
@@ -111,31 +111,6 @@ class LbLugares
     }
 
     /**
-     * Set inlugpadre
-     *
-     * @param \Libreame\BackendBundle\Entity\LbLugares $inlugpadre
-     * @return LbLugares
-     */
-    public function setInlugpadre(\Libreame\BackendBundle\Entity\LbLugares $inlugpadre = null)
-    {
-        $this->inlugpadre = $inlugpadre;
-
-        return $this;
-    }
-
-    /**
-     * Get inlugpadre
-     *
-     * @return \Libreame\BackendBundle\Entity\LbLugares 
-     */
-    public function getInlugpadre()
-    {
-        return $this->inlugpadre;
-    }
-    
-    
-    
-        /**
      * Set inlugelegible
      *
      * @param integer $inlugelegible
@@ -158,4 +133,26 @@ class LbLugares
         return $this->inlugelegible;
     }
 
+    /**
+     * Set inlugpadre
+     *
+     * @param \Libreame\BackendBundle\Entity\LbLugares $inlugpadre
+     * @return LbLugares
+     */
+    public function setInlugpadre(\Libreame\BackendBundle\Entity\LbLugares $inlugpadre = null)
+    {
+        $this->inlugpadre = $inlugpadre;
+
+        return $this;
+    }
+
+    /**
+     * Get inlugpadre
+     *
+     * @return \Libreame\BackendBundle\Entity\LbLugares 
+     */
+    public function getInlugpadre()
+    {
+        return $this->inlugpadre;
+    }
 }

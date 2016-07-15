@@ -1,0 +1,37 @@
+Libreame\BackendBundle\Entity\LbEditoriales:
+    type: entity
+    table: lb_editoriales
+    id:
+        inideditorial:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: 'Id de la editorial'
+            id: true
+            column: inIdEditorial
+            generator:
+                strategy: IDENTITY
+    fields:
+        txedinombre:
+            type: string
+            nullable: false
+            length: 100
+            fixed: false
+            comment: 'Nombre de la editorial'
+            column: txEdiNombre
+        txedipais:
+            type: string
+            nullable: true
+            length: 100
+            fixed: false
+            comment: 'Pais de la editorial-se cambiara luego por un ID '
+            column: txEdiPais
+    manyToMany:
+        inediliblibro:
+            targetEntity: LbLibros
+            cascade: {  }
+            mappedBy: inedilibroeditorial
+            inversedBy: null
+            joinTable: null
+            orderBy: null
+    lifecycleCallbacks: {  }

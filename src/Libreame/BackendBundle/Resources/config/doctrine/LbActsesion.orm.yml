@@ -28,7 +28,7 @@ Libreame\BackendBundle\Entity\LbActsesion:
             nullable: false
             length: 500
             fixed: false
-            comment: 'Mensaje de exito / fallo de la acción'
+            comment: 'Mensaje de exito / fallo de la accion'
             column: txActMensaje
         feactfecha:
             type: datetime

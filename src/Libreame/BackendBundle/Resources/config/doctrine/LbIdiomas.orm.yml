@@ -1,0 +1,22 @@
+Libreame\BackendBundle\Entity\LbIdiomas:
+    type: entity
+    table: lb_idiomas
+    id:
+        inididioma:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: 'Id del idioma'
+            id: true
+            column: inIdIdioma
+            generator:
+                strategy: IDENTITY
+    fields:
+        txidinombre:
+            type: string
+            nullable: false
+            length: 100
+            fixed: false
+            comment: 'Nombre del idioma'
+            column: txIdiNombre
+    lifecycleCallbacks: {  }

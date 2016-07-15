@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * LbLibros
  *
- * @ORM\Table(name="lb_libros", indexes={@ORM\Index(name="idx_tipopublica", columns={"txLibTipoPublica"}), @ORM\Index(name="idx_titulo", columns={"txLibTitulo"}), @ORM\Index(name="idx_editorial", columns={"txLibEditorial"}), @ORM\Index(name="idx_ISBN10", columns={"txLibCodigoOfic"}), @ORM\Index(name="idx_ISBN13", columns={"txLibCodigoOfic13"})})
+ * @ORM\Table(name="lb_libros", indexes={@ORM\Index(name="idx_tipopublica", columns={"txLibTipoPublica"}), @ORM\Index(name="idx_titulo", columns={"txLibTitulo"}), @ORM\Index(name="idx_ISBN10", columns={"txLibCodigoOfic"}), @ORM\Index(name="idx_ISBN13", columns={"txLibCodigoOfic13"}), @ORM\Index(name="fk_lb_libros_lb_titulos1_idx", columns={"inLibTitTitulo"}), @ORM\Index(name="fk_lb_libros_lb_idiomas1_idx", columns={"inLibIdioma"})})
  * @ORM\Entity
  */
 class LbLibros
@@ -15,117 +15,146 @@ class LbLibros
     /**
      * @var integer
      *
-     * @ORM\Column(name="inLibro", type="integer", nullable=false)
+     * @ORM\Column(name="inLibro", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $inlibro;
+    private $inlibro;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="txLibTipoPublica", type="integer", nullable=false)
      */
-    private $txlibtipopublica = '0';
+    private $txlibtipopublica;
 
     /**
      * @var string
      *
      * @ORM\Column(name="txLibTitulo", type="string", length=200, nullable=false)
      */
-    protected $txlibtitulo;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="txLibAutores", type="string", length=700, nullable=true)
-     */
-    protected $txlibautores;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="txLibIdioma", type="string", length=45, nullable=false)
-     */
-    protected $txlibidioma;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="txLibEditorial", type="string", length=100, nullable=true)
-     */
-    protected $txlibeditorial;
+    private $txlibtitulo;
 
     /**
      * @var string
      *
      * @ORM\Column(name="txLibEdicionAnio", type="string", length=10, nullable=true)
      */
-    protected $txlibedicionanio;
+    private $txlibedicionanio;
 
     /**
      * @var string
      *
      * @ORM\Column(name="txLibEdicionNum", type="string", length=10, nullable=true)
      */
-    protected $txlibedicionnum;
+    private $txlibedicionnum;
 
     /**
      * @var string
      *
      * @ORM\Column(name="txLibEdicionPais", type="string", length=100, nullable=true)
      */
-    protected $txlibedicionpais;
+    private $txlibedicionpais;
 
     /**
      * @var string
      *
      * @ORM\Column(name="txEdicionDescripcion", type="string", length=45, nullable=true)
      */
-    protected $txediciondescripcion;
+    private $txediciondescripcion;
 
     /**
      * @var string
      *
      * @ORM\Column(name="txLibCodigoOfic", type="string", length=45, nullable=true)
      */
-    protected $txlibcodigoofic;
+    private $txlibcodigoofic;
 
     /**
      * @var string
      *
      * @ORM\Column(name="txLibCodigoOfic13", type="string", length=45, nullable=true)
      */
-    protected $txlibcodigoofic13;
+    private $txlibcodigoofic13;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="txLibResumen", type="string", length=300, nullable=true)
+     * @ORM\Column(name="txLibResumen", type="text", nullable=true)
      */
-    protected $txlibresumen;
+    private $txlibresumen;
 
     /**
      * @var string
      *
      * @ORM\Column(name="txLibTomo", type="string", length=45, nullable=true)
      */
-    protected $txlibtomo;
+    private $txlibtomo;
 
     /**
      * @var string
      *
      * @ORM\Column(name="txLibVolumen", type="string", length=45, nullable=true)
      */
-    protected $txlibvolumen;
+    private $txlibvolumen;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="txPaginas", type="string", length=45, nullable=true)
+     * @ORM\Column(name="txLibPaginas", type="string", length=45, nullable=true)
      */
-    protected $txpaginas;
+    private $txlibpaginas;
 
+    /**
+     * @var \Libreame\BackendBundle\Entity\LbIdiomas
+     *
+     * @ORM\ManyToOne(targetEntity="Libreame\BackendBundle\Entity\LbIdiomas")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="inLibIdioma", referencedColumnName="inIdIdioma")
+     * })
+     */
+    private $inlibidioma;
+
+    /**
+     * @var \Libreame\BackendBundle\Entity\LbTitulos
+     *
+     * @ORM\ManyToOne(targetEntity="Libreame\BackendBundle\Entity\LbTitulos")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="inLibTitTitulo", referencedColumnName="inIdTitulo")
+     * })
+     */
+    private $inlibtittitulo;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="Libreame\BackendBundle\Entity\LbAutores", mappedBy="lbLibrosInlibro")
+     */
+    private $lbAutoresInidautor;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="Libreame\BackendBundle\Entity\LbEditoriales", inversedBy="inediliblibro")
+     * @ORM\JoinTable(name="lb_editorialeslibros",
+     *   joinColumns={
+     *     @ORM\JoinColumn(name="inEdiLibLibro", referencedColumnName="inLibro")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="inEdiLibroEditorial", referencedColumnName="inIdEditorial")
+     *   }
+     * )
+     */
+    private $inedilibroeditorial;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->lbAutoresInidautor = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->inedilibroeditorial = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
 
     /**
@@ -182,75 +211,6 @@ class LbLibros
     public function getTxlibtitulo()
     {
         return $this->txlibtitulo;
-    }
-
-    /**
-     * Set txlibautores
-     *
-     * @param string $txlibautores
-     * @return LbLibros
-     */
-    public function setTxlibautores($txlibautores)
-    {
-        $this->txlibautores = $txlibautores;
-
-        return $this;
-    }
-
-    /**
-     * Get txlibautores
-     *
-     * @return string 
-     */
-    public function getTxlibautores()
-    {
-        return $this->txlibautores;
-    }
-
-    /**
-     * Set txlibidioma
-     *
-     * @param string $txlibidioma
-     * @return LbLibros
-     */
-    public function setTxlibidioma($txlibidioma)
-    {
-        $this->txlibidioma = $txlibidioma;
-
-        return $this;
-    }
-
-    /**
-     * Get txlibidioma
-     *
-     * @return string 
-     */
-    public function getTxlibidioma()
-    {
-        return $this->txlibidioma;
-    }
-
-    /**
-     * Set txlibeditorial
-     *
-     * @param string $txlibeditorial
-     * @return LbLibros
-     */
-    public function setTxlibeditorial($txlibeditorial)
-    {
-        $this->txlibeditorial = $txlibeditorial;
-
-        return $this;
-    }
-
-    /**
-     * Get txlibeditorial
-     *
-     * @return string 
-     */
-    public function getTxlibeditorial()
-    {
-        return $this->txlibeditorial;
     }
 
     /**
@@ -461,25 +421,137 @@ class LbLibros
     }
 
     /**
-     * Set txpaginas
+     * Set txlibpaginas
      *
-     * @param string $txpaginas
+     * @param string $txlibpaginas
      * @return LbLibros
      */
-    public function setTxpaginas($txpaginas)
+    public function setTxlibpaginas($txlibpaginas)
     {
-        $this->txpaginas = $txpaginas;
+        $this->txlibpaginas = $txlibpaginas;
 
         return $this;
     }
 
     /**
-     * Get txpaginas
+     * Get txlibpaginas
      *
      * @return string 
      */
-    public function getTxpaginas()
+    public function getTxlibpaginas()
     {
-        return $this->txpaginas;
+        return $this->txlibpaginas;
+    }
+
+    /**
+     * Set inlibidioma
+     *
+     * @param \Libreame\BackendBundle\Entity\LbIdiomas $inlibidioma
+     * @return LbLibros
+     */
+    public function setInlibidioma(\Libreame\BackendBundle\Entity\LbIdiomas $inlibidioma = null)
+    {
+        $this->inlibidioma = $inlibidioma;
+
+        return $this;
+    }
+
+    /**
+     * Get inlibidioma
+     *
+     * @return \Libreame\BackendBundle\Entity\LbIdiomas 
+     */
+    public function getInlibidioma()
+    {
+        return $this->inlibidioma;
+    }
+
+    /**
+     * Set inlibtittitulo
+     *
+     * @param \Libreame\BackendBundle\Entity\LbTitulos $inlibtittitulo
+     * @return LbLibros
+     */
+    public function setInlibtittitulo(\Libreame\BackendBundle\Entity\LbTitulos $inlibtittitulo = null)
+    {
+        $this->inlibtittitulo = $inlibtittitulo;
+
+        return $this;
+    }
+
+    /**
+     * Get inlibtittitulo
+     *
+     * @return \Libreame\BackendBundle\Entity\LbTitulos 
+     */
+    public function getInlibtittitulo()
+    {
+        return $this->inlibtittitulo;
+    }
+
+    /**
+     * Add lbAutoresInidautor
+     *
+     * @param \Libreame\BackendBundle\Entity\LbAutores $lbAutoresInidautor
+     * @return LbLibros
+     */
+    public function addLbAutoresInidautor(\Libreame\BackendBundle\Entity\LbAutores $lbAutoresInidautor)
+    {
+        $this->lbAutoresInidautor[] = $lbAutoresInidautor;
+
+        return $this;
+    }
+
+    /**
+     * Remove lbAutoresInidautor
+     *
+     * @param \Libreame\BackendBundle\Entity\LbAutores $lbAutoresInidautor
+     */
+    public function removeLbAutoresInidautor(\Libreame\BackendBundle\Entity\LbAutores $lbAutoresInidautor)
+    {
+        $this->lbAutoresInidautor->removeElement($lbAutoresInidautor);
+    }
+
+    /**
+     * Get lbAutoresInidautor
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getLbAutoresInidautor()
+    {
+        return $this->lbAutoresInidautor;
+    }
+
+    /**
+     * Add inedilibroeditorial
+     *
+     * @param \Libreame\BackendBundle\Entity\LbEditoriales $inedilibroeditorial
+     * @return LbLibros
+     */
+    public function addInedilibroeditorial(\Libreame\BackendBundle\Entity\LbEditoriales $inedilibroeditorial)
+    {
+        $this->inedilibroeditorial[] = $inedilibroeditorial;
+
+        return $this;
+    }
+
+    /**
+     * Remove inedilibroeditorial
+     *
+     * @param \Libreame\BackendBundle\Entity\LbEditoriales $inedilibroeditorial
+     */
+    public function removeInedilibroeditorial(\Libreame\BackendBundle\Entity\LbEditoriales $inedilibroeditorial)
+    {
+        $this->inedilibroeditorial->removeElement($inedilibroeditorial);
+    }
+
+    /**
+     * Get inedilibroeditorial
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getInedilibroeditorial()
+    {
+        return $this->inedilibroeditorial;
     }
 }

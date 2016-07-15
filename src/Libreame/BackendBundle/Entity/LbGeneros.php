@@ -15,18 +15,18 @@ class LbGeneros
     /**
      * @var integer
      *
-     * @ORM\Column(name="inGenero", type="integer", nullable=false)
+     * @ORM\Column(name="inGenero", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $ingenero;
+    private $ingenero;
 
     /**
      * @var string
      *
      * @ORM\Column(name="txGenNombre", type="string", length=100, nullable=false)
      */
-    protected $txgennombre;
+    private $txgennombre;
 
 
 

@@ -3,8 +3,6 @@
 namespace Libreame\BackendBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Libreame\BackendBundle\Helpers\Logica;
-use Libreame\BackendBundle\Controller\AccesoController;
 
 /**
  * LbUsuarios
@@ -14,7 +12,6 @@ use Libreame\BackendBundle\Controller\AccesoController;
  */
 class LbUsuarios
 {
-
     /**
      * @var integer
      *
@@ -22,77 +19,91 @@ class LbUsuarios
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $inusuario;
+    private $inusuario;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="txUsuEmail", type="string", length=100, nullable=false)
+     * @ORM\Column(name="txUsuEmail", type="string", length=200, nullable=false)
      */
-    protected $txusuemail;
+    private $txusuemail;
 
     /**
      * @var string
      *
      * @ORM\Column(name="txUsuTelefono", type="string", length=200, nullable=false)
      */
-    protected $txusutelefono = '0';
+    private $txusutelefono;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="txUsuNombre", type="string", length=100, nullable=false)
+     * @ORM\Column(name="txUsuNombre", type="string", length=300, nullable=false)
      */
-    protected $txusunombre;
+    private $txusunombre;
 
     /**
      * @var integer
-     * Default 2: Genero sin especificar
+     *
      * @ORM\Column(name="inUsuGenero", type="integer", nullable=false)
      */
-    protected $inusugenero = 2;
-
-    /**
-     * @var blob
-     *
-     * @ORM\Column(name="txUsuImagen", type="blob", nullable=false)
-     */
-    protected $txusuimagen;
+    private $inusugenero;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="txUsuNomMostrar", type="string", length=20, nullable=true)
+     * @ORM\Column(name="txUsuImagen", type="text", nullable=false)
      */
-    protected $txusunommostrar;
+    private $txusuimagen;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="txUsuNomMostrar", type="string", length=300, nullable=true)
+     */
+    private $txusunommostrar;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="feUsuNacimiento", type="datetime", nullable=true)
      */
-    protected $feusunacimiento;
+    private $feusunacimiento;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="txUsuValidacion", type="string", length=200, nullable=true)
+     * @ORM\Column(name="txUsuValidacion", type="string", length=300, nullable=true)
      */
-    protected $txusuvalidacion;
+    private $txusuvalidacion;
 
     /**
      * @var integer
-     * Default: 0: Esperando confirmación
+     *
      * @ORM\Column(name="inUsuEstado", type="integer", nullable=false)
      */
-    protected $inusuestado = 0;
+    private $inusuestado;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="txUsuClave", type="string", length=256, nullable=false)
+     * @ORM\Column(name="txUsuClave", type="string", length=300, nullable=false)
      */
-    protected $txusuclave;
+    private $txusuclave;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="feFecRegistro", type="datetime", nullable=false)
+     */
+    private $fefecregistro;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="feUsuUltIngreso", type="datetime", nullable=false)
+     */
+    private $feusuultingreso;
 
     /**
      * @var \Libreame\BackendBundle\Entity\LbLugares
@@ -102,7 +113,7 @@ class LbUsuarios
      *   @ORM\JoinColumn(name="inUsuLugar", referencedColumnName="inLugar")
      * })
      */
-    protected $inusulugar;
+    private $inusulugar;
 
 
 
@@ -347,6 +358,52 @@ class LbUsuarios
     }
 
     /**
+     * Set fefecregistro
+     *
+     * @param \DateTime $fefecregistro
+     * @return LbUsuarios
+     */
+    public function setFefecregistro($fefecregistro)
+    {
+        $this->fefecregistro = $fefecregistro;
+
+        return $this;
+    }
+
+    /**
+     * Get fefecregistro
+     *
+     * @return \DateTime 
+     */
+    public function getFefecregistro()
+    {
+        return $this->fefecregistro;
+    }
+
+    /**
+     * Set feusuultingreso
+     *
+     * @param \DateTime $feusuultingreso
+     * @return LbUsuarios
+     */
+    public function setFeusuultingreso($feusuultingreso)
+    {
+        $this->feusuultingreso = $feusuultingreso;
+
+        return $this;
+    }
+
+    /**
+     * Get feusuultingreso
+     *
+     * @return \DateTime 
+     */
+    public function getFeusuultingreso()
+    {
+        return $this->feusuultingreso;
+    }
+
+    /**
      * Set inusulugar
      *
      * @param \Libreame\BackendBundle\Entity\LbLugares $inusulugar
@@ -368,9 +425,8 @@ class LbUsuarios
     {
         return $this->inusulugar;
     }
-
     
-    //Constructor de la clase
+        //Constructor de la clase
     function __construct(){ 
         $strBlanco = "";
         $this->txusuemail = $strBlanco;
@@ -407,5 +463,5 @@ class LbUsuarios
             return $usuario;
         }
     }
-    
+
 }

@@ -2,20 +2,23 @@ Libreame\BackendBundle\Entity\LbCalificausuarios:
     type: entity
     table: lb_calificausuarios
     indexes:
-        fk_lb_calificausuarios_lb_usuarios1_idx:
-            columns:
-                - inCalUsuCalifica
-        fk_lb_calificausuarios_lb_usuarios2_idx:
+        fk_table1_lb_usuarios2_idx:
             columns:
                 - inCalUsuCalificado
+        fk_lb_calificausuarios_lb_usuarios3_idx:
+            columns:
+                - inCalUsuCalifica
+        fk_lb_calificausuarios_lb_histEjemplar1_idx:
+            columns:
+                - inCalHisEjemplar
     id:
-        incalificacion:
+        inidcalifica:
             type: integer
             nullable: false
             unsigned: false
-            comment: Id
+            comment: 'Id del registro de calificacion'
             id: true
-            column: inCalificacion
+            column: inIDCalifica
             generator:
                 strategy: IDENTITY
     fields:
@@ -23,28 +26,32 @@ Libreame\BackendBundle\Entity\LbCalificausuarios:
             type: integer
             nullable: false
             unsigned: false
-            comment: 'Calificación otorgada de 1 a 5'
+            comment: 'CAlificacion otorgada de 1 a 5'
+            default: '1'
             column: inCalCalificacion
-        txcalobservacion:
+        txcalcomentario:
             type: string
-            nullable: true
+            nullable: false
             length: 500
             fixed: false
-            comment: 'Comentario anexo a la calificacion'
-            column: txCalObservacion
-        incalreporteabuso:
-            type: integer
-            nullable: false
-            unsigned: false
-            comment: "0: No es reporte de abuso\n1: Si es reporte de abuso"
-            default: '0'
-            column: inCalReporteAbuso
-        fefecha:
+            comment: 'Comentario realizado justificando la calificacion'
+            default: Ninguno
+            column: txCalComentario
+        fecalfecha:
             type: datetime
             nullable: false
-            comment: 'Fecha calificacion'
-            column: feFecha
+            comment: 'Fecha en que califica'
+            column: feCalFecha
     manyToOne:
+        incalhisejemplar:
+            targetEntity: LbHistejemplar
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                inCalHisEjemplar:
+                    referencedColumnName: inHistEjemplar
+            orphanRemoval: false
         incalusucalifica:
             targetEntity: LbUsuarios
             cascade: {  }

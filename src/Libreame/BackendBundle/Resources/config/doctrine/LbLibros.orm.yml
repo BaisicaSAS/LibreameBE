@@ -8,15 +8,18 @@ Libreame\BackendBundle\Entity\LbLibros:
         idx_titulo:
             columns:
                 - txLibTitulo
-        idx_editorial:
-            columns:
-                - txLibEditorial
         idx_ISBN10:
             columns:
                 - txLibCodigoOfic
         idx_ISBN13:
             columns:
                 - txLibCodigoOfic13
+        fk_lb_libros_lb_titulos1_idx:
+            columns:
+                - inLibTitTitulo
+        fk_lb_libros_lb_idiomas1_idx:
+            columns:
+                - inLibIdioma
     id:
         inlibro:
             type: integer
@@ -32,7 +35,7 @@ Libreame\BackendBundle\Entity\LbLibros:
             type: integer
             nullable: false
             unsigned: false
-            comment: "Tipo publicacion\n0:Libro\n1:Revista....."
+            comment: 'Tipo publicacion 0:Libro 1:Revista.....'
             default: '0'
             column: txLibTipoPublica
         txlibtitulo:
@@ -42,47 +45,26 @@ Libreame\BackendBundle\Entity\LbLibros:
             fixed: false
             comment: 'Titulo del libro'
             column: txLibTitulo
-        txlibautores:
-            type: string
-            nullable: true
-            length: 700
-            fixed: false
-            comment: 'Autores del libro separados por coma'
-            column: txLibAutores
-        txlibidioma:
-            type: string
-            nullable: false
-            length: 45
-            fixed: false
-            comment: 'Una tabla de idiomas o de parametros'
-            column: txLibIdioma
-        txlibeditorial:
-            type: string
-            nullable: true
-            length: 100
-            fixed: false
-            comment: 'Editorial que imprimió el libro'
-            column: txLibEditorial
         txlibedicionanio:
             type: string
             nullable: true
             length: 10
             fixed: false
-            comment: 'Año de la edición'
+            comment: 'Anho de la edicion'
             column: txLibEdicionAnio
         txlibedicionnum:
             type: string
             nullable: true
             length: 10
             fixed: false
-            comment: 'Número de la edicion'
+            comment: 'Numero de la edicion'
             column: txLibEdicionNum
         txlibedicionpais:
             type: string
             nullable: true
             length: 100
             fixed: false
-            comment: 'País donde fue editado'
+            comment: 'Pais donde fue editado'
             column: txLibEdicionPais
         txediciondescripcion:
             type: string
@@ -106,11 +88,11 @@ Libreame\BackendBundle\Entity\LbLibros:
             comment: 'ISBN - ISSN 13'
             column: txLibCodigoOfic13
         txlibresumen:
-            type: string
+            type: text
             nullable: true
-            length: 300
+            length: null
             fixed: false
-            comment: 'Muy pequeño Resumen del libro'
+            comment: 'Resumen del libro'
             column: txLibResumen
         txlibtomo:
             type: string
@@ -126,11 +108,54 @@ Libreame\BackendBundle\Entity\LbLibros:
             fixed: false
             comment: 'Volumen del libro'
             column: txLibVolumen
-        txpaginas:
+        txlibpaginas:
             type: string
             nullable: true
             length: 45
             fixed: false
-            comment: 'Numero de páginas del libro'
-            column: txPaginas
+            comment: 'Numero de paginas del libro'
+            column: txLibPaginas
+    manyToOne:
+        inlibidioma:
+            targetEntity: LbIdiomas
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                inLibIdioma:
+                    referencedColumnName: inIdIdioma
+            orphanRemoval: false
+        inlibtittitulo:
+            targetEntity: LbTitulos
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                inLibTitTitulo:
+                    referencedColumnName: inIdTitulo
+            orphanRemoval: false
+    manyToMany:
+        lbAutoresInidautor:
+            targetEntity: LbAutores
+            cascade: {  }
+            mappedBy: lbLibrosInlibro
+            inversedBy: null
+            joinTable: null
+            orderBy: null
+        inedilibroeditorial:
+            targetEntity: LbEditoriales
+            cascade: {  }
+            mappedBy: null
+            inversedBy: inediliblibro
+            joinTable:
+                name: lb_editorialeslibros
+                joinColumns:
+                    -
+                        name: inEdiLibLibro
+                        referencedColumnName: inLibro
+                inverseJoinColumns:
+                    -
+                        name: inEdiLibroEditorial
+                        referencedColumnName: inIdEditorial
+            orderBy: null
     lifecycleCallbacks: {  }

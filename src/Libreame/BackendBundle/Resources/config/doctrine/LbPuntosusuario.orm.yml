@@ -1,0 +1,60 @@
+Libreame\BackendBundle\Entity\LbPuntosusuario:
+    type: entity
+    table: lb_puntosusuario
+    indexes:
+        fk_lb_puntosusuario_lb_usuarios1_idx:
+            columns:
+                - inPuUsUsuario
+        fk_lb_puntosusuario_lb_histEjemplar1_idx:
+            columns:
+                - inPuUsHisEje
+    id:
+        inidpuus:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: 'Id del registro de puntos'
+            id: true
+            column: inIDPuUs
+            generator:
+                strategy: IDENTITY
+    fields:
+        inpuuscantpuntos:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: 'Cantidad de puntos otorgados: Positivo o negativo, diferente de cero '
+            default: '0'
+            column: inPuUsCantPuntos
+        txpuusmotivo:
+            type: string
+            nullable: false
+            length: 250
+            fixed: false
+            comment: 'Detalle del motivo de los puntos Sujeto a una transaccion'
+            column: txPuUsMotivo
+        fepuusfechapuntos:
+            type: datetime
+            nullable: false
+            comment: 'Fecha de movimiento de puntos'
+            column: fePuUsFechaPuntos
+    manyToOne:
+        inpuushiseje:
+            targetEntity: LbHistejemplar
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                inPuUsHisEje:
+                    referencedColumnName: inHistEjemplar
+            orphanRemoval: false
+        inpuususuario:
+            targetEntity: LbUsuarios
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                inPuUsUsuario:
+                    referencedColumnName: inUsuario
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

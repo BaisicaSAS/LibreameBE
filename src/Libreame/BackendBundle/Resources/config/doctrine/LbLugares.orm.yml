@@ -10,7 +10,7 @@ Libreame\BackendBundle\Entity\LbLugares:
             type: integer
             nullable: false
             unsigned: false
-            comment: 'Id Automático'
+            comment: 'Id Automatico'
             id: true
             column: inLugar
             generator:
@@ -21,7 +21,7 @@ Libreame\BackendBundle\Entity\LbLugares:
             nullable: false
             length: 45
             fixed: false
-            comment: 'Código del lugar: Ejemplo en Colombia DIVIPOLA'
+            comment: 'Codigo del lugar: Ejemplo en Colombia DIVIPOLA'
             column: txLugCodigo
         txlugnombre:
             type: string

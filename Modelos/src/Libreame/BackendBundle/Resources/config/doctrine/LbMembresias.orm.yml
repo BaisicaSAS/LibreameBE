@@ -1,0 +1,55 @@
+Libreame\BackendBundle\Entity\LbMembresias:
+    type: entity
+    table: lb_membresias
+    indexes:
+        fk_lb_membresias_lb_usuarios_idx:
+            columns:
+                - inMemUsuario
+        fk_lb_membresias_lb_grupos1_idx:
+            columns:
+                - inMemGrupo
+    id:
+        inmembresia:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: Id
+            id: true
+            column: inMembresia
+            generator:
+                strategy: IDENTITY
+    fields:
+        inmemcreador:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: "Indica si el usuario es creador del grupo \n0: No - 1: Si"
+            default: '0'
+            column: inMemCreador
+        inmemactiva:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: "Indica si el usuario sigue siendo miembro del grupo, en principio no se tendrá en cuenta este campo\n0: Inactiva - 1:Activa"
+            default: '1'
+            column: inMemActiva
+    manyToOne:
+        inmemgrupo:
+            targetEntity: LbGrupos
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                inMemGrupo:
+                    referencedColumnName: inGrupo
+            orphanRemoval: false
+        inmemusuario:
+            targetEntity: LbUsuarios
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                inMemUsuario:
+                    referencedColumnName: inUsuario
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

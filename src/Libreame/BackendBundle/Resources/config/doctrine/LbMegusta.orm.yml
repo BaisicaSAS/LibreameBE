@@ -1,0 +1,53 @@
+Libreame\BackendBundle\Entity\LbMegusta:
+    type: entity
+    table: lb_megusta
+    indexes:
+        fk_table1_lb_ejemplares1_idx:
+            columns:
+                - inMegEjemplar
+        fk_lb_megusta_lb_usuarios1_idx:
+            columns:
+                - inMegUsuario
+    id:
+        inidmegusta:
+            type: bigint
+            nullable: false
+            unsigned: false
+            comment: 'Id del me gusta'
+            id: true
+            column: inIDMegusta
+            generator:
+                strategy: IDENTITY
+    fields:
+        inmegmegusta:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: 'Si a una persona le gusta un ejemplar y luego apaga el me gusta, queda con el registro, en la tabla: 1: Me gusta 0 : Ya no me gusta'
+            default: '1'
+            column: inMegMegusta
+        femegmegusta:
+            type: datetime
+            nullable: false
+            comment: 'Fecha en que indica que le gusta'
+            column: feMegMegusta
+    manyToOne:
+        inmegusuario:
+            targetEntity: LbUsuarios
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                inMegUsuario:
+                    referencedColumnName: inUsuario
+            orphanRemoval: false
+        inmegejemplar:
+            targetEntity: LbEjemplares
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                inMegEjemplar:
+                    referencedColumnName: inEjemplar
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

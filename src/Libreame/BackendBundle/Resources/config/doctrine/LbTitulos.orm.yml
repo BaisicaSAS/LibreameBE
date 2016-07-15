@@ -1,0 +1,22 @@
+Libreame\BackendBundle\Entity\LbTitulos:
+    type: entity
+    table: lb_titulos
+    id:
+        inidtitulo:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: 'Id del titulo'
+            id: true
+            column: inIdTitulo
+            generator:
+                strategy: IDENTITY
+    fields:
+        txtitntitulo:
+            type: string
+            nullable: false
+            length: 200
+            fixed: false
+            comment: 'Titulo general de la obra'
+            column: txTitNTitulo
+    lifecycleCallbacks: {  }

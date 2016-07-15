@@ -1,0 +1,65 @@
+Libreame\BackendBundle\Entity\LbPlanes:
+    type: entity
+    table: lb_planes
+    id:
+        inplan:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: 'Id del plan'
+            id: true
+            column: inPlan
+            generator:
+                strategy: IDENTITY
+    fields:
+        txplannombr:
+            type: string
+            nullable: false
+            length: 100
+            fixed: false
+            comment: 'Nombre del plan'
+            column: txPlanNombr
+        txplandescripcion:
+            type: text
+            nullable: true
+            length: null
+            fixed: false
+            comment: 'Descripcion del plan'
+            column: txPlanDescripcion
+        inplanvigente:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: 'Indica si un plan esta vigente para usar 0 : No vigente 1 : Vigente'
+            default: '1'
+            column: inPlanVigente
+        inplanfree:
+            type: integer
+            nullable: true
+            unsigned: false
+            comment: 'Indica si el plan es gratis'
+            default: '0'
+            column: inPlanFree
+        inplandiasfree:
+            type: integer
+            nullable: true
+            unsigned: false
+            comment: 'Cantidad de dias que esta gratis, si el 0, es gratis por siempre'
+            default: '0'
+            column: inPlanDiasFree
+        feplancreacion:
+            type: datetime
+            nullable: false
+            comment: 'FEcha en que se crea el plan '
+            column: fePlanCreacion
+        feplaninivigencia:
+            type: datetime
+            nullable: false
+            comment: 'Fecha de inicio de vigencia del plan'
+            column: fePlanIniVigencia
+        feplanfinvigencia:
+            type: datetime
+            nullable: true
+            comment: 'Si es ilimitado la fecha es 30 anhos adelante'
+            column: fePlanFinVigencia
+    lifecycleCallbacks: {  }

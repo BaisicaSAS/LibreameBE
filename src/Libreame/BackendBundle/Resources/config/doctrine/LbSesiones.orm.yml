@@ -19,7 +19,7 @@ Libreame\BackendBundle\Entity\LbSesiones:
         txsesnumero:
             type: string
             nullable: false
-            length: 45
+            length: 100
             fixed: false
             comment: 'ID o Numero de la sesion'
             column: txSesNumero
@@ -45,7 +45,7 @@ Libreame\BackendBundle\Entity\LbSesiones:
             nullable: false
             length: 30
             fixed: false
-            comment: 'Dirección IP desde donde se genera la sesion'
+            comment: 'Direccion IP desde donde se genera la sesion'
             default: 000.000.000.000
             column: txIPAddr
     manyToOne:

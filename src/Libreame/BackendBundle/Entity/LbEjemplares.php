@@ -15,53 +15,94 @@ class LbEjemplares
     /**
      * @var integer
      *
-     * @ORM\Column(name="inEjemplar", type="integer", nullable=false)
+     * @ORM\Column(name="inEjemplar", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $inejemplar;
+    private $inejemplar;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="inEjeCantidad", type="integer", nullable=false)
      */
-    protected $inejecantidad = '1';
+    private $inejecantidad;
 
     /**
      * @var float
      *
      * @ORM\Column(name="dbEjeAvaluo", type="float", precision=10, scale=0, nullable=false)
      */
-    protected $dbejeavaluo = '0';
+    private $dbejeavaluo;
 
     /**
-     * @var \LbLibros
+     * @var string
      *
-     * @ORM\ManyToOne(targetEntity="LbLibros")
+     * @ORM\Column(name="txEjeImagen", type="text", nullable=false)
+     */
+    private $txejeimagen;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="inEjePuntos", type="integer", nullable=false)
+     */
+    private $inejepuntos;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="inEjePublicado", type="integer", nullable=false)
+     */
+    private $inejepublicado;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="inEjeBloqueado", type="integer", nullable=false)
+     */
+    private $inejebloqueado;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="inEjeEstado", type="integer", nullable=false)
+     */
+    private $inejeestado;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="inEjeCondicion", type="integer", nullable=false)
+     */
+    private $inejecondicion;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="inEjeSoloventa", type="integer", nullable=false)
+     */
+    private $inejesoloventa;
+
+    /**
+     * @var \Libreame\BackendBundle\Entity\LbLibros
+     *
+     * @ORM\ManyToOne(targetEntity="Libreame\BackendBundle\Entity\LbLibros")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="inEjeLibro", referencedColumnName="inLibro")
      * })
      */
-    protected $inejelibro;
+    private $inejelibro;
 
     /**
-     * @var \LbUsuarios
+     * @var \Libreame\BackendBundle\Entity\LbUsuarios
      *
-     * @ORM\ManyToOne(targetEntity="LbUsuarios")
+     * @ORM\ManyToOne(targetEntity="Libreame\BackendBundle\Entity\LbUsuarios")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="inEjeUsuDueno", referencedColumnName="inUsuario")
      * })
      */
-    protected $inejeusudueno;
-
-    /**
-     * @var blob
-     *
-     * @ORM\Column(name="txEjeImagen", type="blob", nullable=true)
-     */
-    protected $txejeimagen;
-
+    private $inejeusudueno;
 
 
 
@@ -122,6 +163,167 @@ class LbEjemplares
     }
 
     /**
+     * Set txejeimagen
+     *
+     * @param string $txejeimagen
+     * @return LbEjemplares
+     */
+    public function setTxejeimagen($txejeimagen)
+    {
+        $this->txejeimagen = $txejeimagen;
+
+        return $this;
+    }
+
+    /**
+     * Get txejeimagen
+     *
+     * @return string 
+     */
+    public function getTxejeimagen()
+    {
+        return $this->txejeimagen;
+    }
+
+    /**
+     * Set inejepuntos
+     *
+     * @param integer $inejepuntos
+     * @return LbEjemplares
+     */
+    public function setInejepuntos($inejepuntos)
+    {
+        $this->inejepuntos = $inejepuntos;
+
+        return $this;
+    }
+
+    /**
+     * Get inejepuntos
+     *
+     * @return integer 
+     */
+    public function getInejepuntos()
+    {
+        return $this->inejepuntos;
+    }
+
+    /**
+     * Set inejepublicado
+     *
+     * @param integer $inejepublicado
+     * @return LbEjemplares
+     */
+    public function setInejepublicado($inejepublicado)
+    {
+        $this->inejepublicado = $inejepublicado;
+
+        return $this;
+    }
+
+    /**
+     * Get inejepublicado
+     *
+     * @return integer 
+     */
+    public function getInejepublicado()
+    {
+        return $this->inejepublicado;
+    }
+
+    /**
+     * Set inejebloqueado
+     *
+     * @param integer $inejebloqueado
+     * @return LbEjemplares
+     */
+    public function setInejebloqueado($inejebloqueado)
+    {
+        $this->inejebloqueado = $inejebloqueado;
+
+        return $this;
+    }
+
+    /**
+     * Get inejebloqueado
+     *
+     * @return integer 
+     */
+    public function getInejebloqueado()
+    {
+        return $this->inejebloqueado;
+    }
+
+    /**
+     * Set inejeestado
+     *
+     * @param integer $inejeestado
+     * @return LbEjemplares
+     */
+    public function setInejeestado($inejeestado)
+    {
+        $this->inejeestado = $inejeestado;
+
+        return $this;
+    }
+
+    /**
+     * Get inejeestado
+     *
+     * @return integer 
+     */
+    public function getInejeestado()
+    {
+        return $this->inejeestado;
+    }
+
+    /**
+     * Set inejecondicion
+     *
+     * @param integer $inejecondicion
+     * @return LbEjemplares
+     */
+    public function setInejecondicion($inejecondicion)
+    {
+        $this->inejecondicion = $inejecondicion;
+
+        return $this;
+    }
+
+    /**
+     * Get inejecondicion
+     *
+     * @return integer 
+     */
+    public function getInejecondicion()
+    {
+        return $this->inejecondicion;
+    }
+
+    /**
+     * Set inejesoloventa
+     *
+     * @param integer $inejesoloventa
+     * @return LbEjemplares
+     */
+    public function setInejesoloventa($inejesoloventa)
+    {
+        $this->inejesoloventa = $inejesoloventa;
+
+        return $this;
+    }
+
+    /**
+     * Get inejesoloventa
+     *
+     * @return integer 
+     */
+    public function getInejesoloventa()
+    {
+        return $this->inejesoloventa;
+    }
+
+    /**
      * Set inejelibro
      *
      * @param \Libreame\BackendBundle\Entity\LbLibros $inejelibro
@@ -166,27 +368,4 @@ class LbEjemplares
     {
         return $this->inejeusudueno;
     }
-    
-    /**
-     * Set txejeimagen
-     *
-     * @param string $txejeimagen
-     * @return LbEjemplares
-     */
-    public function setTxejeimagen($txejeimagen)
-    {
-        $this->txejeimagen = $txejeimagen;
-
-        return $this;
-    }
-
-    /**
-     * Get txejeimagen
-     *
-     * @return string 
-     */
-    public function getTxejeimagen()
-    {
-        return $this->txejeimagen;
-    }    
 }

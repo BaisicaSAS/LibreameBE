@@ -15,56 +15,56 @@ class LbSesiones
     /**
      * @var integer
      *
-     * @ORM\Column(name="inSesion", type="integer", nullable=false)
+     * @ORM\Column(name="inSesion", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $insesion;
+    private $insesion;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="txSesNumero", type="string", length=45, nullable=false)
+     * @ORM\Column(name="txSesNumero", type="string", length=100, nullable=false)
      */
-    protected $txsesnumero;
+    private $txsesnumero;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="inSesActiva", type="integer", nullable=false)
      */
-    protected $insesactiva = '1';
+    private $insesactiva;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="feSesFechaIni", type="datetime", nullable=false)
      */
-    protected $fesesfechaini;
+    private $fesesfechaini;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="feSesFechaFin", type="datetime", nullable=true)
      */
-    protected $fesesfechafin;
+    private $fesesfechafin;
 
     /**
      * @var string
      *
      * @ORM\Column(name="txIPAddr", type="string", length=30, nullable=false)
      */
-    protected $txipaddr = '000.000.000.000';
+    private $txipaddr;
 
     /**
-     * @var \LbDispusuarios
+     * @var \Libreame\BackendBundle\Entity\LbDispusuarios
      *
-     * @ORM\ManyToOne(targetEntity="LbDispusuarios")
+     * @ORM\ManyToOne(targetEntity="Libreame\BackendBundle\Entity\LbDispusuarios")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="inSesDispUsuario", referencedColumnName="inDispUsuario")
      * })
      */
-    protected $insesdispusuario;
+    private $insesdispusuario;
 
 
 

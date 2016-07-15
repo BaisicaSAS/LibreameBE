@@ -22,7 +22,7 @@ Libreame\BackendBundle\Entity\LbGrupos:
         fegrufecha:
             type: datetime
             nullable: false
-            comment: 'Fecha de creación del grupo'
+            comment: 'Fecha de creacion del grupo'
             column: feGruFecha
         ingrucantmiem:
             type: integer

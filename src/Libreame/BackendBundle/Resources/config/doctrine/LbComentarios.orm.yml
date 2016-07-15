@@ -1,0 +1,72 @@
+Libreame\BackendBundle\Entity\LbComentarios:
+    type: entity
+    table: lb_comentarios
+    indexes:
+        fk_lb_comentarios_lb_ejemplares1_idx:
+            columns:
+                - inComEjemplar
+        fk_lb_comentarios_lb_usuarios1_idx:
+            columns:
+                - inComUsuario
+        fk_lb_comentarios_lb_comentarios1_idx:
+            columns:
+                - inComComPadre
+    id:
+        inidcomentario:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: 'Id del comentario'
+            id: true
+            column: inIDComentario
+            generator:
+                strategy: IDENTITY
+    fields:
+        txcomcomentario:
+            type: text
+            nullable: false
+            length: null
+            fixed: false
+            comment: Comentario
+            column: txComComentario
+        fecomfeccomentario:
+            type: datetime
+            nullable: false
+            comment: 'Fecha del comentario'
+            column: feComFecComentario
+        incomactivo:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: 'Indica si el comentario esta activo o fue borrado : 1 Activo 0 : borrado-No mostrar'
+            default: '1'
+            column: inComActivo
+    manyToOne:
+        incomcompadre:
+            targetEntity: LbComentarios
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                inComComPadre:
+                    referencedColumnName: inIDComentario
+            orphanRemoval: false
+        incomejemplar:
+            targetEntity: LbEjemplares
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                inComEjemplar:
+                    referencedColumnName: inEjemplar
+            orphanRemoval: false
+        incomusuario:
+            targetEntity: LbUsuarios
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                inComUsuario:
+                    referencedColumnName: inUsuario
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

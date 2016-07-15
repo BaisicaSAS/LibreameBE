@@ -15,31 +15,31 @@ class LbGeneroslibros
     /**
      * @var integer
      *
-     * @ORM\Column(name="inGeneroLibro", type="integer", nullable=false)
+     * @ORM\Column(name="inGeneroLibro", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $ingenerolibro;
+    private $ingenerolibro;
 
     /**
-     * @var \LbGeneros
+     * @var \Libreame\BackendBundle\Entity\LbGeneros
      *
-     * @ORM\ManyToOne(targetEntity="LbGeneros")
+     * @ORM\ManyToOne(targetEntity="Libreame\BackendBundle\Entity\LbGeneros")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="inGLiGenero", referencedColumnName="inGenero")
      * })
      */
-    protected $ingligenero;
+    private $ingligenero;
 
     /**
-     * @var \LbLibros
+     * @var \Libreame\BackendBundle\Entity\LbLibros
      *
-     * @ORM\ManyToOne(targetEntity="LbLibros")
+     * @ORM\ManyToOne(targetEntity="Libreame\BackendBundle\Entity\LbLibros")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="inGLiLibro", referencedColumnName="inLibro")
      * })
      */
-    protected $inglilibro;
+    private $inglilibro;
 
 
 

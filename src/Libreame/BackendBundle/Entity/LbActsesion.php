@@ -15,49 +15,49 @@ class LbActsesion
     /**
      * @var integer
      *
-     * @ORM\Column(name="inActSesion", type="integer", nullable=false)
+     * @ORM\Column(name="inActSesion", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $inactsesion;
+    private $inactsesion;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="inActAccion", type="integer", nullable=false)
      */
-    protected $inactaccion = '0';
+    private $inactaccion;
 
     /**
      * @var string
      *
      * @ORM\Column(name="txActMensaje", type="string", length=500, nullable=false)
      */
-    protected $txactmensaje;
+    private $txactmensaje;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="feActFecha", type="datetime", nullable=false)
      */
-    protected $feactfecha;
+    private $feactfecha;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="inActFinalizada", type="integer", nullable=false)
      */
-    protected $inactfinalizada = '0';
+    private $inactfinalizada;
 
     /**
-     * @var \LbSesiones
+     * @var \Libreame\BackendBundle\Entity\LbSesiones
      *
-     * @ORM\ManyToOne(targetEntity="LbSesiones")
+     * @ORM\ManyToOne(targetEntity="Libreame\BackendBundle\Entity\LbSesiones")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="inActSesionDisUs", referencedColumnName="inSesion")
      * })
      */
-    protected $inactsesiondisus;
+    private $inactsesiondisus;
 
 
 

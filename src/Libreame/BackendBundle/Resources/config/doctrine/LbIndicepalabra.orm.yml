@@ -32,7 +32,7 @@ Libreame\BackendBundle\Entity\LbIndicepalabra:
             nullable: false
             length: 100
             fixed: false
-            comment: 'Palabra en minúscula'
+            comment: 'Palabra en minuscula'
             column: lbIndPalPalabra
         lbindpalidioma:
             type: string

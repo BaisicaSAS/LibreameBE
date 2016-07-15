@@ -15,32 +15,32 @@ class LbGrupos
     /**
      * @var integer
      *
-     * @ORM\Column(name="inGrupo", type="integer", nullable=false)
+     * @ORM\Column(name="inGrupo", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $ingrupo;
+    private $ingrupo;
 
     /**
      * @var string
      *
      * @ORM\Column(name="inGruNombre", type="string", length=200, nullable=false)
      */
-    protected $ingrunombre;
+    private $ingrunombre;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="feGruFecha", type="datetime", nullable=false)
      */
-    protected $fegrufecha;
+    private $fegrufecha;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="inGruCantMiem", type="integer", nullable=false)
      */
-    protected $ingrucantmiem = '0';
+    private $ingrucantmiem;
 
 
 

@@ -1,0 +1,51 @@
+Libreame\BackendBundle\Entity\LbPlanesusuarios:
+    type: entity
+    table: lb_planesusuarios
+    indexes:
+        fk_table1_lb_usuarios1_idx:
+            columns:
+                - inUsuPlan
+        fk_lb_planesusuarios_lb_planes1_idx:
+            columns:
+                - inPlUsPlanes
+    id:
+        inplanusuario:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: 'Id del plan de usuario'
+            id: true
+            column: inPlanUsuario
+            generator:
+                strategy: IDENTITY
+    fields:
+        feplusinicio:
+            type: datetime
+            nullable: false
+            comment: ''
+            column: fePlUsInicio
+        feplusfin:
+            type: datetime
+            nullable: false
+            comment: 'Cuando la vigencia sea ilimitada la fecha es 30 anhos adelante'
+            column: fePlUsFin
+    manyToOne:
+        inplusplanes:
+            targetEntity: LbPlanes
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                inPlUsPlanes:
+                    referencedColumnName: inPlan
+            orphanRemoval: false
+        inusuplan:
+            targetEntity: LbUsuarios
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                inUsuPlan:
+                    referencedColumnName: inUsuario
+            orphanRemoval: false
+    lifecycleCallbacks: {  }
