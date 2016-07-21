@@ -64,10 +64,10 @@ class LbLibros extends \Libreame\BackendBundle\Entity\LbLibros implements \Doctr
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', 'inlibro', 'txlibtipopublica', 'txlibtitulo', 'txlibautores', 'txlibidioma', 'txlibeditorial', 'txlibedicionanio', 'txlibedicionnum', 'txlibedicionpais', 'txediciondescripcion', 'txlibcodigoofic', 'txlibcodigoofic13', 'txlibresumen', 'txlibtomo', 'txlibvolumen', 'txpaginas');
+            return array('__isInitialized__', 'inlibro', 'txlibtipopublica', 'txlibtitulo', 'txlibedicionanio', 'txlibedicionnum', 'txlibedicionpais', 'txediciondescripcion', 'txlibcodigoofic', 'txlibcodigoofic13', 'txlibresumen', 'txlibtomo', 'txlibvolumen', 'txlibpaginas', 'inlibidioma', 'inlibtittitulo', 'lbAutoresInidautor', 'inedilibroeditorial');
         }
 
-        return array('__isInitialized__', 'inlibro', 'txlibtipopublica', 'txlibtitulo', 'txlibautores', 'txlibidioma', 'txlibeditorial', 'txlibedicionanio', 'txlibedicionnum', 'txlibedicionpais', 'txediciondescripcion', 'txlibcodigoofic', 'txlibcodigoofic13', 'txlibresumen', 'txlibtomo', 'txlibvolumen', 'txpaginas');
+        return array('__isInitialized__', 'inlibro', 'txlibtipopublica', 'txlibtitulo', 'txlibedicionanio', 'txlibedicionnum', 'txlibedicionpais', 'txediciondescripcion', 'txlibcodigoofic', 'txlibcodigoofic13', 'txlibresumen', 'txlibtomo', 'txlibvolumen', 'txlibpaginas', 'inlibidioma', 'inlibtittitulo', 'lbAutoresInidautor', 'inedilibroeditorial');
     }
 
     /**
@@ -230,72 +230,6 @@ class LbLibros extends \Libreame\BackendBundle\Entity\LbLibros implements \Doctr
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getTxlibtitulo', array());
 
         return parent::getTxlibtitulo();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setTxlibautores($txlibautores)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setTxlibautores', array($txlibautores));
-
-        return parent::setTxlibautores($txlibautores);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getTxlibautores()
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getTxlibautores', array());
-
-        return parent::getTxlibautores();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setTxlibidioma($txlibidioma)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setTxlibidioma', array($txlibidioma));
-
-        return parent::setTxlibidioma($txlibidioma);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getTxlibidioma()
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getTxlibidioma', array());
-
-        return parent::getTxlibidioma();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setTxlibeditorial($txlibeditorial)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setTxlibeditorial', array($txlibeditorial));
-
-        return parent::setTxlibeditorial($txlibeditorial);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getTxlibeditorial()
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getTxlibeditorial', array());
-
-        return parent::getTxlibeditorial();
     }
 
     /**
@@ -499,23 +433,133 @@ class LbLibros extends \Libreame\BackendBundle\Entity\LbLibros implements \Doctr
     /**
      * {@inheritDoc}
      */
-    public function setTxpaginas($txpaginas)
+    public function setTxlibpaginas($txlibpaginas)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setTxpaginas', array($txpaginas));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setTxlibpaginas', array($txlibpaginas));
 
-        return parent::setTxpaginas($txpaginas);
+        return parent::setTxlibpaginas($txlibpaginas);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getTxpaginas()
+    public function getTxlibpaginas()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getTxpaginas', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getTxlibpaginas', array());
 
-        return parent::getTxpaginas();
+        return parent::getTxlibpaginas();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setInlibidioma(\Libreame\BackendBundle\Entity\LbIdiomas $inlibidioma = NULL)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setInlibidioma', array($inlibidioma));
+
+        return parent::setInlibidioma($inlibidioma);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getInlibidioma()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getInlibidioma', array());
+
+        return parent::getInlibidioma();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setInlibtittitulo(\Libreame\BackendBundle\Entity\LbTitulos $inlibtittitulo = NULL)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setInlibtittitulo', array($inlibtittitulo));
+
+        return parent::setInlibtittitulo($inlibtittitulo);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getInlibtittitulo()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getInlibtittitulo', array());
+
+        return parent::getInlibtittitulo();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function addLbAutoresInidautor(\Libreame\BackendBundle\Entity\LbAutores $lbAutoresInidautor)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addLbAutoresInidautor', array($lbAutoresInidautor));
+
+        return parent::addLbAutoresInidautor($lbAutoresInidautor);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function removeLbAutoresInidautor(\Libreame\BackendBundle\Entity\LbAutores $lbAutoresInidautor)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'removeLbAutoresInidautor', array($lbAutoresInidautor));
+
+        return parent::removeLbAutoresInidautor($lbAutoresInidautor);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getLbAutoresInidautor()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getLbAutoresInidautor', array());
+
+        return parent::getLbAutoresInidautor();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function addInedilibroeditorial(\Libreame\BackendBundle\Entity\LbEditoriales $inedilibroeditorial)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addInedilibroeditorial', array($inedilibroeditorial));
+
+        return parent::addInedilibroeditorial($inedilibroeditorial);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function removeInedilibroeditorial(\Libreame\BackendBundle\Entity\LbEditoriales $inedilibroeditorial)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'removeInedilibroeditorial', array($inedilibroeditorial));
+
+        return parent::removeInedilibroeditorial($inedilibroeditorial);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getInedilibroeditorial()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getInedilibroeditorial', array());
+
+        return parent::getInedilibroeditorial();
     }
 
 }

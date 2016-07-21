@@ -64,10 +64,10 @@ class LbUsuarios extends \Libreame\BackendBundle\Entity\LbUsuarios implements \D
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', 'inusuario', 'txusuemail', 'txusutelefono', 'txusunombre', 'inusugenero', 'txusuimagen', 'txusunommostrar', 'feusunacimiento', 'txusuvalidacion', 'inusuestado', 'txusuclave', 'inusulugar');
+            return array('__isInitialized__', 'inusuario', 'txusuemail', 'txusutelefono', 'txusunombre', 'inusugenero', 'txusuimagen', 'txusunommostrar', 'feusunacimiento', 'txusuvalidacion', 'inusuestado', 'txusuclave', 'fefecregistro', 'feusuultingreso', 'inusulugar');
         }
 
-        return array('__isInitialized__', 'inusuario', 'txusuemail', 'txusutelefono', 'txusunombre', 'inusugenero', 'txusuimagen', 'txusunommostrar', 'feusunacimiento', 'txusuvalidacion', 'inusuestado', 'txusuclave', 'inusulugar');
+        return array('__isInitialized__', 'inusuario', 'txusuemail', 'txusutelefono', 'txusunombre', 'inusugenero', 'txusuimagen', 'txusunommostrar', 'feusunacimiento', 'txusuvalidacion', 'inusuestado', 'txusuclave', 'fefecregistro', 'feusuultingreso', 'inusulugar');
     }
 
     /**
@@ -406,6 +406,50 @@ class LbUsuarios extends \Libreame\BackendBundle\Entity\LbUsuarios implements \D
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getTxusuclave', array());
 
         return parent::getTxusuclave();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setFefecregistro($fefecregistro)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setFefecregistro', array($fefecregistro));
+
+        return parent::setFefecregistro($fefecregistro);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getFefecregistro()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getFefecregistro', array());
+
+        return parent::getFefecregistro();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setFeusuultingreso($feusuultingreso)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setFeusuultingreso', array($feusuultingreso));
+
+        return parent::setFeusuultingreso($feusuultingreso);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getFeusuultingreso()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getFeusuultingreso', array());
+
+        return parent::getFeusuultingreso();
     }
 
     /**

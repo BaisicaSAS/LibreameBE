@@ -134,28 +134,4 @@ Libreame\BackendBundle\Entity\LbLibros:
                 inLibTitTitulo:
                     referencedColumnName: inIdTitulo
             orphanRemoval: false
-    manyToMany:
-        lbAutoresInidautor:
-            targetEntity: LbAutores
-            cascade: {  }
-            mappedBy: lbLibrosInlibro
-            inversedBy: null
-            joinTable: null
-            orderBy: null
-        inedilibroeditorial:
-            targetEntity: LbEditoriales
-            cascade: {  }
-            mappedBy: null
-            inversedBy: inediliblibro
-            joinTable:
-                name: lb_editorialeslibros
-                joinColumns:
-                    -
-                        name: inEdiLibLibro
-                        referencedColumnName: inLibro
-                inverseJoinColumns:
-                    -
-                        name: inEdiLibroEditorial
-                        referencedColumnName: inIdEditorial
-            orderBy: null
     lifecycleCallbacks: {  }

@@ -1,0 +1,40 @@
+Libreame\BackendBundle\Entity\LbAutoreslibros:
+    type: entity
+    table: lb_autoreslibros
+    indexes:
+        fk_table2_lb_autores1_idx:
+            columns:
+                - inAutLIdAutor
+        fk_table2_lb_libros1_idx:
+            columns:
+                - inAutLIdLibro
+    id:
+        inidautl:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: 'Lllave de la tabla'
+            id: true
+            column: inIdAutL
+            generator:
+                strategy: IDENTITY
+    manyToOne:
+        inautlidautor:
+            targetEntity: LbAutores
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                inAutLIdAutor:
+                    referencedColumnName: inIdAutor
+            orphanRemoval: false
+        inautlidlibro:
+            targetEntity: LbLibros
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                inAutLIdLibro:
+                    referencedColumnName: inLibro
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

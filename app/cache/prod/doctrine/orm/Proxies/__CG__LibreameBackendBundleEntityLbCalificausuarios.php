@@ -64,10 +64,10 @@ class LbCalificausuarios extends \Libreame\BackendBundle\Entity\LbCalificausuari
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', 'incalificacion', 'incalcalificacion', 'txcalobservacion', 'incalreporteabuso', 'incalusucalifica', 'incalusucalificado', 'fefecha');
+            return array('__isInitialized__', 'inidcalifica', 'incalcalificacion', 'txcalcomentario', 'fecalfecha', 'incalhisejemplar', 'incalusucalifica', 'incalusucalificado');
         }
 
-        return array('__isInitialized__', 'incalificacion', 'incalcalificacion', 'txcalobservacion', 'incalreporteabuso', 'incalusucalifica', 'incalusucalificado', 'fefecha');
+        return array('__isInitialized__', 'inidcalifica', 'incalcalificacion', 'txcalcomentario', 'fecalfecha', 'incalhisejemplar', 'incalusucalifica', 'incalusucalificado');
     }
 
     /**
@@ -176,16 +176,16 @@ class LbCalificausuarios extends \Libreame\BackendBundle\Entity\LbCalificausuari
     /**
      * {@inheritDoc}
      */
-    public function getIncalificacion()
+    public function getInidcalifica()
     {
         if ($this->__isInitialized__ === false) {
-            return (int)  parent::getIncalificacion();
+            return (int)  parent::getInidcalifica();
         }
 
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getIncalificacion', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getInidcalifica', array());
 
-        return parent::getIncalificacion();
+        return parent::getInidcalifica();
     }
 
     /**
@@ -213,45 +213,67 @@ class LbCalificausuarios extends \Libreame\BackendBundle\Entity\LbCalificausuari
     /**
      * {@inheritDoc}
      */
-    public function setTxcalobservacion($txcalobservacion)
+    public function setTxcalcomentario($txcalcomentario)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setTxcalobservacion', array($txcalobservacion));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setTxcalcomentario', array($txcalcomentario));
 
-        return parent::setTxcalobservacion($txcalobservacion);
+        return parent::setTxcalcomentario($txcalcomentario);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getTxcalobservacion()
+    public function getTxcalcomentario()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getTxcalobservacion', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getTxcalcomentario', array());
 
-        return parent::getTxcalobservacion();
+        return parent::getTxcalcomentario();
     }
 
     /**
      * {@inheritDoc}
      */
-    public function setIncalreporteabuso($incalreporteabuso)
+    public function setFecalfecha($fecalfecha)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setIncalreporteabuso', array($incalreporteabuso));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setFecalfecha', array($fecalfecha));
 
-        return parent::setIncalreporteabuso($incalreporteabuso);
+        return parent::setFecalfecha($fecalfecha);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getIncalreporteabuso()
+    public function getFecalfecha()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getIncalreporteabuso', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getFecalfecha', array());
 
-        return parent::getIncalreporteabuso();
+        return parent::getFecalfecha();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setIncalhisejemplar(\Libreame\BackendBundle\Entity\LbHistejemplar $incalhisejemplar = NULL)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setIncalhisejemplar', array($incalhisejemplar));
+
+        return parent::setIncalhisejemplar($incalhisejemplar);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getIncalhisejemplar()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getIncalhisejemplar', array());
+
+        return parent::getIncalhisejemplar();
     }
 
     /**
@@ -296,28 +318,6 @@ class LbCalificausuarios extends \Libreame\BackendBundle\Entity\LbCalificausuari
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getIncalusucalificado', array());
 
         return parent::getIncalusucalificado();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setFefecha($feefcha)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setFefecha', array($feefcha));
-
-        return parent::setFefecha($feefcha);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getFefecha()
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getFefecha', array());
-
-        return parent::getFefecha();
     }
 
 }

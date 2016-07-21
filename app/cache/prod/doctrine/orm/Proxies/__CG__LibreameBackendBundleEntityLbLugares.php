@@ -64,10 +64,10 @@ class LbLugares extends \Libreame\BackendBundle\Entity\LbLugares implements \Doc
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', 'inlugar', 'txlugcodigo', 'txlugnombre', 'inlugpadre', 'inlugelegible');
+            return array('__isInitialized__', 'inlugar', 'txlugcodigo', 'txlugnombre', 'inlugelegible', 'inlugpadre');
         }
 
-        return array('__isInitialized__', 'inlugar', 'txlugcodigo', 'txlugnombre', 'inlugpadre', 'inlugelegible');
+        return array('__isInitialized__', 'inlugar', 'txlugcodigo', 'txlugnombre', 'inlugelegible', 'inlugpadre');
     }
 
     /**
@@ -235,28 +235,6 @@ class LbLugares extends \Libreame\BackendBundle\Entity\LbLugares implements \Doc
     /**
      * {@inheritDoc}
      */
-    public function setInlugpadre(\Libreame\BackendBundle\Entity\LbLugares $inlugpadre = NULL)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setInlugpadre', array($inlugpadre));
-
-        return parent::setInlugpadre($inlugpadre);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getInlugpadre()
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getInlugpadre', array());
-
-        return parent::getInlugpadre();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public function setInlugelegible($inlugelegible)
     {
 
@@ -274,6 +252,28 @@ class LbLugares extends \Libreame\BackendBundle\Entity\LbLugares implements \Doc
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getInlugelegible', array());
 
         return parent::getInlugelegible();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setInlugpadre(\Libreame\BackendBundle\Entity\LbLugares $inlugpadre = NULL)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setInlugpadre', array($inlugpadre));
+
+        return parent::setInlugpadre($inlugpadre);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getInlugpadre()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getInlugpadre', array());
+
+        return parent::getInlugpadre();
     }
 
 }

@@ -26,12 +26,4 @@ Libreame\BackendBundle\Entity\LbEditoriales:
             fixed: false
             comment: 'Pais de la editorial-se cambiara luego por un ID '
             column: txEdiPais
-    manyToMany:
-        inediliblibro:
-            targetEntity: LbLibros
-            cascade: {  }
-            mappedBy: inedilibroeditorial
-            inversedBy: null
-            joinTable: null
-            orderBy: null
     lifecycleCallbacks: {  }

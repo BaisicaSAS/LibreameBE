@@ -64,10 +64,10 @@ class LbEjemplares extends \Libreame\BackendBundle\Entity\LbEjemplares implement
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', 'inejemplar', 'inejecantidad', 'dbejeavaluo', 'inejelibro', 'inejeusudueno', 'txejeimagen');
+            return array('__isInitialized__', 'inejemplar', 'inejecantidad', 'dbejeavaluo', 'txejeimagen', 'inejepuntos', 'inejepublicado', 'inejebloqueado', 'inejeestado', 'inejecondicion', 'inejesoloventa', 'inejelibro', 'inejeusudueno');
         }
 
-        return array('__isInitialized__', 'inejemplar', 'inejecantidad', 'dbejeavaluo', 'inejelibro', 'inejeusudueno', 'txejeimagen');
+        return array('__isInitialized__', 'inejemplar', 'inejecantidad', 'dbejeavaluo', 'txejeimagen', 'inejepuntos', 'inejepublicado', 'inejebloqueado', 'inejeestado', 'inejecondicion', 'inejesoloventa', 'inejelibro', 'inejeusudueno');
     }
 
     /**
@@ -235,6 +235,160 @@ class LbEjemplares extends \Libreame\BackendBundle\Entity\LbEjemplares implement
     /**
      * {@inheritDoc}
      */
+    public function setTxejeimagen($txejeimagen)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setTxejeimagen', array($txejeimagen));
+
+        return parent::setTxejeimagen($txejeimagen);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getTxejeimagen()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getTxejeimagen', array());
+
+        return parent::getTxejeimagen();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setInejepuntos($inejepuntos)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setInejepuntos', array($inejepuntos));
+
+        return parent::setInejepuntos($inejepuntos);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getInejepuntos()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getInejepuntos', array());
+
+        return parent::getInejepuntos();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setInejepublicado($inejepublicado)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setInejepublicado', array($inejepublicado));
+
+        return parent::setInejepublicado($inejepublicado);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getInejepublicado()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getInejepublicado', array());
+
+        return parent::getInejepublicado();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setInejebloqueado($inejebloqueado)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setInejebloqueado', array($inejebloqueado));
+
+        return parent::setInejebloqueado($inejebloqueado);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getInejebloqueado()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getInejebloqueado', array());
+
+        return parent::getInejebloqueado();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setInejeestado($inejeestado)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setInejeestado', array($inejeestado));
+
+        return parent::setInejeestado($inejeestado);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getInejeestado()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getInejeestado', array());
+
+        return parent::getInejeestado();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setInejecondicion($inejecondicion)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setInejecondicion', array($inejecondicion));
+
+        return parent::setInejecondicion($inejecondicion);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getInejecondicion()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getInejecondicion', array());
+
+        return parent::getInejecondicion();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setInejesoloventa($inejesoloventa)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setInejesoloventa', array($inejesoloventa));
+
+        return parent::setInejesoloventa($inejesoloventa);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getInejesoloventa()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getInejesoloventa', array());
+
+        return parent::getInejesoloventa();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function setInejelibro(\Libreame\BackendBundle\Entity\LbLibros $inejelibro = NULL)
     {
 
@@ -274,28 +428,6 @@ class LbEjemplares extends \Libreame\BackendBundle\Entity\LbEjemplares implement
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getInejeusudueno', array());
 
         return parent::getInejeusudueno();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setTxejeimagen($txejeimagen)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setTxejeimagen', array($txejeimagen));
-
-        return parent::setTxejeimagen($txejeimagen);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getTxejeimagen()
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getTxejeimagen', array());
-
-        return parent::getTxejeimagen();
     }
 
 }

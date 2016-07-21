@@ -1,0 +1,53 @@
+Libreame\BackendBundle\Entity\LbPreciosplanes:
+    type: entity
+    table: lb_preciosplanes
+    indexes:
+        fk_lb_preciosplanes_lb_planes1_idx:
+            columns:
+                - inIdPrePIdPlan
+    id:
+        inidprepid:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: 'Id de la tabla'
+            id: true
+            column: inIdPrePId
+            generator:
+                strategy: IDENTITY
+    fields:
+        dbprepprecioplanmes:
+            type: decimal
+            nullable: false
+            precision: 10
+            scale: 0
+            comment: 'Precio del plan si se paga por mes'
+            column: dbPrePPrecioplanMes
+        dbprepprecioplananio:
+            type: decimal
+            nullable: false
+            precision: 10
+            scale: 0
+            comment: 'Precio del plan si se paga por año'
+            column: dbPrePPrecioplanAnio
+        feprepiniciovigencia:
+            type: datetime
+            nullable: false
+            comment: 'Inicio de la vigencia del plan'
+            column: fePrePInicioVigencia
+        feprepfinvigencia:
+            type: datetime
+            nullable: false
+            comment: 'Fin de la vigencia del plan'
+            column: fePrePFinVigencia
+    manyToOne:
+        inidprepidplan:
+            targetEntity: LbPlanes
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                inIdPrePIdPlan:
+                    referencedColumnName: inPlan
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

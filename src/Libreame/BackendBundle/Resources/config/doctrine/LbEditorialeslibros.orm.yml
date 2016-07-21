@@ -1,0 +1,40 @@
+Libreame\BackendBundle\Entity\LbEditorialeslibros:
+    type: entity
+    table: lb_editorialeslibros
+    indexes:
+        fk_table1_lb_libros_idx:
+            columns:
+                - inEdiLibLibro
+        fk_table1_lb_editoriales1_idx:
+            columns:
+                - inEdiLibroEditorial
+    id:
+        inedilid:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: 'Llave de la tabla'
+            id: true
+            column: inEdiLId
+            generator:
+                strategy: IDENTITY
+    manyToOne:
+        inedilibroeditorial:
+            targetEntity: LbEditoriales
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                inEdiLibroEditorial:
+                    referencedColumnName: inIdEditorial
+            orphanRemoval: false
+        inediliblibro:
+            targetEntity: LbLibros
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                inEdiLibLibro:
+                    referencedColumnName: inLibro
+            orphanRemoval: false
+    lifecycleCallbacks: {  }
