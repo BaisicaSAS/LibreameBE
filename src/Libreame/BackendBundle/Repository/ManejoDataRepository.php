@@ -23,6 +23,7 @@ use Libreame\BackendBundle\Entity\LbOfrecidos;
 use Libreame\BackendBundle\Entity\LbActividadofertas;
 use Libreame\BackendBundle\Entity\LbIndicepalabra;
 use Libreame\BackendBundle\Entity\LbMensajes;
+use Libreame\BackendBundle\Entity\LbIdiomas;
 use Libreame\BackendBundle\Helpers\Solicitud;
 use Libreame\BackendBundle\Helpers\Respuesta;
 /**
@@ -1312,4 +1313,22 @@ class ManejoDataRepository extends EntityRepository {
                 return AccesoController::inDatoCer;
         } 
     }    
+    
+    //Obtiene la lista de idiomas
+    public function getListaIdiomas()
+    {   
+        try{
+            $em = $this->getDoctrine()->getManager();
+            
+            $sql = "SELECT i FROM LibreameBackendBundle:LbIdiomas i ";
+
+            $query = $em->createQuery($sql);
+            return $query->getResult();
+
+        } catch (Exception $ex) {
+                return new LbIdiomas();
+        } 
+    }
+    
+
 }

@@ -234,7 +234,7 @@ class GestionEjemplares {
     {   
         /*setlocale (LC_TIME, "es_CO");
         $fecha = new \DateTime;*/
-        $respuesta = new Respuesta();
+        $respuesta = new Respuesta();   
         $objLogica = $this->get('logica_service');
         try {
             //Valida que la sesión corresponda y se encuentre activa
@@ -252,8 +252,10 @@ class GestionEjemplares {
                 //echo "<script>alert('Generó actividad de sesion ')</script>";
                 
                 $respuesta->setRespuesta(AccesoController::inExitoso);
-                $arIdiomas = array("Español","Inglés","Frances","Alemán","Ruso","Portugues",
-                    "Catalán","Árabe","Bosnio","Croata","Serbio","Italiano","Griego","Turco","Húngaro","Hindi");
+                
+                $arIdiomas = ManejoDataRepository::getListaIdiomas();                
+                //$arIdiomas = array("Español","Inglés","Frances","Alemán","Ruso","Portugues",
+                //    "Catalán","Árabe","Bosnio","Croata","Serbio","Italiano","Griego","Turco","Húngaro","Hindi");
             
                 return $objLogica::generaRespuesta($respuesta, $psolicitud, $arIdiomas);
             } else {

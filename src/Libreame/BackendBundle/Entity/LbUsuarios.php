@@ -443,7 +443,7 @@ class LbUsuarios
     //Función que crea un usuario para su registro en el sistema
     public function creaUsuario($pSolicitud, $Lugar)
     {   
-        $usuario = new LbUsuarios();
+        $usuario = new LbUsuarios() ;
         try {
             $usuario->settxusuemail($pSolicitud->getEmail());  
             $usuario->settxusunombre($pSolicitud->getEmail());  
