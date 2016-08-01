@@ -677,7 +677,7 @@ CREATE TABLE IF NOT EXISTS `dotEx4read`.`lb_preciosplanes` (
   PRIMARY KEY (`inIdPrePId`),
   CONSTRAINT `fk_lb_preciosplanes_lb_planes1`
     FOREIGN KEY (`inIdPrePIdPlan`)
-    REFERENCES `dotE4read`.`lb_planes` (`inPlan`)
+    REFERENCES `dotEx4read`.`lb_planes` (`inPlan`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB

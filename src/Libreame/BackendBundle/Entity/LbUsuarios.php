@@ -3,6 +3,8 @@
 namespace Libreame\BackendBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Libreame\BackendBundle\Helpers\Logica;
+use Libreame\BackendBundle\Controller\AccesoController;
 
 /**
  * LbUsuarios
@@ -47,7 +49,7 @@ class LbUsuarios
      *
      * @ORM\Column(name="inUsuGenero", type="integer", nullable=false)
      */
-    private $inusugenero;
+    private $inusugenero = 2;
 
     /**
      * @var string
@@ -82,7 +84,7 @@ class LbUsuarios
      *
      * @ORM\Column(name="inUsuEstado", type="integer", nullable=false)
      */
-    private $inusuestado;
+    private $inusuestado = 0;
 
     /**
      * @var string
@@ -113,7 +115,7 @@ class LbUsuarios
      *   @ORM\JoinColumn(name="inUsuLugar", referencedColumnName="inLugar")
      * })
      */
-    private $inusulugar;
+    private $inusulugar=1;
 
 
 
@@ -445,9 +447,13 @@ class LbUsuarios
     {   
         $usuario = new LbUsuarios() ;
         try {
+            setlocale (LC_TIME, "es_CO");
+            $fechaReg = new \DateTime('c');
             $usuario->settxusuemail($pSolicitud->getEmail());  
             $usuario->settxusunombre($pSolicitud->getEmail());  
             $usuario->settxusunommostrar($pSolicitud->getEmail());
+            $usuario->setFefecregistro($fechaReg);
+            $usuario->setFeusuultingreso($fechaReg);
             if (trim($pSolicitud->getTelefono()) == ""){
                 $usuario->settxusutelefono(AccesoController::txMenNoId);  
             } else {
