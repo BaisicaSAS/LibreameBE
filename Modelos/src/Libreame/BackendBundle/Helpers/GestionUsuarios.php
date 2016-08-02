@@ -8,7 +8,6 @@ use Libreame\BackendBundle\Repository\ManejoDataRepository;
 
 use Libreame\BackendBundle\Entity\LbUsuarios;
 use Libreame\BackendBundle\Entity\LbSesiones;
-use Libreame\BackendBundle\Entity\LbMensajes;
 use Libreame\BackendBundle\Entity\LbCalificausuarios;
 use Libreame\BackendBundle\Entity\LbLugares;
 /**
@@ -95,43 +94,8 @@ class GestionUsuarios {
      * Retorna la información de los mensajes del usuario
      */
     
-    public function recuperarMensajes($psolicitud)
-    {
-        /*setlocale (LC_TIME, "es_CO");
-        $fecha = new \DateTime;*/
-        $mensaje = new LbMensajes();
-        $respuesta = new Respuesta();
-        $objLogica = $this->get('logica_service');
-        $usuario = new LbUsuarios();
-        try {
-            //Valida que la sesión corresponda y se encuentre activa
-            $respSesionVali=ManejoDataRepository::validaSesionUsuario($psolicitud);
-           //echo "<script>alert(' obtenerParametros :: Validez de sesion ".$respSesionVali." ')</script>";
-            if ($respSesionVali==AccesoController::inULogged) 
-            {    
-                //Busca el usuario 
-                $usuario = ManejoDataRepository::getUsuarioByEmail($psolicitud->getEmail());
-                //echo "[".$usuario->getTxusuemail()."]";
-                $mensaje = ManejoDataRepository::getMensajesUsuario($usuario);
-
-                //SE INACTIVA PORQUE PUEDE GENERAR UNA GRAN CANTIDAD DE REGISTROS EN UNA SOLA SESION
-                //Busca y recupera el objeto de la sesion:: 
-                //$sesion = ManejoDataRepository::recuperaSesionUsuario($usuario,$psolicitud);
-                //Guarda la actividad de la sesion:: 
-                //ManejoDataRepository::generaActSesion($sesion,AccesoController::inDatoUno,"Datos de usuario ".$psolicitud->getEmail()." recuperados con éxito",$psolicitud->getAccion(),$fecha,$fecha);
-                //echo "<script>alert('Generó actividad de sesion ')</script>";
-                
-                $respuesta->setRespuesta(AccesoController::inExitoso);
-            } else {
-                $respuesta->setRespuesta($respSesionVali);
-            }
-        } catch (Exception $ex) {
-            $respuesta->setRespuesta(AccesoController::inPlatCai);
-        } finally {
-            return $objLogica::generaRespuesta($respuesta, $psolicitud, $mensaje);
-        }
-    }
-    
+ 
+     
     /* marcarMensajes 
      * Marca un mensaje como leído o no leído según el usuario lo indique
      */

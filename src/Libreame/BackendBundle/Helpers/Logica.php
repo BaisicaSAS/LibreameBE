@@ -879,6 +879,8 @@ class Logica {
     public function enviaMailRegistro($usuario)
     {   
         try{
+            $cadena = Logica::generaCadenaURL($usuario);
+            #echo "cadena enviada = "."http://www.ex4read.co/web/registro/".$cadena;
             $message = \Swift_Message::newInstance()
                 ->setContentType('text/html')
                 ->setSubject('Bienvenido a ex4Read '.$usuario->getTxusunombre())
@@ -890,7 +892,8 @@ class Logica {
                 ->setBody($this->renderView(
                     'LibreameBackendBundle:Registro:registro.html.twig',
                     array('usuario' => $usuario->getTxusuemail(), 
-                        'crurl' => "http://www.ex4read.co/web/registro/".Logica::generaCadenaURL($usuario))
+                        'crurl' => "http://www.ex4read.co/web/registro/".$cadena)
+                        //'crurl' => "http://www.ex4read.co/web/registro/".Logica::generaCadenaURL($usuario))
             ),'text/html');
 
             $this->get('mailer')->send($message);

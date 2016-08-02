@@ -1,0 +1,73 @@
+:::::::::::::::::::::1. REGISTRO:::::::::::::::::::::::
+
+{
+	"idsesion": {
+		"idaccion": "1",
+		"idtrx": "",
+		"ipaddr": "200.000.000.002",
+		"iddevice": "MACADDRESS",
+		"marca": "LG",
+		"modelo": "G2 Mini",
+		"so": "KITKAT"
+	},
+	"idsolicitud": {
+		"email": "manuel@ex4read.co",
+		"clave": "clave12345",
+		"telefono": "man20150901153408"
+	}
+}
+
+:::::::::::::::::::::2. LOGIN:::::::::::::::::::::::::::
+
+
+{
+	"idsesion": {
+		"idaccion": "2",
+		"idtrx": "",
+		"ipaddr": "200.000.000.002",
+		"iddevice": "MACADDRESS",
+		"marca": "LG",
+		"modelo": "G2 Mini",
+		"so": "KITKAT"
+	},
+	"idsolicitud": {
+		"email": "manuel@ex4read.co",
+		"clave": "clave12345"
+	}
+}
+
+:::::::::::::::::::::10. CERRAR SESION:::::::::::::::::::::::::::
+
+{
+	"idsesion": {
+		"idaccion": "10",
+		"idtrx": "+2ybp4817eiy5l-cmypc51tdxb6eec",
+		"ipaddr": "200.000.000.002",
+		"iddevice": "MACADDRESS",
+		"marca": "LG",
+		"modelo": "G2 Mini",
+		"so": "KITKAT"
+	},
+	"idsolicitud": {
+		"email": "manuel@ex4read.co",
+		"clave": "clave12345"
+	}
+}
+
+:::::::::::::::::::::37. LISTA DE IDIOMAS:::::::::::::::::::::::::::
+
+{
+	"idsesion": {
+		"idaccion": "37",
+		"idtrx": "+2ybp4817eiy5l-cmypc51tdxb6eec",
+		"ipaddr": "200.000.000.002",
+		"iddevice": "MACADDRESS",
+		"marca": "LG",
+		"modelo": "G2 Mini",
+		"so": "KITKAT"
+	},
+	"idsolicitud": {
+		"email": "manuel@ex4read.co",
+		"clave": "clave12345"
+	}
+}

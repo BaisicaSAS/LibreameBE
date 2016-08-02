@@ -26,14 +26,14 @@ class LbMembresias
      *
      * @ORM\Column(name="inMemCreador", type="integer", nullable=false)
      */
-    private $inmemcreador;
+    private $inmemcreador = 0;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="inMemActiva", type="integer", nullable=false)
      */
-    private $inmemactiva;
+    private $inmemactiva = 1;
 
     /**
      * @var \Libreame\BackendBundle\Entity\LbGrupos

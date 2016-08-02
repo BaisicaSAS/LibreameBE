@@ -2,6 +2,7 @@
 
 namespace Libreame\BackendBundle\Repository;
 
+use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityRepository;
 use DateTime;
 use Libreame\BackendBundle\Controller\AccesoController;
@@ -1257,13 +1258,14 @@ class ManejoDataRepository extends EntityRepository {
     public function cantMsgUsr($usuario)
     {
         try{
-            $em = $this->getDoctrine()->getManager();
+            /*$em = $this->getDoctrine()->getManager();
             $sql = "SELECT COUNT(m) FROM LibreameBackendBundle:LbMensajes m"
                     ." WHERE m.inmenusuario = :usuario";
             $query = $em->createQuery($sql)->setParameter('usuario', $usuario);
             $cantmensajes = $query->getSingleScalarResult();
-            $em->flush();
+            $em->flush();*/
         
+            $cantmensajes = 5;
             return $cantmensajes;
         } catch (Exception $ex) {
                 return AccesoController::inDatoCer;
@@ -1323,7 +1325,8 @@ class ManejoDataRepository extends EntityRepository {
             $sql = "SELECT i FROM LibreameBackendBundle:LbIdiomas i ";
 
             $query = $em->createQuery($sql);
-            return $query->getResult();
+            $idiomas[] = $query->getQuery->getResult(2); 
+            return $idiomas;
 
         } catch (Exception $ex) {
                 return new LbIdiomas();

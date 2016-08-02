@@ -14,7 +14,6 @@ use Libreame\BackendBundle\Entity\LbUsuarios;
 use Libreame\BackendBundle\Entity\LbSesiones;
 use Libreame\BackendBundle\Entity\LbEjemplares;
 use Libreame\BackendBundle\Entity\LbActsesion;
-use Libreame\BackendBundle\Entity\LbMensajes;
 use Libreame\BackendBundle\Entity\LbSolicitados;
 use Libreame\BackendBundle\Entity\LbOfrecidos;
 use Libreame\BackendBundle\Entity\LbOfertas;
@@ -452,50 +451,12 @@ class Logica {
     }    
     
     
-        /*
+    /*
      * respuestaRecuperarMensajes: 
      * Funcion que genera el JSON de respuesta para la accion de recuperar mensajes:: AccesoController::txAccRecOpera:
      */
-    public function respuestaRecuperarMensajes(Respuesta $respuesta, Solicitud $pSolicitud, $parreglo){
-        try{
-            $arUsuario = array();
-            $arrTmp = array();
-            $mensaje = new LbMensajes();
-            
-            foreach ($parreglo as $mensaje){
-                //echo $mensaje->getTxmensaje()."\n";
-                //Recupera los usuarios ID + Nombre
-                if ($mensaje->getInmenusuarioorigen() != NULL)
-                {
-                    //echo "[ID_ORIGEN: ".$mensaje->getInmenusuarioorigen()->getInusuario()."]\n";
-                    $usuario = ManejoDataRepository::getUsuarioById($mensaje->getInmenusuarioorigen()->getInusuario());
-                    $u1 = array('idusuario' => $usuario->getInusuario(), 'nombre' => $usuario->getTxusunommostrar());  
-                } else {
-                    $u1 = array('idusuario' => "", 'nombre' => "");                      
-                } 
-                    
-                //echo "[ID_DESTINO: ".$mensaje->getInmenusuario()->getInusuario()."]\n";
-                $usuario2 = ManejoDataRepository::getUsuarioById($mensaje->getInmenusuario()->getInusuario());
-                $u2 = array('idusuario' => $usuario2->getInusuario(), 'nombre' => $usuario2->getTxusunommostrar());  
-                
-                if ($mensaje->getInmensajepadre() == NULL)
-                    $idpadre = $mensaje->getInmensajepadre();
-                else
-                    $idpadre = "";
-                
-                $arrTmp[] = array('idmensaje' => $mensaje->getInmensaje(), 
-                  'mensaje' => $mensaje->getTxmensaje(),'tipomensaje' => $mensaje->getInmenorigen(), 
-                  'idorigen' => $mensaje->getInmemidrelacionado(),
-                  'padre' => $idpadre, 'remitente' => $u1, 
-                  'destinatario' => $u2, 'leido' => $mensaje->getInmenleido()
-                ) ;
-                
-                //echo "ID Mensaje ".$mensaje->getInmensaje()."\n";
-                
-                unset($u1);
-                unset($u2);
-
-            }
+    /*public function respuestaRecuperarMensajes(Respuesta $respuesta, Solicitud $pSolicitud, $parreglo){
+        
 
             return array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
                     'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr(), 
@@ -506,7 +467,7 @@ class Logica {
         } catch (Exception $ex) {
                 return AccesoController::inPlatCai;
         } 
-    }    
+    } */   
     
 
     /*

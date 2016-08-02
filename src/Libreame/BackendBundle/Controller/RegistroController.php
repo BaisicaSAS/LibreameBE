@@ -52,33 +52,33 @@ class RegistroController extends Controller
      */
     private function descomponerDatosEntrada($datos)
     {   
-        
         $this->clave='';
         $this->usuario='';
         //Caracteres 8 * 5 * 10  Dan el patron de descubrimiento de la clave. Juan (Patron es datos 1,2,3) CAracteres de corrimiento
         //Caracteres 14 * 9 * 12  Indican la cantidad de datos del correo
         $longdatos = strlen($datos); 
-        //echo "\nLong Cadena: ".$longdatos.'  ';
+        #echo "\n Long Cadena: ".$longdatos.'  ';
+        #echo "\n Cadena: ".$datos.'  ';
         //Obtener el patron de ocurrencia de datos
         $patron = array(substr($datos,self::pos1pat,1),substr($datos,self::pos2pat,1),substr($datos,self::pos3pat,1));
         //Obtener la cantidad de caracteres del correo
         $caracteres = (integer) (substr($datos,self::pos1mail,1).substr($datos,self::pos2mail,1).substr($datos,self::pos3mail,1));
-        //echo "\nLong Mail: ".$caracteres.'  ';
+        #echo "\nLong Mail: ".$caracteres.'  ';
         $pat = 0;
-        //echo "\nPosiciones: ";
+        #echo "\nPosiciones: ";
         for ($i=0;$i<$caracteres;$i++) {
             if ($i==0) {
                 $posClave[$i] = 8 + $patron[$pat];
             } else {
                 $posClave[$i] = $posClave[$i-1] + $patron[$pat];
             }
-            //echo $i.' : '.$posClave[$i].' - ';
+            #echo $i.' : '.$posClave[$i].' - ';
             if ($pat==2) { $pat = 0; } else { $pat++; }
         }
         
         //Recupera el mail del usuario
         for ($i=0;$i<$caracteres;$i++) {
-            //echo substr($datos,$posClave[$i],1);;
+            #echo substr($datos,$posClave[$i],1);;
             $this->usuario.=substr($datos,$posClave[$i],1);
         }
 

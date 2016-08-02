@@ -22,7 +22,6 @@ use Libreame\BackendBundle\Entity\LbSolicitados;
 use Libreame\BackendBundle\Entity\LbOfrecidos;
 use Libreame\BackendBundle\Entity\LbActividadofertas;
 use Libreame\BackendBundle\Entity\LbIndicepalabra;
-use Libreame\BackendBundle\Entity\LbMensajes;
 use Libreame\BackendBundle\Helpers\Solicitud;
 use Libreame\BackendBundle\Helpers\Respuesta;
 /**

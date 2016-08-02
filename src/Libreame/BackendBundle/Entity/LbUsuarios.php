@@ -115,7 +115,7 @@ class LbUsuarios
      *   @ORM\JoinColumn(name="inUsuLugar", referencedColumnName="inLugar")
      * })
      */
-    private $inusulugar=1;
+    private $inusulugar = 1;
 
 
 
