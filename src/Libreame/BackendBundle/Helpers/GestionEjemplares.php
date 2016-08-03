@@ -253,7 +253,7 @@ class GestionEjemplares {
                 
                 $respuesta->setRespuesta(AccesoController::inExitoso);
                 
-                $arIdiomas = ManejoDataRepository::getListaIdiomas();                
+                $arIdiomas = ManejoDataRepository::getListaIdiomas();  
                 //$arIdiomas = array("Español","Inglés","Frances","Alemán","Ruso","Portugues",
                 //    "Catalán","Árabe","Bosnio","Croata","Serbio","Italiano","Griego","Turco","Húngaro","Hindi");
             

@@ -19,14 +19,14 @@ class LbIdiomas
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $inididioma;
+    protected $inididioma;
 
     /**
      * @var string
      *
      * @ORM\Column(name="txIdiNombre", type="string", length=100, nullable=false)
      */
-    private $txidinombre;
+    protected $txidinombre;
 
 
 

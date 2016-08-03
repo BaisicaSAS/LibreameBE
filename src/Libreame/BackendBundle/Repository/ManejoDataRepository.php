@@ -2,7 +2,6 @@
 
 namespace Libreame\BackendBundle\Repository;
 
-use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityRepository;
 use DateTime;
 use Libreame\BackendBundle\Controller\AccesoController;
@@ -1323,10 +1322,16 @@ class ManejoDataRepository extends EntityRepository {
             $em = $this->getDoctrine()->getManager();
             
             $sql = "SELECT i FROM LibreameBackendBundle:LbIdiomas i ";
-
             $query = $em->createQuery($sql);
-            $idiomas[] = $query->getQuery->getResult(2); 
-            return $idiomas;
+            foreach ($query->getResult() as $regidioma){
+                $idiomas[] = $regidioma->getTxidinombre();
+                echo (String)$idiomas[];
+                //echo $regidioma->getInididioma().' '.$regidioma->getTxidinombre();
+            }            
+            //echo $query->getResult(); 
+            //echo "Acabo"; 
+            //return $query->getResult();
+            return (array) $idiomas;
 
         } catch (Exception $ex) {
                 return new LbIdiomas();
