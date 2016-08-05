@@ -1325,13 +1325,13 @@ class ManejoDataRepository extends EntityRepository {
             $query = $em->createQuery($sql);
             foreach ($query->getResult() as $regidioma){
                 $idiomas[] = $regidioma->getTxidinombre();
-                echo (String)$idiomas[];
+                //echo $idiomas;
                 //echo $regidioma->getInididioma().' '.$regidioma->getTxidinombre();
             }            
             //echo $query->getResult(); 
             //echo "Acabo"; 
-            //return $query->getResult();
-            return (array) $idiomas;
+            return $query->getResult();
+            //return $idiomas;
 
         } catch (Exception $ex) {
                 return new LbIdiomas();
