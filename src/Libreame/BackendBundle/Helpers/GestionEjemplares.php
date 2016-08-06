@@ -8,6 +8,7 @@ use Libreame\BackendBundle\Repository\ManejoDataRepository;
 
 
 use Libreame\BackendBundle\Entity\LbLibros;
+use Libreame\BackendBundle\Entity\LbIdiomas;
 use Libreame\BackendBundle\Entity\LbUsuarios;
 use Libreame\BackendBundle\Entity\LbEjemplares;
 use Libreame\BackendBundle\Entity\LbDispusuarios;
@@ -253,7 +254,16 @@ class GestionEjemplares {
                 
                 $respuesta->setRespuesta(AccesoController::inExitoso);
                 
-                $arIdiomas = ManejoDataRepository::getListaIdiomas();  
+                $idiomas = ManejoDataRepository::getListaIdiomas();  
+                $idioma = new LbIdiomas();
+                $arIdiomas = array();
+                
+                $contador = 0;
+                foreach ($idiomas as $idioma) {
+                    $arIdiomas[] = array("ididioma"=>$idioma->getInididioma(),"nomidioma"=>$idioma->getTxidinombre());
+                    //$contador++;
+                }
+                //echo $contador." - lugares hallados";
                 //$arIdiomas = array("Español","Inglés","Frances","Alemán","Ruso","Portugues",
                 //    "Catalán","Árabe","Bosnio","Croata","Serbio","Italiano","Griego","Turco","Húngaro","Hindi");
             

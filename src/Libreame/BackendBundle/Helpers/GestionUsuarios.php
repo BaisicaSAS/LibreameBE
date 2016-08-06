@@ -252,11 +252,12 @@ class GestionUsuarios {
                 $lugar = new LbLugares();
                 $arLugares = array();
                 
+                //$contador = 0;
                 foreach ($lugares as $lugar) {
-                
                     $arLugares[] = array("idlugar"=>$lugar->getInlugar(),"nomlugar"=>$lugar->getTxlugnombre());
+                    //$contador++;
                 }
-            
+                //echo $contador." - lugares hallados";
                 return $objLogica::generaRespuesta($respuesta, $psolicitud, $arLugares);
             } else {
                 $respuesta->setRespuesta($respSesionVali);
