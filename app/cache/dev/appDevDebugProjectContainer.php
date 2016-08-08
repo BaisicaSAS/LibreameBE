@@ -2313,15 +2313,15 @@ class appDevDebugProjectContainer extends Container
     protected function getSwiftmailer_Mailer_Default_Transport_RealService()
     {
         $a = new \Swift_Transport_Esmtp_AuthHandler(array(0 => new \Swift_Transport_Esmtp_Auth_CramMd5Authenticator(), 1 => new \Swift_Transport_Esmtp_Auth_LoginAuthenticator(), 2 => new \Swift_Transport_Esmtp_Auth_PlainAuthenticator()));
-        $a->setUsername('baisicasas');
-        $a->setPassword('b41s1c4s4s');
-        $a->setAuthMode('login');
+        $a->setUsername('registro@ex4read.co');
+        $a->setPassword('R3g15tr0');
+        $a->setAuthMode(NULL);
 
         $this->services['swiftmailer.mailer.default.transport.real'] = $instance = new \Swift_Transport_EsmtpTransport(new \Swift_Transport_StreamBuffer(new \Swift_StreamFilters_StringReplacementFilterFactory()), array(0 => $a), $this->get('swiftmailer.mailer.default.transport.eventdispatcher'));
 
-        $instance->setHost('smtp.gmail.com');
-        $instance->setPort(465);
-        $instance->setEncryption('ssl');
+        $instance->setHost('localhost');
+        $instance->setPort(25);
+        $instance->setEncryption(NULL);
         $instance->setTimeout(30);
         $instance->setSourceIp(NULL);
 
@@ -3539,11 +3539,10 @@ class appDevDebugProjectContainer extends Container
             'database_password' => 'root',
             'locale' => 'en',
             'secret' => '818540f6bc2c9676a5a44bdb6e65758b9dc2c2f4',
-            'mailer_transport' => 'gmail',
-            'mailer_host' => NULL,
-            'mailer_user' => 'baisicasas',
-            'mailer_password' => 'b41s1c4s4s',
-            'database_path' => NULL,
+            'mailer_transport' => 'smtp',
+            'mailer_host' => 'p3plcpnl0478.prod.phx3.secureserver.net',
+            'mailer_user' => 'registro@ex4read.co',
+            'mailer_password' => 'R3g15tr0',
             'controller_resolver.class' => 'Symfony\\Bundle\\FrameworkBundle\\Controller\\ControllerResolver',
             'controller_name_converter.class' => 'Symfony\\Bundle\\FrameworkBundle\\Controller\\ControllerNameParser',
             'response_listener.class' => 'Symfony\\Component\\HttpKernel\\EventListener\\ResponseListener',
@@ -3907,12 +3906,12 @@ class appDevDebugProjectContainer extends Container
             'swiftmailer.data_collector.class' => 'Symfony\\Bundle\\SwiftmailerBundle\\DataCollector\\MessageDataCollector',
             'swiftmailer.mailer.default.transport.name' => 'smtp',
             'swiftmailer.mailer.default.delivery.enabled' => true,
-            'swiftmailer.mailer.default.transport.smtp.encryption' => 'ssl',
-            'swiftmailer.mailer.default.transport.smtp.port' => 465,
-            'swiftmailer.mailer.default.transport.smtp.host' => 'smtp.gmail.com',
-            'swiftmailer.mailer.default.transport.smtp.username' => 'baisicasas',
-            'swiftmailer.mailer.default.transport.smtp.password' => 'b41s1c4s4s',
-            'swiftmailer.mailer.default.transport.smtp.auth_mode' => 'login',
+            'swiftmailer.mailer.default.transport.smtp.encryption' => NULL,
+            'swiftmailer.mailer.default.transport.smtp.port' => 25,
+            'swiftmailer.mailer.default.transport.smtp.host' => 'localhost',
+            'swiftmailer.mailer.default.transport.smtp.username' => 'registro@ex4read.co',
+            'swiftmailer.mailer.default.transport.smtp.password' => 'R3g15tr0',
+            'swiftmailer.mailer.default.transport.smtp.auth_mode' => NULL,
             'swiftmailer.mailer.default.transport.smtp.timeout' => 30,
             'swiftmailer.mailer.default.transport.smtp.source_ip' => NULL,
             'swiftmailer.spool.default.memory.path' => 'C:/xampp/htdocs/Ex4readBE/app/cache/dev/swiftmailer/spool/default',

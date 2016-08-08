@@ -163,13 +163,14 @@ class AccesoController extends Controller
                 //$objLogica = $this->get('logica_service')->container->setParameter("@doctrine.orm.default_entity_manager", $em);
                 //$respuesta = $objLogica::ejecutaAccion($this->objSolicitud);
                 $respuesta = Logica::ejecutaAccion($this->objSolicitud);
+                //echo "genera respuesta: ".$this->objSolicitud->getAccion();
             } else { //JSON INVALIDO RESPUESTA GENERAL : -10
                 //echo "<script>alert('.......ELSE..........')</script>";
                 $objLogica = $this->get('logica_service');
                 $jrespuesta = new Respuesta();
                 $jrespuesta->setRespuesta($jsonValido);    
                 $respuesta = json_encode($objLogica::respuestaGenerica($jrespuesta, $this->objSolicitud));
-               //echo "<script>alert('Encontramos un problema con tu registro: ".$this->$objSolicitud->getSession()."-".$jsonValido."')</script>"; 
+                //echo "<script>alert('Encontramos un problema con tu registro: ".$this->$objSolicitud->getSession()."-".$jsonValido."')</script>"; 
                 //@TODO: Debemos revisar que hacer cuando se detecta actividad sospechosa: Cierro sesion?. Bloqueo usuario e informo?
             }
             //echo "<script>alert('RESPUESTA ingresarSistemaAction: ".$respuesta."')</script>";

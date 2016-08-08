@@ -254,15 +254,21 @@ class GestionEjemplares {
                 
                 $respuesta->setRespuesta(AccesoController::inExitoso);
                 
+                echo "Respuesta Idiomas: ".$respuesta->getRespuesta()." \n";
+                
                 $idiomas = ManejoDataRepository::getListaIdiomas();  
                 $idioma = new LbIdiomas();
                 $arIdiomas = array();
                 
                 $contador = 0;
                 foreach ($idiomas as $idioma) {
-                    $arIdiomas[] = array("ididioma"=>$idioma->getInididioma(),"nomidioma"=>$idioma->getTxidinombre());
+                    $id = (String)$idioma->getInididioma();
+                    $nombre = $idioma->getTxidinombre();
+                    $arIdiomas[] = array("ididioma"=>$id, "nomidioma"=>$nombre);
+                    echo "Idioma=".$id." - ".$nombre." \n";
                     //$contador++;
                 }
+                print_r($respuesta);
                 //echo $contador." - lugares hallados";
                 //$arIdiomas = array("Español","Inglés","Frances","Alemán","Ruso","Portugues",
                 //    "Catalán","Árabe","Bosnio","Croata","Serbio","Italiano","Griego","Turco","Húngaro","Hindi");

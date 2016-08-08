@@ -142,6 +142,7 @@ class Logica {
                     //echo "<script>alert('Antes de entrar a Listar idiomas Usuario-".$solicitud->getEmail()."')</script>";
                     $objGestEjemplares = $this->get('gest_ejemplares_service');
                     $respuesta = $objGestEjemplares::listarIdiomas($solicitud);
+                    //echo "Genera respuesta : ".$respuesta; 
                     break;
                 } 
 
@@ -153,7 +154,7 @@ class Logica {
                 } 
 
             }
-            //echo "<script>alert('ejecuta Accion: ".$respuesta."')</script>";
+            echo "<script>alert('ejecuta Accion: ".$respuesta."')</script>";
             return $respuesta;
         } catch (Exception $ex) {
                 return AccesoController::inPlatCai;
@@ -234,6 +235,7 @@ class Logica {
                 
                 case AccesoController::txAccListaIdi: //Dato:37 : Listar idiomas
                     $JSONResp = Logica::respuestaListaIdiomas($respuesta, $pSolicitud, $parreglo);
+                    print_r(array_values($JSONResp));
                     break;
                 
                 case AccesoController::txAccListaLug: //Dato:38 : Listar Lugares
@@ -242,6 +244,7 @@ class Logica {
                 
             }
 
+            echo "La respuesta se imprimió - va a ";
             return json_encode($JSONResp);
         } catch (Exception $ex) {
                 return AccesoController::inPlatCai;
@@ -845,11 +848,16 @@ class Logica {
      */
     public function respuestaListaIdiomas(Respuesta $respuesta, Solicitud $pSolicitud, $parreglo){
         try {
+            //echo "respuesta idiomas \n";
+            //print_r(array_values($parreglo));
             return array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
                             'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr(), 
                             'iddevice'=> $pSolicitud->getDeviceMac(), 'marca'=>$pSolicitud->getDeviceMarca(), 
                             'modelo'=>$pSolicitud->getDeviceModelo(), 'so'=>$pSolicitud->getDeviceSO()), 
-                            'idrespuesta' => (array('respuesta' => $respuesta->getRespuesta(), 'idiomas' => $parreglo)));
+                            'idrespuesta' => array('respuesta' => $respuesta->getRespuesta(), 
+                            'idiomas' => $parreglo));
+//                            'idrespuesta' => (array('respuesta' => $respuesta->getRespuesta(), 'idiomas' => array('ididioma'=>$parreglo[][0], 'nomidioma'=>$parreglo[][1]))));
+            //echo "termino armar \n" ;
         } catch (Exception $ex) {
                 return AccesoController::inPlatCai;
         } 
