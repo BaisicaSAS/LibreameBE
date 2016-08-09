@@ -1,5 +1,5 @@
 SELECT ps_product.active, ps_product.reference, ps_product.price, ps_product_lang.name, ps_product_lang.description_short, 
-ps_category_lang.name AS categoría, ps_feature_lang.name, ps_feature_value_lang.value AS característica1
+ps_category_lang.name AS categorï¿½a, ps_feature_lang.name, ps_feature_value_lang.value AS caracterï¿½stica1
 FROM ps_product
 LEFT JOIN ps_product_lang ON ps_product.id_product = ps_product_lang.id_product
 LEFT JOIN ps_feature_product ON ps_feature_product.id_product = ps_product.id_product
@@ -12,7 +12,7 @@ LIMIT 0 , 10000
 
 
 
----- La imágen
+---- La imï¿½gen
 
 SELECT p.id_product AS 'ID',
 pl.id_lang AS 'ID_LANG',
@@ -49,3 +49,4 @@ INNER JOIN ps_product_lang pl ON p.id_product = pl.id_product
 LEFT JOIN ps_image im ON p.id_product = im.id_product 
 WHERE 1=1
 and p.active = 1
+LIMIT 0 , 10000

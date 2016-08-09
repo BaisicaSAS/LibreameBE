@@ -254,7 +254,7 @@ class GestionUsuarios {
                 
                 //$contador = 0;
                 foreach ($lugares as $lugar) {
-                    $arLugares[] = array("idlugar"=>$lugar->getInlugar(),"nomlugar"=>$lugar->getTxlugnombre());
+                    $arLugares[] = array("idlugar"=>$lugar->getInlugar(),"nomlugar"=>utf8_encode($lugar->getTxlugnombre()));
                     //$contador++;
                 }
                 //echo $contador." - lugares hallados";

@@ -154,7 +154,7 @@ class Logica {
                 } 
 
             }
-            echo "<script>alert('ejecuta Accion: ".$respuesta."')</script>";
+            //echo "<script>alert('ejecuta Accion: ".$respuesta."')</script>";
             return $respuesta;
         } catch (Exception $ex) {
                 return AccesoController::inPlatCai;
@@ -235,7 +235,7 @@ class Logica {
                 
                 case AccesoController::txAccListaIdi: //Dato:37 : Listar idiomas
                     $JSONResp = Logica::respuestaListaIdiomas($respuesta, $pSolicitud, $parreglo);
-                    print_r(array_values($JSONResp));
+                    //print_r(array_values($JSONResp));
                     break;
                 
                 case AccesoController::txAccListaLug: //Dato:38 : Listar Lugares
@@ -244,8 +244,9 @@ class Logica {
                 
             }
 
-            echo "La respuesta se imprimió - va a ";
-            return json_encode($JSONResp);
+            $respuestaGen = json_encode($JSONResp);
+            //echo "La respuesta se imprimió - va a ".$respuestaGen;
+            return $respuestaGen;
         } catch (Exception $ex) {
                 return AccesoController::inPlatCai;
         } 
