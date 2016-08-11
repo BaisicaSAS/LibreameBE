@@ -1,5 +1,5 @@
-SELECT ps_product.active, ps_product.reference, ps_product.price, ps_product_lang.name, ps_product_lang.description_short, 
-ps_category_lang.name AS categor�a, ps_feature_lang.name, ps_feature_value_lang.value AS caracter�stica1
+SELECT ps_product.id_product, ps_product.active, ps_product.reference, ps_product.price, ps_product_lang.name, ps_product_lang.description_short, 
+ps_category_lang.name AS categoria, ps_feature_lang.name, ps_feature_value_lang.value AS caracteristica1
 FROM ps_product
 LEFT JOIN ps_product_lang ON ps_product.id_product = ps_product_lang.id_product
 LEFT JOIN ps_feature_product ON ps_feature_product.id_product = ps_product.id_product
@@ -9,6 +9,7 @@ LEFT JOIN ps_category_lang ON ps_product.id_category_default = ps_category_lang.
 WHERE ps_feature_lang.id_feature >0
 AND ps_product_lang.id_lang >=0
 LIMIT 0 , 10000
+
 
 
 
