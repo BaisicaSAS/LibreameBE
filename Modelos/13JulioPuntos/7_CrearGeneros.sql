@@ -4,8 +4,6 @@ delete FROM dotex4read.lb_generos where ingenero > 0;
 alter table dotEx4read.lb_generos auto_increment=1;
 commit;
 commit;commit;
-commit;commit;
-commit;commit;
 commit;
 
 INSERT INTO `lb_generos`(`txGenNombre`)VALUES('Académico');

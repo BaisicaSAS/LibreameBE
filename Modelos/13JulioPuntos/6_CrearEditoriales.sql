@@ -5,8 +5,6 @@ alter table dotEx4read.lb_editoriales auto_increment=1;
 commit;
 commit;commit;
 commit;commit;
-commit;commit;
-commit;
 
 INSERT INTO `lb_editoriales`(`txEdiNombre`)VALUES('3R Editores');
 INSERT INTO `lb_editoriales`(`txEdiNombre`)VALUES('ABC');
@@ -223,3 +221,5 @@ INSERT INTO `lb_editoriales`(`txEdiNombre`)VALUES('W. W. Norton & Company');
 INSERT INTO `lb_editoriales`(`txEdiNombre`)VALUES('YearLing');
 INSERT INTO `lb_editoriales`(`txEdiNombre`)VALUES('Zeta');
 INSERT INTO `lb_editoriales`(`txEdiNombre`)VALUES('Zig-Zag');
+commit;commit;
+commit;
