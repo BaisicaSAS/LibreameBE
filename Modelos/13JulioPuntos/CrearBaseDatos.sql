@@ -620,7 +620,7 @@ COMMENT = 'Lista de las editoriales';
 -- Table `dotEx4read`.`lb_editorialeslibros`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `dotEx4read`.`lb_editorialeslibros` (
-  `inEdiLId` INT NOT NULL COMMENT 'Llave de la tabla',
+  `inEdiLId` INT NOT NULL AUTO_INCREMENT COMMENT 'Llave de la tabla',
   `inEdiLibLibro` INT NOT NULL COMMENT 'Id del libro',
   `inEdiLibroEditorial` INT NOT NULL COMMENT 'Id de la editorial',
   INDEX `fk_table1_lb_libros_idx` (`inEdiLibLibro` ASC),
