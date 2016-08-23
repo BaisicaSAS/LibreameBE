@@ -18,6 +18,10 @@ select * from lb_libros where inLibro in (select inEjeLibro from lb_ejemplares w
 select inEjeLibro, count(1) from lb_ejemplares
 group by inEjeLibro having count(1) > 1;
 
-select count(1) from lb_generoslibros
+select count(1) from lb_generoslibros;
 
-select count(1) from lb_libros
+select count(1) from lb_libros;
+
+
+
+select * from lbejemplares

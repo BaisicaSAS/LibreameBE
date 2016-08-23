@@ -1284,7 +1284,7 @@ class ManejoDataRepository extends EntityRepository {
                 'si', 'lo', 'identificar', 'no', 'al', 'que'); 
             if ($em == NULL) { $flEm = TRUE; } else  { $flEm = FALSE; }
             
-            if ($flEm) {$em = $this->getDoctrie()->getManager();}
+            if ($flEm) {$em = $this->getDoctrine()->getManager();}
 
             $palabras = explode(" ", $texto);
             $repetidos = [];
