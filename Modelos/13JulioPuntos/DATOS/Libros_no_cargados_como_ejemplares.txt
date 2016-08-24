@@ -1,0 +1,120 @@
+Libros no cargados en ejemplares
+
+'22', '0', 'El reino de este mundo', NULL, NULL, 'España', '7', 'Sin especificar', '9788420655505', NULL, NULL, NULL, NULL, NULL, NULL
+'26', '0', 'Siete cuentos góticos', NULL, NULL, 'Sin especificar', '1999', '8481302090', '9788481302097', NULL, NULL, NULL, NULL, NULL, NULL
+'27', '0', 'Encuentro en la rue laugier', NULL, NULL, 'Sin especificar', 'Sin especificar', '8482370316', '9788482370316', NULL, NULL, NULL, NULL, NULL, NULL
+'28', '0', 'Yo soy Dios', NULL, NULL, 'Italia', '1 2010', 'Sin especificar', '9788466643351', NULL, NULL, NULL, NULL, NULL, NULL
+'29', '0', 'El coronel no tiene quien le escriba', NULL, NULL, 'Colombia', '2002', '9588089425', '9789588089423', NULL, NULL, NULL, NULL, NULL, NULL
+'32', '0', 'Ricardo y el dinosaurio rojo. Cuaderno de trabajo', NULL, NULL, 'España', 'Sin especificar', 'Sin especificar', '9788466763493', NULL, NULL, NULL, NULL, NULL, NULL
+'33', '0', 'Morir bien', NULL, NULL, 'Colombia', 'Primera', '9584214004', 'Sin especificar', NULL, NULL, NULL, NULL, NULL, NULL
+'34', '0', 'Historia de la farmacia', NULL, NULL, 'Francia', 'Primera', '2865420068', 'Sin especificar', NULL, NULL, NULL, NULL, NULL, NULL
+'35', '0', 'Carne de res', NULL, NULL, 'Colombia', 'Primera', 'Sin especificar', 'Sin especificar', NULL, NULL, NULL, NULL, NULL, NULL
+'37', '0', 'Escuela de cocina', NULL, NULL, 'Colombia', 'Primera', '9589609198', 'Sin especificar', NULL, NULL, NULL, NULL, NULL, NULL
+'38', '0', 'Los cristales', NULL, NULL, 'Sin especificar', 'Primera', '8478081518', 'Sin especificar', NULL, NULL, NULL, NULL, NULL, NULL
+'39', '0', 'El hueco', NULL, NULL, 'Colombia', 'Octava', '9586142922', 'Sin especificar', NULL, NULL, NULL, NULL, NULL, NULL
+'41', '0', 'El Hurakan', NULL, NULL, 'Colombia', 'Segunda', '958614352X', 'Sin especificar', NULL, NULL, NULL, NULL, NULL, NULL
+'42', '0', 'Cuentos del fin de siglo', NULL, NULL, 'Colombia', 'Primera', '9586147452', 'Sin especificar', NULL, NULL, NULL, NULL, NULL, NULL
+'43', '0', 'La llama doble', NULL, NULL, 'México', 'Novena reimpresión', '843220692X', 'Sin especificar', NULL, NULL, NULL, NULL, NULL, NULL
+'44', '0', 'Cien años de soledad', NULL, NULL, 'Colombia', 'Décima', 'Sin especificar', 'Sin especificar', NULL, NULL, NULL, NULL, NULL, NULL
+'45', '0', 'Memoria de mis putas tristes', NULL, NULL, 'Colombia', 'Primera', '9580483620', 'Sin especificar', NULL, NULL, NULL, NULL, NULL, NULL
+'46', '0', 'El coronel no tiene quien le escriba', NULL, NULL, 'Colombia', 'Primera', '843991198X', 'Sin especificar', NULL, NULL, NULL, NULL, NULL, NULL
+'47', '0', 'La muerte de Giacomo Turra', NULL, NULL, 'Colombia', 'Primera', '9586146030', 'Sin especificar', NULL, NULL, NULL, NULL, NULL, NULL
+'48', '0', 'La vaca', NULL, NULL, 'Colombia', 'Primera', '1607380226', 'Sin especificar', NULL, NULL, NULL, NULL, NULL, NULL
+'49', '0', 'Doce cuentos peregrinos', NULL, NULL, 'Colombia', 'Primera', '9580476853', 'Sin especificar', NULL, NULL, NULL, NULL, NULL, NULL
+'50', '0', 'El papa contra el diablo', NULL, NULL, 'Colombia', 'Primera', 'Sin especificar', 'Sin especificar', NULL, NULL, NULL, NULL, NULL, NULL
+'51', '0', 'Duelo en el paraíso', NULL, NULL, 'España', 'Sexta', '8423309967', '9789585816206', NULL, NULL, NULL, NULL, NULL, NULL
+'52', '0', 'Impávido coloso', NULL, NULL, 'Colombia', 'Primera', '9587040643', 'Sin especificar', NULL, NULL, NULL, NULL, NULL, NULL
+'53', '0', 'Cuentos de Andersen', NULL, NULL, 'Alemania', 'Sexta', '8427935048', 'Sin especificar', NULL, NULL, NULL, NULL, NULL, NULL
+'55', '0', 'Los Caminos del saber Sociales 1', NULL, NULL, 'Colombia', 'Sin especificar', 'Sin especificar', '9789587058390', NULL, NULL, NULL, NULL, NULL, NULL
+'56', '0', 'Reading Cue 1', NULL, NULL, 'Estados Unidos', 'Sin especificar', 'Sin especificar', '9789582425203', NULL, NULL, NULL, NULL, NULL, NULL
+'57', '0', 'Soy Creyente Cristiano Católico 1', NULL, NULL, 'Colombia', 'Sin especificar', 'Sin especificar', '9788925647852', NULL, NULL, NULL, NULL, NULL, NULL
+'58', '0', 'Grafiti. Plan de lectura y escritura Norma', NULL, NULL, 'Colombia', 'Sin especificar', 'Sin especificar', '9789582430030', NULL, NULL, NULL, NULL, NULL, NULL
+'60', '0', 'Matemáticas para pensar 1', NULL, NULL, 'Colombia', 'Sin especificar', 'Sin especificar', '9789587058406', NULL, NULL, NULL, NULL, NULL, NULL
+'61', '0', 'English World 1. Pupil´s Book', NULL, NULL, 'Estados Unidos', 'Sin especificar', 'Sin especificar', '9789584535252', NULL, NULL, NULL, NULL, NULL, NULL
+'62', '0', 'English World 1. Workbook.', NULL, NULL, 'Estados Unidos', 'Sin especificar', 'Sin especificar', '9780230024595', NULL, NULL, NULL, NULL, NULL, NULL
+'65', '0', 'La señora contraria', NULL, NULL, 'Colombia', 'Sin especificar', '9583011169', '9788424113834', NULL, NULL, NULL, NULL, NULL, NULL
+'66', '0', 'El Caballo y la Bicicleta', NULL, NULL, 'Colombia', 'Sin especificar', 'Sin especificar', 'Sin especificar', NULL, NULL, NULL, NULL, NULL, NULL
+'67', '0', 'Un...dos..tres..¡Ya!', NULL, NULL, 'Colombia', 'Sin especificar', '9580513353', '9789587241013', NULL, NULL, NULL, NULL, NULL, NULL
+'68', '0', 'El tigre y el ratón', NULL, NULL, 'Colombia', 'Sin especificar', '9580494088', 'Sin especificar', NULL, NULL, NULL, NULL, NULL, NULL
+'69', '0', 'Un tesoro en la Navidad', NULL, NULL, 'Colombia', 'Sin especificar', 'Sin especificar', 'Sin especificar', NULL, NULL, NULL, NULL, NULL, NULL
+'70', '0', 'Proyectos transversales Sociales 1', NULL, NULL, 'Colombia', 'Sin especificar', 'Sin especificar', '9789588293721', NULL, NULL, NULL, NULL, NULL, NULL
+'71', '0', 'Papá ha perdido el trabajo', NULL, NULL, 'España', 'Sin especificar', 'Sin especificar', '9789582430498', NULL, NULL, NULL, NULL, NULL, NULL
+'72', '0', 'Ricardo y el dinosaurio rojo', NULL, NULL, 'España', 'Sin especificar', 'Sin especificar', '9788468303826', NULL, NULL, NULL, NULL, NULL, NULL
+'73', '0', 'El enigma de Colón y los descubrimientos de América', NULL, NULL, 'España', 'Sin especificar', '840806679X', '9788466725576', NULL, NULL, NULL, NULL, NULL, NULL
+'74', '0', 'Naturalmente', NULL, NULL, 'Colombia', 'Sin especificar', 'Sin especificar', 'Sin especificar', NULL, NULL, NULL, NULL, NULL, NULL
+'75', '0', 'Notas de álgebra lineal', NULL, NULL, 'Colombia', 'Sin especificar', '9588133181', '9789587240030', NULL, NULL, NULL, NULL, NULL, NULL
+'76', '0', 'Matemáticas Discretas', NULL, NULL, 'México', '6', '9702606373', 'Sin especificar', NULL, NULL, NULL, NULL, NULL, NULL
+'77', '0', 'Programación Lineal. Una introducción a la toma de decisiones cuantitativa', NULL, NULL, 'México', 'Sin especificar', '9706861912', 'Sin especificar', NULL, NULL, NULL, NULL, NULL, NULL
+'78', '0', 'Física Universitaria', NULL, NULL, 'México', '11 Volumen 1', '9702605113', 'Sin especificar', NULL, NULL, NULL, NULL, NULL, NULL
+'79', '0', 'Probabilidad y Estadística para ingeniería y ciencias', NULL, NULL, 'México', '5', '9706860673', 'Sin especificar', NULL, NULL, NULL, NULL, NULL, NULL
+'80', '0', 'Fundamentos de Bases de Datos', NULL, NULL, 'España', '4', '8448136543', 'Sin especificar', NULL, NULL, NULL, NULL, NULL, NULL
+'81', '0', 'Ecuaciones Diferenciales', NULL, NULL, 'México', '2', '9684444389', 'Sin especificar', NULL, NULL, NULL, NULL, NULL, NULL
+'83', '0', 'Matemática Discreta y Lógica. Una perspectiva desde la Ciencia de la Computación', NULL, NULL, 'España', 'Sin especificar', '8489660042', 'Sin especificar', NULL, NULL, NULL, NULL, NULL, NULL
+'85', '0', 'Probabilidad y Estadística Para Ingenieros', NULL, NULL, 'México', '6', '9701702646', 'Sin especificar', NULL, NULL, NULL, NULL, NULL, NULL
+'86', '0', 'Compiladores. Principios, técnicas y herramientas', NULL, NULL, 'México', 'Sin especificar', '9684443331', 'Sin especificar', NULL, NULL, NULL, NULL, NULL, NULL
+'87', '0', 'Fundamentos de Sistemas Operativos', NULL, NULL, 'España', '7', '8448146417', 'Sin especificar', NULL, NULL, NULL, NULL, NULL, NULL
+'88', '0', 'Física para ciencias e ingeniería', NULL, NULL, 'México', '5 Tomo 2', '9701035828', 'Sin especificar', NULL, NULL, NULL, NULL, NULL, NULL
+'89', '0', 'Organización y Arquitectura de Computadores', NULL, NULL, 'España', '5', '8420529931', 'Sin especificar', NULL, NULL, NULL, NULL, NULL, NULL
+'90', '0', 'Física para ciencias e ingeniería', NULL, NULL, 'México', '5 Tomo 1', '970103581X', 'Sin especificar', NULL, NULL, NULL, NULL, NULL, NULL
+'91', '0', 'Sistema de bases de datos. Un enfoque práctico para diseño, implementación y gestión', NULL, NULL, 'España', '4', '8478290753', 'Sin especificar', NULL, NULL, NULL, NULL, NULL, NULL
+'92', '0', 'Manual De Informatica II', NULL, NULL, 'Colombia', 'Sin especificar', '9589105912', 'Sin especificar', NULL, NULL, NULL, NULL, NULL, NULL
+'94', '0', 'Fundamentos de programación. Algoritmos y Estructura de Datos', NULL, NULL, 'México', '2', '8448106032', 'Sin especificar', NULL, NULL, NULL, NULL, NULL, NULL
+'97', '0', 'Oracle 10g Administración y Análisis de Bases de Datos', NULL, NULL, 'México', 'Sin especificar', '9701511026', 'Sin especificar', NULL, NULL, NULL, NULL, NULL, NULL
+'98', '0', 'Linux para usuarios de Windows', NULL, NULL, 'México', 'Sin especificar', '9701034384', 'Sin especificar', NULL, NULL, NULL, NULL, NULL, NULL
+'112', '0', 'Narraciones Fantásticas Antología', NULL, NULL, 'México', '2002', '9587040333', '9789586140850', NULL, NULL, NULL, NULL, NULL, NULL
+'114', '0', 'Diez preguntas eternas', NULL, NULL, 'Sin especificar', '2006', '840806343X', '9788408063438', NULL, NULL, NULL, NULL, NULL, NULL
+'133', '0', 'Colmillo blanco', NULL, NULL, 'USA', '1a. ed.', '9580451864', '9789580451860', NULL, NULL, NULL, NULL, NULL, NULL
+'135', '0', 'Introducción a la Teoría de Autómatas, Lenguajes y Computación', NULL, NULL, 'España', '2', '8478290567', '9788478290567', NULL, NULL, NULL, NULL, NULL, NULL
+'136', '0', 'La reina en el palacio de las corrientes de aire. Millennium 3.', NULL, NULL, 'Suecia', '6', '8423341615', '9788423341610', NULL, NULL, NULL, NULL, NULL, NULL
+'153', '0', 'Donde esta la franja amarilla', NULL, NULL, 'Colombia', 'Primera', '9580438927', 'Sin especificar', NULL, NULL, NULL, NULL, NULL, NULL
+'154', '0', 'País de la canela', NULL, NULL, 'Colombia', 'Sin especificar', 'Sin especificar', 'Sin especificar', NULL, NULL, NULL, NULL, NULL, NULL
+'156', '0', 'Canto general', NULL, NULL, 'Chile', 'Primera', 'Sin especificar', 'Sin especificar', NULL, NULL, NULL, NULL, NULL, NULL
+'158', '0', 'Relato de un naufrago', NULL, NULL, 'Colombia', 'Primera', 'Sin especificar', 'Sin especificar', NULL, NULL, NULL, NULL, NULL, NULL
+'159', '0', 'El general en su laberinto', NULL, NULL, 'Colombia', 'Sin especificar', 'Sin especificar', 'Sin especificar', NULL, NULL, NULL, NULL, NULL, NULL
+'160', '0', 'El otoño del patriarca', NULL, NULL, 'Colombia', 'Sin especificar', 'Sin especificar', 'Sin especificar', NULL, NULL, NULL, NULL, NULL, NULL
+'162', '0', 'Crónica de una muerte anunciada', NULL, NULL, 'Colombia', 'Sin especificar', 'Sin especificar', 'Sin especificar', NULL, NULL, NULL, NULL, NULL, NULL
+'163', '0', 'Vivir para contarlo', NULL, NULL, 'Colombia', 'Sin especificar', 'Sin especificar', 'Sin especificar', NULL, NULL, NULL, NULL, NULL, NULL
+'164', '0', 'Del Amor y otros demonios', NULL, NULL, 'Colombia', 'Sin especificar', 'Sin especificar', 'Sin especificar', NULL, NULL, NULL, NULL, NULL, NULL
+'166', '0', 'La muerte de Artemio Cruz', NULL, NULL, 'México', 'Primera', '8466301968', 'Sin especificar', NULL, NULL, NULL, NULL, NULL, NULL
+'167', '0', 'Doña flor y sus dos maridos', NULL, NULL, 'Brasil', 'Sin especificar', 'Sin especificar', 'Sin especificar', NULL, NULL, NULL, NULL, NULL, NULL
+'168', '0', 'El olvido que seremos', NULL, NULL, 'Colombia', 'Sin especificar', 'Sin especificar', 'Sin especificar', NULL, NULL, NULL, NULL, NULL, NULL
+'171', '0', 'Tierra de nadie', NULL, NULL, 'Uruguay', 'Primera', '8425330106', 'Sin especificar', NULL, NULL, NULL, NULL, NULL, NULL
+'172', '0', 'Escalera al cielo', NULL, NULL, 'Colombia', 'Sin especificar', 'Sin especificar', 'Sin especificar', NULL, NULL, NULL, NULL, NULL, NULL
+'173', '0', 'Satanás', NULL, NULL, 'Colombia', 'Octava', '9584205536', 'Sin especificar', NULL, NULL, NULL, NULL, NULL, NULL
+'174', '0', 'La luz difícil', NULL, NULL, 'Colombia', 'Sin especificar', 'Sin especificar', 'Sin especificar', NULL, NULL, NULL, NULL, NULL, NULL
+'175', '0', 'El Túnel', NULL, NULL, 'Argentina', 'Sin especificar', 'Sin especificar', 'Sin especificar', NULL, NULL, NULL, NULL, NULL, NULL
+'193', '0', 'Ficciones', NULL, NULL, 'Argentina', 'Sin especificar', 'Sin especificar', '9789583001000', NULL, NULL, NULL, NULL, NULL, NULL
+'194', '0', 'Los parientes de Ester', NULL, NULL, 'Colombia', 'Sin especificar', 'Sin especificar', 'Sin especificar', NULL, NULL, NULL, NULL, NULL, NULL
+'196', '0', 'Mujeres de ojos grandes', NULL, NULL, 'México', 'Sin especificar', 'Sin especificar', 'Sin especificar', NULL, NULL, NULL, NULL, NULL, NULL
+'197', '0', 'La ultima oportunidad', NULL, NULL, 'México', 'Sin especificar', 'Sin especificar', 'Sin especificar', NULL, NULL, NULL, NULL, NULL, NULL
+'198', '0', 'Volar sobre el pantano', NULL, NULL, 'México', 'Sin especificar', 'Sin especificar', 'Sin especificar', NULL, NULL, NULL, NULL, NULL, NULL
+'199', '0', 'Don Simeón torrente ha dejado de beber', NULL, NULL, 'Colombia', 'Vigésima séptima', '95860116301', 'Sin especificar', NULL, NULL, NULL, NULL, NULL, NULL
+'200', '0', 'Un tal Bernabé Bernal', NULL, NULL, 'Colombia', 'Sin especificar', 'Sin especificar', 'Sin especificar', NULL, NULL, NULL, NULL, NULL, NULL
+'201', '0', 'La multitud errante', NULL, NULL, 'Colombia', 'Sin especificar', 'Sin especificar', 'Sin especificar', NULL, NULL, NULL, NULL, NULL, NULL
+'202', '0', 'Delirio', NULL, NULL, 'Colombia', 'Sin especificar', 'Sin especificar', 'Sin especificar', NULL, NULL, NULL, NULL, NULL, NULL
+'203', '0', 'La isla de la pasión', NULL, NULL, 'Colombia', 'Sin especificar', 'Sin especificar', 'Sin especificar', NULL, NULL, NULL, NULL, NULL, NULL
+'204', '0', 'Dulce compañía', NULL, NULL, 'Colombia', 'Sin especificar', 'Sin especificar', 'Sin especificar', NULL, NULL, NULL, NULL, NULL, NULL
+'205', '0', 'El Moro', NULL, NULL, 'Colombia', 'Sin especificar', 'Sin especificar', 'Sin especificar', NULL, NULL, NULL, NULL, NULL, NULL
+'206', '0', 'Tres tristes tigres', NULL, NULL, 'Cuba', 'Sin especificar', 'Sin especificar', 'Sin especificar', NULL, NULL, NULL, NULL, NULL, NULL
+'207', '0', 'La Habana para un infante difunto', NULL, NULL, 'Cuba', 'Sin especificar', 'Sin especificar', 'Sin especificar', NULL, NULL, NULL, NULL, NULL, NULL
+'208', '0', 'Noticia de un convento frente al mar', NULL, NULL, 'Colombia', 'Sin especificar', 'Sin especificar', 'Sin especificar', NULL, NULL, NULL, NULL, NULL, NULL
+'209', '0', 'La elipse de la codorniz', NULL, NULL, 'Colombia', 'Sin especificar', 'Sin especificar', 'Sin especificar', NULL, NULL, NULL, NULL, NULL, NULL
+'210', '0', 'La ultima mudanza de Felipe Carrillo', NULL, NULL, 'Perú', 'Sin especificar', 'Sin especificar', 'Sin especificar', NULL, NULL, NULL, NULL, NULL, NULL
+'211', '0', 'Elogio a la madrastra', NULL, NULL, 'Perú', 'Primera', '9582700009', 'Sin especificar', NULL, NULL, NULL, NULL, NULL, NULL
+'212', '0', 'la ciudad y los perros', NULL, NULL, 'Perú', 'Sin especificar', 'Sin especificar', 'Sin especificar', NULL, NULL, NULL, NULL, NULL, NULL
+'214', '0', 'La guerra del fin del mundo', NULL, NULL, 'Perú', 'Sin especificar', 'Sin especificar', 'Sin especificar', NULL, NULL, NULL, NULL, NULL, NULL
+'215', '0', 'Conversaciones en la catedral', NULL, NULL, 'Perú', 'Sin especificar', 'Sin especificar', 'Sin especificar', NULL, NULL, NULL, NULL, NULL, NULL
+'216', '0', 'Historia de Mayta', NULL, NULL, 'Perú', 'Sin especificar', 'Sin especificar', 'Sin especificar', NULL, NULL, NULL, NULL, NULL, NULL
+'217', '0', 'La casa de las dos palmas', NULL, NULL, 'Colombia', 'Sin especificar', 'Sin especificar', 'Sin especificar', NULL, NULL, NULL, NULL, NULL, NULL
+'218', '0', 'El bosque de los pigmeos', NULL, NULL, 'Chile', 'Sin especificar', 'Sin especificar', 'Sin especificar', NULL, NULL, NULL, NULL, NULL, NULL
+'219', '0', 'De amor y de sombra', NULL, NULL, 'Chile', 'Primera', 'Sin especificar', '9789802936311', NULL, NULL, NULL, NULL, NULL, NULL
+'220', '0', 'La hija de la fortuna', NULL, NULL, 'Chile', 'Sin especificar', 'Sin especificar', 'Sin especificar', NULL, NULL, NULL, NULL, NULL, NULL
+'221', '0', 'El Aleph', NULL, NULL, 'Brasil', 'Sin especificar', 'Sin especificar', 'Sin especificar', NULL, NULL, NULL, NULL, NULL, NULL
+'222', '0', 'el Zahir', NULL, NULL, 'Brasil', 'Sin especificar', 'Sin especificar', 'Sin especificar', NULL, NULL, NULL, NULL, NULL, NULL
+'223', '0', 'Maktub', NULL, NULL, 'Brasil', 'Sin especificar', 'Sin especificar', 'Sin especificar', NULL, NULL, NULL, NULL, NULL, NULL
+'224', '0', 'Once Minutos', NULL, NULL, 'Brasil', 'Sin especificar', 'Sin especificar', 'Sin especificar', NULL, NULL, NULL, NULL, NULL, NULL
+'225', '0', 'El demonio y la señorita Prym', NULL, NULL, 'Brasil', 'Sin especificar', 'Sin especificar', 'Sin especificar', NULL, NULL, NULL, NULL, NULL, NULL
+'227', '0', 'Ilona llega con la lluvia', NULL, NULL, 'Colombia', 'Sin especificar', 'Sin especificar', 'Sin especificar', NULL, NULL, NULL, NULL, NULL, NULL
+'231', '0', 'Los informantes', NULL, NULL, 'Colombia', 'Sin especificar', 'Sin especificar', 'Sin especificar', NULL, NULL, NULL, NULL, NULL, NULL
+'304', '0', 'La colmena', NULL, NULL, 'España', 'Primera', '8402067093', 'Sin especificar', NULL, NULL, NULL, NULL, NULL, NULL
+'399', '0', 'Malinche', NULL, NULL, 'México', '2006', '9587043987', '9789587043983', NULL, NULL, NULL, NULL, NULL, NULL
