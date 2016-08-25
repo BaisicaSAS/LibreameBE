@@ -1,6 +1,7 @@
 
 ##Libros que no están cargados como ejemplares (Puede ser que no tengan propietario)
-select * from lb_libros where inLibro not in (select inEjeLibro from lb_ejemplares where lb_histejemplar);
+select * from lb_libros where inLibro not in 
+(select inEjeLibro from lb_ejemplares);
 
 ##Libros que no tienen editorial
 select * from lb_libros where inLibro not in (select inEdiLibLibro from lb_editorialeslibros);
@@ -11,12 +12,22 @@ select * from lb_libros where inLibro not in (select inAutLIdLibro from lb_autor
 ##Libros que no tienen genero
 select * from lb_libros where inLibro not in (select inGLiLibro from lb_generoslibros);
 
+##Ejemplares que no tienen propietario
+select inEjeLibro from lb_ejemplares where inEjeUsuDueno IS NULL;
+
 ##Libros que no tienen propietario
 select * from lb_libros where inLibro in (select inEjeLibro from lb_ejemplares where inEjeUsuDueno IS NULL);
+
 
 ##Libros con más de un ejemplar
 select inEjeLibro, count(1) from lb_ejemplares
 group by inEjeLibro having count(1) > 1;
+
+
+##Libros con más de un ejemplar
+select txNomLibro
+group by inEjeLibro having count(1) > 1;
+
 
 select count(1) from lb_generoslibros;
 
