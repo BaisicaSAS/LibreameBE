@@ -33,6 +33,9 @@ class GestionEjemplares {
     
     public function recuperarFeedEjemplares(Solicitud $psolicitud)
     {   
+        /*
+            http://ex4read.co/services/web/img/p/1/1/11.jpg         
+        */
         /*setlocale (LC_TIME, "es_CO");
         $fecha = new \DateTime;*/
         $respuesta = new Respuesta();

@@ -3,6 +3,7 @@
 namespace Libreame\BackendBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use EntityR;
 use DateTime;
 use Libreame\BackendBundle\Controller\AccesoController;
 use Libreame\BackendBundle\Entity\LbLugares;
@@ -435,16 +436,35 @@ class ManejoDataRepository extends EntityRepository {
         try{
             //Recupera cada uno de los ejemplares con ID > al del parametro
             $em = $this->getDoctrine()->getManager();
-            $sql = "SELECT e FROM LibreameBackendBundle:LbEjemplares e,"
-                    . " LibreameBackendBundle:LbMembresias m,"
-                    . " LibreameBackendBundle:LbUsuarios u,"
-                    . " LibreameBackendBundle:LbOfrecidos o WHERE e.inejemplar > ".$inultejemplar
-                    . " and e.inejeusudueno = m.inmemusuario"
-                    . " and o.inofrejemplar = e.inejemplar"
-                    . " and m.inmemgrupo in (:grupos) ";
-
-            $query = $em->createQuery($sql)->setParameter('grupos', $grupos);
-            return $query->getResult();
+/*            $sql = "SELECT e.inEjemplar, l.txLibTitulo, e.*, u.*, count(mg.inidmegusta), count(c.inidcomentario), max(h.fehisejeregistro) fechapub  FROM LibreameBackendBundle:LbEjemplares e"
+                    . " LEFT JOIN LibreameBackendBundle:LbLibros l ON e.inejelibro = l.inlibro "
+                    . " LEFT JOIN LibreameBackendBundle:LbUsuarios u ON e.inejeusudueno = u.inusuario "
+                    . " LEFT JOIN LibreameBackendBundle:LbMembresias m ON e.inejeusudueno = m.inmemusuario"
+                    . " LEFT JOIN LibreameBackendBundle:LbMegusta mg ON mg.inMegEjemplar = e.inejemplar "
+                    . " LEFT JOIN LibreameBackendBundle:LbComentarios c ON c.inComEjemplar = e.inejemplar "
+                    . " LEFT JOIN LibreameBackendBundle:LbHistejemplar h ON h.inhisejeejemplar = e.inejemplar "
+                    . " WHERE e.inejemplar > ".$inultejemplar." and e.inejepublicado <= 1 and h.inHisEjeMovimiento = 1 "
+                    . " group by e.inEjemplar " 
+                    . " and m.inmemgrupo in (:grupos) "
+                    . " order by fechapub ";*/
+            $q = $em->createQueryBuilder()
+                ->select('e.inEjemplar, l.txLibTitulo, e.*, u.*, count(mg.inidmegusta), count(c.inidcomentario), max(h.fehisejeregistro) fechapub')
+                ->from('LibreameBackendBundle:LbEjemplares', 'e')
+                ->leftJoin('LibreameBackendBundle:LbLibros', 'l')
+                ->leftJoin('LibreameBackendBundle:LbUsuarios', 'u')                 
+                ->leftJoin('LibreameBackendBundle:LbMembresias', 'm')
+                ->leftJoin('LibreameBackendBundle:LbMegusta', 'mg')                  
+                ->leftJoin('LibreameBackendBundle:LbComentarios', 'c')
+                ->leftJoin('LibreameBackendBundle:LbHistejemplar', 'h')
+                ->where('e.inejemplar > ?', $inultejemplar)
+                ->andWhere('e.inejepublicado <= ?', '1')
+                ->andWhere('h.inHisEjeMovimiento = ?', '1')
+                ->groupBy(' e.inEjemplar ')      
+                ->orderBy(' fechapub ');                    
+                    
+            //$query = $em->createQuery($sql)->setParameter('grupos', $grupos);
+            //return $query->getResult();
+            return $q->execute();
         } catch (Exception $ex) {
                 return new LbEjemplares();
         } 

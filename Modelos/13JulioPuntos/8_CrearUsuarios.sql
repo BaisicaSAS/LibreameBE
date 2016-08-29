@@ -166,6 +166,9 @@ INSERT INTO `lb_usuarios`(`inUsuario`,`txUsuTelefono`,`txUsuEmail`,`txUsuNombre`
 INSERT INTO `lb_usuarios`(`inUsuario`,`txUsuTelefono`,`txUsuEmail`,`txUsuNombre`,`txUsuImagen`,`inUsuGenero`,`inUsuLugar`,`txUsuNomMostrar`,`inUsuEstado`,`txUsuClave`,`feFecRegistro`,`feUsuUltIngreso`)VALUES(143, 'juliansuarezbag@hotmail.com', 'juliansuarezbag@hotmail.com', 'Julian David Suarez', 'Julian David Suarez', 0, 5, 'Julian David', 1, 'PENDIENTE', '2016-8-24 18:46', '');     INSERT INTO `dotex4read`.`lb_planesusuarios`(`inUsuPlan`,`inPlUsPlanes`,`fePlUsInicio`,`fePlUsFin`)VALUES(143, 1, '2016-01-01 00:00:00', '2046-01-01 00:00:00');
 INSERT INTO `lb_usuarios`(`inUsuario`,`txUsuTelefono`,`txUsuEmail`,`txUsuNombre`,`txUsuImagen`,`inUsuGenero`,`inUsuLugar`,`txUsuNomMostrar`,`inUsuEstado`,`txUsuClave`,`feFecRegistro`,`feUsuUltIngreso`)VALUES(144, 'carlosnicolas6@gmail.com', 'carlosnicolas6@gmail.com', 'Carlos .', 'Carlos .', 0, 5, 'Carlos', 1, 'PENDIENTE', '2016-8-25 18:46', '');     INSERT INTO `dotex4read`.`lb_planesusuarios`(`inUsuPlan`,`inPlUsPlanes`,`fePlUsInicio`,`fePlUsFin`)VALUES(144, 1, '2016-01-01 00:00:00', '2046-01-01 00:00:00');
 
+INSERT INTO lb_membresias (inmemusuario, inmemgrupo) 
+select inusuario, 1 from lb_usuarios;
+
 
 
 SELECT * FROM dotex4read.lb_usuarios;

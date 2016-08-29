@@ -23,10 +23,12 @@ select * from lb_libros where inLibro in (select inEjeLibro from lb_ejemplares w
 select inEjeLibro, count(1) from lb_ejemplares
 group by inEjeLibro having count(1) > 1;
 
+##Todos los ejemplares
+select l.txLibtitulo, e.* from lb_ejemplares e, lb_libros l where e.inEjeLibro = l.inLibro and e.inEjemplar = 11;
 
 ##Libros con más de un ejemplar
-select txNomLibro
-group by inEjeLibro having count(1) > 1;
+##select txNomLibro
+##group by inEjeLibro having count(1) > 1;
 
 
 select count(1) from lb_generoslibros;
@@ -35,4 +37,23 @@ select count(1) from lb_libros;
 
 
 
-select * from lbejemplares
+/**************************************************/
+/*consulta para recuperar feed ejemplares
+/**************************************************/
+
+
+/* ESTA ES LA CONSULTA */
+SELECT e.inEjemplar, l.txLibTitulo, e.*, u.*, count(mg.inidmegusta), count(c.inidcomentario), max(h.fehisejeregistro) fechapub  FROM Lb_Ejemplares e
+LEFT JOIN lb_libros l ON e.inejelibro = l.inlibro 
+LEFT JOIN lb_usuarios u ON e.inejeusudueno = u.inusuario
+LEFT JOIN lb_membresias m ON e.inejeusudueno = m.inmemusuario
+LEFT JOIN lb_megusta mg ON mg.inMegEjemplar = e.inejemplar 
+LEFT JOIN lb_comentarios c ON c.inComEjemplar = e.inejemplar 
+LEFT JOIN lb_histejemplar h ON h.inhisejeejemplar = e.inejemplar 
+WHERE e.inejemplar > 0 and e.inejepublicado <= 1
+and h.inHisEjeMovimiento = 1
+group by  e.inEjemplar
+order by fechapub
+
+
+/***
