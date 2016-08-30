@@ -448,24 +448,28 @@ class ManejoDataRepository extends EntityRepository {
                     . " and m.inmemgrupo in (:grupos) "
                     . " order by fechapub ";*/
             $q = $em->createQueryBuilder()
-                ->select('e.inEjemplar, l.txLibTitulo, e.*, u.*, count(mg.inidmegusta), count(c.inidcomentario), max(h.fehisejeregistro) fechapub')
+                ->select('e.inejemplar', 'l.txlibtitulo', 'e', 'u', 'count(mg.inidmegusta)', 'count(c.inidcomentario)', 'max(h.fehisejeregistro) fechapub')
                 ->from('LibreameBackendBundle:LbEjemplares', 'e')
-                ->leftJoin('LibreameBackendBundle:LbLibros', 'l')
-                ->leftJoin('LibreameBackendBundle:LbUsuarios', 'u')                 
-                ->leftJoin('LibreameBackendBundle:LbMembresias', 'm')
-                ->leftJoin('LibreameBackendBundle:LbMegusta', 'mg')                  
-                ->leftJoin('LibreameBackendBundle:LbComentarios', 'c')
-                ->leftJoin('LibreameBackendBundle:LbHistejemplar', 'h')
-                ->where('e.inejemplar > ?', $inultejemplar)
-                ->andWhere('e.inejepublicado <= ?', '1')
-                ->andWhere('h.inHisEjeMovimiento = ?', '1')
-                ->groupBy(' e.inEjemplar ')      
-                ->orderBy(' fechapub ');                    
-                    
+                ->leftJoin('LibreameBackendBundle:LbLibros', 'l', \Doctrine\ORM\Query\Expr\Join::WITH, 'l.inlibro = e.inejelibro')
+                ->leftJoin('LibreameBackendBundle:LbUsuarios', 'u', \Doctrine\ORM\Query\Expr\Join::WITH, 'u.inusuario = e.inejeusudueno')                 
+                ->leftJoin('LibreameBackendBundle:LbMembresias', 'm', \Doctrine\ORM\Query\Expr\Join::WITH, 'm.inmemusuario = e.inejeusudueno')
+                ->leftJoin('LibreameBackendBundle:LbMegusta', 'mg', \Doctrine\ORM\Query\Expr\Join::WITH, 'mg.inmegejemplar = e.inejemplar')                  
+                ->leftJoin('LibreameBackendBundle:LbComentarios', 'c', \Doctrine\ORM\Query\Expr\Join::WITH, 'c.incomejemplar = e.inejemplar')
+                ->leftJoin('LibreameBackendBundle:LbHistejemplar', 'h', \Doctrine\ORM\Query\Expr\Join::WITH, 'h.inhisejeejemplar = e.inejemplar')
+                ->where(' e.inejemplar > :pejemplar')
+                ->setParameter('pejemplar', $inultejemplar)
+                ->andWhere(' e.inejepublicado <= :ppublicado')
+                ->setParameter('ppublicado', 1)                    
+                ->andWhere(' h.inhisejemovimiento = :pmovimiento')
+                ->setParameter('pmovimiento', 1)
+                ->orderBy(' fechapub ')                    
+                ->groupBy(' e.inejemplar ');
+
             //$query = $em->createQuery($sql)->setParameter('grupos', $grupos);
             //return $query->getResult();
-            return $q->execute();
+            return $q->getQuery()->getResult() ;
         } catch (Exception $ex) {
+                //echo "retorna error";
                 return new LbEjemplares();
         } 
     }

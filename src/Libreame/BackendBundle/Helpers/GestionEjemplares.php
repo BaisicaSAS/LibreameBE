@@ -42,7 +42,7 @@ class GestionEjemplares {
         $objLogica = $this->get('logica_service');
         $usuario = new LbUsuarios();
         $sesion = new LbSesiones();
-        $ejemplares = new LbEjemplares();
+        //$ejemplares = new LbEjemplares();
         try {
             //Valida que la sesión corresponda y se encuentre activa
             $respSesionVali=  ManejoDataRepository::validaSesionUsuario($psolicitud);
@@ -66,6 +66,9 @@ class GestionEjemplares {
 
 
                 $ejemplares = ManejoDataRepository::getEjemplaresDisponibles($arrGru, $psolicitud->getUltEjemplar());
+                //echo "Imagen ".$ejemplares;
+                
+                
                 $respuesta->setRespuesta(AccesoController::inExitoso);
 
                 //SE INACTIVA PORQUE PUEDE GENERAR UNA GRAN CANTIDAD DE REGISTROS EN UNA SOLA SESION

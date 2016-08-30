@@ -365,6 +365,8 @@ class Logica {
             $arrGeneros = array();
             $arrTmp = array();
             //$ejemplar = new LbEjemplares();
+            echo "La respuesta :: Logica 368";
+            //        var_dump($parreglo );
             foreach ($parreglo as $ejemplar){
                 //Recupera nombre del genero, Nombre del libro, Nombre del uduario Dueño
                 $genero = new LbGeneros();
@@ -372,7 +374,7 @@ class Logica {
                 $libro = new LbLibros();
                 $usuario = new LbUsuarios();
                 if ($respuesta->getRespuesta()== AccesoController::inULogged){
-                    //echo "ejemplar: [".$ejemplar->getInejelibro()->getInlibro()."]\n";
+                    echo "ejemplar: [".$ejemplar->LbEjemplares()->getInejemplar()."]\n";
                     $libro = ManejoDataRepository::getLibro($ejemplar->getInejelibro()->getInlibro());
                     $generolibro = ManejoDataRepository::getGeneroLibro($ejemplar->getInejelibro()->getInlibro());
                     $usuario = ManejoDataRepository::getUsuarioById($ejemplar->getInejeusudueno()->getInusuario());
@@ -383,7 +385,7 @@ class Logica {
                     $genero = ManejoDataRepository::getGenero($gen->getIngligenero());
                     $arrGeneros[] = array('ingenero' => $genero->getIngenero(), 'txgenero' => $genero->getTxgennombre());
                 }
-                //echo "ANTES OFERTA RECUPERO DATOS\n";
+                echo "ANTES OFERTA RECUPERO DATOS\n";
 
                 $oferta = new LbOfertas();
                 $oferta = ManejoDataRepository::getOfertasByEjemplar($ejemplar);
