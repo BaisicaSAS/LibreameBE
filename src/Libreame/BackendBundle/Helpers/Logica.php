@@ -15,9 +15,6 @@ use Libreame\BackendBundle\Entity\LbSesiones;
 use Libreame\BackendBundle\Entity\LbEjemplares;
 use Libreame\BackendBundle\Entity\LbActsesion;
 use Libreame\BackendBundle\Entity\LbMensajes;
-use Libreame\BackendBundle\Entity\LbSolicitados;
-use Libreame\BackendBundle\Entity\LbOfrecidos;
-use Libreame\BackendBundle\Entity\LbOfertas;
 use Libreame\BackendBundle\Entity\LbCalificausuarios;
 use Libreame\BackendBundle\Helpers\Respuesta;
 
@@ -364,9 +361,8 @@ class Logica {
         try{
             $arrGeneros = array();
             $arrTmp = array();
-            //$ejemplar = new LbEjemplares();
-            echo "La respuesta :: Logica 368";
-            //        var_dump($parreglo );
+            $ejemplar = new LbEjemplares();
+            echo "Va a generar la respuestaFeedEjemplares :: Logica.php [365] \n";
             foreach ($parreglo as $ejemplar){
                 //Recupera nombre del genero, Nombre del libro, Nombre del uduario Dueño
                 $genero = new LbGeneros();
@@ -374,84 +370,45 @@ class Logica {
                 $libro = new LbLibros();
                 $usuario = new LbUsuarios();
                 if ($respuesta->getRespuesta()== AccesoController::inULogged){
-                    echo "ejemplar: [".$ejemplar->LbEjemplares()->getInejemplar()."]\n";
+                    //'e.inejemplar inejemplar', 
+                    //'l.txlibtitulo txlibtitulo', 
+                    //'count(mg.inidmegusta) megusta', 
+                    //'count(nmg.inidmegusta) nomegusta', 
+                    //'count(c.inidcomentario) numcomm', 
+                    //'max(h.fehisejeregistro) fechapub', 'e', 'u')
                     $libro = ManejoDataRepository::getLibro($ejemplar->getInejelibro()->getInlibro());
-                    $generolibro = ManejoDataRepository::getGeneroLibro($ejemplar->getInejelibro()->getInlibro());
+                    echo "ejemplar: [".$ejemplar->getInejemplar()."] libro: [".$libro->getTxlibtitulo()."]\n";
+                    $generoslibro = ManejoDataRepository::getGenerosLibro($ejemplar->getInejelibro()->getInlibro());
+                    $autores = ManejoDataRepository::getAutoresLibro($ejemplar->getInejelibro()->getInlibro());
+                    $editoriales = ManejoDataRepository::getEditorialesLibro($ejemplar->getInejelibro()->getInlibro());
+                    //$cantmegusta = ManejoDataRepository::getUsuarioById($ejemplar->getInejemplar());
+                    //$cantcomment = ManejoDataRepository::getUsuarioById($ejemplar->getInejemplar());
                     $usuario = ManejoDataRepository::getUsuarioById($ejemplar->getInejeusudueno()->getInusuario());
-                    //echo "RECUPERO DATOS\n";
-                }
-                //Guarda los generos
-                foreach ($generolibro as $gen){
-                    $genero = ManejoDataRepository::getGenero($gen->getIngligenero());
-                    $arrGeneros[] = array('ingenero' => $genero->getIngenero(), 'txgenero' => $genero->getTxgennombre());
-                }
-                echo "ANTES OFERTA RECUPERO DATOS\n";
-
-                $oferta = new LbOfertas();
-                $oferta = ManejoDataRepository::getOfertasByEjemplar($ejemplar);
-                //echo "RECUPERO OFERTA = ".$oferta->getInoferta()."\n";
-
-                $ofrecidos = new LbOfrecidos();
-                $ofrecidos = ManejoDataRepository::getOfrecidosByOferta($oferta);
-                //echo "RECUPERO OFRECIDOS \n";
-
-                $solicitados = new LbSolicitados();
-                $solicitados = ManejoDataRepository::getSolicitadosByOferta($oferta);
-                //echo "RECUPERO SOLICITADOS \n";
-                
-                $inContador = 0;
-                $sol1 = "";
-                $sol2 = "";
-                $vsol1 = 0;
-                $vsol2 = 0;
-                $mensaje = "";
-                foreach ($solicitados as $solicitado){
-                    //echo "SOLICITADO # ".$inContador." - ".$solicitado->getInsollibro()->getTxlibtitulo();
-                    
-                    if($inContador == 0) {
-                        //echo "Libro - ".$solicitado->getInsollibro()->getInlibro();
-                        
-                        $sol1 = $solicitado->getInsollibro()->getTxlibtitulo();
-                        $vsol1 = $solicitado->getDbsolvaladic();
-                        $mensaje = $solicitado->getTxsolobservacion();
-                    } else {
-                        //echo "Libro - ".$solicitado->getInsollibro()->getInlibro();
-                        $sol2 = $solicitado->getInsollibro()->getTxlibtitulo();
-                        $vsol2 = $solicitado->getDbsolvaladic();
-                    }
-                    //echo $inContador." - ".$solicitado->getInsollibro()->getTxlibtitulo();
-                    $inContador++;
+                    //echo "RECUPERO DATOS\n";*/
                 }
                 
-                $arrOferta = array('inoferta' => $oferta->getInoferta(), 
-                    'soli1' => $sol1, 
-                    'valadic1' => $vsol1, 
-                    'soli2' => $sol2, 
-                    'valadic2' => $vsol2, 
-                    'valventa' => $ejemplar->getDbejeavaluo(), 
-                    'mensaje' => $mensaje 
-                );
-                        
+                $titulo = utf8_encode($libro->getTxlibtitulo());
+                //if ($libro->getTxediciondescripcion() == "") $edicion = "Sin especificar"; ELSE $edicion = $libro->getTxediciondescripcion();
+                $edicion = utf8_encode($libro->getTxediciondescripcion());
+                echo "Titulo + Descripcion edicion : [".$titulo."] - [".$edicion."]\n";
+                //$titulo = $libro->getTxlibtitulo();
                 $arrTmp[] = array('idejemplar' => $ejemplar->getInejemplar(), 
-                    'titulo' => $ejemplar->getInejelibro()->getTxlibtitulo(), 
-                    'autor' => $ejemplar->getInejelibro()->getTxlibautores(),
-                    'edicion' => $ejemplar->getInejelibro()->getTxlibedicionnum(), 
-                    'editorial' => $ejemplar->getInejelibro()->getTxlibeditorial(),
-                    'idioma' => $ejemplar->getInejelibro()->getTxlibidioma(),
-                    'indueno' => $usuario->getInusuario(), 'oferta' => $arrOferta
-                ); 
-
-                
-                unset($arrGeneros);
+                    'titulo' => $titulo, 
+                    'edicion' => $edicion,
+                    //'idioma' => $libro->getInlibidioma()->getTxidinombre()->toString(),
+                    'indueno' => $usuario/*, 'libro'  => $libro, 'autores'  => $autores, 
+                    'editoriales' => $editoriales*/
+                );
                 
             }
-
+            
             return array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
                     'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr(), 
                     'iddevice'=> $pSolicitud->getDeviceMac(), 'marca'=>$pSolicitud->getDeviceMarca(), 
                     'modelo'=>$pSolicitud->getDeviceModelo(), 'so'=>$pSolicitud->getDeviceSO()), 
                     'idrespuesta' => array('respuesta' => $respuesta->getRespuesta(), 
-                    'ejemplares' => $arrTmp));
+                    'ejemplares' => $arrTmp ));
+
         } catch (Exception $ex) {
                 return AccesoController::inPlatCai;
         } 

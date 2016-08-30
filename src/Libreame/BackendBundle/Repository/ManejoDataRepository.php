@@ -3,6 +3,7 @@
 namespace Libreame\BackendBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query;
 use EntityR;
 use DateTime;
 use Libreame\BackendBundle\Controller\AccesoController;
@@ -16,12 +17,11 @@ use Libreame\BackendBundle\Entity\LbGrupos;
 use Libreame\BackendBundle\Entity\LbSesiones;
 use Libreame\BackendBundle\Entity\LbActsesion;
 use Libreame\BackendBundle\Entity\LbGeneroslibros;
+use Libreame\BackendBundle\Entity\LbEditorialeslibros;
+use Libreame\BackendBundle\Entity\LbAutoreslibros;
 use Libreame\BackendBundle\Entity\LbMembresias;
 use Libreame\BackendBundle\Entity\LbCalificausuarios;
 use Libreame\BackendBundle\Entity\LbOfertas;
-use Libreame\BackendBundle\Entity\LbSolicitados;
-use Libreame\BackendBundle\Entity\LbOfrecidos;
-use Libreame\BackendBundle\Entity\LbActividadofertas;
 use Libreame\BackendBundle\Entity\LbIndicepalabra;
 use Libreame\BackendBundle\Entity\LbMensajes;
 use Libreame\BackendBundle\Entity\LbIdiomas;
@@ -286,12 +286,48 @@ class ManejoDataRepository extends EntityRepository {
     }
     
     //Obtiene varios objetos Genero según el ID del libro 
-    public function getGeneroLibro($inlibro)
+    public function getGenerosLibro($inlibro)
     {   
         try{
             $em = $this->getDoctrine()->getManager();
-            return $em->getRepository('LibreameBackendBundle:LbGenerosLibros')->
-                findBy(array('inglilibro' => $inlibro));
+            $q = $em->createQueryBuilder()
+                ->select('g')
+                ->from('LibreameBackendBundle:LbGeneros', 'g')
+                ->leftJoin('LibreameBackendBundle:LbGeneroslibros', 'gl', \Doctrine\ORM\Query\Expr\Join::WITH, 'gl.ingligenero = g.ingenero and gl.inglilibro = :plibro')
+                ->setParameter('plibro', $inlibro);
+            return $q->getQuery()->getResult();
+        } catch (Exception $ex) {
+                return new LbGeneros();
+        } 
+    }
+    
+    //Obtiene varios objetos Genero según el ID del libro 
+    public function getEditorialesLibro($inlibro)
+    {   
+        try{
+            $em = $this->getDoctrine()->getManager();
+            $q = $em->createQueryBuilder()
+                ->select('e')
+                ->from('LibreameBackendBundle:LbEditoriales', 'e')
+                ->leftJoin('LibreameBackendBundle:LbEditorialeslibros', 'el', \Doctrine\ORM\Query\Expr\Join::WITH, 'el.inedilibroeditorial = e.inideditorial and el.inediliblibro = :plibro')
+                ->setParameter('plibro', $inlibro);
+            return $q->getQuery()->getResult();
+        } catch (Exception $ex) {
+                return new LbEditoriales();
+        } 
+    }
+    
+    //Obtiene varios objetos Genero según el ID del libro 
+    public function getAutoresLibro($inlibro)
+    {   
+        try{
+            $em = $this->getDoctrine()->getManager();
+            $q = $em->createQueryBuilder()
+                ->select('a')
+                ->from('LibreameBackendBundle:LbAutores', 'a')
+                ->leftJoin('LibreameBackendBundle:LbAutoreslibros', 'al', \Doctrine\ORM\Query\Expr\Join::WITH, 'al.inautlidautor = a.inidautor and al.inautlidlibro = :plibro')
+                ->setParameter('plibro', $inlibro);
+            return $q->getQuery()->getResult();
         } catch (Exception $ex) {
                 return new LbGeneroslibros();
         } 
@@ -435,39 +471,30 @@ class ManejoDataRepository extends EntityRepository {
     {   
         try{
             //Recupera cada uno de los ejemplares con ID > al del parametro
+            //Los ejemplares cuya membresías coincidan con las del usuario que solicita
+            //El usuario debe estar activo
             $em = $this->getDoctrine()->getManager();
-/*            $sql = "SELECT e.inEjemplar, l.txLibTitulo, e.*, u.*, count(mg.inidmegusta), count(c.inidcomentario), max(h.fehisejeregistro) fechapub  FROM LibreameBackendBundle:LbEjemplares e"
-                    . " LEFT JOIN LibreameBackendBundle:LbLibros l ON e.inejelibro = l.inlibro "
-                    . " LEFT JOIN LibreameBackendBundle:LbUsuarios u ON e.inejeusudueno = u.inusuario "
-                    . " LEFT JOIN LibreameBackendBundle:LbMembresias m ON e.inejeusudueno = m.inmemusuario"
-                    . " LEFT JOIN LibreameBackendBundle:LbMegusta mg ON mg.inMegEjemplar = e.inejemplar "
-                    . " LEFT JOIN LibreameBackendBundle:LbComentarios c ON c.inComEjemplar = e.inejemplar "
-                    . " LEFT JOIN LibreameBackendBundle:LbHistejemplar h ON h.inhisejeejemplar = e.inejemplar "
-                    . " WHERE e.inejemplar > ".$inultejemplar." and e.inejepublicado <= 1 and h.inHisEjeMovimiento = 1 "
-                    . " group by e.inEjemplar " 
-                    . " and m.inmemgrupo in (:grupos) "
-                    . " order by fechapub ";*/
             $q = $em->createQueryBuilder()
-                ->select('e.inejemplar', 'l.txlibtitulo', 'e', 'u', 'count(mg.inidmegusta)', 'count(c.inidcomentario)', 'max(h.fehisejeregistro) fechapub')
+                ->select('e')
                 ->from('LibreameBackendBundle:LbEjemplares', 'e')
-                ->leftJoin('LibreameBackendBundle:LbLibros', 'l', \Doctrine\ORM\Query\Expr\Join::WITH, 'l.inlibro = e.inejelibro')
-                ->leftJoin('LibreameBackendBundle:LbUsuarios', 'u', \Doctrine\ORM\Query\Expr\Join::WITH, 'u.inusuario = e.inejeusudueno')                 
+                ->leftJoin('LibreameBackendBundle:LbUsuarios', 'u', \Doctrine\ORM\Query\Expr\Join::WITH, 'u.inusuario = e.inejeusudueno')
                 ->leftJoin('LibreameBackendBundle:LbMembresias', 'm', \Doctrine\ORM\Query\Expr\Join::WITH, 'm.inmemusuario = e.inejeusudueno')
-                ->leftJoin('LibreameBackendBundle:LbMegusta', 'mg', \Doctrine\ORM\Query\Expr\Join::WITH, 'mg.inmegejemplar = e.inejemplar')                  
-                ->leftJoin('LibreameBackendBundle:LbComentarios', 'c', \Doctrine\ORM\Query\Expr\Join::WITH, 'c.incomejemplar = e.inejemplar')
-                ->leftJoin('LibreameBackendBundle:LbHistejemplar', 'h', \Doctrine\ORM\Query\Expr\Join::WITH, 'h.inhisejeejemplar = e.inejemplar')
+                ->leftJoin('LibreameBackendBundle:LbHistejemplar', 'h', \Doctrine\ORM\Query\Expr\Join::WITH, 'h.inhisejeejemplar = e.inejemplar and h.inhisejeusuario = e.inejeusudueno')
                 ->where(' e.inejemplar > :pejemplar')
                 ->setParameter('pejemplar', $inultejemplar)
-                ->andWhere(' e.inejepublicado <= :ppublicado')
-                ->setParameter('ppublicado', 1)                    
+                ->andWhere(' u.inusuestado = :estado')//Solo los usuarios con estado 1
+                ->setParameter('estado', 1)//Solo los usuarios con estado 1
+                ->andWhere(' e.inejepublicado <= :ppublicado')//Debe cambiar a solo los ejemplares publicados = 1
+                ->setParameter('ppublicado', 1)//Debe cambiar a solo los ejemplares publicados = 1                    
                 ->andWhere(' h.inhisejemovimiento = :pmovimiento')
-                ->setParameter('pmovimiento', 1)
-                ->orderBy(' fechapub ')                    
-                ->groupBy(' e.inejemplar ');
+                ->setParameter('pmovimiento', 1)//Todos los ejemplares con registro de movimiento en historia ejemplar: publicados 
+                ->andWhere(' m.inmemgrupo in (:grupos) ')//Para los grupos del usuario
+                ->setParameter('grupos', $grupos)
+                ->setMaxResults(10)
+                ->orderBy(' h.fehisejeregistro ', 'DESC');
 
-            //$query = $em->createQuery($sql)->setParameter('grupos', $grupos);
-            //return $query->getResult();
-            return $q->getQuery()->getResult() ;
+            return $q->getQuery()->getResult();
+            //return $q->getArrayResult();
         } catch (Exception $ex) {
                 //echo "retorna error";
                 return new LbEjemplares();
