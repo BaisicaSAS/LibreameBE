@@ -10,11 +10,12 @@ use Libreame\BackendBundle\Entity\LbLugares;
 use Libreame\BackendBundle\Entity\LbGeneros;
 use Libreame\BackendBundle\Entity\LbGeneroslibros;
 use Libreame\BackendBundle\Entity\LbLibros;
+use Libreame\BackendBundle\Entity\LbAutores;
+use Libreame\BackendBundle\Entity\LbEditoriales;
 use Libreame\BackendBundle\Entity\LbUsuarios;
 use Libreame\BackendBundle\Entity\LbSesiones;
 use Libreame\BackendBundle\Entity\LbEjemplares;
 use Libreame\BackendBundle\Entity\LbActsesion;
-use Libreame\BackendBundle\Entity\LbMensajes;
 use Libreame\BackendBundle\Entity\LbCalificausuarios;
 use Libreame\BackendBundle\Helpers\Respuesta;
 
@@ -359,15 +360,15 @@ class Logica {
      */
     public function respuestaFeedEjemplares(Respuesta $respuesta, Solicitud $pSolicitud, $parreglo){
         try{
-            $arrGeneros = array();
             $arrTmp = array();
             $ejemplar = new LbEjemplares();
-            echo "Va a generar la respuestaFeedEjemplares :: Logica.php [365] \n";
+            //echo "Va a generar la respuestaFeedEjemplares :: Logica.php [365] \n";
             foreach ($parreglo as $ejemplar){
                 //Recupera nombre del genero, Nombre del libro, Nombre del uduario Dueño
-                $genero = new LbGeneros();
-                $generolibro = new LbGeneroslibros();
-                $libro = new LbLibros();
+                $generos = new LbGeneros();
+                $autores = new LbAutores();
+                $editoriales = new LbEditoriales();
+                $libros = new LbLibros();
                 $usuario = new LbUsuarios();
                 if ($respuesta->getRespuesta()== AccesoController::inULogged){
                     //'e.inejemplar inejemplar', 
@@ -376,9 +377,9 @@ class Logica {
                     //'count(nmg.inidmegusta) nomegusta', 
                     //'count(c.inidcomentario) numcomm', 
                     //'max(h.fehisejeregistro) fechapub', 'e', 'u')
-                    $libro = ManejoDataRepository::getLibro($ejemplar->getInejelibro()->getInlibro());
-                    echo "ejemplar: [".$ejemplar->getInejemplar()."] libro: [".utf8_encode($libro->getTxlibtitulo())."]\n";
-                    $generoslibro = ManejoDataRepository::getGenerosLibro($ejemplar->getInejelibro()->getInlibro());
+                    $libros = ManejoDataRepository::getLibro($ejemplar->getInejelibro()->getInlibro());
+                    //echo "ejemplar: [".$ejemplar->getInejemplar()."--".$ejemplar->getInejelibro()->getInlibro()."] libro: [".utf8_encode($libros->getTxlibtitulo())."]\n";
+                    $generos = ManejoDataRepository::getGenerosLibro($ejemplar->getInejelibro()->getInlibro());
                     $autores = ManejoDataRepository::getAutoresLibro($ejemplar->getInejelibro()->getInlibro());
                     $editoriales = ManejoDataRepository::getEditorialesLibro($ejemplar->getInejelibro()->getInlibro());
                     $cantmegusta = ManejoDataRepository::getCantMegusta($ejemplar->getInejemplar());
@@ -388,14 +389,40 @@ class Logica {
                     //echo "RECUPERO DATOS\n";*/
                 }
                 
-                $titulo = utf8_encode($libro->getTxlibtitulo());
-                $edicion = utf8_encode($libro->getTxediciondescripcion());
-                $isbn10 = utf8_encode($libro->getTxlibcodigoofic());
-                $isbn13 = utf8_encode($libro->getTxlibcodigoofic13());
+                $arrAutores = array();
+                foreach ($autores as $autor) {
+                    $arrAutores[] = array('inidautor' => $autor->getInidautor(),
+                        'txautnombre' => utf8_encode($autor->getTxautnombre()));
+                }
+                $arrEditoriales = array();
+                foreach ($editoriales as $editorial) {
+                    $arrEditoriales[] = array('inideditorial' => $editorial->getInideditorial(),
+                        'txedinombre' => utf8_encode($editorial->getTxedinombre()));
+                }
+                $arrGeneros = array();
+                foreach ($generos as $genero) {
+                    $arrGeneros[] = array('ingenero' => $genero->getIngenero(),
+                        'txgennombre' => utf8_encode($genero->getTxgennombre()));
+                }
+                
+                $titulo = utf8_encode($libros->getTxlibtitulo());
+                $precio = utf8_encode($ejemplar->getDbejeavaluo());  //Precio del libro
+                $puntos = utf8_encode($ejemplar->getInejepuntos()); //Cantidad de puntos
+                $estado = utf8_encode($ejemplar->getInejeestado()); // de 1 a 10
+                $usado = utf8_encode($ejemplar->getInejecondicion()); //0 nuevo - 1 usado
+                $vencam = utf8_encode($ejemplar->getInejesoloventa()); //1: Solo venta - 2: venta / cambio - 3: Solo cambio
+                $edicion = utf8_encode($libros->getTxediciondescripcion());
+                $isbn10 = utf8_encode($libros->getTxlibcodigoofic());
+                $isbn13 = utf8_encode($libros->getTxlibcodigoofic13());
                 $imagen = utf8_encode($ejemplar->getTxejeimagen());
                 //echo "Titulo + Descripcion edicion : [".$titulo."] - [".$edicion."]\n";
                 $arrTmp[] = array('idejemplar' => $ejemplar->getInejemplar(), 
                     'titulo' => $titulo, 
+                    'precio' => $precio, 
+                    'puntos' => $puntos, 
+                    'estado' => $estado, 
+                    'usado' => $usado, 
+                    'vencam' => $vencam, 
                     'imagen' => $imagen, 
                     'edicion' => $edicion,
                     'isbn10' => $isbn10,
@@ -403,10 +430,9 @@ class Logica {
                     'cantmegusta' => $cantmegusta,
                     'cantcomment' => $cantcomment,
                     'promcalifica' => $promcalifica,
-                    'autores' => array('inidautor' => $autores->getInidautor(),
-                        'txautnombre' => utf8_encode($autores->getTxautnombre())),
-                    'editoriales' => array('inideditorial' => $editoriales->getInideditorial(),
-                        'txedinombre' => utf8_encode($editoriales->getTxedinombre())),
+                    'autores' => array($arrAutores),
+                    'editoriales' => array($arrEditoriales),
+                    'generos' => array($arrGeneros),
                     'usrdueno' => array('inusuario' => $usuario->getInusuario(),
                         'txusunommostrar' => $usuario->getTxusunommostrar(),
                         'txusuimagen' => $usuario->getTxusuimagen(),

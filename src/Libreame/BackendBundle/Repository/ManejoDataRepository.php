@@ -2,8 +2,9 @@
 
 namespace Libreame\BackendBundle\Repository;
 
-use Doctrine\ORM\EntityRepository;
 use DateTime;
+use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query;
 use Libreame\BackendBundle\Controller\AccesoController;
 use Libreame\BackendBundle\Entity\LbLugares;
 use Libreame\BackendBundle\Entity\LbEjemplares;
@@ -291,7 +292,8 @@ class ManejoDataRepository extends EntityRepository {
             $q = $em->createQueryBuilder()
                 ->select('g')
                 ->from('LibreameBackendBundle:LbGeneros', 'g')
-                ->leftJoin('LibreameBackendBundle:LbGeneroslibros', 'gl', \Doctrine\ORM\Query\Expr\Join::WITH, 'gl.ingligenero = g.ingenero and gl.inglilibro = :plibro')
+                ->leftJoin('LibreameBackendBundle:LbGeneroslibros', 'gl', \Doctrine\ORM\Query\Expr\Join::WITH, 'gl.ingligenero = g.ingenero')
+                ->Where(' gl.inglilibro = :plibro ')
                 ->setParameter('plibro', $inlibro);
             return $q->getQuery()->getResult();
         } catch (Exception $ex) {
@@ -307,7 +309,8 @@ class ManejoDataRepository extends EntityRepository {
             $q = $em->createQueryBuilder()
                 ->select('e')
                 ->from('LibreameBackendBundle:LbEditoriales', 'e')
-                ->leftJoin('LibreameBackendBundle:LbEditorialeslibros', 'el', \Doctrine\ORM\Query\Expr\Join::WITH, 'el.inedilibroeditorial = e.inideditorial and el.inediliblibro = :plibro')
+                ->leftJoin('LibreameBackendBundle:LbEditorialeslibros', 'el', \Doctrine\ORM\Query\Expr\Join::WITH, 'e.inideditorial = el.inedilibroeditorial ')
+                ->Where(' el.inediliblibro = :plibro ')
                 ->setParameter('plibro', $inlibro);
             return $q->getQuery()->getResult();
         } catch (Exception $ex) {
@@ -323,9 +326,10 @@ class ManejoDataRepository extends EntityRepository {
             $q = $em->createQueryBuilder()
                 ->select('a')
                 ->from('LibreameBackendBundle:LbAutores', 'a')
-                ->leftJoin('LibreameBackendBundle:LbAutoreslibros', 'al', \Doctrine\ORM\Query\Expr\Join::WITH, 'al.inautlidautor = a.inidautor and al.inautlidlibro = :plibro')
+                ->leftJoin('LibreameBackendBundle:LbAutoreslibros', 'al', \Doctrine\ORM\Query\Expr\Join::WITH, 'a.inidautor = al.inautlidautor ')
+                ->Where(' al.inautlidlibro = :plibro ')
                 ->setParameter('plibro', $inlibro);
-            return $q->getQuery()->getArrayResult();
+            return $q->getQuery()->getResult();
         } catch (Exception $ex) {
                 return new LbAutores();
         } 
@@ -372,7 +376,8 @@ class ManejoDataRepository extends EntityRepository {
                 ->from('LibreameBackendBundle:LbComentarios', 'a')
                 ->Where('a.incomejemplar = :pejemplar')
                 ->setParameter('pejemplar', $inejemplar);
-            return $q->getQuery()->getScalarResult();
+            $comm = $q->getQuery()->getSingleScalarResult() * 1;
+            return $comm;
         } catch (Exception $ex) {
                 return 0;
         } 
@@ -383,12 +388,25 @@ class ManejoDataRepository extends EntityRepository {
     {   
         try{
             $em = $this->getDoctrine()->getManager();
-            $q = $em->createQueryBuilder()
-                ->select('sum(a.incalcalificacion) / count(a)')
+            $qs = $em->createQueryBuilder()
+                ->select('sum(a.incalcalificacion)')
                 ->from('LibreameBackendBundle:LbCalificausuarios', 'a')
                 ->Where('a.incalusucalificado = :pusuario')
                 ->setParameter('pusuario', $inusuario);
-            return $q->getQuery()->getScalarResult();
+            $suma = $qs->getQuery()->getSingleScalarResult();
+
+            $qc = $em->createQueryBuilder()
+                ->select('count(a)')
+                ->from('LibreameBackendBundle:LbCalificausuarios', 'a')
+                ->Where('a.incalusucalificado = :pusuario')
+                ->setParameter('pusuario', $inusuario);
+            $cant = $qs->getQuery()->getSingleScalarResult();
+            if($cant == 0)
+                $promedio = 0;
+            else    
+                $promedio = $suma / $cant;
+            //echo "\n promedio:".$promedio;
+            return $promedio;
         } catch (Exception $ex) {
                 return 0;
         } 
@@ -551,7 +569,7 @@ class ManejoDataRepository extends EntityRepository {
                 ->setParameter('pmovimiento', 1)//Todos los ejemplares con registro de movimiento en historia ejemplar: publicados 
                 ->andWhere(' m.inmemgrupo in (:grupos) ')//Para los grupos del usuario
                 ->setParameter('grupos', $grupos)
-                ->setMaxResults(10)
+                ->setMaxResults(2)
                 ->orderBy(' h.fehisejeregistro ', 'DESC');
 
             return $q->getQuery()->getResult();
