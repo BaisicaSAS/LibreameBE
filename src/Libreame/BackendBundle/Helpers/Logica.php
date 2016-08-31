@@ -377,27 +377,40 @@ class Logica {
                     //'count(c.inidcomentario) numcomm', 
                     //'max(h.fehisejeregistro) fechapub', 'e', 'u')
                     $libro = ManejoDataRepository::getLibro($ejemplar->getInejelibro()->getInlibro());
-                    echo "ejemplar: [".$ejemplar->getInejemplar()."] libro: [".$libro->getTxlibtitulo()."]\n";
+                    echo "ejemplar: [".$ejemplar->getInejemplar()."] libro: [".utf8_encode($libro->getTxlibtitulo())."]\n";
                     $generoslibro = ManejoDataRepository::getGenerosLibro($ejemplar->getInejelibro()->getInlibro());
                     $autores = ManejoDataRepository::getAutoresLibro($ejemplar->getInejelibro()->getInlibro());
                     $editoriales = ManejoDataRepository::getEditorialesLibro($ejemplar->getInejelibro()->getInlibro());
-                    //$cantmegusta = ManejoDataRepository::getUsuarioById($ejemplar->getInejemplar());
-                    //$cantcomment = ManejoDataRepository::getUsuarioById($ejemplar->getInejemplar());
+                    $cantmegusta = ManejoDataRepository::getCantMegusta($ejemplar->getInejemplar());
+                    $cantcomment = ManejoDataRepository::getCantComment($ejemplar->getInejemplar());
                     $usuario = ManejoDataRepository::getUsuarioById($ejemplar->getInejeusudueno()->getInusuario());
+                    $promcalifica = ManejoDataRepository::getPromedioCalifica($usuario->getInusuario());
                     //echo "RECUPERO DATOS\n";*/
                 }
                 
                 $titulo = utf8_encode($libro->getTxlibtitulo());
-                //if ($libro->getTxediciondescripcion() == "") $edicion = "Sin especificar"; ELSE $edicion = $libro->getTxediciondescripcion();
                 $edicion = utf8_encode($libro->getTxediciondescripcion());
-                echo "Titulo + Descripcion edicion : [".$titulo."] - [".$edicion."]\n";
-                //$titulo = $libro->getTxlibtitulo();
+                $isbn10 = utf8_encode($libro->getTxlibcodigoofic());
+                $isbn13 = utf8_encode($libro->getTxlibcodigoofic13());
+                $imagen = utf8_encode($ejemplar->getTxejeimagen());
+                //echo "Titulo + Descripcion edicion : [".$titulo."] - [".$edicion."]\n";
                 $arrTmp[] = array('idejemplar' => $ejemplar->getInejemplar(), 
                     'titulo' => $titulo, 
+                    'imagen' => $imagen, 
                     'edicion' => $edicion,
-                    //'idioma' => $libro->getInlibidioma()->getTxidinombre()->toString(),
-                    'indueno' => $usuario/*, 'libro'  => $libro, 'autores'  => $autores, 
-                    'editoriales' => $editoriales*/
+                    'isbn10' => $isbn10,
+                    'isbn13' => $isbn13,
+                    'cantmegusta' => $cantmegusta,
+                    'cantcomment' => $cantcomment,
+                    'promcalifica' => $promcalifica,
+                    'autores' => array('inidautor' => $autores->getInidautor(),
+                        'txautnombre' => utf8_encode($autores->getTxautnombre())),
+                    'editoriales' => array('inideditorial' => $editoriales->getInideditorial(),
+                        'txedinombre' => utf8_encode($editoriales->getTxedinombre())),
+                    'usrdueno' => array('inusuario' => $usuario->getInusuario(),
+                        'txusunommostrar' => $usuario->getTxusunommostrar(),
+                        'txusuimagen' => $usuario->getTxusuimagen(),
+                        'calificacion' => $promcalifica)
                 );
                 
             }

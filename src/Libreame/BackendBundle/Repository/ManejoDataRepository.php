@@ -3,8 +3,6 @@
 namespace Libreame\BackendBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\Query;
-use EntityR;
 use DateTime;
 use Libreame\BackendBundle\Controller\AccesoController;
 use Libreame\BackendBundle\Entity\LbLugares;
@@ -16,9 +14,9 @@ use Libreame\BackendBundle\Entity\LbDispusuarios;
 use Libreame\BackendBundle\Entity\LbGrupos;
 use Libreame\BackendBundle\Entity\LbSesiones;
 use Libreame\BackendBundle\Entity\LbActsesion;
+use Libreame\BackendBundle\Entity\LbEditoriales;
+use Libreame\BackendBundle\Entity\LbAutores;
 use Libreame\BackendBundle\Entity\LbGeneroslibros;
-use Libreame\BackendBundle\Entity\LbEditorialeslibros;
-use Libreame\BackendBundle\Entity\LbAutoreslibros;
 use Libreame\BackendBundle\Entity\LbMembresias;
 use Libreame\BackendBundle\Entity\LbCalificausuarios;
 use Libreame\BackendBundle\Entity\LbOfertas;
@@ -301,7 +299,7 @@ class ManejoDataRepository extends EntityRepository {
         } 
     }
     
-    //Obtiene varios objetos Genero según el ID del libro 
+    //Obtiene varios objetos Editorial según el ID del libro 
     public function getEditorialesLibro($inlibro)
     {   
         try{
@@ -317,7 +315,7 @@ class ManejoDataRepository extends EntityRepository {
         } 
     }
     
-    //Obtiene varios objetos Genero según el ID del libro 
+    //Obtiene varios objetos Autor según el ID del libro 
     public function getAutoresLibro($inlibro)
     {   
         try{
@@ -327,9 +325,72 @@ class ManejoDataRepository extends EntityRepository {
                 ->from('LibreameBackendBundle:LbAutores', 'a')
                 ->leftJoin('LibreameBackendBundle:LbAutoreslibros', 'al', \Doctrine\ORM\Query\Expr\Join::WITH, 'al.inautlidautor = a.inidautor and al.inautlidlibro = :plibro')
                 ->setParameter('plibro', $inlibro);
-            return $q->getQuery()->getResult();
+            return $q->getQuery()->getArrayResult();
         } catch (Exception $ex) {
-                return new LbGeneroslibros();
+                return new LbAutores();
+        } 
+    }
+    
+    //Obtiene la cantidad de Megusta del ejemplar : Condicion megusta - nomegusta 
+    public function getCantMegusta($inejemplar)
+    {   
+        try{
+            $em = $this->getDoctrine()->getManager();
+            $qmg = $em->createQueryBuilder()
+                ->select('count(a)')
+                ->from('LibreameBackendBundle:LbMegusta', 'a')
+                ->Where('a.inmegejemplar = :pejemplar')
+                ->setParameter('pejemplar', $inejemplar)
+                ->andWhere('a.inmegmegusta = :pmeg')
+                ->setParameter('pmeg', 1);
+                
+            $qnmg = $em->createQueryBuilder()
+                ->select('count(a)')
+                ->from('LibreameBackendBundle:LbMegusta', 'a')
+                ->Where('a.inmegejemplar = :pejemplar')
+                ->setParameter('pejemplar', $inejemplar)
+                ->andWhere('a.inmegmegusta = :pnomeg')
+                ->setParameter('pnomeg', 0);
+            
+            $meg = $qmg->getQuery()->getSingleScalarResult();
+            $nomeg = $qnmg->getQuery()->getSingleScalarResult();
+            
+            //echo "megusta ".$meg." - nomegusta ".$nomeg;
+            return $meg - $nomeg;
+        } catch (Exception $ex) {
+                return 0;
+        } 
+    }
+    
+    //Obtiene la cantidad de Comentarios del ejemplar : Condicion : Comentarios activos
+    public function getCantComment($inejemplar)
+    {   
+        try{
+            $em = $this->getDoctrine()->getManager();
+            $q = $em->createQueryBuilder()
+                ->select('count(a)')
+                ->from('LibreameBackendBundle:LbComentarios', 'a')
+                ->Where('a.incomejemplar = :pejemplar')
+                ->setParameter('pejemplar', $inejemplar);
+            return $q->getQuery()->getScalarResult();
+        } catch (Exception $ex) {
+                return 0;
+        } 
+    }
+    
+    //Obtiene la cantidad de Comentarios del ejemplar : Condicion : Comentarios activos
+    public function getPromedioCalifica($inusuario)
+    {   
+        try{
+            $em = $this->getDoctrine()->getManager();
+            $q = $em->createQueryBuilder()
+                ->select('sum(a.incalcalificacion) / count(a)')
+                ->from('LibreameBackendBundle:LbCalificausuarios', 'a')
+                ->Where('a.incalusucalificado = :pusuario')
+                ->setParameter('pusuario', $inusuario);
+            return $q->getQuery()->getScalarResult();
+        } catch (Exception $ex) {
+                return 0;
         } 
     }
     
