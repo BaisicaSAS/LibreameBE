@@ -458,9 +458,9 @@ COMMENT = 'Comentarios de los usuarios sobre ejemplares';
 
 
 -- -----------------------------------------------------
--- Table `dotEx4read`.`lb_histEjemplar`
+-- Table `dotEx4read`.`lb_histejemplar`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `dotEx4read`.`lb_histEjemplar` (
+CREATE TABLE IF NOT EXISTS `dotEx4read`.`lb_histejemplar` (
   `inHistEjemplar` INT NOT NULL AUTO_INCREMENT COMMENT 'Id del registro historico',
   `inHisEjeEjemplar` INT NOT NULL COMMENT 'Id del ejemplar',
   `feHisEjeRegistro` DATETIME NOT NULL COMMENT 'Fecha del movimiento de historia del ejemplar',
@@ -470,21 +470,21 @@ CREATE TABLE IF NOT EXISTS `dotEx4read`.`lb_histEjemplar` (
   `inHisEjeModoEntrega` INT NULL COMMENT '0: En el domicilio, 1: Encontrandose, 3. Courrier local, 4: Courrier Nacional, 5: Courrier internacional',
   INDEX `fk_table1_lb_ejemplares2_idx` (`inHisEjeEjemplar` ASC),
   PRIMARY KEY (`inHistEjemplar`),
-  INDEX `fk_lb_histEjemplar_lb_usuarios1_idx` (`inHisEjeUsuario` ASC),
-  INDEX `fk_lb_histEjemplar_lb_histEjemplar1_idx` (`inHisEjePadre` ASC),
+  INDEX `fk_lb_histejemplar_lb_usuarios1_idx` (`inHisEjeUsuario` ASC),
+  INDEX `fk_lb_histejemplar_lb_histejemplar1_idx` (`inHisEjePadre` ASC),
   CONSTRAINT `fk_table1_lb_ejemplares2`
     FOREIGN KEY (`inHisEjeEjemplar`)
     REFERENCES `dotEx4read`.`lb_ejemplares` (`inEjemplar`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_lb_histEjemplar_lb_usuarios1`
+  CONSTRAINT `fk_lb_histejemplar_lb_usuarios1`
     FOREIGN KEY (`inHisEjeUsuario`)
     REFERENCES `dotEx4read`.`lb_usuarios` (`inUsuario`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_lb_histEjemplar_lb_histEjemplar1`
+  CONSTRAINT `fk_lb_histejemplar_lb_histejemplar1`
     FOREIGN KEY (`inHisEjePadre`)
-    REFERENCES `dotEx4read`.`lb_histEjemplar` (`inHistEjemplar`)
+    REFERENCES `dotEx4read`.`lb_histejemplar` (`inHistEjemplar`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -505,7 +505,7 @@ CREATE TABLE IF NOT EXISTS `dotEx4read`.`lb_calificausuarios` (
   INDEX `fk_table1_lb_usuarios2_idx` (`inCalUsuCalificado` ASC),
   PRIMARY KEY (`inIDCalifica`),
   INDEX `fk_lb_calificausuarios_lb_usuarios3_idx` (`inCalUsuCalifica` ASC),
-  INDEX `fk_lb_calificausuarios_lb_histEjemplar1_idx` (`inCalHisEjemplar` ASC),
+  INDEX `fk_lb_calificausuarios_lb_histejemplar1_idx` (`inCalHisEjemplar` ASC),
   CONSTRAINT `fk_table1_lb_usuarios2`
     FOREIGN KEY (`inCalUsuCalificado`)
     REFERENCES `dotEx4read`.`lb_usuarios` (`inUsuario`)
@@ -516,9 +516,9 @@ CREATE TABLE IF NOT EXISTS `dotEx4read`.`lb_calificausuarios` (
     REFERENCES `dotEx4read`.`lb_usuarios` (`inUsuario`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_lb_calificausuarios_lb_histEjemplar1`
+  CONSTRAINT `fk_lb_calificausuarios_lb_histejemplar1`
     FOREIGN KEY (`inCalHisEjemplar`)
-    REFERENCES `dotEx4read`.`lb_histEjemplar` (`inHistEjemplar`)
+    REFERENCES `dotEx4read`.`lb_histejemplar` (`inHistEjemplar`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -537,15 +537,15 @@ CREATE TABLE IF NOT EXISTS `dotEx4read`.`lb_puntosusuario` (
   `fePuUsFechaPuntos` DATETIME NOT NULL COMMENT 'Fecha de movimiento de puntos',
   INDEX `fk_lb_puntosusuario_lb_usuarios1_idx` (`inPuUsUsuario` ASC),
   PRIMARY KEY (`inIDPuUs`),
-  INDEX `fk_lb_puntosusuario_lb_histEjemplar1_idx` (`inPuUsHisEje` ASC),
+  INDEX `fk_lb_puntosusuario_lb_histejemplar1_idx` (`inPuUsHisEje` ASC),
   CONSTRAINT `fk_lb_puntosusuario_lb_usuarios1`
     FOREIGN KEY (`inPuUsUsuario`)
     REFERENCES `dotEx4read`.`lb_usuarios` (`inUsuario`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_lb_puntosusuario_lb_histEjemplar1`
+  CONSTRAINT `fk_lb_puntosusuario_lb_histejemplar1`
     FOREIGN KEY (`inPuUsHisEje`)
-    REFERENCES `dotEx4read`.`lb_histEjemplar` (`inHistEjemplar`)
+    REFERENCES `dotEx4read`.`lb_histejemplar` (`inHistEjemplar`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;

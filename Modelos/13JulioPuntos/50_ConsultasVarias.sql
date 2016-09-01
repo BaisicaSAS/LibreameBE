@@ -36,6 +36,12 @@ select count(1) from lb_generoslibros;
 select count(1) from lb_libros;
 
 
+select * from lb_autores where txautnombre like "%gabriel%" ;
+
+Select * from lb_autoreslibros where inautlidautor = 184;
+
+select * from lb_ejemplares where inejelibro in (Select inautlidlibro from lb_autoreslibros where inautlidautor = 184);
+
 
 /**************************************************/
 /*consulta para recuperar feed ejemplares

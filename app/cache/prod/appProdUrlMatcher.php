@@ -63,6 +63,17 @@ class appProdUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirecta
 
         }
 
+        // ex4read_indexar
+        if (0 === strpos($pathinfo, '/indexarPrueba') && preg_match('#^/indexarPrueba/(?P<dummy>[^/]++)$#s', $pathinfo, $matches)) {
+            if (!in_array($this->context->getMethod(), array('GET', 'HEAD'))) {
+                $allow = array_merge($allow, array('GET', 'HEAD'));
+                goto not_ex4read_indexar;
+            }
+
+            return $this->mergeDefaults(array_replace($matches, array('_route' => 'ex4read_indexar')), array (  '_controller' => 'Libreame\\BackendBundle\\Controller\\IndexarController::indexarPruebaAction',));
+        }
+        not_ex4read_indexar:
+
         throw 0 < count($allow) ? new MethodNotAllowedException(array_unique($allow)) : new ResourceNotFoundException();
     }
 }

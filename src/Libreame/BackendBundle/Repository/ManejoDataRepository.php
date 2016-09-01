@@ -569,7 +569,7 @@ class ManejoDataRepository extends EntityRepository {
                 ->setParameter('pmovimiento', 1)//Todos los ejemplares con registro de movimiento en historia ejemplar: publicados 
                 ->andWhere(' m.inmemgrupo in (:grupos) ')//Para los grupos del usuario
                 ->setParameter('grupos', $grupos)
-                ->setMaxResults(2)
+                ->setMaxResults(20)
                 ->orderBy(' h.fehisejeregistro ', 'DESC');
 
             return $q->getQuery()->getResult();
@@ -716,12 +716,33 @@ class ManejoDataRepository extends EntityRepository {
                 $palabrasindice = $query->getResult();
                 foreach ($palabrasindice as $indice) {
                     $arLibros[] = $indice->getLbindpallibro();
-                    //$libro = $indice->getLbindpallibro();
+                    $libro = $indice->getLbindpallibro();
                     //echo "LIBRO :".$libro->getTxlibtitulo()."\n";
                 }
             }
             
-            $sql1 = "SELECT e FROM LibreameBackendBundle:LbEjemplares e, "
+            $q = $em->createQueryBuilder()
+                ->select('e')
+                ->from('LibreameBackendBundle:LbEjemplares', 'e')
+                ->leftJoin('LibreameBackendBundle:LbUsuarios', 'u', \Doctrine\ORM\Query\Expr\Join::WITH, 'u.inusuario = e.inejeusudueno')
+                ->leftJoin('LibreameBackendBundle:LbMembresias', 'm', \Doctrine\ORM\Query\Expr\Join::WITH, 'm.inmemusuario = e.inejeusudueno')
+                ->leftJoin('LibreameBackendBundle:LbHistejemplar', 'h', \Doctrine\ORM\Query\Expr\Join::WITH, 'h.inhisejeejemplar = e.inejemplar and h.inhisejeusuario = e.inejeusudueno')
+                ->where(' e.inejelibro in (:plibros)')
+                ->setParameter('plibros', $arLibros)
+                ->andWhere(' u.inusuestado = :estado')//Solo los usuarios con estado 1
+                ->setParameter('estado', 1)//Solo los usuarios con estado 1
+                ->andWhere(' e.inejepublicado <= :ppublicado')//Debe cambiar a solo los ejemplares publicados = 1
+                ->setParameter('ppublicado', 1)//Debe cambiar a solo los ejemplares publicados = 1                    
+                ->andWhere(' h.inhisejemovimiento = :pmovimiento')
+                ->setParameter('pmovimiento', 1)//Todos los ejemplares con registro de movimiento en historia ejemplar: publicados 
+                ->andWhere(' m.inmemgrupo in (:grupos) ')//Para los grupos del usuario
+                ->setParameter('grupos', $grupos)
+                //->setMaxResults(20)
+                ->orderBy(' h.fehisejeregistro ', 'DESC');
+
+            return $q->getQuery()->getResult();
+
+            /*$sql1 = "SELECT e FROM LibreameBackendBundle:LbEjemplares e, "
                     . " LibreameBackendBundle:LbMembresias m, "
                     . " LibreameBackendBundle:LbUsuarios u, "
                     . " LibreameBackendBundle:LbOfrecidos o "
@@ -731,7 +752,8 @@ class ManejoDataRepository extends EntityRepository {
                     . " and m.inmemgrupo in (:grupos) ";
             $query1 = $em->createQuery($sql1)->setParameters(array('libros' => $arLibros,'grupos' => $grupos));
 
-            return $query1->getResult();
+            return $query1->getResult();*/
+            
         } catch (Exception $ex) {
                 return new LbEjemplares();
         } 
@@ -1411,10 +1433,26 @@ class ManejoDataRepository extends EntityRepository {
                 'sobre', 'tras', 'yo', 'tu', 'usted', 'el', 'nosotros', 'vosotros', 
                 'ellos', 'ellas', 'ella', 'la', 'los', 'la', 'un', 'una', 'unos', 
                 'unas', 'es', 'del', 'de', 'mi', 'mis', 'su', 'sus', 'lo', 'le', 'se', 
-                'si', 'lo', 'identificar', 'no', 'al', 'que'); 
+                'si', 'lo', 'identificar', 'no', 'al', 'que', '1', '2', '3', '4', '5', 
+                '6', '7', '8', '9', '0', '(', ',', '.', ')', '"', '&', '/', '-', '=', 
+                'y', 'o', '¡', '¿', '?', ':'); 
             if ($em == NULL) { $flEm = TRUE; } else  { $flEm = FALSE; }
             
             if ($flEm) {$em = $this->getDoctrine()->getManager();}
+            //echo $texto."\n ----------------------"; 
+            $texto = str_replace('(', '', $texto); 
+            $texto = str_replace('¡', '', $texto);
+            $texto = str_replace('?', '', $texto);
+            $texto = str_replace('-', '', $texto);
+            $texto = str_replace('/', '', $texto);
+            $texto = str_replace('=', '', $texto);
+            $texto = str_replace('&', '', $texto);
+            $texto = str_replace(',', '', $texto);
+            $texto = str_replace('.', '', $texto);
+            $texto = str_replace(')', '', $texto);
+            $texto = str_replace('"', '', $texto);
+            $texto = str_replace(':', '', $texto);
+            //echo $texto."\n ----------------------"; 
 
             $palabras = explode(" ", $texto);
             $repetidos = [];
@@ -1423,7 +1461,7 @@ class ManejoDataRepository extends EntityRepository {
             {   
                 //echo "... ".$palabra."\n";
                 if(!in_array(strtolower($palabra), $arPalDescartar) and 
-                        !in_array(strtolower($palabra), $repetidos) )
+                        !in_array(strtolower($palabra), $repetidos) and $palabra != "")
                 {
                     if (!$em->getRepository('LibreameBackendBundle:LbIndicepalabra')->
                         findOneBy(array('lbindpalpalabra' => $palabra, 'lbindpallibro' => $libro)))
@@ -1431,7 +1469,11 @@ class ManejoDataRepository extends EntityRepository {
                         //echo "   SI   \n";
                         $indice = new LbIndicepalabra();
                         $indice->setLbindpallibro($libro);
-                        $indice->setLbindpalidioma($libro->getTxlibidioma());
+                        $dioma = $libro->getInlibidioma();
+                        if ($dioma == NULL)
+                            $indice->setLbindpalidioma("Sin especificar");
+                        else
+                            $indice->setLbindpalidioma(utf8_encode($idioma()->getTxidinombre()));
                         $indice->setLbindpalpalabra(strtolower($palabra));
                         $em->persist($indice);
                         $repetidos[] = $palabra; 

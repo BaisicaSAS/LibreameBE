@@ -429,7 +429,6 @@ class Logica {
                     'isbn13' => $isbn13,
                     'cantmegusta' => $cantmegusta,
                     'cantcomment' => $cantcomment,
-                    'promcalifica' => $promcalifica,
                     'autores' => array($arrAutores),
                     'editoriales' => array($arrEditoriales),
                     'generos' => array($arrGeneros),
@@ -659,7 +658,91 @@ class Logica {
      */
     public function respuestaBuscarEjemplares(Respuesta $respuesta, Solicitud $pSolicitud, $parreglo){
         try{
-            $arrGeneros = array();
+            $arrTmp = array();
+            $ejemplar = new LbEjemplares();
+            //echo "Va a generar la respuestaBuscarEjemplares :: Logica.php [663] \n";
+            foreach ($parreglo as $ejemplar){
+                //Recupera nombre del genero, Nombre del libro, Nombre del uduario Dueño
+                $generos = new LbGeneros();
+                $autores = new LbAutores();
+                $editoriales = new LbEditoriales();
+                $libros = new LbLibros();
+                $usuario = new LbUsuarios();
+                if ($respuesta->getRespuesta()== AccesoController::inULogged){
+                    $libros = ManejoDataRepository::getLibro($ejemplar->getInejelibro()->getInlibro());
+                    //echo "ejemplar: [".$ejemplar->getInejemplar()."--".$ejemplar->getInejelibro()->getInlibro()."] libro: [".utf8_encode($libros->getTxlibtitulo())."]\n";
+                    $generos = ManejoDataRepository::getGenerosLibro($ejemplar->getInejelibro()->getInlibro());
+                    $autores = ManejoDataRepository::getAutoresLibro($ejemplar->getInejelibro()->getInlibro());
+                    $editoriales = ManejoDataRepository::getEditorialesLibro($ejemplar->getInejelibro()->getInlibro());
+                    $cantmegusta = ManejoDataRepository::getCantMegusta($ejemplar->getInejemplar());
+                    $cantcomment = ManejoDataRepository::getCantComment($ejemplar->getInejemplar());
+                    $usuario = ManejoDataRepository::getUsuarioById($ejemplar->getInejeusudueno()->getInusuario());
+                    $promcalifica = ManejoDataRepository::getPromedioCalifica($usuario->getInusuario());
+                    //echo "RECUPERO DATOS\n";*/
+                }
+                
+                $arrAutores = array();
+                foreach ($autores as $autor) {
+                    $arrAutores[] = array('inidautor' => $autor->getInidautor(),
+                        'txautnombre' => utf8_encode($autor->getTxautnombre()));
+                }
+                $arrEditoriales = array();
+                foreach ($editoriales as $editorial) {
+                    $arrEditoriales[] = array('inideditorial' => $editorial->getInideditorial(),
+                        'txedinombre' => utf8_encode($editorial->getTxedinombre()));
+                }
+                $arrGeneros = array();
+                foreach ($generos as $genero) {
+                    $arrGeneros[] = array('ingenero' => $genero->getIngenero(),
+                        'txgennombre' => utf8_encode($genero->getTxgennombre()));
+                }
+                
+                $titulo = utf8_encode($libros->getTxlibtitulo());
+                $precio = utf8_encode($ejemplar->getDbejeavaluo());  //Precio del libro
+                $puntos = utf8_encode($ejemplar->getInejepuntos()); //Cantidad de puntos
+                $estado = utf8_encode($ejemplar->getInejeestado()); // de 1 a 10
+                $usado = utf8_encode($ejemplar->getInejecondicion()); //0 nuevo - 1 usado
+                $vencam = utf8_encode($ejemplar->getInejesoloventa()); //1: Solo venta - 2: venta / cambio - 3: Solo cambio
+                $edicion = utf8_encode($libros->getTxediciondescripcion());
+                $isbn10 = utf8_encode($libros->getTxlibcodigoofic());
+                $isbn13 = utf8_encode($libros->getTxlibcodigoofic13());
+                $imagen = utf8_encode($ejemplar->getTxejeimagen());
+                //echo "Titulo + Descripcion edicion : [".$titulo."] - [".$edicion."]\n";
+                $arrTmp[] = array('idejemplar' => $ejemplar->getInejemplar(), 
+                    'titulo' => $titulo, 
+                    'precio' => $precio, 
+                    'puntos' => $puntos, 
+                    'estado' => $estado, 
+                    'usado' => $usado, 
+                    'vencam' => $vencam, 
+                    'imagen' => $imagen, 
+                    'edicion' => $edicion,
+                    'isbn10' => $isbn10,
+                    'isbn13' => $isbn13,
+                    'cantmegusta' => $cantmegusta,
+                    'cantcomment' => $cantcomment,
+                    'autores' => array($arrAutores),
+                    'editoriales' => array($arrEditoriales),
+                    'generos' => array($arrGeneros),
+                    'usrdueno' => array('inusuario' => $usuario->getInusuario(),
+                        'txusunommostrar' => $usuario->getTxusunommostrar(),
+                        'txusuimagen' => $usuario->getTxusuimagen(),
+                        'calificacion' => $promcalifica)
+                );
+                
+            }
+            
+            //echo "El arreglo \n";
+            return array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
+                    'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr(), 
+                    'iddevice'=> $pSolicitud->getDeviceMac(), 'marca'=>$pSolicitud->getDeviceMarca(), 
+                    'modelo'=>$pSolicitud->getDeviceModelo(), 'so'=>$pSolicitud->getDeviceSO()), 
+                    'idrespuesta' => array('respuesta' => $respuesta->getRespuesta(), 
+                    'ejemplares' => $arrTmp ));
+
+        } catch (Exception $ex) {
+                return AccesoController::inPlatCai;
+            /*$arrGeneros = array();
             $arrTmp = array();
             //$ejemplar = new LbEjemplares();
             foreach ($parreglo as $ejemplar){
@@ -745,7 +828,7 @@ class Logica {
                     'idrespuesta' => array('respuesta' => $respuesta->getRespuesta(), 
                     'ejemplares' => $arrTmp));
         } catch (Exception $ex) {
-                return AccesoController::inPlatCai;
+                return AccesoController::inPlatCai;*/
         } 
     }    
     

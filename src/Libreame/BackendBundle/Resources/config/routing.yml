@@ -12,3 +12,8 @@ ex4read_resetUsuario:
     pattern:  /reset/{usuario}
     defaults: { _controller: LibreameBackendBundle:Pruebas:resetUsuario}
     methods: [GET] 
+
+ex4read_indexar:
+    pattern:  /indexarPrueba/{dummy}
+    defaults: { _controller: LibreameBackendBundle:Indexar:indexarPrueba}
+    methods: [GET] 
