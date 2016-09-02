@@ -241,9 +241,10 @@ class Logica {
                     break;
                 
             }
+            //echo " 1 La respuesta inicia";
 
             $respuestaGen = json_encode($JSONResp);
-            //echo "La respuesta se imprimió - va a ".$respuestaGen;
+            //echo "2 La respuesta se imprimió - va a ".$respuestaGen;
             return $respuestaGen;
         } catch (Exception $ex) {
                 return AccesoController::inPlatCai;
@@ -696,7 +697,7 @@ class Logica {
                     $arrGeneros[] = array('ingenero' => $genero->getIngenero(),
                         'txgennombre' => utf8_encode($genero->getTxgennombre()));
                 }
-                
+                //echo "armar json buscar";
                 $titulo = utf8_encode($libros->getTxlibtitulo());
                 $precio = utf8_encode($ejemplar->getDbejeavaluo());  //Precio del libro
                 $puntos = utf8_encode($ejemplar->getInejepuntos()); //Cantidad de puntos
@@ -742,93 +743,6 @@ class Logica {
 
         } catch (Exception $ex) {
                 return AccesoController::inPlatCai;
-            /*$arrGeneros = array();
-            $arrTmp = array();
-            //$ejemplar = new LbEjemplares();
-            foreach ($parreglo as $ejemplar){
-                //Recupera nombre del genero, Nombre del libro, Nombre del uduario Dueño
-                $genero = new LbGeneros();
-                $generolibro = new LbGeneroslibros();
-                $libro = new LbLibros();
-                $usuario = new LbUsuarios();
-                if ($respuesta->getRespuesta()== AccesoController::inULogged){
-                    //echo "ejemplar: [".$ejemplar->getInejelibro()->getInlibro()."]\n";
-                    $libro = ManejoDataRepository::getLibro($ejemplar->getInejelibro()->getInlibro());
-                    $generolibro = ManejoDataRepository::getGeneroLibro($ejemplar->getInejelibro()->getInlibro());
-                    $usuario = ManejoDataRepository::getUsuarioById($ejemplar->getInejeusudueno()->getInusuario());
-                    //echo "RECUPERO DATOS\n";
-                }
-                //Guarda los generos
-                foreach ($generolibro as $gen){
-                    $genero = ManejoDataRepository::getGenero($gen->getIngligenero());
-                    $arrGeneros[] = array('ingenero' => $genero->getIngenero(), 'txgenero' => $genero->getTxgennombre());
-                }
-                //echo "ANTES OFERTA RECUPERO DATOS\n";
-
-                
-
-                $oferta = new LbOfertas();
-                $oferta = ManejoDataRepository::getOfertasByEjemplar($ejemplar);
-                //echo "RECUPERO OFERTA = ".$oferta->getInoferta()."\n";
-
-                $ofrecidos = new LbOfrecidos();
-                $ofrecidos = ManejoDataRepository::getOfrecidosByOferta($oferta);
-                //echo "RECUPERO OFRECIDOS \n";
-
-                $solicitados = new LbSolicitados();
-                $solicitados = ManejoDataRepository::getSolicitadosByOferta($oferta);
-                //echo "RECUPERO SOLICITADOS \n";
-                
-                $inContador = 0;
-                $sol1 = "";
-                $sol2 = "";
-                $vsol1 = 0;
-                $vsol2 = 0;
-                $mensaje = "";
-                foreach ($solicitados as $solicitado){
-                    if($inContador == 0) {
-                        $sol1 = $solicitado->getInsollibro()->getTxlibtitulo();
-                        $vsol1 = $solicitado->getDbsolvaladic();
-                        $mensaje = $solicitado->getTxsolobservacion();
-                    } else {
-                        $sol2 = $solicitado->getInsollibro()->getTxlibtitulo();
-                        $vsol2 = $solicitado->getDbsolvaladic();
-                    }
-                    //echo $inContador." - ".$solicitado->getInsollibro()->getTxlibtitulo();
-                    $inContador++;
-                }
-                
-                $arrOferta = array('inoferta' => $oferta->getInoferta(), 
-                    'soli1' => $sol1, 
-                    'valadic1' => $vsol1, 
-                    'soli2' => $sol2, 
-                    'valadic2' => $vsol2, 
-                    'valventa' => $ejemplar->getDbejeavaluo(), 
-                    'mensaje' => $mensaje 
-                );
-                        
-                $arrTmp[] = array('idejemplar' => $ejemplar->getInejemplar(), 
-                    'titulo' => $ejemplar->getInejelibro()->getTxlibtitulo(), 
-                    'autor' => $ejemplar->getInejelibro()->getTxlibautores(),
-                    'edicion' => $ejemplar->getInejelibro()->getTxlibedicionnum(), 
-                    'editorial' => $ejemplar->getInejelibro()->getTxlibeditorial(),
-                    'idioma' => $ejemplar->getInejelibro()->getTxlibidioma(),
-                    'indueno' => $usuario->getInusuario(), 'oferta' => $arrOferta
-                ); 
-
-                
-                unset($arrGeneros);
-                
-            }
-
-            return array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
-                    'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr(), 
-                    'iddevice'=> $pSolicitud->getDeviceMac(), 'marca'=>$pSolicitud->getDeviceMarca(), 
-                    'modelo'=>$pSolicitud->getDeviceModelo(), 'so'=>$pSolicitud->getDeviceSO()), 
-                    'idrespuesta' => array('respuesta' => $respuesta->getRespuesta(), 
-                    'ejemplares' => $arrTmp));
-        } catch (Exception $ex) {
-                return AccesoController::inPlatCai;*/
         } 
     }    
     

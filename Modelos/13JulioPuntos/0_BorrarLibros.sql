@@ -15,8 +15,8 @@ alter table dotEx4read.lb_generoslibros  auto_increment=1;
 delete from dotex4read.lb_puntosusuario where inIDPuUs > 0;
 alter table dotEx4read.lb_puntosusuario  auto_increment=1;
 
-delete from dotex4read.lb_histejemplar where inHistEjemplar > 0;
-alter table dotEx4read.lb_histejemplar  auto_increment=1;
+delete from dotex4read.lb_histEjemplar where inHistEjemplar > 0;
+alter table dotEx4read.lb_histEjemplar  auto_increment=1;
 
 delete from dotex4read.lb_ejemplares where inEjemplar > 0;
 alter table dotEx4read.lb_ejemplares  auto_increment=1;
