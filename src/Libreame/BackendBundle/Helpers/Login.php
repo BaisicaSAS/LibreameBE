@@ -6,7 +6,6 @@ use Libreame\BackendBundle\Repository\ManejoDataRepository;
 use Libreame\BackendBundle\Controller\AccesoController;
 use Libreame\BackendBundle\Entity\LbUsuarios;
 use Libreame\BackendBundle\Entity\LbDispusuarios;
-use Libreame\BackendBundle\Entity\LbMembresias;
 use Libreame\BackendBundle\Entity\LbSesiones;
 use Libreame\BackendBundle\Entity\LbActsesion;
 

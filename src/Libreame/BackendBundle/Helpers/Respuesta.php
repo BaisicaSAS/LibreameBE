@@ -21,13 +21,7 @@ class Respuesta {
     public  $RespUsuarios; //Arreglo de Usuarios 
     private $RespCalifUsu; //Arreglo de calificaciones de usuario
     private $RespGrupos; //Arreglo de calificaciones de usuario
-    private $RespOfertas; //Arreglo de ofertas
-    private $RespOfrecidos; //Arreglo de ejemplares ofrecidos
-    private $RespSolicitados; //Arreglo de ejemplares ofrecidos
-    private $RespActOfertas; //Arreglo de ejemplares ofrecidos
-    private $CalifPromedio; //CAlificacion promedio que ha obtenido el usuario
     //Respuestas para PublicarEjemplar
-    private $pIdOferta; //Id Oferta
     private $pTitulo; //Titulo del libro ofrecido
     private $pIdlibro; //Id del libro ofrecido
     private $pIdEjemplar; //Id del Ejemplar
@@ -45,7 +39,7 @@ class Respuesta {
     private $pTxMensaje; //Mensaje recibido (La plataforma publica el ejemplar)
     private $pFeMensaje; //Fecha Mensaje recibido (La plataforma publica el ejemplar)
     private $pIdPadre; //Id Mensaje padre del hilo
-    private $pPromCalificaciones; //Id Mensaje padre del hilo
+    private $pPromCalificaciones; //Promedio de calificaciones  
     
     /*
      *  Bloque de getter para los atributos de la clase
@@ -80,31 +74,6 @@ class Respuesta {
     public function getArrGrupos()
     {
         return $this->RespGrupos;
-    }   
-
-    public function getArrOfertas()
-    {
-        return $this->RespOfertas;
-    }   
-
-    public function getArrOfrecidos()
-    {
-        return $this->RespOfrecidos;
-    }   
-
-    public function getArrSolicitados()
-    {
-        return $this->RespSolicitados;
-    }   
-
-    public function getArrActOferta()
-    {
-        return $this->RespActOfertas;
-    }   
-
-    public function getIdOferta()
-    {
-        return $this->pIdOferta;
     }   
 
     public function getTitulo()
@@ -240,36 +209,6 @@ class Respuesta {
         return $this;
     }   
     
-    public function setArrOfertas(array $ofertas)
-    {
-        $this->RespOfertas = $ofertas;
-        return $this;
-    }   
-
-    public function setArrSolicitados(array $solicitados)
-    {
-        $this->RespSolicitados = $solicitados;
-        return $this;
-    }   
-
-    public function setArrOfrecidos(array $ofrecidos)
-    {
-        $this->RespOfrecidos = $ofrecidos;
-        return $this;
-    }   
-
-    public function setArrActOfertas(array $actOfertas)
-    {
-        $this->RespActOfertas = $actOfertas;
-        return $this;
-    }   
-
-    public function setIdOferta($pIdOferta)
-    {
-        $this->pIdOferta = $pIdOferta;
-        return $this;
-    }   
-
     public function setTitulo($pTitulo)
     {
         $this->pTitulo = $pTitulo;

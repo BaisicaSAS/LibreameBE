@@ -7,16 +7,10 @@ use Libreame\BackendBundle\Controller\AccesoController;
 use Libreame\BackendBundle\Repository\ManejoDataRepository;
 
 
-use Libreame\BackendBundle\Entity\LbLibros;
 use Libreame\BackendBundle\Entity\LbIdiomas;
 use Libreame\BackendBundle\Entity\LbUsuarios;
 use Libreame\BackendBundle\Entity\LbEjemplares;
-use Libreame\BackendBundle\Entity\LbDispusuarios;
-use Libreame\BackendBundle\Entity\LbMembresias;
 use Libreame\BackendBundle\Entity\LbSesiones;
-use Libreame\BackendBundle\Entity\LbActsesion;
-use Libreame\BackendBundle\Entity\LbOfertas;
-use Libreame\BackendBundle\Entity\LbGeneroslibros;
 /**
  * Description of Feeds
  *
@@ -152,7 +146,8 @@ class GestionEjemplares {
                     $arrGru[] = $gru->getIngrupo();
                 }
 
-                $ejemplares = ManejoDataRepository::getBuscarEjemplares($arrGru, $psolicitud->getTextoBuscar());
+                $ejemplares = ManejoDataRepository::getBuscarEjemplares($usuario, $arrGru, $psolicitud->getTextoBuscar());
+                //echo "Recuperó ejemplares...gestionejemplares:buscarEjemplares \n";
                 $respuesta->setRespuesta(AccesoController::inExitoso);
 
                 //SE INACTIVA PORQUE PUEDE GENERAR UNA GRAN CANTIDAD DE REGISTROS EN UNA SOLA SESION
@@ -185,7 +180,6 @@ class GestionEjemplares {
         $objLogica = $this->get('logica_service');
         $usuario = new LbUsuarios();
         $sesion = new LbSesiones();
-        $oferta = new LbOfertas();
         try {
             //Valida que la sesión corresponda y se encuentre activa
             $respSesionVali=  ManejoDataRepository::validaSesionUsuario($psolicitud);

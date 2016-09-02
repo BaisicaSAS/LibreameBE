@@ -35,12 +35,16 @@ select count(1) from lb_generoslibros;
 
 select count(1) from lb_libros;
 
+SELECT * FROM dotex4read.lb_indicepalabra
+where lbindpalpalabra like "%stone%";
 
-select * from lb_autores where txautnombre like "%gabriel%" ;
+select * from lb_autores where txautnombre like "%rowl%" ;
 
-Select * from lb_autoreslibros where inautlidautor = 184;
+Select * from lb_autoreslibros where inautlidautor in (24, 596);
 
-select * from lb_ejemplares where inejelibro in (Select inautlidlibro from lb_autoreslibros where inautlidautor = 184);
+select * from lb_ejemplares where inejelibro in (Select inautlidlibro from lb_autoreslibros where inautlidautor  in (24, 596));
+
+select * from lb_ejemplares where inejelibro in (24, 596);
 
 
 /**************************************************/

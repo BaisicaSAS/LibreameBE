@@ -150,11 +150,11 @@ class GestionUsuarios {
             {    
                 //Genera la oferta para el ejemplar
                 $marca = ManejoDataRepository::setMarcaMensaje($psolicitud);
-                if ($marca == AccesoController::inMenNoEx)
+                if ($marca == AccesoController::inMenNoEx) {
                     $respuesta->setRespuesta(AccesoController::inMenNoEx);
-                else
+                } else {
                     $respuesta->setRespuesta($respSesionVali);
-                
+                }
                 return $objLogica::generaRespuesta($respuesta, $psolicitud, NULL);
             } else {
                 $respuesta->setRespuesta($respSesionVali);
@@ -287,11 +287,11 @@ class GestionUsuarios {
             {    
                 //Genera la oferta para el ejemplar
                 $actualiza = ManejoDataRepository::setActualizaUsuario($psolicitud);
-                if ($actualiza == AccesoController::inFallido)
+                if ($actualiza == AccesoController::inFallido){
                     $respuesta->setRespuesta(AccesoController::inFallido);
-                else
+                } else {
                     $respuesta->setRespuesta($respSesionVali);
-                
+                }
                 return $objLogica::generaRespuesta($respuesta, $psolicitud, NULL);
             } else {
                 $respuesta->setRespuesta($respSesionVali);
@@ -318,10 +318,11 @@ class GestionUsuarios {
             {    
                 //Genera la oferta para el ejemplar
                 $actualiza = ManejoDataRepository::setActualizaUsuario($psolicitud);
-                if ($actualiza == AccesoController::inFallido)
+                if ($actualiza == AccesoController::inFallido){
                     $respuesta->setRespuesta(AccesoController::inFallido);
-                else
+                } else {
                     $respuesta->setRespuesta($respSesionVali);
+                }
                 
                 return $objLogica::generaRespuesta($respuesta, $psolicitud, NULL);
             } else {
