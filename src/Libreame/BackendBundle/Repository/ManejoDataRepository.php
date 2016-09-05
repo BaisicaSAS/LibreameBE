@@ -24,6 +24,7 @@ use Libreame\BackendBundle\Entity\LbIndicepalabra;
 use Libreame\BackendBundle\Entity\LbMensajes;
 use Libreame\BackendBundle\Entity\LbIdiomas;
 use Libreame\BackendBundle\Entity\LbBusquedasusuarios;
+use Libreame\BackendBundle\Entity\LbMegusta;
 use Libreame\BackendBundle\Helpers\Solicitud;
 
 
@@ -337,6 +338,34 @@ class ManejoDataRepository extends EntityRepository {
     }
     
     //Obtiene la cantidad de Megusta del ejemplar : Condicion megusta - nomegusta 
+    public function getMegustaEjemplar(LbEjemplares $pEjemplar, LbUsuarios $pUsuario)
+    {   
+        try{
+            $em = $this->getDoctrine()->getManager();
+            $qmg = $em->createQueryBuilder()
+                ->select('a.inmegmegusta')
+                ->from('LibreameBackendBundle:LbMegusta', 'a')
+                ->Where('a.inmegejemplar = :pejemplar')
+                ->setParameter('pejemplar', $pEjemplar)
+                ->andWhere('a.inmegusuario = :pusuario')
+                ->setParameter('pusuario', $pUsuario)
+                ->setMaxResults(1)
+                ->orderBy('a.femegmegusta', 'DESC');
+
+            if($qmg->getQuery()->getOneOrNullResult() == NULL){
+                $meg = AccesoController::inDatoCer; //Si ho hay registro devuelve no me gusta (0)
+            } else {
+                $meg = $qmg->getQuery()->getOneOrNullResult();//Si hay registro devuelve lo que hay
+            }    
+            
+            //echo "megusta ".$meg;
+            return $meg;
+        } catch (Exception $ex) {
+                return 0;
+        } 
+    }
+
+    //Obtiene la cantidad de Megusta del ejemplar : Condicion megusta - nomegusta 
     public function getCantMegusta($inejemplar)
     {   
         try{
@@ -517,18 +546,16 @@ class ManejoDataRepository extends EntityRepository {
                 return new LbMembresias();
         } 
     }
-    
+        
     //Obtiene todos los grupos a los que pertenece el usuario
-    public function getGruposUsuario(LbUsuarios $usuario)
+    public function getEjemplarById($ejemplar)
     {   
         try{
             $em = $this->getDoctrine()->getManager();
-            $sql = "SELECT g.ingrunombre FROM LibreameBackendBundle:LbGrupos g JOIN LibreameBackendBundle:LbMembresias m"
-                    ." WHERE m.inmemusuario = :usuario AND m.inmemgrupo = g.ingrupo";
-            $query = $em->createQuery($sql)->setParameter('usuario', $usuario);
-            return $query->getResult();
+            return $em->getRepository('LibreameBackendBundle:LbEjemplares')->
+                    findOneBy(array('inejemplar' => $ejemplar));
         } catch (Exception $ex) {
-                return new LbGrupos();
+                return new LbEjemplares();
         } 
     }
                 
@@ -1125,5 +1152,30 @@ class ManejoDataRepository extends EntityRepository {
         } 
     }
     
+        //Obtiene varios objetos Autor según el ID del libro 
+    public function setMegustaEjemplar($ejemplar, $megusta, $usuario)
+    {   
+        try{
+            setlocale (LC_TIME, "es_CO");
+            $fecha = new \DateTime;
+            $em = $this->getDoctrine()->getManager();
+            $ObjEjemplar = ManejoDataRepository::getEjemplarById($ejemplar);
+            $ObjUsuario = ManejoDataRepository::getUsuarioByEmail($usuario);
+            $megustaEjemplar = new LbMegusta();
+            $megustaEjemplar->setInmegejemplar($ObjEjemplar);
+            $megustaEjemplar->setInmegusuario($ObjUsuario);
+            $megustaEjemplar->setInmegmegusta($megusta);
+            $megustaEjemplar->setFemegmegusta($fecha);
+
+            $em->persist($megustaEjemplar);
+
+            $em->flush();
+
+        } catch (Exception $ex) {
+                return new LbAutores();
+        } 
+    }
+    
+
 
 }

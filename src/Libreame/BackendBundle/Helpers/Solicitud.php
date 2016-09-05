@@ -58,7 +58,12 @@ class Solicitud {
     private $pMarcaComo; //Marcar usuario como : Leido = 1, No leido = 0
     //Parametros para recuperar usuario otro
     private $pIdUsuarioVer; //Id del mensaje
-    //Parametros para recuperar oferta
+    //Id de un ejemplar
+    private $pIdEjemplar;
+    //Marca de megusta o no me gusta para un ejemplar
+    private $pMegusta;
+    
+    
     
     /*
      *  Bloque de getter para los atributos de la clase
@@ -210,6 +215,14 @@ class Solicitud {
     
     public function getImageneje() {
         return $this->pImagenEje;
+    }
+
+    public function getIdEjemplar() {
+        return $this->pIdEjemplar;
+    }
+
+    public function getMegusta() {
+        return $this->pMegusta;
     }
 
 
@@ -404,6 +417,16 @@ class Solicitud {
     
     public function setImageneje($pimageneje) {
         $this->pImagenEje = $pimageneje;
+        return $this;
+    }
+    
+    public function setIdEjemplar($pidejemplar) {
+        $this->pIdEjemplar = $pidejemplar;
+        return $this;
+    }
+    
+    public function setMegusta($pmegusta) {
+        $this->pMegusta = $pmegusta;
         return $this;
     }
     

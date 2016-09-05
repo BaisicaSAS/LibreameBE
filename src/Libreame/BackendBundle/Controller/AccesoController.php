@@ -94,6 +94,9 @@ class AccesoController extends Controller
     const txAccListaIdi =  '37'; //Listar idiomas
     const txAccListaLug =  '38'; //Listar lugares
 
+    //
+    const txAccMegEjemp =  '40'; //Marcar un ejemplar como megusta
+    
     const txEjemplarPub =  'P'; //Indica que es el ejemplar a publicar de la solicitud
     const txEjemplarSol1 =  'S1'; //Indica que es el ejemplar a Solicitar de la solicitud
     const txEjemplarSol2 =  'S2'; //Indica que es el ejemplar a Solicitar de la solicitud
@@ -348,6 +351,15 @@ class AccesoController extends Controller
                         break;
                     }
 
+                    case self::txAccMegEjemp: { //Dato:40 : Marcar Megusta a ejemplar
+                        //echo "<script>alert('ENTRA POR LISTAR DE LUGARES')</script>";
+                        $this->objSolicitud->setEmail($json_datos['idsolicitud']['email']);
+                        $this->objSolicitud->setClave($json_datos['idsolicitud']['clave']);
+                        $this->objSolicitud->setIdEjemplar($json_datos['idsolicitud']['ejemplar']);
+                        $this->objSolicitud->setMegusta($json_datos['idsolicitud']['megusta']);
+                        break;
+                    }
+
                 }
                 //echo "<script>alert('SESION: ".$this->objSolicitud->getSession().": Finalizó')</script>"; 
                 $resp = self::inExitoso;
@@ -480,6 +492,13 @@ class AccesoController extends Controller
                     case self::txAccListaLug: { //Dato:38 : LISTAR LUGARES
                         //echo "<script>alert('ENTRA POR LISTAR LUGARES')</script>";
                         $resp = (isset($datos['idsolicitud']['email']) and isset($datos['idsolicitud']['clave']));
+                        break;
+                    }
+
+                    case self::txAccMegEjemp: { //Dato:40 : MARCAR MEGUSTA EJEMPLAR
+                        //echo "<script>alert('ENTRA POR MARCAR ME GUSTA EJEMPLAR')</script>";
+                        $resp = (isset($datos['idsolicitud']['email']) and isset($datos['idsolicitud']['clave']) and
+                                isset($datos['idsolicitud']['ejemplar']) and isset($datos['idsolicitud']['megusta']));
                         break;
                     }
 

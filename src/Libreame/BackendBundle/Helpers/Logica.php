@@ -146,6 +146,13 @@ class Logica {
                     break;
                 } 
 
+                case AccesoController::txAccMegEjemp: {//Dato:40 : Marcar megusta ejemplar
+                    //echo "<script>alert('Antes de entrar a Me gusta ejemplar Usuario-".$solicitud->getEmail()."')</script>";
+                    $objGestEjemplares = $this->get('gest_ejemplares_service');
+                    $respuesta = $objGestEjemplares::megustaEjemplar($solicitud);
+                    break;
+                } 
+
             }
             //echo "<script>alert('ejecuta Accion: ".$respuesta."')</script>";
             return $respuesta;
@@ -233,6 +240,10 @@ class Logica {
                 
                 case AccesoController::txAccListaLug: //Dato:38 : Listar Lugares
                     $JSONResp = Logica::respuestaListaLugares($respuesta, $pSolicitud, $parreglo);
+                    break;
+                
+                case AccesoController::txAccMegEjemp: //Dato:40 : Marcar Megusta ejemplar
+                    $JSONResp = Logica::respuestaMegustaEjemplar($respuesta, $pSolicitud);
                     break;
                 
             }
@@ -358,6 +369,7 @@ class Logica {
         try{
             $arrTmp = array();
             $ejemplar = new LbEjemplares();
+            $usuarioConsulta = ManejoDataRepository::getUsuarioByEmail($pSolicitud->getEmail());
             //echo "Va a generar la respuestaFeedEjemplares :: Logica.php [365] \n";
             foreach ($parreglo as $ejemplar){
                 //Recupera nombre del genero, Nombre del libro, Nombre del uduario Dueño
@@ -367,12 +379,6 @@ class Logica {
                 $libros = new LbLibros();
                 $usuario = new LbUsuarios();
                 if ($respuesta->getRespuesta()== AccesoController::inULogged){
-                    //'e.inejemplar inejemplar', 
-                    //'l.txlibtitulo txlibtitulo', 
-                    //'count(mg.inidmegusta) megusta', 
-                    //'count(nmg.inidmegusta) nomegusta', 
-                    //'count(c.inidcomentario) numcomm', 
-                    //'max(h.fehisejeregistro) fechapub', 'e', 'u')
                     $libros = ManejoDataRepository::getLibro($ejemplar->getInejelibro()->getInlibro());
                     //echo "libro: [".utf8_encode($libros->getTxlibtitulo())."]\n";
                     //echo "ejemplar: [".$ejemplar->getInejemplar()."--".$ejemplar->getInejelibro()->getInlibro()."] libro: [".utf8_encode($libros->getTxlibtitulo())."]\n";
@@ -382,6 +388,8 @@ class Logica {
                     //echo "...autores \n";
                     $editoriales = ManejoDataRepository::getEditorialesLibro($ejemplar->getInejelibro()->getInlibro());
                     //echo "...editoriales \n";
+                    $megusta = ManejoDataRepository::getMegustaEjemplar($ejemplar, $usuarioConsulta);
+                    //echo "...megusta \n";
                     $cantmegusta = ManejoDataRepository::getCantMegusta($ejemplar->getInejemplar());
                     //echo "...cantmegusta \n";
                     $cantcomment = ManejoDataRepository::getCantComment($ejemplar->getInejemplar());
@@ -434,6 +442,7 @@ class Logica {
                     'edicion' => $edicion,
                     'isbn10' => $isbn10,
                     'isbn13' => $isbn13,
+                    'megusta' => $megusta,
                     'cantmegusta' => $cantmegusta,
                     'cantcomment' => $cantcomment,
                     'autores' => array($arrAutores),
@@ -563,6 +572,7 @@ class Logica {
         try{
             $arrTmp = array();
             $ejemplar = new LbEjemplares();
+            $usuarioConsulta = ManejoDataRepository::getUsuarioByEmail($pSolicitud->getEmail());
             //echo "Va a generar la respuestaFeedEjemplares :: Logica.php [365] \n";
             foreach ($parreglo as $ejemplar){
                 //Recupera nombre del genero, Nombre del libro, Nombre del uduario Dueño
@@ -572,12 +582,6 @@ class Logica {
                 $libros = new LbLibros();
                 $usuario = new LbUsuarios();
                 if ($respuesta->getRespuesta()== AccesoController::inULogged){
-                    //'e.inejemplar inejemplar', 
-                    //'l.txlibtitulo txlibtitulo', 
-                    //'count(mg.inidmegusta) megusta', 
-                    //'count(nmg.inidmegusta) nomegusta', 
-                    //'count(c.inidcomentario) numcomm', 
-                    //'max(h.fehisejeregistro) fechapub', 'e', 'u')
                     $libros = ManejoDataRepository::getLibro($ejemplar->getInejelibro()->getInlibro());
                     //echo "libro: [".utf8_encode($libros->getTxlibtitulo())."]\n";
                     //echo "ejemplar: [".$ejemplar->getInejemplar()."--".$ejemplar->getInejelibro()->getInlibro()."] libro: [".utf8_encode($libros->getTxlibtitulo())."]\n";
@@ -587,6 +591,8 @@ class Logica {
                     //echo "...autores \n";
                     $editoriales = ManejoDataRepository::getEditorialesLibro($ejemplar->getInejelibro()->getInlibro());
                     //echo "...editoriales \n";
+                    $megusta = ManejoDataRepository::getMegustaEjemplar($ejemplar, $usuarioConsulta);
+                    //echo "...megusta \n";
                     $cantmegusta = ManejoDataRepository::getCantMegusta($ejemplar->getInejemplar());
                     //echo "...cantmegusta \n";
                     $cantcomment = ManejoDataRepository::getCantComment($ejemplar->getInejemplar());
@@ -639,6 +645,7 @@ class Logica {
                     'edicion' => $edicion,
                     'isbn10' => $isbn10,
                     'isbn13' => $isbn13,
+                    'megusta' => $megusta,
                     'cantmegusta' => $cantmegusta,
                     'cantcomment' => $cantcomment,
                     'autores' => array($arrAutores),
@@ -789,6 +796,23 @@ class Logica {
                             'iddevice'=> $pSolicitud->getDeviceMac(), 'marca'=>$pSolicitud->getDeviceMarca(), 
                             'modelo'=>$pSolicitud->getDeviceModelo(), 'so'=>$pSolicitud->getDeviceSO()), 
                             'idrespuesta' => (array('respuesta' => $respuesta->getRespuesta(), 'lugares' => $parreglo)));
+        } catch (Exception $ex) {
+                return AccesoController::inPlatCai;
+        } 
+    }    
+    
+    /*
+        * respuestaListaLugares: 
+     * Funcion que genera el JSON de respuesta para la accion de Listar Lugares:: AccesoController::inListarIdi
+
+     */
+    public function respuestaMegustaEjemplar(Respuesta $respuesta, Solicitud $pSolicitud){
+        try {
+            return array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
+                            'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr(), 
+                            'iddevice'=> $pSolicitud->getDeviceMac(), 'marca'=>$pSolicitud->getDeviceMarca(), 
+                            'modelo'=>$pSolicitud->getDeviceModelo(), 'so'=>$pSolicitud->getDeviceSO()), 
+                            'idrespuesta' => (array('respuesta' => $respuesta->getRespuesta())));
         } catch (Exception $ex) {
                 return AccesoController::inPlatCai;
         } 
