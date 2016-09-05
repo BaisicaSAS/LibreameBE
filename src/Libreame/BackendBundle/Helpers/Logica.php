@@ -153,6 +153,19 @@ class Logica {
                     break;
                 } 
 
+                case AccesoController::txAccVerUsMeg: {//Dato:41 : Ver usuarios a quienes les gusta un ejemplar
+                    //echo "<script>alert('Antes de entrar a Ver usuarios Me gusta ejemplar Usuario-".$solicitud->getEmail()."')</script>";
+                    $objGestEjemplares = $this->get('gest_ejemplares_service');
+                    $respuesta = $objGestEjemplares::VerUsrgustaEjemplar($solicitud);
+                    break;
+                } 
+
+                case AccesoController::txAccCommEjem: {//Dato:42 : Realizar, borrar, editar comentario a ejemplar
+                    //echo "<script>alert('Antes de entrar a COMENTARIO ejemplar Usuario-".$solicitud->getEmail()."')</script>";
+                    $objGestEjemplares = $this->get('gest_ejemplares_service');
+                    $respuesta = $objGestEjemplares::comentarEjemplar($solicitud);
+                    break;
+                } 
             }
             //echo "<script>alert('ejecuta Accion: ".$respuesta."')</script>";
             return $respuesta;
@@ -246,6 +259,13 @@ class Logica {
                     $JSONResp = Logica::respuestaMegustaEjemplar($respuesta, $pSolicitud);
                     break;
                 
+                case AccesoController::txAccVerUsMeg: //Dato:41 : Ver usuarios a quienes les gusta ejemplar
+                    $JSONResp = Logica::respuestaVerUsuMegustaEjemplar($respuesta, $pSolicitud, $parreglo);
+                    break;
+
+                case AccesoController::txAccCommEjem: //Dato:42 : Realizar comentario a un ejemplar
+                    $JSONResp = Logica::respuestaComentarioEjemplar($respuesta, $pSolicitud);
+                    break;
             }
             //echo " 1 La respuesta inicia";
 
@@ -430,6 +450,7 @@ class Logica {
                 $isbn10 = utf8_encode($libros->getTxlibcodigoofic());
                 $isbn13 = utf8_encode($libros->getTxlibcodigoofic13());
                 $imagen = utf8_encode($ejemplar->getTxejeimagen());
+                $lugar = $usuario->getInusulugar();
                 //echo "Titulo + Descripcion edicion : [".$titulo."] - [".$edicion."]\n";
                 $arrTmp[] = array('idejemplar' => $ejemplar->getInejemplar(), 
                     'titulo' => $titulo, 
@@ -445,6 +466,7 @@ class Logica {
                     'megusta' => $megusta,
                     'cantmegusta' => $cantmegusta,
                     'cantcomment' => $cantcomment,
+                    'lugar' => array('inlugar' => $lugar->getInlugar(), 'txlugnombre' => utf8_encode($lugar->getTxlugnombre())),
                     'autores' => array($arrAutores),
                     'editoriales' => array($arrEditoriales),
                     'generos' => array($arrGeneros),
@@ -633,6 +655,7 @@ class Logica {
                 $isbn10 = utf8_encode($libros->getTxlibcodigoofic());
                 $isbn13 = utf8_encode($libros->getTxlibcodigoofic13());
                 $imagen = utf8_encode($ejemplar->getTxejeimagen());
+                $lugar = $usuario->getInusulugar();
                 //echo "Titulo + Descripcion edicion : [".$titulo."] - [".$edicion."]\n";
                 $arrTmp[] = array('idejemplar' => $ejemplar->getInejemplar(), 
                     'titulo' => $titulo, 
@@ -648,6 +671,7 @@ class Logica {
                     'megusta' => $megusta,
                     'cantmegusta' => $cantmegusta,
                     'cantcomment' => $cantcomment,
+                    'lugar' => array('inlugar' => $lugar->getInlugar(), 'txlugnombre' => utf8_encode($lugar->getTxlugnombre())),
                     'autores' => array($arrAutores),
                     'editoriales' => array($arrEditoriales),
                     'generos' => array($arrGeneros),
@@ -802,8 +826,8 @@ class Logica {
     }    
     
     /*
-        * respuestaListaLugares: 
-     * Funcion que genera el JSON de respuesta para la accion de Listar Lugares:: AccesoController::inListarIdi
+        * respuestaMegustaEjemplar: 
+     * Funcion que genera el JSON de respuesta para la accion de Dar Me gusta a ejemplar:: AccesoController::txAccMegEjemp
 
      */
     public function respuestaMegustaEjemplar(Respuesta $respuesta, Solicitud $pSolicitud){
@@ -817,6 +841,42 @@ class Logica {
                 return AccesoController::inPlatCai;
         } 
     }    
+    
+    /*
+        * respuestaVerUsuariosMegustaEjemplar: 
+     * Funcion que genera el JSON de respuesta para la accion de VEr usuarios Me gusta a ejemplar:: AccesoController::txAccVerUsMeg
+
+     */
+    public function respuestaVerUsuMegustaEjemplar(Respuesta $respuesta, Solicitud $pSolicitud, $parreglo){
+        try {
+            return array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
+                            'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr(), 
+                            'iddevice'=> $pSolicitud->getDeviceMac(), 'marca'=>$pSolicitud->getDeviceMarca(), 
+                            'modelo'=>$pSolicitud->getDeviceModelo(), 'so'=>$pSolicitud->getDeviceSO()), 
+                            'idrespuesta' => (array('respuesta' => $respuesta->getRespuesta(), 'usuarios' => $parreglo)));
+        } catch (Exception $ex) {
+                return AccesoController::inPlatCai;
+        } 
+    }    
+    
+    /*
+        * respuestaComentarEjemplar: 
+     * Funcion que genera el JSON de respuesta para la accion de comentar a ejemplar:: AccesoController::txAccCommEjem
+
+     */
+    public function respuestaComentarioEjemplar(Respuesta $respuesta, Solicitud $pSolicitud){
+        try {
+            return array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
+                            'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr(), 
+                            'iddevice'=> $pSolicitud->getDeviceMac(), 'marca'=>$pSolicitud->getDeviceMarca(), 
+                            'modelo'=>$pSolicitud->getDeviceModelo(), 'so'=>$pSolicitud->getDeviceSO()), 
+                            'idrespuesta' => (array('respuesta' => $respuesta->getRespuesta())));
+        } catch (Exception $ex) {
+                return AccesoController::inPlatCai;
+        } 
+    }    
+    
+    
     
     /*
      * enviaMailRegistro 

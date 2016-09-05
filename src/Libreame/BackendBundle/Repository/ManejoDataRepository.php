@@ -25,6 +25,7 @@ use Libreame\BackendBundle\Entity\LbMensajes;
 use Libreame\BackendBundle\Entity\LbIdiomas;
 use Libreame\BackendBundle\Entity\LbBusquedasusuarios;
 use Libreame\BackendBundle\Entity\LbMegusta;
+use Libreame\BackendBundle\Entity\LbComentarios;
 use Libreame\BackendBundle\Helpers\Solicitud;
 
 
@@ -365,6 +366,33 @@ class ManejoDataRepository extends EntityRepository {
         } 
     }
 
+    
+    public function getUsrMegustaEjemplar(Solicitud $psolicitud)
+    {   
+        try{
+            $em = $this->getDoctrine()->getManager();
+            $Megusta = $em->getRepository('LibreameBackendBundle:LbMegusta')->findBy(array('inmegejemplar' => $psolicitud->getIdEjemplar())/*, 
+                    array('femegmegusta', 'ASC')*/);
+            $arUsuar = [];
+            $usr = new LbUsuarios();
+            foreach($Megusta as $mg){
+               $usr = ManejoDataRepository::getUsuarioById($mg->getInMegUsuario()->getInUsuario());
+               if  ($mg->getInmegmegusta() == AccesoController::inDatoUno){
+                 $arUsuar[] = array("inusuario" => $usr->getInUsuario(), "txusunommostrar" => utf8_encode($usr->getTxusunommostrar()));
+               } else {   
+                    if (in_array(strtolower($mg->getInMegUsuario()->getInUsuario()), $arUsuar)){
+                        unset($arUsuar[$mg->getInMegUsuario()->getInUsuario()]);
+                    }
+               }
+            }
+            
+            return $arUsuar;
+        } catch (Exception $ex) {
+                return $arUsuar;
+        } 
+    }
+    
+    
     //Obtiene la cantidad de Megusta del ejemplar : Condicion megusta - nomegusta 
     public function getCantMegusta($inejemplar)
     {   
@@ -867,6 +895,20 @@ class ManejoDataRepository extends EntityRepository {
     }
     
     /*
+     * Recupera un comentario, con su Id numerico
+     */
+    public function getComentarioById($idcomentario){
+        try{
+            $em = $this->getDoctrine()->getManager();
+            return $em->getRepository('LibreameBackendBundle:LbComentarios')->
+                    findOneBy(array('inidcomentario' => $idcomentario));
+
+        } catch (Exception $ex) {
+                return new LbComentarios();
+        } 
+    }
+    
+    /*
      * Crea registro en generolibro, para el genero por defecto y lo rtorna
      */
     public function asociarGeneroBasicoLibro(LbLibros $libro, $em){
@@ -1152,7 +1194,7 @@ class ManejoDataRepository extends EntityRepository {
         } 
     }
     
-        //Obtiene varios objetos Autor según el ID del libro 
+   //Marca un Megusta en un ejemplar
     public function setMegustaEjemplar($ejemplar, $megusta, $usuario)
     {   
         try{
@@ -1170,12 +1212,52 @@ class ManejoDataRepository extends EntityRepository {
             $em->persist($megustaEjemplar);
 
             $em->flush();
+            return AccesoController::inDatoUno;
 
         } catch (Exception $ex) {
-                return new LbAutores();
+                return NULL;
         } 
     }
     
+   //Marca un Megusta en un ejemplar
+    public function setComentarioEjemplar(Solicitud $psolicitud)
+    {   
+        try{
+            setlocale (LC_TIME, "es_CO");
+            $fecha = new \DateTime;
+            $em = $this->getDoctrine()->getManager();
+            $ObjEjemplar = ManejoDataRepository::getEjemplarById($psolicitud->getIdEjemplar());
+            $ObjUsuario = ManejoDataRepository::getUsuarioByEmail($psolicitud->getEmail());
+            if($psolicitud->getIdComentario() == ""){//Si no viene el Id del cometario, es porque es nuevo
+                $comentarioEjemplar = new LbComentarios();
+                $comentarioEjemplar->setFecomfeccomentario($fecha);
+                $comentarioEjemplar->setIncomactivo(AccesoController::inDatoUno);
+                if($psolicitud->getIdComPadre() != ""){ 
+                    $compadre = ManejoDataRepository::getComentarioById($psolicitud->getIdComPadre());
+                    $comentarioEjemplar->setIncomcompadre($compadre);
+                }
+                $comentarioEjemplar->setIncomejemplar($ObjEjemplar);
+                $comentarioEjemplar->setIncomusuario($ObjUsuario);
+                $comentarioEjemplar->setTxcomcomentario(utf8_encode($psolicitud->getComentario()));
+            } else { //Si no viene, puede ser Edicion o borrado
+                $comentarioEjemplar = new LbComentarios();
+                $comentarioEjemplar = ManejoDataRepository::getComentarioById($psolicitud->getIdComentario());
+                if($psolicitud->getAccionComm()=="0"){ //Si es 0: borrado
+                    $comentarioEjemplar->setIncomactivo(AccesoController::inDatoCer);
+                } else if($psolicitud->getAccionComm()=="1")  { //Si es 1: edicion, modifica la fecha y el texto
+                    $comentarioEjemplar->setFecomfeccomentario($fecha);
+                    $comentarioEjemplar->setTxcomcomentario(utf8_encode($psolicitud->getComentario()));
+                }
+            }
 
+            $em->persist($comentarioEjemplar);
 
+            $em->flush();
+            return AccesoController::inDatoUno;
+
+        } catch (Exception $ex) {
+                return NULL;
+        } 
+    }
+ 
 }

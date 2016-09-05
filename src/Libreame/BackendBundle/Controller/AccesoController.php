@@ -94,8 +94,10 @@ class AccesoController extends Controller
     const txAccListaIdi =  '37'; //Listar idiomas
     const txAccListaLug =  '38'; //Listar lugares
 
-    //
+    //Nuevos con puntos
     const txAccMegEjemp =  '40'; //Marcar un ejemplar como megusta
+    const txAccVerUsMeg =  '41'; //Ver usuarios a los que les gusta
+    const txAccCommEjem =  '42'; //Realizar Cometario ejemplar
     
     const txEjemplarPub =  'P'; //Indica que es el ejemplar a publicar de la solicitud
     const txEjemplarSol1 =  'S1'; //Indica que es el ejemplar a Solicitar de la solicitud
@@ -142,7 +144,8 @@ class AccesoController extends Controller
      */
     public function ingresarSistemaAction()
     {   
-        error_reporting(E_ALL & ~E_STRICT & ~E_DEPRECATED );
+        //error_reporting(E_ALL & ~E_STRICT & ~E_DEPRECATED );
+        //echo "IngresarSistema";
         $request = $this->getRequest();
         $content = $request->getContent();
         $datos = json_decode($content, true);
@@ -359,6 +362,26 @@ class AccesoController extends Controller
                         $this->objSolicitud->setMegusta($json_datos['idsolicitud']['megusta']);
                         break;
                     }
+                    
+                    case self::txAccVerUsMeg: { //Dato:41 : Ver usuarios a quienes les gusta el ejemplar 
+                        //echo "<script>alert('ENTRA POR LISTAR DE LUGARES')</script>";
+                        $this->objSolicitud->setEmail($json_datos['idsolicitud']['email']);
+                        $this->objSolicitud->setClave($json_datos['idsolicitud']['clave']);
+                        $this->objSolicitud->setIdEjemplar($json_datos['idsolicitud']['ejemplar']);
+                        break;
+                    }
+                    
+                    case self::txAccCommEjem: { //Dato:42 : Realizar comentario ejemplar
+                        //echo "<script>alert('ENTRA POR LISTAR DE LUGARES')</script>";
+                        $this->objSolicitud->setEmail($json_datos['idsolicitud']['email']);
+                        $this->objSolicitud->setClave($json_datos['idsolicitud']['clave']);
+                        $this->objSolicitud->setIdEjemplar($json_datos['idsolicitud']['ejemplar']);
+                        $this->objSolicitud->setComentario($json_datos['idsolicitud']['comentario']);
+                        $this->objSolicitud->setIdComPadre($json_datos['idsolicitud']['idcompadre']);
+                        $this->objSolicitud->setIdComentario($json_datos['idsolicitud']['idcomentario']);
+                        $this->objSolicitud->setAccionCom($json_datos['idsolicitud']['accioncom']);
+                        break;
+                    }
 
                 }
                 //echo "<script>alert('SESION: ".$this->objSolicitud->getSession().": Finalizó')</script>"; 
@@ -501,11 +524,25 @@ class AccesoController extends Controller
                                 isset($datos['idsolicitud']['ejemplar']) and isset($datos['idsolicitud']['megusta']));
                         break;
                     }
-
                     
+                    case self::txAccVerUsMeg: { //Dato:41 : VER A QUIENES LES GUSTA EL EJEMPLAR
+                        //echo "<script>alert('ENTRA POR MARCAR ME GUSTA EJEMPLAR')</script>";
+                        $resp = (isset($datos['idsolicitud']['email']) and isset($datos['idsolicitud']['clave']) and
+                                isset($datos['idsolicitud']['ejemplar']));
+                        break;
+                    }
+                    
+                    case self::txAccCommEjem: { //Dato:42 : manejo de cometario a ejemplar : Crear comentario, crear comentario hijo, editar comentario, borrar
+                        //echo "<script>alert('ENTRA POR MARCAR ME GUSTA EJEMPLAR')</script>";
+                        $resp = (isset($datos['idsolicitud']['email']) and isset($datos['idsolicitud']['clave']) and
+                                isset($datos['idsolicitud']['ejemplar']) and isset($datos['idsolicitud']['comentario']) and 
+                                isset($datos['idsolicitud']['idcompadre']) and isset($datos['idsolicitud']['idcomentario']) and 
+                                isset($datos['idsolicitud']['accioncom'])); // 0 Borrar - 1 Editar;
+                        break;
+                    }
                 }
             }
-        }
+        }    
         //echo "<script>alert('VALIDADO COMO: ".$resp ? 'true' : 'false'."')</script>";
         return $resp;
     }

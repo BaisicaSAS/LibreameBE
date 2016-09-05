@@ -62,6 +62,11 @@ class Solicitud {
     private $pIdEjemplar;
     //Marca de megusta o no me gusta para un ejemplar
     private $pMegusta;
+    //Comentario a realizar para un ejemplar
+    private $pComentario; // Texto del comentario
+    private $pIdComPadre; //Id del comentario padre / cuando es respuesta a un comentario
+    private $pIdComentario; //Id del comentario - cuando se edita o borra
+    private $pAccioncom; //Id del comentario - cuando se edita o borra
     
     
     
@@ -225,6 +230,21 @@ class Solicitud {
         return $this->pMegusta;
     }
 
+    public function getComentario() {
+        return $this->pComentario;
+    }
+
+    public function getIdComPadre() {
+        return $this->pIdComPadre;
+    }
+
+    public function getIdComentario() {
+        return $this->pIdComentario;
+    }
+
+    public function getAccionComm() {
+        return $this->pAccioncom;
+    }
 
     /*
      *  Bloque de setter para los atributos de la clase
@@ -427,6 +447,26 @@ class Solicitud {
     
     public function setMegusta($pmegusta) {
         $this->pMegusta = $pmegusta;
+        return $this;
+    }
+    
+    public function setComentario($pcomentario) {
+        $this->pComentario = $pcomentario;
+        return $this;
+    }
+    
+    public function setIdComPadre($pidcompadre) {
+        $this->pIdComPadre = $pidcompadre;
+        return $this;
+    }
+    
+    public function setIdComentario($pidcomentario) {
+        $this->pIdComentario = $pidcomentario;
+        return $this;
+    }
+    
+    public function setAccionCom($paccioncom) {
+        $this->pAccioncom = $paccioncom;
         return $this;
     }
     
