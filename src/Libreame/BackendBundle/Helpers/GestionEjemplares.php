@@ -172,6 +172,64 @@ class GestionEjemplares {
        
     }
 
+
+    public function visualizarBiblioteca(Solicitud $psolicitud)
+    {   
+        /*setlocale (LC_TIME, "es_CO");
+        $fecha = new \DateTime;*/
+        $respuesta = new Respuesta();
+        $objLogica = $this->get('logica_service');
+        $usuario = new LbUsuarios();
+        $sesion = new LbSesiones();
+        $ejemplares = new LbEjemplares();
+        try {
+            //Valida que la sesión corresponda y se encuentre activa
+            $respSesionVali=  ManejoDataRepository::validaSesionUsuario($psolicitud);
+            //echo "<script>alert(' buscarEjemplares :: Validez de sesion ".$respSesionVali." ')</script>";
+            if ($respSesionVali==AccesoController::inULogged) 
+            {    
+                //echo "<script>alert(' buscaEjemplares :: FindAll ')</script>";
+                //Busca el usuario 
+                $usuario = ManejoDataRepository::getUsuarioByEmail($psolicitud->getEmail());
+                
+                //$membresia= ManejoDataRepository::getMembresiasUsuario($usuario);
+                
+                //echo "<script>alert('MEM ".count($membresia)." regs ')</script>";
+                
+                $grupo= ManejoDataRepository::getObjetoGruposUsuario($usuario);
+
+                $arrGru = array();
+                foreach ($grupo as $gru){
+                    $arrGru[] = $gru->getIngrupo();
+                }
+
+                $ejemplares = ManejoDataRepository::getVisualizarBiblioteca($usuario, $arrGru);
+                //echo "Recuperó ejemplares...gestionejemplares:buscarEjemplares \n";
+                $respuesta->setRespuesta(AccesoController::inExitoso);
+
+                //SE INACTIVA PORQUE PUEDE GENERAR UNA GRAN CANTIDAD DE REGISTROS EN UNA SOLA SESION
+                //Busca y recupera el objeto de la sesion:: 
+                //$sesion = ManejoDataRepository::recuperaSesionUsuario($usuario,$psolicitud);
+                //echo "<script>alert('La sesion es ".$sesion->getTxsesnumero()." ')</script>";
+                //Guarda la actividad de la sesion:: 
+                //ManejoDataRepository::generaActSesion($sesion,AccesoController::inDatoUno,"Recupera Feed de Ejemplares".$psolicitud->getEmail()." recuperados con éxito ",$psolicitud->getAccion(),$fecha,$fecha);
+                //echo "<script>alert('Generó actividad de sesion ')</script>";
+                
+                return $objLogica::generaRespuesta($respuesta, $psolicitud, $ejemplares);
+            } else {
+                $respuesta->setRespuesta($respSesionVali);
+                $ejemplares = array();
+                return $objLogica::generaRespuesta($respuesta, $psolicitud, $ejemplares);
+            }
+        } catch (Exception $ex) {
+            $respuesta->setRespuesta(AccesoController::inPlatCai);
+            $ejemplares = array();
+            return $objLogica::generaRespuesta($respuesta, $psolicitud, $ejemplares);
+        }
+       
+    }
+
+
     public function recuperarOferta(Solicitud $psolicitud)
     {   
         /*setlocale (LC_TIME, "es_CO");
@@ -308,7 +366,7 @@ class GestionEjemplares {
                 //echo "<script>alert('Generó actividad de sesion ')</script>";
                 
                 $resp = ManejoDataRepository::setMegustaEjemplar($psolicitud->getIdEjemplar(), $psolicitud->getMegusta(), $psolicitud->getEmail());
-                $respuesta->setRespuesta(AccesoController::inExitoso);
+                $respuesta->setRespuesta($resp);
                                 
                 //echo "esto es lo que hay en respuesta";
                 //print_r($respuesta);
@@ -391,7 +449,7 @@ class GestionEjemplares {
                 //echo "<script>alert('Generó actividad de sesion ')</script>";
                 
                 $resp = ManejoDataRepository::setComentarioEjemplar($psolicitud);
-                $respuesta->setRespuesta(AccesoController::inExitoso);
+                $respuesta->setRespuesta($resp);
                                 
                 //echo "esto es lo que hay en respuesta";
                 //print_r($respuesta);
@@ -406,5 +464,48 @@ class GestionEjemplares {
             return $objLogica::generaRespuesta($respuesta, $psolicitud, NULL);
         }
     }
+
+    public function VerComentariosEjemplar(Solicitud $psolicitud)
+    {   
+        /*setlocale (LC_TIME, "es_CO");
+        $fecha = new \DateTime;*/
+        $respuesta = new Respuesta();   
+        $objLogica = $this->get('logica_service');
+        try {
+            //Valida que la sesión corresponda y se encuentre activa
+            $respSesionVali=  ManejoDataRepository::validaSesionUsuario($psolicitud);
+            //echo "<script>alert(' buscarEjemplares :: Validez de sesion ".$respSesionVali." ')</script>";
+            if ($respSesionVali==AccesoController::inULogged) 
+            {    
+
+                //SE INACTIVA PORQUE PUEDE GENERAR UNA GRAN CANTIDAD DE REGISTROS EN UNA SOLA SESION
+                //Busca y recupera el objeto de la sesion:: 
+                //$sesion = ManejoDataRepository::recuperaSesionUsuario($usuario,$psolicitud);
+                //echo "<script>alert('La sesion es ".$sesion->getTxsesnumero()." ')</script>";
+                //Guarda la actividad de la sesion:: 
+                //ManejoDataRepository::generaActSesion($sesion,AccesoController::inDatoUno,"Recupera Feed de Ejemplares".$psolicitud->getEmail()." recuperados con éxito ",$psolicitud->getAccion(),$fecha,$fecha);
+                //echo "<script>alert('Generó actividad de sesion ')</script>";
+                
+                $ComenEjemplar = ManejoDataRepository::getComentariosEjemplar($psolicitud);
+                $respuesta->setRespuesta(AccesoController::inExitoso);
+                                
+                //echo "esto es lo que hay en respuesta";
+                //print_r($respuesta);
+                //echo $contador." - lugares hallados";
+                //$arIdiomas = array("Español","Inglés","Frances","Alemán","Ruso","Portugues",
+                //    "Catalán","Árabe","Bosnio","Croata","Serbio","Italiano","Griego","Turco","Húngaro","Hindi");
+            
+                return $objLogica::generaRespuesta($respuesta, $psolicitud, $ComenEjemplar);
+            } else {
+                $respuesta->setRespuesta($respSesionVali);
+                return $objLogica::generaRespuesta($respuesta, $psolicitud, $ComenEjemplar);
+            }
+        } catch (Exception $ex) {
+            $respuesta->setRespuesta(AccesoController::inPlatCai);
+            return $objLogica::generaRespuesta($respuesta, $psolicitud, $ComenEjemplar);
+        }
+       
+    }
+    
     
 }

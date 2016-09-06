@@ -26,6 +26,8 @@ use Libreame\BackendBundle\Entity\LbIdiomas;
 use Libreame\BackendBundle\Entity\LbBusquedasusuarios;
 use Libreame\BackendBundle\Entity\LbMegusta;
 use Libreame\BackendBundle\Entity\LbComentarios;
+use Libreame\BackendBundle\Entity\LbNegociacion;
+use Libreame\BackendBundle\Entity\LbHistejemplar;
 use Libreame\BackendBundle\Helpers\Solicitud;
 
 
@@ -362,7 +364,7 @@ class ManejoDataRepository extends EntityRepository {
             //echo "megusta ".$meg;
             return $meg;
         } catch (Exception $ex) {
-                return 0;
+                return AccesoController::inDatoCer;
         } 
     }
 
@@ -378,7 +380,8 @@ class ManejoDataRepository extends EntityRepository {
             foreach($Megusta as $mg){
                $usr = ManejoDataRepository::getUsuarioById($mg->getInMegUsuario()->getInUsuario());
                if  ($mg->getInmegmegusta() == AccesoController::inDatoUno){
-                 $arUsuar[] = array("inusuario" => $usr->getInUsuario(), "txusunommostrar" => utf8_encode($usr->getTxusunommostrar()));
+                 $arUsuar[] = array("inusuario" => $usr->getInUsuario(), "txusunommostrar" => utf8_encode($usr->getTxusunommostrar()), 
+                     "txusuimagen" => utf8_encode($usr->getTxusuimagen()), );
                } else {   
                     if (in_array(strtolower($mg->getInMegUsuario()->getInUsuario()), $arUsuar)){
                         unset($arUsuar[$mg->getInMegUsuario()->getInUsuario()]);
@@ -389,6 +392,106 @@ class ManejoDataRepository extends EntityRepository {
             return $arUsuar;
         } catch (Exception $ex) {
                 return $arUsuar;
+        } 
+    }
+    
+    
+    public function getNegociacionEjemplar(LbEjemplares $pejemplar)
+    {   
+        try{
+            $em = $this->getDoctrine()->getManager();
+            $comentarios = $em->getRepository('LibreameBackendBundle:LbComentarios')->
+                    findBy(array('incomejemplar' => $psolicitud->getIdEjemplar(), 'incomactivo' => '1'), 
+                           array('fecomfeccomentario' => 'desc'));
+            $com = new LbComentarios();
+            $arComme = [];
+            $usr = new LbUsuarios();
+            foreach($comentarios as $com){
+               $usr = ManejoDataRepository::getUsuarioById($com->getIncomusuario()->getInusuario());
+                $arUsuar = [];
+               $arUsuar[] = array("inusuario" => $usr->getInUsuario(), "txusunommostrar" => utf8_encode($usr->getTxusunommostrar()), 
+                   "txusuimagen" => utf8_encode($usr->getTxusuimagen()), );
+               if($com->getIncomcompadre()!=NULL){ //Si el cometario PADRE está inactivo, el hijo tambien
+                    if($com->getIncomcompadre()->getIncomactivo()==AccesoController::inDatoUno){ //Si el cometario PADRE está inactivo, el hijo tambien
+                         $arComme[] = array("inidcomentario" => $com->getInidcomentario(), "fecomfeccomentario" => $com->getFecomfeccomentario()->format("Y-m-d H:i:s"),
+                             "incompadre" => $com->getIncomcompadre()->getInidcomentario(), "txcomentario" => utf8_encode($com->getTxcomcomentario()),
+                             "usuario" => $arUsuar);
+                    }
+               } else {
+                         $arComme[] = array("inidcomentario" => $com->getInidcomentario(), "fecomfeccomentario" => $com->getFecomfeccomentario()->format("Y-m-d H:i:s"),
+                             "incompadre" => "", "txcomentario" => utf8_encode($com->getTxcomcomentario()),"usuario" => $arUsuar);
+               }
+            }
+            
+            return $arComme;
+        } catch (Exception $ex) {
+                return new LbNegociacion();
+        } 
+    }
+
+    public function getHistoriaEjemplar(LbEjemplares $pejemplar)
+    {   
+        try{
+            $em = $this->getDoctrine()->getManager();
+            $comentarios = $em->getRepository('LibreameBackendBundle:LbComentarios')->
+                    findBy(array('incomejemplar' => $psolicitud->getIdEjemplar(), 'incomactivo' => '1'), 
+                           array('fecomfeccomentario' => 'desc'));
+            $com = new LbComentarios();
+            $arComme = [];
+            $usr = new LbUsuarios();
+            foreach($comentarios as $com){
+               $usr = ManejoDataRepository::getUsuarioById($com->getIncomusuario()->getInusuario());
+                $arUsuar = [];
+               $arUsuar[] = array("inusuario" => $usr->getInUsuario(), "txusunommostrar" => utf8_encode($usr->getTxusunommostrar()), 
+                   "txusuimagen" => utf8_encode($usr->getTxusuimagen()), );
+               if($com->getIncomcompadre()!=NULL){ //Si el cometario PADRE está inactivo, el hijo tambien
+                    if($com->getIncomcompadre()->getIncomactivo()==AccesoController::inDatoUno){ //Si el cometario PADRE está inactivo, el hijo tambien
+                         $arComme[] = array("inidcomentario" => $com->getInidcomentario(), "fecomfeccomentario" => $com->getFecomfeccomentario()->format("Y-m-d H:i:s"),
+                             "incompadre" => $com->getIncomcompadre()->getInidcomentario(), "txcomentario" => utf8_encode($com->getTxcomcomentario()),
+                             "usuario" => $arUsuar);
+                    }
+               } else {
+                         $arComme[] = array("inidcomentario" => $com->getInidcomentario(), "fecomfeccomentario" => $com->getFecomfeccomentario()->format("Y-m-d H:i:s"),
+                             "incompadre" => "", "txcomentario" => utf8_encode($com->getTxcomcomentario()),"usuario" => $arUsuar);
+               }
+            }
+            
+            return $arComme;
+        } catch (Exception $ex) {
+                return $arComme;
+        } 
+    }
+
+    public function getComentariosEjemplar(Solicitud $psolicitud)
+    {   
+        try{
+            $em = $this->getDoctrine()->getManager();
+            $comentarios = $em->getRepository('LibreameBackendBundle:LbComentarios')->
+                    findBy(array('incomejemplar' => $psolicitud->getIdEjemplar(), 'incomactivo' => '1'), 
+                           array('fecomfeccomentario' => 'desc'));
+            $com = new LbComentarios();
+            $arComme = [];
+            $usr = new LbUsuarios();
+            foreach($comentarios as $com){
+               $usr = ManejoDataRepository::getUsuarioById($com->getIncomusuario()->getInusuario());
+                $arUsuar = [];
+               $arUsuar[] = array("inusuario" => $usr->getInUsuario(), "txusunommostrar" => utf8_encode($usr->getTxusunommostrar()), 
+                   "txusuimagen" => utf8_encode($usr->getTxusuimagen()), );
+               if($com->getIncomcompadre()!=NULL){ //Si el cometario PADRE está inactivo, el hijo tambien
+                    if($com->getIncomcompadre()->getIncomactivo()==AccesoController::inDatoUno){ //Si el cometario PADRE está inactivo, el hijo tambien
+                         $arComme[] = array("inidcomentario" => $com->getInidcomentario(), "fecomfeccomentario" => $com->getFecomfeccomentario()->format("Y-m-d H:i:s"),
+                             "incompadre" => $com->getIncomcompadre()->getInidcomentario(), "txcomentario" => utf8_encode($com->getTxcomcomentario()),
+                             "usuario" => $arUsuar);
+                    }
+               } else {
+                         $arComme[] = array("inidcomentario" => $com->getInidcomentario(), "fecomfeccomentario" => $com->getFecomfeccomentario()->format("Y-m-d H:i:s"),
+                             "incompadre" => "", "txcomentario" => utf8_encode($com->getTxcomcomentario()),"usuario" => $arUsuar);
+               }
+            }
+            
+            return $arComme;
+        } catch (Exception $ex) {
+                return $arComme;
         } 
     }
     
@@ -420,7 +523,7 @@ class ManejoDataRepository extends EntityRepository {
             //echo "megusta ".$meg." - nomegusta ".$nomeg;
             return $meg - $nomeg;
         } catch (Exception $ex) {
-                return 0;
+                return AccesoController::inDatoCer;
         } 
     }
     
@@ -437,7 +540,7 @@ class ManejoDataRepository extends EntityRepository {
             $comm = $q->getQuery()->getSingleScalarResult() * 1;
             return $comm;
         } catch (Exception $ex) {
-                return 0;
+                return AccesoController::inDatoCer;
         } 
     }
     
@@ -466,7 +569,7 @@ class ManejoDataRepository extends EntityRepository {
             //echo "\n promedio:".$promedio;
             return $promedio;
         } catch (Exception $ex) {
-                return 0;
+                return AccesoController::inDatoCer;
         } 
     }
     
@@ -601,6 +704,23 @@ class ManejoDataRepository extends EntityRepository {
         } 
     }
                 
+    //Obtiene la fecha en que el usuario publicó el ejemplar
+    public function getFechaPublicacion($pejemplar, $pusuario)
+    {   
+        try{
+            $em = $this->getDoctrine()->getManager();
+            $sql = "SELECT max(h.fehisejeregistro) AS fecha FROM LibreameBackendBundle:LbHistejemplar h"
+                    ." WHERE h.inhisejeejemplar = :ejemplar AND h.inhisejeusuario = :usuario";
+            $query = $em->createQuery($sql)->setParameters(array('ejemplar'=>$pejemplar, 'usuario'=> $pusuario));
+            
+            $fecha = $query->getOneOrNullResult();
+            //echo "fecha : ".$fecha['fecha'];
+            return $fecha['fecha'];
+        } catch (Exception $ex) {
+                return $fecha;
+        } 
+    }
+                
     //Obtiene todos los Ejemplares, con ID mayor al parámetro
     public function getEjemplaresDisponibles(Array $grupos, $inultejemplar)
     {   
@@ -625,7 +745,7 @@ class ManejoDataRepository extends EntityRepository {
                 ->setParameter('pmovimiento', 1)//Todos los ejemplares con registro de movimiento en historia ejemplar: publicados 
                 ->andWhere(' m.inmemgrupo in (:grupos) ')//Para los grupos del usuario
                 ->setParameter('grupos', $grupos)
-                ->setMaxResults(200)
+                ->setMaxResults(30)
                 ->orderBy(' h.fehisejeregistro ', 'DESC');
 
             return $q->getQuery()->getResult();
@@ -694,12 +814,41 @@ class ManejoDataRepository extends EntityRepository {
                 ->setParameter('pmovimiento', 1)//Todos los ejemplares con registro de movimiento en historia ejemplar: publicados 
                 ->andWhere(' m.inmemgrupo in (:grupos) ')//Para los grupos del usuario
                 ->setParameter('grupos', $grupos)
-                //->setMaxResults(20)
+                ->setMaxResults(100)
                 ->orderBy(' h.fehisejeregistro ', 'DESC');
             
            return $q->getQuery()->getResult();
             
         } catch (Exception $ex) {
+                return new LbEjemplares();
+        } 
+    }
+                
+    //Obtiene todos los Ejemplares, de un usuario
+    public function getVisualizarBiblioteca(LbUsuarios $usuario, Array $grupos)
+    {   
+        try{
+            //Recupera cada uno de los ejemplares con ID > al del parametro
+            //Los ejemplares cuya membresías coincidan con las del usuario que solicita
+            //El usuario debe estar activo
+            $em = $this->getDoctrine()->getManager();
+            $q = $em->createQueryBuilder()
+                ->select('e')
+                ->from('LibreameBackendBundle:LbEjemplares', 'e')
+                ->leftJoin('LibreameBackendBundle:LbUsuarios', 'u', \Doctrine\ORM\Query\Expr\Join::WITH, 'u.inusuario = e.inejeusudueno')
+                ->leftJoin('LibreameBackendBundle:LbMembresias', 'm', \Doctrine\ORM\Query\Expr\Join::WITH, 'm.inmemusuario = e.inejeusudueno')
+                ->leftJoin('LibreameBackendBundle:LbHistejemplar', 'h', \Doctrine\ORM\Query\Expr\Join::WITH, 'h.inhisejeejemplar = e.inejemplar and h.inhisejeusuario = e.inejeusudueno')
+                ->where(' u.inusuario = :pusuario')
+                ->setParameter('pusuario', $usuario)
+                ->andWhere(' m.inmemgrupo in (:grupos) ')//Para los grupos del usuario
+                ->setParameter('grupos', $grupos)
+                //->setMaxResults(10000)
+                ->orderBy(' h.fehisejeregistro ', 'DESC');
+
+            return $q->getQuery()->getResult();
+            //return $q->getArrayResult();
+        } catch (Exception $ex) {
+                //echo "retorna error";
                 return new LbEjemplares();
         } 
     }
@@ -1215,7 +1364,7 @@ class ManejoDataRepository extends EntityRepository {
             return AccesoController::inDatoUno;
 
         } catch (Exception $ex) {
-                return NULL;
+                return AccesoController::inDatoCer;
         } 
     }
     
@@ -1256,7 +1405,7 @@ class ManejoDataRepository extends EntityRepository {
             return AccesoController::inDatoUno;
 
         } catch (Exception $ex) {
-                return NULL;
+                return AccesoController::inDatoCer;
         } 
     }
  

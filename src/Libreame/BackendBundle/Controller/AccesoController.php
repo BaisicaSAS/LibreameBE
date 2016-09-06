@@ -97,7 +97,8 @@ class AccesoController extends Controller
     //Nuevos con puntos
     const txAccMegEjemp =  '40'; //Marcar un ejemplar como megusta
     const txAccVerUsMeg =  '41'; //Ver usuarios a los que les gusta
-    const txAccCommEjem =  '42'; //Realizar Cometario ejemplar
+    const txAccCommEjem =  '42'; //Realizar-editar-borrar Cometario ejemplar
+    const txAccVerComEj =  '43'; //Ver comentarios ejemplar 
     
     const txEjemplarPub =  'P'; //Indica que es el ejemplar a publicar de la solicitud
     const txEjemplarSol1 =  'S1'; //Indica que es el ejemplar a Solicitar de la solicitud
@@ -144,7 +145,7 @@ class AccesoController extends Controller
      */
     public function ingresarSistemaAction()
     {   
-        //error_reporting(E_ALL & ~E_STRICT & ~E_DEPRECATED );
+        error_reporting(E_ALL & ~E_STRICT & ~E_DEPRECATED );
         //echo "IngresarSistema";
         $request = $this->getRequest();
         $content = $request->getContent();
@@ -332,6 +333,14 @@ class AccesoController extends Controller
 
                         break;
                     }
+
+                    case self::txAccVisuaBib: { //Dato:16 : Visualizar biblioteca
+                        //echo "<script>alert('ENTRA POR CERRAR SESION')</script>";
+                        $this->objSolicitud->setEmail($json_datos['idsolicitud']['email']);
+                        $this->objSolicitud->setClave($json_datos['idsolicitud']['clave']);
+                        break;
+                    }
+                    
                     case self::txAccMarcMens: { //Dato:36 : Marcar mensaje / Leído - No leído
                         //echo "<script>alert('ENTRA POR MARCAR MENSAJES')</script>";
                         $this->objSolicitud->setEmail($json_datos['idsolicitud']['email']);
@@ -382,6 +391,16 @@ class AccesoController extends Controller
                         $this->objSolicitud->setAccionCom($json_datos['idsolicitud']['accioncom']);
                         break;
                     }
+                    
+                    case self::txAccVerComEj: { //Dato:43 : Ver comentarios ejemplar
+                        //echo "<script>alert('ENTRA POR LISTAR DE LUGARES')</script>";
+                        $this->objSolicitud->setEmail($json_datos['idsolicitud']['email']);
+                        $this->objSolicitud->setClave($json_datos['idsolicitud']['clave']);
+                        $this->objSolicitud->setIdEjemplar($json_datos['idsolicitud']['ejemplar']);
+                        break;
+                    }
+                    
+                    
 
                 }
                 //echo "<script>alert('SESION: ".$this->objSolicitud->getSession().": Finalizó')</script>"; 
@@ -488,6 +507,7 @@ class AccesoController extends Controller
                                 isset($datos['idsolicitud']['usufecnac']) and  isset($datos['idsolicitud']['usulugar']));
                         break;
                     }
+                    
                     case self::txAccPubliEje: { //Dato:13 : Publicar un Ejemplar
                         //echo "<script>alert('VAL ENTRA POR PUBLICAR')</script>";
                         $resp = (isset($datos['idsolicitud']['email']) and isset($datos['idsolicitud']['clave']) and 
@@ -500,6 +520,13 @@ class AccesoController extends Controller
                                  isset($datos['idsolicitud']['observasol']) and isset($datos['idsolicitud']['foto']));
                         break;
                     }
+                    
+                    case self::txAccVisuaBib: { //Dato:16 : Visualizar biblioteca
+                        //echo "<script>alert('VAL ENTRA VISUALIZAR BIBLIOTECA')</script>";
+                        $resp = (isset($datos['idsolicitud']['email']) and isset($datos['idsolicitud']['clave']));
+                        break;
+                    }
+
                     case self::txAccMarcMens: { //Dato:36 : Marcar mensaje / Leído - No leído
                         //echo "<script>alert('VAL ENTRA POR MARCAR MENSAJES')</script>";
                         $resp = (isset($datos['idsolicitud']['email']) and isset($datos['idsolicitud']['clave']) and
@@ -533,13 +560,21 @@ class AccesoController extends Controller
                     }
                     
                     case self::txAccCommEjem: { //Dato:42 : manejo de cometario a ejemplar : Crear comentario, crear comentario hijo, editar comentario, borrar
-                        //echo "<script>alert('ENTRA POR MARCAR ME GUSTA EJEMPLAR')</script>";
+                        //echo "<script>alert('ENTRA POR MANEJO COMENTARIOS EJEMPLAR')</script>";
                         $resp = (isset($datos['idsolicitud']['email']) and isset($datos['idsolicitud']['clave']) and
                                 isset($datos['idsolicitud']['ejemplar']) and isset($datos['idsolicitud']['comentario']) and 
                                 isset($datos['idsolicitud']['idcompadre']) and isset($datos['idsolicitud']['idcomentario']) and 
                                 isset($datos['idsolicitud']['accioncom'])); // 0 Borrar - 1 Editar;
                         break;
                     }
+                    
+                    case self::txAccVerComEj: { //Dato:43 : Ver comentarios ejemplar
+                        //echo "<script>alert('ENTRA POR VER COMENTARIOS EJEMPLAR')</script>";
+                        $resp = (isset($datos['idsolicitud']['email']) and isset($datos['idsolicitud']['clave']) and
+                                isset($datos['idsolicitud']['ejemplar']));
+                        break;
+                    }
+                    
                 }
             }
         }    

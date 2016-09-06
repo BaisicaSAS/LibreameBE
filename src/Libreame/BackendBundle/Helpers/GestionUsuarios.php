@@ -69,7 +69,7 @@ class GestionUsuarios {
                                             "nomusrcalif" => $califica->getIncalusucalifica()->getTxusunommostrar(),
                                             "incalificacion" => $califica->getIncalcalificacion(),
                                             "comentario" => $califica->getTxcalobservacion(),
-                                            "fecha" => $califica->getfeFecha()->format('d/m/Y H:i:s'));
+                                            "fecha" => $califica->getfeFecha()->format('Y-m-d H:i:s'));
                     }
                     
                     $respuesta->setArrCalificaciones($arrCalifica);

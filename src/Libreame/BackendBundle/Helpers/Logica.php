@@ -2,6 +2,7 @@
 
 namespace Libreame\BackendBundle\Helpers;
 
+use DateTime;
 use Libreame\BackendBundle\Controller\AccesoController;
 use Doctrine\ORM\EntityManager;
 use Libreame\BackendBundle\Repository\ManejoDataRepository;
@@ -12,6 +13,8 @@ use Libreame\BackendBundle\Entity\LbAutores;
 use Libreame\BackendBundle\Entity\LbEditoriales;
 use Libreame\BackendBundle\Entity\LbUsuarios;
 use Libreame\BackendBundle\Entity\LbEjemplares;
+use Libreame\BackendBundle\Entity\LbNegociacion;
+use Libreame\BackendBundle\Entity\LbHistejemplar;
 use Libreame\BackendBundle\Helpers\Respuesta;
 
 
@@ -117,6 +120,13 @@ class Logica {
                     break;
                 } 
 
+                case AccesoController::txAccVisuaBib: {//Dato:16 : Visualizar Biblioteca
+                    //echo "<script>alert('Antes de entrar a Visualizar Biblioteca-".$solicitud->getEmail()."')</script>";
+                    $objGestEjemplares = $this->get('gest_ejemplares_service');
+                    $respuesta = $objGestEjemplares::visualizarBiblioteca($solicitud);
+                    break;
+                } 
+
                 case AccesoController::txAccRecClave: {//Dato:29 : Cambio de clave
                     //echo "<script>alert('Antes de entrar a Cambio de clave -".$solicitud->getEmail()."')</script>";
                     $objGestUsuarios = $this->get('gest_usuarios_service');
@@ -166,6 +176,15 @@ class Logica {
                     $respuesta = $objGestEjemplares::comentarEjemplar($solicitud);
                     break;
                 } 
+                
+                case AccesoController::txAccVerComEj: {//Dato:43 : Ver comentarios  ejemplar
+                    //echo "<script>alert('Antes de entrar a COMENTARIO ejemplar Usuario-".$solicitud->getEmail()."')</script>";
+                    $objGestEjemplares = $this->get('gest_ejemplares_service');
+                    $respuesta = $objGestEjemplares::VerComentariosEjemplar($solicitud);
+                    break;
+                } 
+                
+                
             }
             //echo "<script>alert('ejecuta Accion: ".$respuesta."')</script>";
             return $respuesta;
@@ -228,7 +247,7 @@ class Logica {
                     $JSONResp = Logica::respuestaCerrarSesion($respuesta, $pSolicitud);
                     break;
 
-                //accion de publicar un ejemplar
+                //accion de actualizar datos usuario
                 case AccesoController::txAccActParam: //Dato:12 : Actualizar datos usuario
                     $JSONResp = Logica::respuestaActualizarDatosUsuario($respuesta, $pSolicitud);
                     break;
@@ -236,6 +255,11 @@ class Logica {
                 //accion de publicar un ejemplar
                 case AccesoController::txAccPubliEje:  //Dato: 13
                     $JSONResp = Logica::respuestaPublicarEjemplar($respuesta, $pSolicitud);
+                    break;
+
+                //accion de Visualizar biblioteca
+                case AccesoController::txAccVisuaBib:  //Dato: 16
+                    $JSONResp = Logica::respuestaVisualizarBiblioteca($respuesta, $pSolicitud, $parreglo);
                     break;
 
                 case AccesoController::txAccRecClave: //Dato:29 : Cambio de clave
@@ -266,6 +290,12 @@ class Logica {
                 case AccesoController::txAccCommEjem: //Dato:42 : Realizar comentario a un ejemplar
                     $JSONResp = Logica::respuestaComentarioEjemplar($respuesta, $pSolicitud);
                     break;
+                
+                case AccesoController::txAccVerComEj: //Dato:43 : Ver comentarios ejemplar
+                    $JSONResp = Logica::respuestaVerComentariosEjemplar($respuesta, $pSolicitud, $parreglo);
+                    break;
+                
+                
             }
             //echo " 1 La respuesta inicia";
 
@@ -348,7 +378,7 @@ class Logica {
             if ($respuesta->RespUsuarios[0]->getFeusunacimiento() == NULL) {
                 $fecha = "";
             } else {
-                $fecha = $respuesta->RespUsuarios[0]->getFeusunacimiento()->format('d-m-Y');
+                $fecha = $respuesta->RespUsuarios[0]->getFeusunacimiento()->format('Y-m-d H:i:s');
             }
             return array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
                     'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr(), 
@@ -418,6 +448,8 @@ class Logica {
                     //echo "...usuario [".utf8_encode($usuario->getTxusunommostrar())."] \n";
                     $promcalifica = ManejoDataRepository::getPromedioCalifica($usuario->getInusuario());
                     //echo "...promcalifica \n";
+                    $fecpublica = ManejoDataRepository::getFechaPublicacion($ejemplar, $usuario);
+                    //echo "...$fecpublica \n";
                     //echo "RECUPERO DATOS\n";*/
                 }
                 
@@ -464,12 +496,13 @@ class Logica {
                     'isbn10' => $isbn10,
                     'isbn13' => $isbn13,
                     'megusta' => $megusta,
+                    'fechapublica' => $fecpublica,
                     'cantmegusta' => $cantmegusta,
                     'cantcomment' => $cantcomment,
                     'lugar' => array('inlugar' => $lugar->getInlugar(), 'txlugnombre' => utf8_encode($lugar->getTxlugnombre())),
-                    'autores' => array($arrAutores),
-                    'editoriales' => array($arrEditoriales),
-                    'generos' => array($arrGeneros),
+                    'autores' => $arrAutores,
+                    'editoriales' => $arrEditoriales,
+                    'generos' => $arrGeneros,
                     'usrdueno' => array('inusuario' => $usuario->getInusuario(),
                         'txusunommostrar' => utf8_encode($usuario->getTxusunommostrar()),
                         'txusuimagen' => utf8_encode($usuario->getTxusuimagen()),
@@ -595,7 +628,7 @@ class Logica {
             $arrTmp = array();
             $ejemplar = new LbEjemplares();
             $usuarioConsulta = ManejoDataRepository::getUsuarioByEmail($pSolicitud->getEmail());
-            //echo "Va a generar la respuestaFeedEjemplares :: Logica.php [365] \n";
+            //echo "Va a generar la respuestaBuscarEjemplares :: Logica.php [365] \n";
             foreach ($parreglo as $ejemplar){
                 //Recupera nombre del genero, Nombre del libro, Nombre del uduario Dueño
                 $generos = new LbGeneros();
@@ -623,6 +656,8 @@ class Logica {
                     //echo "...usuario [".utf8_encode($usuario->getTxusunommostrar())."] \n";
                     $promcalifica = ManejoDataRepository::getPromedioCalifica($usuario->getInusuario());
                     //echo "...promcalifica \n";
+                    $fecpublica = ManejoDataRepository::getFechaPublicacion($ejemplar, $usuario);
+                    //echo "...$fecpublica \n";
                     //echo "RECUPERO DATOS\n";*/
                 }
                 
@@ -669,12 +704,13 @@ class Logica {
                     'isbn10' => $isbn10,
                     'isbn13' => $isbn13,
                     'megusta' => $megusta,
+                    'fechapublica' => $fecpublica,
                     'cantmegusta' => $cantmegusta,
                     'cantcomment' => $cantcomment,
                     'lugar' => array('inlugar' => $lugar->getInlugar(), 'txlugnombre' => utf8_encode($lugar->getTxlugnombre())),
-                    'autores' => array($arrAutores),
-                    'editoriales' => array($arrEditoriales),
-                    'generos' => array($arrGeneros),
+                    'autores' => $arrAutores,
+                    'editoriales' => $arrEditoriales,
+                    'generos' => $arrGeneros,
                     'usrdueno' => array('inusuario' => $usuario->getInusuario(),
                         'txusunommostrar' => utf8_encode($usuario->getTxusunommostrar()),
                         'txusuimagen' => utf8_encode($usuario->getTxusuimagen()),
@@ -871,6 +907,173 @@ class Logica {
                             'iddevice'=> $pSolicitud->getDeviceMac(), 'marca'=>$pSolicitud->getDeviceMarca(), 
                             'modelo'=>$pSolicitud->getDeviceModelo(), 'so'=>$pSolicitud->getDeviceSO()), 
                             'idrespuesta' => (array('respuesta' => $respuesta->getRespuesta())));
+        } catch (Exception $ex) {
+                return AccesoController::inPlatCai;
+        } 
+    }    
+    
+    /*
+        * respuestaVerComentariosEjemplar: 
+     * Funcion que genera el JSON de respuesta para la accion de comentar a ejemplar:: AccesoController::txAccCommEjem
+
+     */
+    public function respuestaVerComentariosEjemplar(Respuesta $respuesta, Solicitud $pSolicitud, $parreglo){
+        try {
+            return array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
+                            'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr(), 
+                            'iddevice'=> $pSolicitud->getDeviceMac(), 'marca'=>$pSolicitud->getDeviceMarca(), 
+                            'modelo'=>$pSolicitud->getDeviceModelo(), 'so'=>$pSolicitud->getDeviceSO()), 
+                            'idrespuesta' => (array('respuesta' => $respuesta->getRespuesta(), 'comentarios' => $parreglo)));
+        } catch (Exception $ex) {
+                return AccesoController::inPlatCai;
+        } 
+    }    
+    
+    public function respuestaVisualizarBiblioteca(Respuesta $respuesta, Solicitud $pSolicitud, $parreglo){
+        try{
+            $arrTmp = array();
+            $ejemplar = new LbEjemplares();
+            $usuarioConsulta = ManejoDataRepository::getUsuarioByEmail($pSolicitud->getEmail());
+            //echo "Va a generar la respuestaVisualizarBiblioteca :: Logica.php [365] \n";
+            foreach ($parreglo as $ejemplar){
+                //Recupera nombre del genero, Nombre del libro, Nombre del uduario Dueño
+                $generos = new LbGeneros();
+                $autores = new LbAutores();
+                $editoriales = new LbEditoriales();
+                $histejemplar = new LbHistejemplar();
+                $negociacion = new LbNegociacion();
+                $libros = new LbLibros();
+                $usuario = new LbUsuarios();
+                if ($respuesta->getRespuesta()== AccesoController::inULogged){
+                    $libros = ManejoDataRepository::getLibro($ejemplar->getInejelibro()->getInlibro());
+                    //echo "libro: [".utf8_encode($libros->getTxlibtitulo())."]\n";
+                    //echo "ejemplar: [".$ejemplar->getInejemplar()."--".$ejemplar->getInejelibro()->getInlibro()."] libro: [".utf8_encode($libros->getTxlibtitulo())."]\n";
+                    $generos = ManejoDataRepository::getGenerosLibro($ejemplar->getInejelibro()->getInlibro());
+                    //echo "...generos \n";
+                    $autores = ManejoDataRepository::getAutoresLibro($ejemplar->getInejelibro()->getInlibro());
+                    //echo "...autores \n";
+                    $editoriales = ManejoDataRepository::getEditorialesLibro($ejemplar->getInejelibro()->getInlibro());
+                    //echo "...editoriales \n";
+                    $histejemplar = ManejoDataRepository::getHistoriaEjemplar($ejemplar);
+                    //echo "...histejemplar \n";
+                    $negociacion = ManejoDataRepository::getNegociacionEjemplar($ejemplar);
+                    //echo "...negociacion \n";
+                    $megusta = ManejoDataRepository::getMegustaEjemplar($ejemplar, $usuarioConsulta);
+                    //echo "...megusta \n";
+                    $cantmegusta = ManejoDataRepository::getCantMegusta($ejemplar->getInejemplar());
+                    //echo "...cantmegusta \n";
+                    $cantcomment = ManejoDataRepository::getCantComment($ejemplar->getInejemplar());
+                    //echo "...cantcomment \n";
+                    $usuario = ManejoDataRepository::getUsuarioById($ejemplar->getInejeusudueno()->getInusuario());
+                    //echo "...usuario [".utf8_encode($usuario->getTxusunommostrar())."] \n";
+                    $promcalifica = ManejoDataRepository::getPromedioCalifica($usuario->getInusuario());
+                    //echo "...promcalifica \n";
+                    $fecpublica = ManejoDataRepository::getFechaPublicacion($ejemplar, $usuario);
+                    //echo "...$fecpublica \n";
+                    //echo "RECUPERO DATOS\n";*/
+                }
+                
+                $arrAutores = array();
+                foreach ($autores as $autor) {
+                    //echo "...autor [".utf8_encode($autor->getTxautnombre())."] \n";
+                    $arrAutores[] = array('inidautor' => $autor->getInidautor(),
+                        'txautnombre' => utf8_encode($autor->getTxautnombre()));
+                }
+                $arrEditoriales = array();
+                foreach ($editoriales as $editorial) {
+                    //echo "...editorial [".utf8_encode($editorial->getTxedinombre())."] \n";
+                    $arrEditoriales[] = array('inideditorial' => $editorial->getInideditorial(),
+                        'txedinombre' => utf8_encode($editorial->getTxedinombre()));
+                }
+                $arrGeneros = array();
+                foreach ($generos as $genero) {
+                    //echo "...genero [".utf8_encode($genero->getTxgennombre())."] \n";
+                    $arrGeneros[] = array('ingenero' => $genero->getIngenero(),
+                        'txgennombre' => utf8_encode($genero->getTxgennombre()));
+                }
+                $arrHistEjemplar = array();
+                foreach ($histejemplar as $hisEje) {
+                    //echo "...genero [".utf8_encode($genero->getTxgennombre())."] \n";
+                    $usuaHist = ManejoDataRepository::getUsuarioById($hisEje->getInhisejeusuario()->getInusuario());
+                    $promcalUsHist = ManejoDataRepository::getPromedioCalifica($usuaHist->getInusuario());
+                    $arrHistEjemplar[] = array('fehisejeregistro' => $hisEje->getFehisejeregistro()->format("Y-m-d H:i:s"),
+                        'inhisejemodoentrega' => $hisEje->getInhisejemodoentrega(), /*0: En el domicilio, 1: Encontrandose, 3. Courrier local, 4: Courrier Nacional, 5: Courrier internacional*/
+                        'inhisejemovimiento' => $hisEje->getInhisejemovimiento(),
+                        'inhisejeejemplar' => $hisEje->getInhisejeejemplar()->getInejemplar(),
+                        'inhisejepadre' => $hisEje->getInhisejepadre(),
+                        'usrtrx' => array('inusuario' => $usuaHist->getInusuario(),
+                                'txusunommostrar' => utf8_encode($usuaHist->getTxusunommostrar()),
+                                'txusuimagen' => utf8_encode($usuaHist->getTxusuimagen()),
+                                'calificacion' => $promcalUsHist)
+                        );
+                }
+                $arrNegociacion = array();
+                foreach ($negociacion as $negoc) {
+                    //echo "...genero [".utf8_encode($genero->getTxgennombre())."] \n";
+                    $usuaNeg = ManejoDataRepository::getUsuarioById($negoc->getInnegususolicita()->getInusuario());
+                    $usuaEsc = ManejoDataRepository::getUsuarioById($negoc->getInnegusuescribe()->getInusuario());
+                    $promcalUsNeg = ManejoDataRepository::getPromedioCalifica($usuaNeg->getInusuario());
+                    $promcalUsEsc = ManejoDataRepository::getPromedioCalifica($usuaEsc->getInusuario());
+                    $arrNegociacion[] = array('inidnegociacion' => $negoc->getInidnegociacion(),
+                        'innegejemplar' => $negoc->getInnegejemplar()->getInejemplar(), 
+                        'innegmensleido' => $negoc->getInnegmensleido(),
+                        'fenegfechamens' => $negoc->getFenegfechamens()->format("Y-m-d H:i:s"),
+                        'txnegmensaje' => utf8_encode($negoc->getTxnegmensaje()),
+                        'usrescribe' =>  array('inusuario' => $usuaEsc->getInusuario(),
+                                'txusunommostrar' => utf8_encode($usuaEsc->getTxusunommostrar()),
+                                'txusuimagen' => utf8_encode($usuaEsc->getTxusuimagen()),
+                                'calificacion' => $promcalUsEsc),
+                        'usrtrx' => array('inusuario' => $usuaNeg->getInusuario(),
+                                'txusunommostrar' => utf8_encode($usuaNeg->getTxusunommostrar()),
+                                'txusuimagen' => utf8_encode($usuaNeg->getTxusuimagen()),
+                                'calificacion' => $promcalUsNeg));
+                }
+                $titulo = utf8_encode($libros->getTxlibtitulo());
+                $precio = utf8_encode($ejemplar->getDbejeavaluo());  //Precio del libro
+                $puntos = utf8_encode($ejemplar->getInejepuntos()); //Cantidad de puntos
+                $estado = utf8_encode($ejemplar->getInejeestado()); // de 1 a 10
+                $usado = utf8_encode($ejemplar->getInejecondicion()); //0 nuevo - 1 usado
+                $vencam = utf8_encode($ejemplar->getInejesoloventa()); //1: Solo venta - 2: venta / cambio - 3: Solo cambio
+                $edicion = utf8_encode($libros->getTxediciondescripcion());
+                $isbn10 = utf8_encode($libros->getTxlibcodigoofic());
+                $isbn13 = utf8_encode($libros->getTxlibcodigoofic13());
+                $imagen = utf8_encode($ejemplar->getTxejeimagen());
+                $lugar = $usuario->getInusulugar();
+                //echo "Titulo + Descripcion edicion : [".$titulo."] - [".$edicion."]\n";
+                $arrTmp[] = array('idejemplar' => $ejemplar->getInejemplar(), 
+                    'titulo' => $titulo, 
+                    'precio' => $precio, 
+                    'puntos' => $puntos, 
+                    'estado' => $estado, 
+                    'usado' => $usado, 
+                    'vencam' => $vencam, 
+                    'imagen' => $imagen, 
+                    'edicion' => $edicion,
+                    'isbn10' => $isbn10,
+                    'isbn13' => $isbn13,
+                    'publicado' => $ejemplar->getInejepublicado(),
+                    'megusta' => $megusta,
+                    'fechapublica' => $fecpublica,
+                    'cantmegusta' => $cantmegusta,
+                    'cantcomment' => $cantcomment,
+                    'lugar' => array('inlugar' => $lugar->getInlugar(), 'txlugnombre' => utf8_encode($lugar->getTxlugnombre())),
+                    'autores' => $arrAutores,
+                    'editoriales' => $arrEditoriales,
+                    'generos' => $arrGeneros,
+                    'histejemplar' => $arrHistEjemplar,
+                    'chats' => $arrNegociacion
+                    
+                );
+                
+            }
+            
+            return array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
+                    'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr(), 
+                    'iddevice'=> $pSolicitud->getDeviceMac(), 'marca'=>$pSolicitud->getDeviceMarca(), 
+                    'modelo'=>$pSolicitud->getDeviceModelo(), 'so'=>$pSolicitud->getDeviceSO()), 
+                    'idrespuesta' => array('respuesta' => $respuesta->getRespuesta(), 
+                    'ejemplares' => $arrTmp ));
+
         } catch (Exception $ex) {
                 return AccesoController::inPlatCai;
         } 
