@@ -940,8 +940,6 @@ class Logica {
                 $generos = new LbGeneros();
                 $autores = new LbAutores();
                 $editoriales = new LbEditoriales();
-                $histejemplar = new LbHistejemplar();
-                $negociacion = new LbNegociacion();
                 $libros = new LbLibros();
                 $usuario = new LbUsuarios();
                 if ($respuesta->getRespuesta()== AccesoController::inULogged){
@@ -954,9 +952,9 @@ class Logica {
                     //echo "...autores \n";
                     $editoriales = ManejoDataRepository::getEditorialesLibro($ejemplar->getInejelibro()->getInlibro());
                     //echo "...editoriales \n";
-                    $histejemplar = ManejoDataRepository::getHistoriaEjemplar($ejemplar);
+                    $arrHistEjemplar = ManejoDataRepository::getHistoriaEjemplarBiblioteca($ejemplar, $usuarioConsulta);
                     //echo "...histejemplar \n";
-                    $negociacion = ManejoDataRepository::getNegociacionEjemplar($ejemplar);
+                    $arrNegociacion = ManejoDataRepository::getNegociacionEjemplarBiblioteca($ejemplar, $usuarioConsulta);
                     //echo "...negociacion \n";
                     $megusta = ManejoDataRepository::getMegustaEjemplar($ejemplar, $usuarioConsulta);
                     //echo "...megusta \n";
@@ -990,43 +988,6 @@ class Logica {
                     //echo "...genero [".utf8_encode($genero->getTxgennombre())."] \n";
                     $arrGeneros[] = array('ingenero' => $genero->getIngenero(),
                         'txgennombre' => utf8_encode($genero->getTxgennombre()));
-                }
-                $arrHistEjemplar = array();
-                foreach ($histejemplar as $hisEje) {
-                    //echo "...genero [".utf8_encode($genero->getTxgennombre())."] \n";
-                    $usuaHist = ManejoDataRepository::getUsuarioById($hisEje->getInhisejeusuario()->getInusuario());
-                    $promcalUsHist = ManejoDataRepository::getPromedioCalifica($usuaHist->getInusuario());
-                    $arrHistEjemplar[] = array('fehisejeregistro' => $hisEje->getFehisejeregistro()->format("Y-m-d H:i:s"),
-                        'inhisejemodoentrega' => $hisEje->getInhisejemodoentrega(), /*0: En el domicilio, 1: Encontrandose, 3. Courrier local, 4: Courrier Nacional, 5: Courrier internacional*/
-                        'inhisejemovimiento' => $hisEje->getInhisejemovimiento(),
-                        'inhisejeejemplar' => $hisEje->getInhisejeejemplar()->getInejemplar(),
-                        'inhisejepadre' => $hisEje->getInhisejepadre(),
-                        'usrtrx' => array('inusuario' => $usuaHist->getInusuario(),
-                                'txusunommostrar' => utf8_encode($usuaHist->getTxusunommostrar()),
-                                'txusuimagen' => utf8_encode($usuaHist->getTxusuimagen()),
-                                'calificacion' => $promcalUsHist)
-                        );
-                }
-                $arrNegociacion = array();
-                foreach ($negociacion as $negoc) {
-                    //echo "...genero [".utf8_encode($genero->getTxgennombre())."] \n";
-                    $usuaNeg = ManejoDataRepository::getUsuarioById($negoc->getInnegususolicita()->getInusuario());
-                    $usuaEsc = ManejoDataRepository::getUsuarioById($negoc->getInnegusuescribe()->getInusuario());
-                    $promcalUsNeg = ManejoDataRepository::getPromedioCalifica($usuaNeg->getInusuario());
-                    $promcalUsEsc = ManejoDataRepository::getPromedioCalifica($usuaEsc->getInusuario());
-                    $arrNegociacion[] = array('inidnegociacion' => $negoc->getInidnegociacion(),
-                        'innegejemplar' => $negoc->getInnegejemplar()->getInejemplar(), 
-                        'innegmensleido' => $negoc->getInnegmensleido(),
-                        'fenegfechamens' => $negoc->getFenegfechamens()->format("Y-m-d H:i:s"),
-                        'txnegmensaje' => utf8_encode($negoc->getTxnegmensaje()),
-                        'usrescribe' =>  array('inusuario' => $usuaEsc->getInusuario(),
-                                'txusunommostrar' => utf8_encode($usuaEsc->getTxusunommostrar()),
-                                'txusuimagen' => utf8_encode($usuaEsc->getTxusuimagen()),
-                                'calificacion' => $promcalUsEsc),
-                        'usrtrx' => array('inusuario' => $usuaNeg->getInusuario(),
-                                'txusunommostrar' => utf8_encode($usuaNeg->getTxusunommostrar()),
-                                'txusuimagen' => utf8_encode($usuaNeg->getTxusuimagen()),
-                                'calificacion' => $promcalUsNeg));
                 }
                 $titulo = utf8_encode($libros->getTxlibtitulo());
                 $precio = utf8_encode($ejemplar->getDbejeavaluo());  //Precio del libro
@@ -1062,7 +1023,6 @@ class Logica {
                     'generos' => $arrGeneros,
                     'histejemplar' => $arrHistEjemplar,
                     'chats' => $arrNegociacion
-                    
                 );
                 
             }

@@ -1,4 +1,3 @@
-
 ##Libros que no están cargados como ejemplares (Puede ser que no tengan propietario)
 select * from lb_libros where inLibro not in 
 (select inEjeLibro from lb_ejemplares);

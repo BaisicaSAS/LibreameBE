@@ -683,3 +683,12 @@ CREATE TABLE IF NOT EXISTS `dotEx4read`.`lb_preciosplanes` (
 ENGINE = InnoDB
 COMMENT = 'Precios de todos los planes';
 
+ALTER TABLE `dotex4read`.`lb_negociacion` 
+ADD COLUMN `txNegIdConversacion` VARCHAR(50) NOT NULL AFTER `inNegMensEliminado`;
+
+
+ALTER TABLE `dotex4read`.`lb_negociacion` 
+ADD INDEX `fk_lb_negociacion_idconversacion_idx` (`txNegIdConversacion` ASC);
+
+ALTER TABLE `dotex4read`.`lb_negociacion` 
+ADD INDEX `fk_lb_negociacion_idconversacion2_idx` (`txNegIdConversacion` DESC);

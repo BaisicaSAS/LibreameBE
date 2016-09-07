@@ -89,7 +89,12 @@ class LbNegociacion
      */
     private $innegusuescribe;
 
-
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="txNegIdConversacion",  type="string", length=50, nullable=false)
+     */
+    private $txnegidconversacion;
 
     /**
      * Get inidnegociacion
@@ -284,4 +289,29 @@ class LbNegociacion
     {
         return $this->innegusuescribe;
     }
+    
+    /**
+     * Set txnegidconversacion
+     *
+     * @param string $txnegidconversacion
+     * @return LbNegociacion
+     */
+    public function setTxnegidconversacion($txnegidconversacion)
+    {
+        $this->txnegidconversacion = $txnegidconversacion;
+
+        return $this;
+    }
+
+    /**
+     * Get txnegidconversacion
+     *
+     * @return string 
+     */
+    public function getTxnegidconversacion()
+    {
+        return $this->txnegidconversacion;
+    }
+
+    
 }

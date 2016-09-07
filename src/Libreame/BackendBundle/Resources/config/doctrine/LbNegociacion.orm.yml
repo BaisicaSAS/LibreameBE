@@ -51,6 +51,11 @@ Libreame\BackendBundle\Entity\LbNegociacion:
             comment: 'Eliminado por remitente : 1, Eliminado por receptor : 2, No eliminado : 0'
             default: '0'
             column: inNegMensEliminado
+        txnegidconversacion:
+            type: string
+            nullable: false
+            length: 50
+            column: txNegIdConversacion
     manyToOne:
         innegejemplar:
             targetEntity: LbEjemplares

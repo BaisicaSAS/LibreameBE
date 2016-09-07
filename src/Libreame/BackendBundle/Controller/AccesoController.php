@@ -119,13 +119,54 @@ class AccesoController extends Controller
     const inIdGeneral = 1; //Id General para datos basicos :: Genero, Lugar, Grupo
     //
     //Constantes para origen de mensajes:::
-    const inMsPubEjem = 0;//Mensaje de publicación de ejemplar
-    const inMsRealOfe = 1;//Mensaje de Realización de oferta por ejemplar
-    const inMsVerOfAc = 2;//Mensaje de oferta aceptada
-    const inMsVerOfRe = 3;//Mensaje de oferta recibida
-    const inMsVerComR = 4;//Mensaje de comentario recibido
-    const inMsVerCReP = 5;//Mensaje de comentario para responder pregunta
-    const inMsVerOfRz = 6;//Mensaje de oferta realizada
+    /*1: Publicacion del ejemplar 2: Bloqueo del ejemplar (Lo hace el sistema, el usr que queda es el que debe), 
+    * 3: Solicita ejemplar, 4: Entrega ejemplar: Puntos, 5: Recibe ejemplar: Puntos, 6: Activa - Ofrece, 7: Inactiva, 
+    * 8: Comenta, 9: Me gusta, 10: No me gusta, 11: Cambia estado (mejora o empeora de 1 a 10), 
+    * 12: Mejora contenido: Idioma, ISBN, Autor etc., 13: Baja del sistema, 
+    * 14: Vista del ejemplar (Consulta del detalle), 15: Vendio ejemplar (trato cerrado), 
+    * 16: Compro ejemplar(trato cerrado), 17: Acepta solicitud de ejemplar */
+    const inMovPubEjem = 1;//1: Publicacion del ejemplar 
+    const txMovPubEjem = "Ejemplar publicado";//Mensaje de publicación de ejemplar
+    const inMovBlqEjSi = 2;//Mensaje de Bloqueo de ejemplar por el sistema
+    const txMovBlqEjSi = "Ejemplar bloqueado";//Mensaje de Bloqueo de ejemplar por el sistema
+    const inMovSoliEje = 3;//3: Solicita ejemplar
+    const txMovSoliEje = "Ejemplar solicitado";//3: Solicita ejemplar
+    const inMovEntrEje = 4;//4: Entrega ejemplar: Puntos
+    const txMovEntrEje = "Ejemplar entregado : Cambio/venta";//4: Entrega ejemplar: Puntos
+    const inMovReciEje = 5;//5: Recibe ejemplar: Puntos
+    const txMovReciEje = "Ejemplar recibido : Cambio/venta";//5: Recibe ejemplar: Puntos
+    const inMovActiEje = 6;//6: Activa - Ofrece ejemplar ?? Debe ser el 1 creo: Revisar bien
+    const txMovActiEje = "Ejemplar publicado";//6: Activa - Ofrece ejemplar ?? Debe ser el 1 creo: Revisar bien
+    const inMovInacEje = 7;//7: Inactiva ejemplar
+    const txMovInacEje = "Ejemplar Inactivo / No publicado";//7: Inactiva ejemplar
+    const inMovComeEje = 8;//8: Comenta
+    const txMovComeEje = "Comentario realizado sobre ejemplar";//8: Comenta
+    const inMovMeguEje = 9;//9: Me gusta
+    const txMovMeguEje = "Me gusta sobre ejemplar";//9: Me gusta
+    const inMovNMegEje = 10;//10: No me gusta
+    const txMovNMegEje = "No me gusta sobre ejemplar";//10: No me gusta
+    const inMovCamEEje = 11;//11: Cambia estado (mejora o empeora de 1 a 10)
+    const txMovCamEEje = "Cambio de estado del Ejemplar";//11: Cambia estado (mejora o empeora de 1 a 10)
+    const inMovContEje = 12;//12: Mejora contenido: Idioma, ISBN, Autor etc.
+    const txMovContEje = "Mejora de contenido sobre libro";//12: Mejora contenido: Idioma, ISBN, Autor etc.
+    const inMovBajaEje = 13;//13: Baja del sistema ejemplar
+    const txMovBajaEje = "Sistema dado de baja en ex4read";//13: Baja del sistema ejemplar
+    const inMovConsEje = 14;//14: Vista del ejemplar (Consulta del detalle)
+    const txMovConsEje = "Consulta del detalle del Ejemplar";//14: Vista del ejemplar (Consulta del detalle)
+    const inMovVendEje = 15;//15: Vendio ejemplar (trato cerrado)
+    const txMovVendEje = "Ejemplar vendido";//15: Vendio ejemplar (trato cerrado)
+    const inMovCompEje = 16;//16: Compro ejemplar(trato cerrado)
+    const txMovCompEje = "Ejemplar compardo";//16: Compro ejemplar(trato cerrado)
+    const inMovAcepEje = 17;//17: Acepta solicitud de ejemplar
+    const txMovAcepEje = "Solicitud de ejemplar aceptada";//17: Acepta solicitud de ejemplar
+    const inMovRechEje = 18;//18: Solicitud de ejemplar rechazada
+    const txMovRechEje = "Solicitud de ejemplar rechazada";//18: Solicitud de ejemplar rechazada
+    const inMovEjeDevu = 19;//19: Ejemplar devuelto por Calidad
+    const txMovEjeDevu = "Ejemplar devuelto por Calidad";///19: Ejemplar devuelto por Calidad
+    const inMovUsPCali = 20;//20: Usuario propietario Calificó
+    const txMovUsPCali = "Usuario propietario Calificó";//20: Usuario propietario Calificó
+    const inMovUsSCali = 21;//21: Usuario solicitante Calificó
+    const txMovUsSCali = "Usuario solicitante Calificó";//21: Usuario solicitante Calificó
 
     var $objSolicitud;
     /*

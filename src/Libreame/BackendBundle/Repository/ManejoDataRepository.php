@@ -396,69 +396,145 @@ class ManejoDataRepository extends EntityRepository {
     }
     
     
-    public function getNegociacionEjemplar(LbEjemplares $pejemplar)
+    public function getNegociacionEjemplarBiblioteca(LbEjemplares $pejemplar, LbUsuarios $pusuario)
     {   
         try{
             $em = $this->getDoctrine()->getManager();
-            $comentarios = $em->getRepository('LibreameBackendBundle:LbComentarios')->
-                    findBy(array('incomejemplar' => $psolicitud->getIdEjemplar(), 'incomactivo' => '1'), 
-                           array('fecomfeccomentario' => 'desc'));
-            $com = new LbComentarios();
-            $arComme = [];
-            $usr = new LbUsuarios();
-            foreach($comentarios as $com){
-               $usr = ManejoDataRepository::getUsuarioById($com->getIncomusuario()->getInusuario());
-                $arUsuar = [];
-               $arUsuar[] = array("inusuario" => $usr->getInUsuario(), "txusunommostrar" => utf8_encode($usr->getTxusunommostrar()), 
-                   "txusuimagen" => utf8_encode($usr->getTxusuimagen()), );
-               if($com->getIncomcompadre()!=NULL){ //Si el cometario PADRE está inactivo, el hijo tambien
-                    if($com->getIncomcompadre()->getIncomactivo()==AccesoController::inDatoUno){ //Si el cometario PADRE está inactivo, el hijo tambien
-                         $arComme[] = array("inidcomentario" => $com->getInidcomentario(), "fecomfeccomentario" => $com->getFecomfeccomentario()->format("Y-m-d H:i:s"),
-                             "incompadre" => $com->getIncomcompadre()->getInidcomentario(), "txcomentario" => utf8_encode($com->getTxcomcomentario()),
-                             "usuario" => $arUsuar);
-                    }
-               } else {
-                         $arComme[] = array("inidcomentario" => $com->getInidcomentario(), "fecomfeccomentario" => $com->getFecomfeccomentario()->format("Y-m-d H:i:s"),
-                             "incompadre" => "", "txcomentario" => utf8_encode($com->getTxcomcomentario()),"usuario" => $arUsuar);
-               }
+            $qneg = $em->createQueryBuilder()
+                ->select('DISTINCT a.txnegidconversacion')
+                ->from('LibreameBackendBundle:LbNegociacion', 'a')
+                ->Where('a.innegejemplar = :pejemplar')
+                ->setParameter('pejemplar', $pejemplar)
+                ->andWhere('a.innegusuduenho = :pusuario')
+                ->setParameter('pusuario', $pusuario);
+            
+            $arrNegociacion = array();
+            foreach($qneg->getQuery()->getResult() as $idconversacion){
+                //echo "conversa ".$idconversacion;
+                
+                $negociacion = $em->getRepository('LibreameBackendBundle:LbNegociacion')->
+                        findBy(array('txnegidconversacion' => $idconversacion,
+                                    'innegmenseliminado' => AccesoController::inDatoCer), 
+                                    array('fenegfechamens' => 'asc'));
+                $negoc = new LbNegociacion();
+                $arrConversacion = array();
+                foreach ($negociacion as $negoc) {
+                    $usuaNeg = ManejoDataRepository::getUsuarioById($negoc->getInnegusuduenho()->getInusuario());
+                    $usuaEsc = ManejoDataRepository::getUsuarioById($negoc->getInnegusuescribe()->getInusuario());
+                    $usuaSol = ManejoDataRepository::getUsuarioById($negoc->getInnegususolicita()->getInusuario());
+                    $promcalUsNeg = ManejoDataRepository::getPromedioCalifica($usuaNeg->getInusuario());
+                    $promcalUsEsc = ManejoDataRepository::getPromedioCalifica($usuaEsc->getInusuario());
+                    $promcalUsSol = ManejoDataRepository::getPromedioCalifica($usuaSol->getInusuario());
+                    $arrConversacion[] = array('inidnegociacion' => $negoc->getInidnegociacion(),
+                        'innegmensleido' => $negoc->getInnegmensleido(),
+                        'fenegfechamens' => $negoc->getFenegfechamens()->format("Y-m-d H:i:s"),
+                        'txnegmensaje' => utf8_encode($negoc->getTxnegmensaje()),
+                        'usrescribe' =>  $usuaEsc->getInusuario(),
+                    );
+                }
+                $arrNegociacion[] = array('txnegidconversacion' => $idconversacion, 'usrsolicita' =>  array('inusuario' => $usuaSol->getInusuario(),
+                                'txusunommostrar' => utf8_encode($usuaSol->getTxusunommostrar()),
+                                'txusuimagen' => utf8_encode($usuaSol->getTxusuimagen()),'calificacion' => $promcalUsSol),
+                                'usrdueno' => array('inusuario' => $usuaNeg->getInusuario(),
+                                'txusunommostrar' => utf8_encode($usuaNeg->getTxusunommostrar()),
+                                'txusuimagen' => utf8_encode($usuaNeg->getTxusuimagen()),'calificacion' => $promcalUsNeg), 
+                                "conversacion" => array($arrConversacion));
+                unset($arrConversacion);
+                
             }
             
-            return $arComme;
+            return $arrNegociacion;
         } catch (Exception $ex) {
                 return new LbNegociacion();
         } 
     }
 
-    public function getHistoriaEjemplar(LbEjemplares $pejemplar)
+    public function getHistoriaEjemplarBiblioteca(LbEjemplares $pejemplar, LbUsuarios $pusuario)
     {   
         try{
             $em = $this->getDoctrine()->getManager();
-            $comentarios = $em->getRepository('LibreameBackendBundle:LbComentarios')->
-                    findBy(array('incomejemplar' => $psolicitud->getIdEjemplar(), 'incomactivo' => '1'), 
-                           array('fecomfeccomentario' => 'desc'));
-            $com = new LbComentarios();
-            $arComme = [];
-            $usr = new LbUsuarios();
-            foreach($comentarios as $com){
-               $usr = ManejoDataRepository::getUsuarioById($com->getIncomusuario()->getInusuario());
-                $arUsuar = [];
-               $arUsuar[] = array("inusuario" => $usr->getInUsuario(), "txusunommostrar" => utf8_encode($usr->getTxusunommostrar()), 
-                   "txusuimagen" => utf8_encode($usr->getTxusuimagen()), );
-               if($com->getIncomcompadre()!=NULL){ //Si el cometario PADRE está inactivo, el hijo tambien
-                    if($com->getIncomcompadre()->getIncomactivo()==AccesoController::inDatoUno){ //Si el cometario PADRE está inactivo, el hijo tambien
-                         $arComme[] = array("inidcomentario" => $com->getInidcomentario(), "fecomfeccomentario" => $com->getFecomfeccomentario()->format("Y-m-d H:i:s"),
-                             "incompadre" => $com->getIncomcompadre()->getInidcomentario(), "txcomentario" => utf8_encode($com->getTxcomcomentario()),
-                             "usuario" => $arUsuar);
-                    }
-               } else {
-                         $arComme[] = array("inidcomentario" => $com->getInidcomentario(), "fecomfeccomentario" => $com->getFecomfeccomentario()->format("Y-m-d H:i:s"),
-                             "incompadre" => "", "txcomentario" => utf8_encode($com->getTxcomcomentario()),"usuario" => $arUsuar);
-               }
+            //Primero busca todos los que tengan hijos
+            $histEjemplar = $em->createQueryBuilder()
+                ->select('DISTINCT a.inhisejepadre')
+                ->from('LibreameBackendBundle:LbHistejemplar', 'a')
+                ->Where('a.inhisejeejemplar = :pejemplar')
+                ->setParameter('pejemplar', $pejemplar)
+                ->andWhere('a.inhisejeusuario = :pusuario')
+                ->setParameter('pusuario', $pusuario)
+                ->andWhere('a.inhisejepadre IS NOT NULL')
+                ->orderBy('a.fehisejeregistro', 'DESC');
+            $hisEje = new LbHistejemplar();
+            $arrHistEjemplar = array();
+            $arRepetidos = array();
+            foreach ($histejemplar as $hisEje) {
+                //Para cada uno busca sus hijos
+                $padre = $hisEje->getInhistejemplar();
+                while($padre!=NULL){
+                    $histHijos = $em->createQueryBuilder()
+                        ->select('DISTINCT a.inhisejepadre')
+                        ->from('LibreameBackendBundle:LbHistejemplar', 'a')
+                        ->Where('a.inhisejeejemplar = :pejemplar')
+                        ->setParameter('pejemplar', $pejemplar)
+                        ->andWhere('a.inhisejeusuario = :pusuario')
+                        ->setParameter('pusuario', $pusuario)
+                        ->andWhere('a.inhisejepadre = :ppadre')
+                        ->setParameter('ppadre', $padre)
+                        ->orderBy('a.fehisejeregistro', 'DESC');
+                    foreach ($histHijos as $hisHijo) {
+                    $padre = $histHijos->getInhistejemplar();
+                }
+                $arRepetidos[] = $hisEje->getInhistejemplar();
+                        
+                $usuaHist = ManejoDataRepository::getUsuarioById($hisEje->getInhisejeusuario()->getInusuario());
+                $promcalUsHist = ManejoDataRepository::getPromedioCalifica($usuaHist->getInusuario());
+                /*1: Publicacion del ejemplar 2: Bloqueo del ejemplar (Lo hace el sistema, el usr que queda es el que debe), 
+                 * 3: Solicita ejemplar, 4: Entrega ejemplar: Puntos, 5: Recibe ejemplar: Puntos, 6: Activa - Ofrece, 7: Inactiva, 
+                 * 8: Comenta, 9: Me gusta, 10: No me gusta, 11: Cambia estado (mejora o empeora de 1 a 10), 
+                 * 12: Mejora contenido: Idioma, ISBN, Autor etc., 13: Baja del sistema, 
+                 * 14: Vista del ejemplar (Consulta del detalle), 15: Vendio ejemplar (trato cerrado), 
+                 * 16: Compro ejemplar(trato cerrado), 17: Acepta solicitud de ejemplar */
+                $descMovimiento = "";
+
+                switch ($hisEje->getInhisejemovimiento()){
+                    case AccesoController::inMovPubEjem: $descMovimiento = AccesoController::txMovPubEjem; break;
+                    case AccesoController::inMovBlqEjSi: $descMovimiento = AccesoController::txMovBlqEjSi; break;
+                    case AccesoController::inMovSoliEje: $descMovimiento = AccesoController::txMovSoliEje; break;
+                    case AccesoController::inMovEntrEje: $descMovimiento = AccesoController::txMovEntrEje; break;
+                    case AccesoController::inMovReciEje: $descMovimiento = AccesoController::txMovReciEje; break;
+                    case AccesoController::inMovActiEje: $descMovimiento = AccesoController::txMovActiEje; break;
+                    case AccesoController::inMovInacEje: $descMovimiento = AccesoController::txMovInacEje; break;
+                    case AccesoController::inMovComeEje: $descMovimiento = AccesoController::txMovComeEje; break;
+                    case AccesoController::inMovMeguEje: $descMovimiento = AccesoController::txMovMeguEje; break;
+                    case AccesoController::inMovNMegEje: $descMovimiento = AccesoController::txMovNMegEje; break;
+                    case AccesoController::inMovCamEEje: $descMovimiento = AccesoController::txMovCamEEje; break;
+                    case AccesoController::inMovContEje: $descMovimiento = AccesoController::txMovContEje; break;
+                    case AccesoController::inMovBajaEje: $descMovimiento = AccesoController::txMovBajaEje; break;
+                    case AccesoController::inMovConsEje: $descMovimiento = AccesoController::txMovConsEje; break;
+                    case AccesoController::inMovVendEje: $descMovimiento = AccesoController::txMovVendEje; break;
+                    case AccesoController::inMovCompEje: $descMovimiento = AccesoController::txMovCompEje; break;
+                    case AccesoController::inMovAcepEje: $descMovimiento = AccesoController::txMovAcepEje; break;
+                    case AccesoController::inMovRechEje: $descMovimiento = AccesoController::txMovRechEje; break;
+                    case AccesoController::inMovEjeDevu: $descMovimiento = AccesoController::txMovEjeDevu; break;
+                    case AccesoController::inMovUsPCali: $descMovimiento = AccesoController::txMovUsPCali; break;
+                    case AccesoController::inMovUsSCali: $descMovimiento = AccesoController::txMovUsSCali; break;
+                }
+
+                $arrHistEjemplar[] = array('fehisejeregistro' => $hisEje->getFehisejeregistro()->format("Y-m-d H:i:s"),
+                    'inhisejemodoentrega' => $hisEje->getInhisejemodoentrega(), /*0: En el domicilio, 1: Encontrandose, 3. Courrier local, 4: Courrier Nacional, 5: Courrier internacional*/
+                    'inhisejemovimiento' => $hisEje->getInhisejemovimiento(),
+                    'txhisejedescmovimiento' => utf8_encode($descMovimiento),
+                    'inhisejeejemplar' => $hisEje->getInhisejeejemplar()->getInejemplar(),
+                    'inhisejepadre' => $hisEje->getInhisejepadre(),
+                    'usrtrx' => array('inusuario' => $usuaHist->getInusuario(),
+                            'txusunommostrar' => utf8_encode($usuaHist->getTxusunommostrar()),
+                            'txusuimagen' => utf8_encode($usuaHist->getTxusuimagen()),
+                            'calificacion' => $promcalUsHist)
+                    );
             }
             
-            return $arComme;
+            return $arrHistEjemplar;
         } catch (Exception $ex) {
-                return $arComme;
+                return LbHistejemplar();
         } 
     }
 
