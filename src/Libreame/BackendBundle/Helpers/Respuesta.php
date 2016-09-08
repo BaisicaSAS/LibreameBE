@@ -209,6 +209,12 @@ class Respuesta {
         return $this;
     }   
     
+    public function setPromCalifUsu($PromCalifUsu)
+    {
+        $this->pProCalifUsu = $PromCalifUsu;
+        return $this;
+    }   
+    
     public function setTitulo($pTitulo)
     {
         $this->pTitulo = $pTitulo;
@@ -314,7 +320,7 @@ class Respuesta {
 
     public function setPromCalificaciones($pPromCalifica)
     {
-        $this->pPromCalificaciones = $pPromCalifica = "4";
+        $this->pPromCalificaciones = $pPromCalifica;
         return $this;
     }   
 

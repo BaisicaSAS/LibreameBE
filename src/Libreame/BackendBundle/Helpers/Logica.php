@@ -2,9 +2,9 @@
 
 namespace Libreame\BackendBundle\Helpers;
 
-use DateTime;
+//use DateTime;
 use Libreame\BackendBundle\Controller\AccesoController;
-use Doctrine\ORM\EntityManager;
+//use Doctrine\ORM\EntityManager;
 use Libreame\BackendBundle\Repository\ManejoDataRepository;
 use Libreame\BackendBundle\Entity\LbLugares;
 use Libreame\BackendBundle\Entity\LbGeneros;
@@ -13,8 +13,9 @@ use Libreame\BackendBundle\Entity\LbAutores;
 use Libreame\BackendBundle\Entity\LbEditoriales;
 use Libreame\BackendBundle\Entity\LbUsuarios;
 use Libreame\BackendBundle\Entity\LbEjemplares;
-use Libreame\BackendBundle\Entity\LbNegociacion;
-use Libreame\BackendBundle\Entity\LbHistejemplar;
+//use Libreame\BackendBundle\Entity\LbNegociacion;
+//use Libreame\BackendBundle\Entity\LbHistejemplar;
+use Libreame\BackendBundle\Entity\LbCalificausuarios;
 use Libreame\BackendBundle\Helpers\Respuesta;
 
 
@@ -591,12 +592,15 @@ class Logica {
             //$calificacion = new LbCalificausuarios();
             $usuario = new LbUsuarios();
             $arrTmp = array();
+            $calificacion = new LbCalificausuarios();
             foreach ($respuesta->getArrCalificaciones() as $calificacion){
                 //$usuario = ManejoDataRepository::getUsuarioById($calificacion->getIncalusucalifica()->getInusuario());
                 
-                $arrTmp[] = array('usucalifica' => $calificacion->getIncalusucalifica()->getInusuario(), 
+                $arrTmp[] = array('idcalifica'=>$calificacion->getInidcalifica(),
+                    'usucalifica' => $calificacion->getIncalusucalifica()->getInusuario(), 
                     'califica' => $calificacion->getIncalcalificacion(),
-                    'mensaje' => $calificacion->getTxcalobservacion()
+                    'mensaje' => $calificacion->getTxcalcomentario(),
+                    'ejemplar' => $calificacion->getIncalhisejemplar()->getInhistejemplar()
                 ) ;
                 
             }
@@ -611,7 +615,7 @@ class Logica {
                         'email' => $respuesta->RespUsuarios[0]->getTxusuemail(),
                         //La siguiente línea debe habilitarse, e integrar el CAST de BLOB a TEXT??
                         //'usuimagen' => $respuesta->RespUsuarios[0]->getTxusuimagen(), 
-                        'usuimagen' => "DUMMY", "calificacion" => "4,5",
+                        'usuimagen' => "DUMMY", "calificacion" => $respuesta->getPromCalificaciones(),
                         'comentarios' => $arrTmp))
                 );
         } catch (Exception $ex) {
@@ -952,7 +956,7 @@ class Logica {
                     //echo "...autores \n";
                     $editoriales = ManejoDataRepository::getEditorialesLibro($ejemplar->getInejelibro()->getInlibro());
                     //echo "...editoriales \n";
-                    $arrHistEjemplar = ManejoDataRepository::getHistoriaEjemplarBiblioteca($ejemplar, $usuarioConsulta);
+                    $arrHistEjemplar = ManejoDataRepository::getHistoriaEjemplarBiblioteca($ejemplar);
                     //echo "...histejemplar \n";
                     $arrNegociacion = ManejoDataRepository::getNegociacionEjemplarBiblioteca($ejemplar, $usuarioConsulta);
                     //echo "...negociacion \n";
@@ -967,6 +971,8 @@ class Logica {
                     $promcalifica = ManejoDataRepository::getPromedioCalifica($usuario->getInusuario());
                     //echo "...promcalifica \n";
                     $fecpublica = ManejoDataRepository::getFechaPublicacion($ejemplar, $usuario);
+                    //echo "...$fecpublica \n";
+                    $condactual = ManejoDataRepository::getCondicionActualEjemplar($ejemplar);
                     //echo "...$fecpublica \n";
                     //echo "RECUPERO DATOS\n";*/
                 }
@@ -1017,6 +1023,7 @@ class Logica {
                     'fechapublica' => $fecpublica,
                     'cantmegusta' => $cantmegusta,
                     'cantcomment' => $cantcomment,
+                    'condactual' => $condactual,
                     'lugar' => array('inlugar' => $lugar->getInlugar(), 'txlugnombre' => utf8_encode($lugar->getTxlugnombre())),
                     'autores' => $arrAutores,
                     'editoriales' => $arrEditoriales,

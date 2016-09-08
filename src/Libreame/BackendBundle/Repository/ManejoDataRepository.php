@@ -61,7 +61,7 @@ class ManejoDataRepository extends EntityRepository {
             //echo "<script>alert('validaSesionUsuario :: ingreso')</script>";
             if (!$em->getRepository('LibreameBackendBundle:LbUsuarios')->
                         findOneBy(array('txusuemail' => $psolicitud->getEmail()))){
-               //echo "<script>alert('validaSesionUsuario :: No existe el USUARIO')</script>";
+               //echo " <script>alert('validaSesionUsuario :: No existe el USUARIO')</script>";
                 $respuesta = AccesoController::inUsClInv; //Usuario o clave inválidos
             } else {    
                 $usuario = $em->getRepository('LibreameBackendBundle:LbUsuarios')->
@@ -369,6 +369,34 @@ class ManejoDataRepository extends EntityRepository {
         } 
     }
 
+    //Obtiene la cantidad de Megusta del ejemplar : Condicion megusta - nomegusta 
+    public function getCondicionActualEjemplar(LbEjemplares $pEjemplar)
+    {   
+        try{
+            $em = $this->getDoctrine()->getManager();
+            $qmg = $em->createQueryBuilder()
+                ->select('a.inmegmegusta')
+                ->from('LibreameBackendBundle:LbMegusta', 'a')
+                ->Where('a.inmegejemplar = :pejemplar')
+                ->setParameter('pejemplar', $pEjemplar)
+                ->andWhere('a.inmegusuario = :pusuario')
+                ->setParameter('pusuario', $pUsuario)
+                ->setMaxResults(1)
+                ->orderBy('a.femegmegusta', 'DESC');
+            
+            $meg = AccesoController::inDatoCer;
+            if($qmg->getQuery()->getOneOrNullResult() == NULL){
+                $meg = AccesoController::inDatoCer; //Si ho hay registro devuelve no me gusta (0)
+            } else {
+                $meg = $qmg->getQuery()->getOneOrNullResult();//Si hay registro devuelve lo que hay
+            }    
+            
+            //echo "megusta ".$meg;
+            return $meg;
+        } catch (Exception $ex) {
+                return AccesoController::inDatoCer;
+        } 
+    }
     
     public function getUsrMegustaEjemplar(Solicitud $psolicitud)
     {   
@@ -450,7 +478,7 @@ class ManejoDataRepository extends EntityRepository {
         } 
     }
 
-    public function getHistoriaEjemplarBiblioteca(LbEjemplares $pejemplar, LbUsuarios $pusuario){   
+    public function getHistoriaEjemplarBiblioteca(LbEjemplares $pejemplar){   
         try{
             $em = $this->getDoctrine()->getManager();
             //Primero busca todos los que tengan hijos
@@ -459,82 +487,79 @@ class ManejoDataRepository extends EntityRepository {
                 ->from('LibreameBackendBundle:LbHistejemplar', 'a')
                 ->Where('a.inhisejeejemplar = :pejemplar')
                 ->setParameter('pejemplar', $pejemplar)
-                ->andWhere('a.inhisejeusuario = :pusuario')
-                ->setParameter('pusuario', $pusuario)
-                ->andWhere('a.inhisejepadre  IS NOT NULL')
+                //->andWhere('a.inhisejeusuario = :pusuario')
+                //->setParameter('pusuario', $pusuario)
+                //->andWhere('a.inhisejepadre  IS NOT NULL')
                 ->orderBy('a.fehisejeregistro', 'ASC')->getQuery()->getResult();
             $arrHistEjemplar = array();
-            $punteros = array();
+
             $hisEje = new LbHistejemplar();
             foreach ($histEjemplar as $hisEje) {
                 //Para cada uno busca sus hijos
                 $hijo = $hisEje->getInhistejemplar();
-                $padre = $hisEje->getInhisejepadre()->getInhistejemplar();
-                $punteros[]['padre'] = $padre;
-                $punteros[]['hijo'] = $hijo;
+                $padre = null;
+                if($hisEje->getInhisejepadre() != NULL)
+                    $padre = $hisEje->getInhisejepadre()->getInhistejemplar();
+                //$punteros[]['padre'] = $padre;
+                //$punteros[]['hijo'] = $hijo;
                 //echo "P:".$padre." -> H:".$hijo." \n";
-            }
-            
-            foreach ($punteros as $registro){
                 
                 $histHijo = new LbHistejemplar();
-                $rpadre = $registro['padre'];
+                //$rpadre = $registro['padre'];
                 $histHijo = $em->createQueryBuilder()
                     ->select('a')
                     ->from('LibreameBackendBundle:LbHistejemplar', 'a')
                     ->Where('a.inhisejeejemplar = :pejemplar')
                     ->setParameter('pejemplar', $pejemplar)
-                    ->andWhere('a.inhisejeusuario = :pusuario')
-                    ->setParameter('pusuario', $pusuario)
-                    ->andWhere('a.inhistejemplar = :id')
-                    ->setParameter('id', $rpadre)
+                    //->andWhere('a.inhisejeusuario = :pusuario')
+                    //->setParameter('pusuario', $pusuario)
+                    ->andWhere('a.inhistejemplar = :idhijo')
+                    ->setParameter('idhijo', $hijo)
+                    ->orWhere('a.inhistejemplar = :idpadre')
+                    ->setParameter('idpadre', $padre)
                     ->orderBy('a.fehisejeregistro', 'ASC')->getQuery()->getResult();
                 
-                $idusuario = $histHijo->getInhisejeusuario()->getInusuario();
-                $usuaHist = ManejoDataRepository::getUsuarioById($idusuario);
-                $promcalUsHist = ManejoDataRepository::getPromedioCalifica($usuaHist->getInusuario());
-                $descMovimiento = "";
-                switch ($histHijo->getInhisejemovimiento()){
-                    case AccesoController::inMovPubEjem: $descMovimiento = AccesoController::txMovPubEjem; break;
-                    case AccesoController::inMovBlqEjSi: $descMovimiento = AccesoController::txMovBlqEjSi; break;
-                    case AccesoController::inMovSoliEje: $descMovimiento = AccesoController::txMovSoliEje; break;
-                    case AccesoController::inMovEntrEje: $descMovimiento = AccesoController::txMovEntrEje; break;
-                    case AccesoController::inMovReciEje: $descMovimiento = AccesoController::txMovReciEje; break;
-                    case AccesoController::inMovActiEje: $descMovimiento = AccesoController::txMovActiEje; break;
-                    case AccesoController::inMovInacEje: $descMovimiento = AccesoController::txMovInacEje; break;
-                    case AccesoController::inMovComeEje: $descMovimiento = AccesoController::txMovComeEje; break;
-                    case AccesoController::inMovMeguEje: $descMovimiento = AccesoController::txMovMeguEje; break;
-                    case AccesoController::inMovNMegEje: $descMovimiento = AccesoController::txMovNMegEje; break;
-                    case AccesoController::inMovCamEEje: $descMovimiento = AccesoController::txMovCamEEje; break;
-                    case AccesoController::inMovContEje: $descMovimiento = AccesoController::txMovContEje; break;
-                    case AccesoController::inMovBajaEje: $descMovimiento = AccesoController::txMovBajaEje; break;
-                    case AccesoController::inMovConsEje: $descMovimiento = AccesoController::txMovConsEje; break;
-                    case AccesoController::inMovVendEje: $descMovimiento = AccesoController::txMovVendEje; break;
-                    case AccesoController::inMovCompEje: $descMovimiento = AccesoController::txMovCompEje; break;
-                    case AccesoController::inMovAcepEje: $descMovimiento = AccesoController::txMovAcepEje; break;
-                    case AccesoController::inMovRechEje: $descMovimiento = AccesoController::txMovRechEje; break;
-                    case AccesoController::inMovEjeDevu: $descMovimiento = AccesoController::txMovEjeDevu; break;
-                    case AccesoController::inMovUsPCali: $descMovimiento = AccesoController::txMovUsPCali; break;
-                    case AccesoController::inMovUsSCali: $descMovimiento = AccesoController::txMovUsSCali; break;
-                }
-                if (in_array_field($registro['padre'], "hijo", $punteros)){
-                }
+                foreach ($histHijo as $hisEjePH) {
+                    $idusuario = $hisEjePH->getInhisejeusuario()->getInusuario();
+                    $usuaHist = ManejoDataRepository::getUsuarioById($idusuario);
+                    $promcalUsHist = ManejoDataRepository::getPromedioCalifica($idusuario);
+                    $descMovimiento = "";
+                    switch ($hisEjePH->getInhisejemovimiento()){
+                        case AccesoController::inMovPubEjem: $descMovimiento = AccesoController::txMovPubEjem; break;
+                        case AccesoController::inMovBlqEjSi: $descMovimiento = AccesoController::txMovBlqEjSi; break;
+                        case AccesoController::inMovSoliEje: $descMovimiento = AccesoController::txMovSoliEje; break;
+                        case AccesoController::inMovEntrEje: $descMovimiento = AccesoController::txMovEntrEje; break;
+                        case AccesoController::inMovReciEje: $descMovimiento = AccesoController::txMovReciEje; break;
+                        case AccesoController::inMovActiEje: $descMovimiento = AccesoController::txMovActiEje; break;
+                        case AccesoController::inMovInacEje: $descMovimiento = AccesoController::txMovInacEje; break;
+                        case AccesoController::inMovComeEje: $descMovimiento = AccesoController::txMovComeEje; break;
+                        case AccesoController::inMovMeguEje: $descMovimiento = AccesoController::txMovMeguEje; break;
+                        case AccesoController::inMovNMegEje: $descMovimiento = AccesoController::txMovNMegEje; break;
+                        case AccesoController::inMovCamEEje: $descMovimiento = AccesoController::txMovCamEEje; break;
+                        case AccesoController::inMovContEje: $descMovimiento = AccesoController::txMovContEje; break;
+                        case AccesoController::inMovBajaEje: $descMovimiento = AccesoController::txMovBajaEje; break;
+                        case AccesoController::inMovConsEje: $descMovimiento = AccesoController::txMovConsEje; break;
+                        case AccesoController::inMovVendEje: $descMovimiento = AccesoController::txMovVendEje; break;
+                        case AccesoController::inMovCompEje: $descMovimiento = AccesoController::txMovCompEje; break;
+                        case AccesoController::inMovAcepEje: $descMovimiento = AccesoController::txMovAcepEje; break;
+                        case AccesoController::inMovRechEje: $descMovimiento = AccesoController::txMovRechEje; break;
+                        case AccesoController::inMovEjeDevu: $descMovimiento = AccesoController::txMovEjeDevu; break;
+                        case AccesoController::inMovUsPCali: $descMovimiento = AccesoController::txMovUsPCali; break;
+                        case AccesoController::inMovUsSCali: $descMovimiento = AccesoController::txMovUsSCali; break;
+                    }
+                    $arrHistEjemplar[] = array('fehisejeregistro' => $hisEjePH->getFehisejeregistro()->format("Y-m-d H:i:s"),
+                        'inhisejemodoentrega' => $hisEjePH->getInhisejemodoentrega(), /*0: En el domicilio, 1: Encontrandose, 3. Courrier local, 4: Courrier Nacional, 5: Courrier internacional*/
+                        'inhisejemovimiento' => $hisEjePH->getInhisejemovimiento(),
+                        'txhisejedescmovimiento' => utf8_encode($descMovimiento),
+                        'inhisejeejemplar' => $hisEjePH->getInhisejeejemplar()->getInejemplar(),
+                        'inhisejepadre' => $hisEjePH->getInhisejepadre(),
+                        'usrtrx' => array('inusuario' => $usuaHist->getInusuario(),
+                                'txusunommostrar' => utf8_encode($usuaHist->getTxusunommostrar()),
+                                'txusuimagen' => utf8_encode($usuaHist->getTxusuimagen()),
+                                'calificacion' => $promcalUsHist)
+                    );
+                }    
             }    
-
-
-                //$arrHistEjemplar[] = array('fehisejeregistro' => $hisEje->getFehisejeregistro()->format("Y-m-d H:i:s"),
-                //    'inhisejemodoentrega' => $hisEje->getInhisejemodoentrega(), /*0: En el domicilio, 1: Encontrandose, 3. Courrier local, 4: Courrier Nacional, 5: Courrier internacional*/
-                //    'inhisejemovimiento' => $hisEje->getInhisejemovimiento(),
-                //    'txhisejedescmovimiento' => utf8_encode($descMovimiento),
-                  //  'inhisejeejemplar' => $hisEje->getInhisejeejemplar()->getInejemplar(),
-                    //'inhisejepadre' => $hisEje->getInhisejepadre(),
-                    //'usrtrx' => array('inusuario' => $usuaHist->getInusuario(),
-                    //        'txusunommostrar' => utf8_encode($usuaHist->getTxusunommostrar()),
-                    //        'txusuimagen' => utf8_encode($usuaHist->getTxusuimagen()),
-                    //        'calificacion' => $promcalUsHist)
-                    //);
-            //}
-            
             return $arrHistEjemplar;
         
         } catch (Exception $ex) {
@@ -635,13 +660,13 @@ class ManejoDataRepository extends EntityRepository {
                 ->Where('a.incalusucalificado = :pusuario')
                 ->setParameter('pusuario', $inusuario);
             $suma = $qs->getQuery()->getSingleScalarResult();
-
+            
             $qc = $em->createQueryBuilder()
                 ->select('count(a)')
                 ->from('LibreameBackendBundle:LbCalificausuarios', 'a')
                 ->Where('a.incalusucalificado = :pusuario')
                 ->setParameter('pusuario', $inusuario);
-            $cant = $qs->getQuery()->getSingleScalarResult();
+            $cant = $qc->getQuery()->getSingleScalarResult();
             if($cant == 0)
                 $promedio = 0;
             else    
@@ -815,8 +840,9 @@ class ManejoDataRepository extends EntityRepository {
                 ->leftJoin('LibreameBackendBundle:LbUsuarios', 'u', \Doctrine\ORM\Query\Expr\Join::WITH, 'u.inusuario = e.inejeusudueno')
                 ->leftJoin('LibreameBackendBundle:LbMembresias', 'm', \Doctrine\ORM\Query\Expr\Join::WITH, 'm.inmemusuario = e.inejeusudueno')
                 ->leftJoin('LibreameBackendBundle:LbHistejemplar', 'h', \Doctrine\ORM\Query\Expr\Join::WITH, 'h.inhisejeejemplar = e.inejemplar and h.inhisejeusuario = e.inejeusudueno')
-                ->where(' e.inejemplar > :pejemplar')
+                ->where(' e.inejemplar BETWEEN :pejemplar AND :pFejemplar')
                 ->setParameter('pejemplar', $inultejemplar)
+                ->setParameter('pFejemplar', $inultejemplar+30)
                 ->andWhere(' u.inusuestado = :estado')//Solo los usuarios con estado 1
                 ->setParameter('estado', 1)//Solo los usuarios con estado 1
                 ->andWhere(' e.inejepublicado <= :ppublicado')//Debe cambiar a solo los ejemplares publicados = 1
@@ -825,7 +851,7 @@ class ManejoDataRepository extends EntityRepository {
                 ->setParameter('pmovimiento', 1)//Todos los ejemplares con registro de movimiento en historia ejemplar: publicados 
                 ->andWhere(' m.inmemgrupo in (:grupos) ')//Para los grupos del usuario
                 ->setParameter('grupos', $grupos)
-                ->setMaxResults(30)
+                //->setMaxResults(30)
                 ->orderBy(' h.fehisejeregistro ', 'DESC');
 
             return $q->getQuery()->getResult();
