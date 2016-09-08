@@ -354,7 +354,8 @@ class ManejoDataRepository extends EntityRepository {
                 ->setParameter('pusuario', $pUsuario)
                 ->setMaxResults(1)
                 ->orderBy('a.femegmegusta', 'DESC');
-
+            
+            $meg = AccesoController::inDatoCer;
             if($qmg->getQuery()->getOneOrNullResult() == NULL){
                 $meg = AccesoController::inDatoCer; //Si ho hay registro devuelve no me gusta (0)
             } else {
@@ -449,53 +450,51 @@ class ManejoDataRepository extends EntityRepository {
         } 
     }
 
-    public function getHistoriaEjemplarBiblioteca(LbEjemplares $pejemplar, LbUsuarios $pusuario)
-    {   
+    public function getHistoriaEjemplarBiblioteca(LbEjemplares $pejemplar, LbUsuarios $pusuario){   
         try{
             $em = $this->getDoctrine()->getManager();
             //Primero busca todos los que tengan hijos
             $histEjemplar = $em->createQueryBuilder()
-                ->select('DISTINCT a.inhisejepadre')
+                ->select('a')
                 ->from('LibreameBackendBundle:LbHistejemplar', 'a')
                 ->Where('a.inhisejeejemplar = :pejemplar')
                 ->setParameter('pejemplar', $pejemplar)
                 ->andWhere('a.inhisejeusuario = :pusuario')
                 ->setParameter('pusuario', $pusuario)
-                ->andWhere('a.inhisejepadre IS NOT NULL')
-                ->orderBy('a.fehisejeregistro', 'DESC');
-            $hisEje = new LbHistejemplar();
+                ->andWhere('a.inhisejepadre  IS NOT NULL')
+                ->orderBy('a.fehisejeregistro', 'ASC')->getQuery()->getResult();
             $arrHistEjemplar = array();
-            $arRepetidos = array();
-            foreach ($histejemplar as $hisEje) {
+            $punteros = array();
+            $hisEje = new LbHistejemplar();
+            foreach ($histEjemplar as $hisEje) {
                 //Para cada uno busca sus hijos
-                $padre = $hisEje->getInhistejemplar();
-                while($padre!=NULL){
-                    $histHijos = $em->createQueryBuilder()
-                        ->select('DISTINCT a.inhisejepadre')
-                        ->from('LibreameBackendBundle:LbHistejemplar', 'a')
-                        ->Where('a.inhisejeejemplar = :pejemplar')
-                        ->setParameter('pejemplar', $pejemplar)
-                        ->andWhere('a.inhisejeusuario = :pusuario')
-                        ->setParameter('pusuario', $pusuario)
-                        ->andWhere('a.inhisejepadre = :ppadre')
-                        ->setParameter('ppadre', $padre)
-                        ->orderBy('a.fehisejeregistro', 'DESC');
-                    foreach ($histHijos as $hisHijo) {
-                    $padre = $histHijos->getInhistejemplar();
-                }
-                $arRepetidos[] = $hisEje->getInhistejemplar();
-                        
-                $usuaHist = ManejoDataRepository::getUsuarioById($hisEje->getInhisejeusuario()->getInusuario());
+                $hijo = $hisEje->getInhistejemplar();
+                $padre = $hisEje->getInhisejepadre()->getInhistejemplar();
+                $punteros[]['padre'] = $padre;
+                $punteros[]['hijo'] = $hijo;
+                //echo "P:".$padre." -> H:".$hijo." \n";
+            }
+            
+            foreach ($punteros as $registro){
+                
+                $histHijo = new LbHistejemplar();
+                $rpadre = $registro['padre'];
+                $histHijo = $em->createQueryBuilder()
+                    ->select('a')
+                    ->from('LibreameBackendBundle:LbHistejemplar', 'a')
+                    ->Where('a.inhisejeejemplar = :pejemplar')
+                    ->setParameter('pejemplar', $pejemplar)
+                    ->andWhere('a.inhisejeusuario = :pusuario')
+                    ->setParameter('pusuario', $pusuario)
+                    ->andWhere('a.inhistejemplar = :id')
+                    ->setParameter('id', $rpadre)
+                    ->orderBy('a.fehisejeregistro', 'ASC')->getQuery()->getResult();
+                
+                $idusuario = $histHijo->getInhisejeusuario()->getInusuario();
+                $usuaHist = ManejoDataRepository::getUsuarioById($idusuario);
                 $promcalUsHist = ManejoDataRepository::getPromedioCalifica($usuaHist->getInusuario());
-                /*1: Publicacion del ejemplar 2: Bloqueo del ejemplar (Lo hace el sistema, el usr que queda es el que debe), 
-                 * 3: Solicita ejemplar, 4: Entrega ejemplar: Puntos, 5: Recibe ejemplar: Puntos, 6: Activa - Ofrece, 7: Inactiva, 
-                 * 8: Comenta, 9: Me gusta, 10: No me gusta, 11: Cambia estado (mejora o empeora de 1 a 10), 
-                 * 12: Mejora contenido: Idioma, ISBN, Autor etc., 13: Baja del sistema, 
-                 * 14: Vista del ejemplar (Consulta del detalle), 15: Vendio ejemplar (trato cerrado), 
-                 * 16: Compro ejemplar(trato cerrado), 17: Acepta solicitud de ejemplar */
                 $descMovimiento = "";
-
-                switch ($hisEje->getInhisejemovimiento()){
+                switch ($histHijo->getInhisejemovimiento()){
                     case AccesoController::inMovPubEjem: $descMovimiento = AccesoController::txMovPubEjem; break;
                     case AccesoController::inMovBlqEjSi: $descMovimiento = AccesoController::txMovBlqEjSi; break;
                     case AccesoController::inMovSoliEje: $descMovimiento = AccesoController::txMovSoliEje; break;
@@ -518,21 +517,26 @@ class ManejoDataRepository extends EntityRepository {
                     case AccesoController::inMovUsPCali: $descMovimiento = AccesoController::txMovUsPCali; break;
                     case AccesoController::inMovUsSCali: $descMovimiento = AccesoController::txMovUsSCali; break;
                 }
+                if (in_array_field($registro['padre'], "hijo", $punteros)){
+                }
+            }    
 
-                $arrHistEjemplar[] = array('fehisejeregistro' => $hisEje->getFehisejeregistro()->format("Y-m-d H:i:s"),
-                    'inhisejemodoentrega' => $hisEje->getInhisejemodoentrega(), /*0: En el domicilio, 1: Encontrandose, 3. Courrier local, 4: Courrier Nacional, 5: Courrier internacional*/
-                    'inhisejemovimiento' => $hisEje->getInhisejemovimiento(),
-                    'txhisejedescmovimiento' => utf8_encode($descMovimiento),
-                    'inhisejeejemplar' => $hisEje->getInhisejeejemplar()->getInejemplar(),
-                    'inhisejepadre' => $hisEje->getInhisejepadre(),
-                    'usrtrx' => array('inusuario' => $usuaHist->getInusuario(),
-                            'txusunommostrar' => utf8_encode($usuaHist->getTxusunommostrar()),
-                            'txusuimagen' => utf8_encode($usuaHist->getTxusuimagen()),
-                            'calificacion' => $promcalUsHist)
-                    );
-            }
+
+                //$arrHistEjemplar[] = array('fehisejeregistro' => $hisEje->getFehisejeregistro()->format("Y-m-d H:i:s"),
+                //    'inhisejemodoentrega' => $hisEje->getInhisejemodoentrega(), /*0: En el domicilio, 1: Encontrandose, 3. Courrier local, 4: Courrier Nacional, 5: Courrier internacional*/
+                //    'inhisejemovimiento' => $hisEje->getInhisejemovimiento(),
+                //    'txhisejedescmovimiento' => utf8_encode($descMovimiento),
+                  //  'inhisejeejemplar' => $hisEje->getInhisejeejemplar()->getInejemplar(),
+                    //'inhisejepadre' => $hisEje->getInhisejepadre(),
+                    //'usrtrx' => array('inusuario' => $usuaHist->getInusuario(),
+                    //        'txusunommostrar' => utf8_encode($usuaHist->getTxusunommostrar()),
+                    //        'txusuimagen' => utf8_encode($usuaHist->getTxusuimagen()),
+                    //        'calificacion' => $promcalUsHist)
+                    //);
+            //}
             
             return $arrHistEjemplar;
+        
         } catch (Exception $ex) {
                 return LbHistejemplar();
         } 
