@@ -67,6 +67,7 @@ class Solicitud {
     private $pIdComPadre; //Id del comentario padre / cuando es respuesta a un comentario
     private $pIdComentario; //Id del comentario - cuando se edita o borra
     private $pAccioncom; //Id del comentario - cuando se edita o borra
+    private $pFiltro; //Id del comentario - cuando se edita o borra
     
     
     
@@ -246,6 +247,9 @@ class Solicitud {
         return $this->pAccioncom;
     }
 
+    public function getFiltro() {
+        return $this->pFiltro;
+    }
     /*
      *  Bloque de setter para los atributos de la clase
      */
@@ -467,6 +471,11 @@ class Solicitud {
     
     public function setAccionCom($paccioncom) {
         $this->pAccioncom = $paccioncom;
+        return $this;
+    }
+    
+    public function setFiltro($pfiltro) {
+        $this->pFiltro = $pfiltro;
         return $this;
     }
     

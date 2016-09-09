@@ -203,7 +203,7 @@ class GestionEjemplares {
                     $arrGru[] = $gru->getIngrupo();
                 }
 
-                $ejemplares = ManejoDataRepository::getVisualizarBiblioteca($usuario, $arrGru);
+                $ejemplares = ManejoDataRepository::getVisualizarBiblioteca($usuario, $arrGru, $psolicitud->getFiltro());
                 //echo "Recuperó ejemplares...gestionejemplares:buscarEjemplares \n";
                 $respuesta->setRespuesta(AccesoController::inExitoso);
 

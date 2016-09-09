@@ -31,6 +31,10 @@ class AccesoController extends Controller
     const inExitoso =  1; //Proceso existoso
     const inDatoCer =  0; //Valor cero: Sirve para los datos Inactivo, Cerrado etc del modelo
     const inDatoUno =  1; //Valor Uno: Sirve para los datos Activo, Abierto, etc del modelo
+    const inDatoDos =  2; //Valor Uno: Sirve para los datos Activo, Abierto, etc del modelo
+    const inDatoTre =  3; //Valor Uno: Sirve para los datos Activo, Abierto, etc del modelo
+    const inDatoCua =  4; //Valor Uno: Sirve para los datos Activo, Abierto, etc del modelo
+    const inDatoCin =  5; //Valor Uno: Sirve para los datos Activo, Abierto, etc del modelo
     const inGenSinE =  2; //Genero del usuario: Sin especificar
     const inGenFeme =  1; //Genero del usuario: Femenino
     const inGenMasc =  0; //Genero del usuario: Masculino
@@ -379,6 +383,7 @@ class AccesoController extends Controller
                         //echo "<script>alert('ENTRA POR CERRAR SESION')</script>";
                         $this->objSolicitud->setEmail($json_datos['idsolicitud']['email']);
                         $this->objSolicitud->setClave($json_datos['idsolicitud']['clave']);
+                        $this->objSolicitud->setFiltro($json_datos['idsolicitud']['filtro']);
                         break;
                     }
                     
@@ -564,7 +569,8 @@ class AccesoController extends Controller
                     
                     case self::txAccVisuaBib: { //Dato:16 : Visualizar biblioteca
                         //echo "<script>alert('VAL ENTRA VISUALIZAR BIBLIOTECA')</script>";
-                        $resp = (isset($datos['idsolicitud']['email']) and isset($datos['idsolicitud']['clave']));
+                        $resp = (isset($datos['idsolicitud']['email']) and isset($datos['idsolicitud']['clave'])
+                                and isset($datos['idsolicitud']['filtro']));
                         break;
                     }
 

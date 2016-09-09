@@ -379,8 +379,8 @@ class ManejoDataRepository extends EntityRepository {
                 ->from('LibreameBackendBundle:LbMegusta', 'a')
                 ->Where('a.inmegejemplar = :pejemplar')
                 ->setParameter('pejemplar', $pEjemplar)
-                ->andWhere('a.inmegusuario = :pusuario')
-                ->setParameter('pusuario', $pUsuario)
+                //->andWhere('a.inmegusuario = :pusuario')
+                //->setParameter('pusuario', $pUsuario)
                 ->setMaxResults(1)
                 ->orderBy('a.femegmegusta', 'DESC');
             
@@ -931,25 +931,76 @@ class ManejoDataRepository extends EntityRepository {
     }
                 
     //Obtiene todos los Ejemplares, de un usuario
-    public function getVisualizarBiblioteca(LbUsuarios $usuario, Array $grupos)
+    //1: Todos, 2: En negociación, 3: Publicados, 4: No publicados, 5: Bloqueados
+    public function getVisualizarBiblioteca(LbUsuarios $usuario, Array $grupos, $filtro)
     {   
         try{
             //Recupera cada uno de los ejemplares con ID > al del parametro
             //Los ejemplares cuya membresías coincidan con las del usuario que solicita
             //El usuario debe estar activo
             $em = $this->getDoctrine()->getManager();
-            $q = $em->createQueryBuilder()
-                ->select('e')
-                ->from('LibreameBackendBundle:LbEjemplares', 'e')
-                ->leftJoin('LibreameBackendBundle:LbUsuarios', 'u', \Doctrine\ORM\Query\Expr\Join::WITH, 'u.inusuario = e.inejeusudueno')
-                ->leftJoin('LibreameBackendBundle:LbMembresias', 'm', \Doctrine\ORM\Query\Expr\Join::WITH, 'm.inmemusuario = e.inejeusudueno')
-                ->leftJoin('LibreameBackendBundle:LbHistejemplar', 'h', \Doctrine\ORM\Query\Expr\Join::WITH, 'h.inhisejeejemplar = e.inejemplar and h.inhisejeusuario = e.inejeusudueno')
-                ->where(' u.inusuario = :pusuario')
-                ->setParameter('pusuario', $usuario)
-                ->andWhere(' m.inmemgrupo in (:grupos) ')//Para los grupos del usuario
-                ->setParameter('grupos', $grupos)
-                //->setMaxResults(10000)
-                ->orderBy(' h.fehisejeregistro ', 'DESC');
+            switch($filtro){
+                case AccesoController::inDatoUno : //Todos
+                    $q = $em->createQueryBuilder()
+                        ->select('e')
+                        ->from('LibreameBackendBundle:LbEjemplares', 'e')
+                        ->leftJoin('LibreameBackendBundle:LbUsuarios', 'u', \Doctrine\ORM\Query\Expr\Join::WITH, 'u.inusuario = e.inejeusudueno')
+                        ->leftJoin('LibreameBackendBundle:LbMembresias', 'm', \Doctrine\ORM\Query\Expr\Join::WITH, 'm.inmemusuario = e.inejeusudueno')
+                        ->leftJoin('LibreameBackendBundle:LbHistejemplar', 'h', \Doctrine\ORM\Query\Expr\Join::WITH, 'h.inhisejeejemplar = e.inejemplar and h.inhisejeusuario = e.inejeusudueno')
+                        ->where(' u.inusuario = :pusuario')
+                        ->setParameter('pusuario', $usuario)
+                        ->andWhere(' m.inmemgrupo in (:grupos) ')//Para los grupos del usuario
+                        ->setParameter('grupos', $grupos)
+                        //->setMaxResults(10000)
+                        ->orderBy(' h.fehisejeregistro ', 'DESC');
+                        break;
+                case AccesoController::inDatoTre :  //Publicados
+                    $q = $em->createQueryBuilder()
+                        ->select('e')
+                        ->from('LibreameBackendBundle:LbEjemplares', 'e')
+                        ->leftJoin('LibreameBackendBundle:LbUsuarios', 'u', \Doctrine\ORM\Query\Expr\Join::WITH, 'u.inusuario = e.inejeusudueno')
+                        ->leftJoin('LibreameBackendBundle:LbMembresias', 'm', \Doctrine\ORM\Query\Expr\Join::WITH, 'm.inmemusuario = e.inejeusudueno')
+                        ->leftJoin('LibreameBackendBundle:LbHistejemplar', 'h', \Doctrine\ORM\Query\Expr\Join::WITH, 'h.inhisejeejemplar = e.inejemplar and h.inhisejeusuario = e.inejeusudueno')
+                        ->where(' u.inusuario = :pusuario')
+                        ->setParameter('pusuario', $usuario)
+                        ->andWhere(' m.inmemgrupo in (:grupos) ')//Para los grupos del usuario
+                        ->setParameter('grupos', $grupos)
+                        ->andWhere(' e.inejepublicado = 1 ')//Publicados
+                        //->setMaxResults(10000)
+                        ->orderBy(' h.fehisejeregistro ', 'DESC');
+                        break;
+                case AccesoController::inDatoCua :  //No Publicados
+                    $q = $em->createQueryBuilder()
+                        ->select('e')
+                        ->from('LibreameBackendBundle:LbEjemplares', 'e')
+                        ->leftJoin('LibreameBackendBundle:LbUsuarios', 'u', \Doctrine\ORM\Query\Expr\Join::WITH, 'u.inusuario = e.inejeusudueno')
+                        ->leftJoin('LibreameBackendBundle:LbMembresias', 'm', \Doctrine\ORM\Query\Expr\Join::WITH, 'm.inmemusuario = e.inejeusudueno')
+                        ->leftJoin('LibreameBackendBundle:LbHistejemplar', 'h', \Doctrine\ORM\Query\Expr\Join::WITH, 'h.inhisejeejemplar = e.inejemplar and h.inhisejeusuario = e.inejeusudueno')
+                        ->where(' u.inusuario = :pusuario')
+                        ->setParameter('pusuario', $usuario)
+                        ->andWhere(' m.inmemgrupo in (:grupos) ')//Para los grupos del usuario
+                        ->setParameter('grupos', $grupos)
+                        ->andWhere(' e.inejepublicado = 0 ')//No publicados
+                        //->setMaxResults(10000)
+                        ->orderBy(' h.fehisejeregistro ', 'DESC');
+                        break;
+                case AccesoController::inDatoCin:  //Bloqueados
+                    $q = $em->createQueryBuilder()
+                        ->select('e')
+                        ->from('LibreameBackendBundle:LbEjemplares', 'e')
+                        ->leftJoin('LibreameBackendBundle:LbUsuarios', 'u', \Doctrine\ORM\Query\Expr\Join::WITH, 'u.inusuario = e.inejeusudueno')
+                        ->leftJoin('LibreameBackendBundle:LbMembresias', 'm', \Doctrine\ORM\Query\Expr\Join::WITH, 'm.inmemusuario = e.inejeusudueno')
+                        ->leftJoin('LibreameBackendBundle:LbHistejemplar', 'h', \Doctrine\ORM\Query\Expr\Join::WITH, 'h.inhisejeejemplar = e.inejemplar and h.inhisejeusuario = e.inejeusudueno')
+                        ->where(' u.inusuario = :pusuario')
+                        ->setParameter('pusuario', $usuario)
+                        ->andWhere(' m.inmemgrupo in (:grupos) ')//Para los grupos del usuario
+                        ->setParameter('grupos', $grupos)
+                        ->andWhere(' e.inejepublicado = 0 ')//No publicados
+                        //->setMaxResults(10000)
+                        ->orderBy(' h.fehisejeregistro ', 'DESC');
+                        break;
+                    
+            }    
 
             return $q->getQuery()->getResult();
             //return $q->getArrayResult();
