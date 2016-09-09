@@ -484,6 +484,8 @@ class Logica {
                 $isbn13 = utf8_encode($libros->getTxlibcodigoofic13());
                 $imagen = utf8_encode($ejemplar->getTxejeimagen());
                 $lugar = $usuario->getInusulugar();
+                $condactual = $ejemplar->getInejeestadonegocio(); // 0 - No en negociacion,1 - Solicitado por usuario, 2 - En proceso de aprobación del negocio, 3 - Aprobado negocio por Ambos actores, 4 - En proceso de entrega, 5 - Entregado, 6 - Recibido
+                $desccondactual = utf8_encode(ManejoDataRepository::getDescCondicionActualEjemplar($ejemplar->getInejeestadonegocio())); // 0 - No en negociacion,1 - Solicitado por usuario, 2 - En proceso de aprobación del negocio, 3 - Aprobado negocio por Ambos actores, 4 - En proceso de entrega, 5 - Entregado, 6 - Recibido
                 //echo "Titulo + Descripcion edicion : [".$titulo."] - [".$edicion."]\n";
                 $arrTmp[] = array('idejemplar' => $ejemplar->getInejemplar(), 
                     'titulo' => $titulo, 
@@ -500,6 +502,8 @@ class Logica {
                     'fechapublica' => $fecpublica,
                     'cantmegusta' => $cantmegusta,
                     'cantcomment' => $cantcomment,
+                    'condactual' => $condactual,
+                    'desccondactual' => $desccondactual,
                     'lugar' => array('inlugar' => $lugar->getInlugar(), 'txlugnombre' => utf8_encode($lugar->getTxlugnombre())),
                     'autores' => $arrAutores,
                     'editoriales' => $arrEditoriales,
@@ -695,6 +699,8 @@ class Logica {
                 $isbn13 = utf8_encode($libros->getTxlibcodigoofic13());
                 $imagen = utf8_encode($ejemplar->getTxejeimagen());
                 $lugar = $usuario->getInusulugar();
+                $condactual = $ejemplar->getInejeestadonegocio(); // 0 - No en negociacion,1 - Solicitado por usuario, 2 - En proceso de aprobación del negocio, 3 - Aprobado negocio por Ambos actores, 4 - En proceso de entrega, 5 - Entregado, 6 - Recibido
+                $desccondactual = utf8_encode(ManejoDataRepository::getDescCondicionActualEjemplar($ejemplar->getInejeestadonegocio())); // 0 - No en negociacion,1 - Solicitado por usuario, 2 - En proceso de aprobación del negocio, 3 - Aprobado negocio por Ambos actores, 4 - En proceso de entrega, 5 - Entregado, 6 - Recibido
                 //echo "Titulo + Descripcion edicion : [".$titulo."] - [".$edicion."]\n";
                 $arrTmp[] = array('idejemplar' => $ejemplar->getInejemplar(), 
                     'titulo' => $titulo, 
@@ -711,6 +717,8 @@ class Logica {
                     'fechapublica' => $fecpublica,
                     'cantmegusta' => $cantmegusta,
                     'cantcomment' => $cantcomment,
+                    'condactual' => $condactual,
+                    'desccondactual' => $desccondactual,
                     'lugar' => array('inlugar' => $lugar->getInlugar(), 'txlugnombre' => utf8_encode($lugar->getTxlugnombre())),
                     'autores' => $arrAutores,
                     'editoriales' => $arrEditoriales,
@@ -972,8 +980,6 @@ class Logica {
                     //echo "...promcalifica \n";
                     $fecpublica = ManejoDataRepository::getFechaPublicacion($ejemplar, $usuario);
                     //echo "...$fecpublica \n";
-                    $condactual = ManejoDataRepository::getCondicionActualEjemplar($ejemplar);
-                    //echo "...$fecpublica \n";
                     //echo "RECUPERO DATOS\n";*/
                 }
                 
@@ -1006,6 +1012,8 @@ class Logica {
                 $isbn13 = utf8_encode($libros->getTxlibcodigoofic13());
                 $imagen = utf8_encode($ejemplar->getTxejeimagen());
                 $lugar = $usuario->getInusulugar();
+                $condactual = $ejemplar->getInejeestadonegocio(); // 0 - No en negociacion,1 - Solicitado por usuario, 2 - En proceso de aprobación del negocio, 3 - Aprobado negocio por Ambos actores, 4 - En proceso de entrega, 5 - Entregado, 6 - Recibido
+                $desccondactual = utf8_encode(ManejoDataRepository::getDescCondicionActualEjemplar($ejemplar->getInejeestadonegocio())); // 0 - No en negociacion,1 - Solicitado por usuario, 2 - En proceso de aprobación del negocio, 3 - Aprobado negocio por Ambos actores, 4 - En proceso de entrega, 5 - Entregado, 6 - Recibido
                 //echo "Titulo + Descripcion edicion : [".$titulo."] - [".$edicion."]\n";
                 $arrTmp[] = array('idejemplar' => $ejemplar->getInejemplar(), 
                     'titulo' => $titulo, 
@@ -1024,6 +1032,7 @@ class Logica {
                     'cantmegusta' => $cantmegusta,
                     'cantcomment' => $cantcomment,
                     'condactual' => $condactual,
+                    'desccondactual' => $desccondactual,
                     'lugar' => array('inlugar' => $lugar->getInlugar(), 'txlugnombre' => utf8_encode($lugar->getTxlugnombre())),
                     'autores' => $arrAutores,
                     'editoriales' => $arrEditoriales,

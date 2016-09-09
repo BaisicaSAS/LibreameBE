@@ -10,6 +10,7 @@ use Libreame\BackendBundle\Helpers\Solicitud;
 use Libreame\BackendBundle\Helpers\Respuesta;
 use Libreame\BackendBundle\Entity\LbEjemplares;
 use Libreame\BackendBundle\Entity\LbLibros;
+
 use Libreame\BackendBundle\Entity\LbGeneros;
 /*
  * Controlador que contiene las funciones que validan, controlan y despachan 
@@ -171,7 +172,23 @@ class AccesoController extends Controller
     const txMovUsPCali = "Usuario propietario Calificó";//20: Usuario propietario Calificó
     const inMovUsSCali = 21;//21: Usuario solicitante Calificó
     const txMovUsSCali = "Usuario solicitante Calificó";//21: Usuario solicitante Calificó
-
+    
+    //Constantes para Estado de negociación ejemplar
+    const inConEjeNoNe = 0;//0: Ejemplar no está en negociacion
+    const txConEjeNoNe = "Ejemplar no está en negociacion";//0: Ejemplar no está en negociacion
+    const inConEjeSoli = 1;//1: Ejemplar solicitado
+    const txConEjeSoli = "Ejemplar solicitado";//1: Ejemplar solicitado
+    const inConEjePrAp = 2;//2: En proceso de aprobación del negocio
+    const txConEjePrAp = "En proceso de aprobación del negocio";//2: En proceso de aprobación del negocio
+    const inConEjeApNe = 3;//3: Aprobado negocio por ambas partes
+    const txConEjeApNe = "Aprobado negocio por ambas partes";//3: Aprobado negocio por ambas partes
+    const inConEjePrEn = 4;//4: En proceso de entrega
+    const txConEjePrEn = "En proceso de entrega";//4: En proceso de entrega
+    const inConEjeEntr = 5;//5: Entregado
+    const txConEjeEntr = "Entregado";//5: Entregado
+    const inConEjeReci = 6;//6: Recibido
+    const txConEjeReci = "Recibido";//6: Recibido
+    
     var $objSolicitud;
     /*
      * IngresarSistema es la UNICA funcion que recibe la información desde el cliente, para revisar y despachar

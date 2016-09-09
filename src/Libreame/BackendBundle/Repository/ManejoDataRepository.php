@@ -369,32 +369,27 @@ class ManejoDataRepository extends EntityRepository {
         } 
     }
 
-    //Obtiene la cantidad de Megusta del ejemplar : Condicion megusta - nomegusta 
-    public function getCondicionActualEjemplar(LbEjemplares $pEjemplar)
+    //Obtiene la descripcion de la condicion actual del ejemplar
+    // 0 - No en negociacion,1 - Solicitado por usuario, 2 - En proceso de aprobación del negocio, 
+    // 3 - Aprobado negocio por Ambos actores, 4 - En proceso de entrega
+    // 5 - Entregado, 6 - Recibido
+    public function getDescCondicionActualEjemplar($condactual)
     {   
         try{
-            $em = $this->getDoctrine()->getManager();
-            $qmg = $em->createQueryBuilder()
-                ->select('a.inmegmegusta')
-                ->from('LibreameBackendBundle:LbMegusta', 'a')
-                ->Where('a.inmegejemplar = :pejemplar')
-                ->setParameter('pejemplar', $pEjemplar)
-                //->andWhere('a.inmegusuario = :pusuario')
-                //->setParameter('pusuario', $pUsuario)
-                ->setMaxResults(1)
-                ->orderBy('a.femegmegusta', 'DESC');
-            
-            $meg = AccesoController::inDatoCer;
-            if($qmg->getQuery()->getOneOrNullResult() == NULL){
-                $meg = AccesoController::inDatoCer; //Si ho hay registro devuelve no me gusta (0)
-            } else {
-                $meg = $qmg->getQuery()->getOneOrNullResult();//Si hay registro devuelve lo que hay
-            }    
-            
-            //echo "megusta ".$meg;
-            return $meg;
+            $desCondactual = "Ejemplar no está en negociacion";
+            switch($condactual){
+                case (AccesoController::inConEjeNoNe): $desCondactual = AccesoController::txConEjeNoNe; break;
+                case (AccesoController::inConEjeSoli): $desCondactual = AccesoController::txConEjeSoli; break;
+                case (AccesoController::inConEjePrAp): $desCondactual = AccesoController::txConEjePrAp; break;
+                case (AccesoController::inConEjeApNe): $desCondactual = AccesoController::txConEjeApNe; break;
+                case (AccesoController::inConEjePrEn): $desCondactual = AccesoController::txConEjePrEn; break;
+                case (AccesoController::inConEjeEntr): $desCondactual = AccesoController::txConEjeEntr; break;
+                case (AccesoController::inConEjeReci): $desCondactual = AccesoController::txConEjeReci; break;
+            }
+
+            return utf8_encode($desCondactual);
         } catch (Exception $ex) {
-                return AccesoController::inDatoCer;
+            return utf8_encode($desCondactual);
         } 
     }
     
@@ -938,6 +933,8 @@ class ManejoDataRepository extends EntityRepository {
             //Recupera cada uno de los ejemplares con ID > al del parametro
             //Los ejemplares cuya membresías coincidan con las del usuario que solicita
             //El usuario debe estar activo
+            //Estado de la negocuación actual : 0 - No en negociacion,1 - Solicitado por usuario, 2 - En proceso de aprobación del negocio, 
+            //3 - Aprobado negocio por Ambos actores, 4 - En proceso de entrega 5 - Entregado, 6 - Recibido
             $em = $this->getDoctrine()->getManager();
             switch($filtro){
                 case AccesoController::inDatoUno : //Todos
@@ -951,6 +948,21 @@ class ManejoDataRepository extends EntityRepository {
                         ->setParameter('pusuario', $usuario)
                         ->andWhere(' m.inmemgrupo in (:grupos) ')//Para los grupos del usuario
                         ->setParameter('grupos', $grupos)
+                        //->setMaxResults(10000)
+                        ->orderBy(' h.fehisejeregistro ', 'DESC');
+                        break;
+                case AccesoController::inDatoDos :  //En negociación
+                    $q = $em->createQueryBuilder()
+                        ->select('e')
+                        ->from('LibreameBackendBundle:LbEjemplares', 'e')
+                        ->leftJoin('LibreameBackendBundle:LbUsuarios', 'u', \Doctrine\ORM\Query\Expr\Join::WITH, 'u.inusuario = e.inejeusudueno')
+                        ->leftJoin('LibreameBackendBundle:LbMembresias', 'm', \Doctrine\ORM\Query\Expr\Join::WITH, 'm.inmemusuario = e.inejeusudueno')
+                        ->leftJoin('LibreameBackendBundle:LbHistejemplar', 'h', \Doctrine\ORM\Query\Expr\Join::WITH, 'h.inhisejeejemplar = e.inejemplar and h.inhisejeusuario = e.inejeusudueno')
+                        ->where(' u.inusuario = :pusuario')
+                        ->setParameter('pusuario', $usuario)
+                        ->andWhere(' m.inmemgrupo in (:grupos) ')//Para los grupos del usuario
+                        ->setParameter('grupos', $grupos)
+                        ->andWhere(' e.inEjeEstadoNegocio IN (1, 2, 3, 4) ')//En negociación (Si está entregado o recibido, ya no es del usuario)
                         //->setMaxResults(10000)
                         ->orderBy(' h.fehisejeregistro ', 'DESC');
                         break;
@@ -995,7 +1007,7 @@ class ManejoDataRepository extends EntityRepository {
                         ->setParameter('pusuario', $usuario)
                         ->andWhere(' m.inmemgrupo in (:grupos) ')//Para los grupos del usuario
                         ->setParameter('grupos', $grupos)
-                        ->andWhere(' e.inejepublicado = 0 ')//No publicados
+                        ->andWhere(' e.inejebloqueado = 1 ')//Bloqueados
                         //->setMaxResults(10000)
                         ->orderBy(' h.fehisejeregistro ', 'DESC');
                         break;

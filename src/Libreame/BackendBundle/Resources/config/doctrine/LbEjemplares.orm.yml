@@ -83,6 +83,63 @@ Libreame\BackendBundle\Entity\LbEjemplares:
             comment: 'Indica si el ejemplar solo esta disponible para venta - 1: solo venta, 2: Venta y cambio'
             default: '0'
             column: inEjeSoloventa
+        inejeestadonegocio:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: 'Estado de la negocuación actual : 0 - No en negociacion,1 - Solicitado por usuario, 2 - En proceso de aprobación del negocio, 3 - Aprobado negocio por Ambos actores, 4 - En proceso de entrega\n5 - Entregado, 6 - Recibido'
+            default: '0'
+            column: inEjeEstadoNegocio
+        inejereghisbloqueo:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: 'Si está bloqueado, aquí se registra el ID de HisEjemplar de bloqueo vigente'
+            default: '0'
+            column: inEjeRegHisBloqueo
+        inejereghispublicacion:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: 'Si esta / No publicado Publicado, aquí se registra el ID de HisEjemplar de publicacion / Despublicacion vigente'
+            default: '0'
+            column: inEjeRegHisPublicacion
+        inejereghisbajasis:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: 'Si se dió de baja, aquí se registra el ID de HisEjemplar de Baja del sistema'
+            default: '0'
+            column: inEjeRegHisBajaSis
+        inejereghisaprobdueno:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: 'Si el dueno aprobó un negocio, aquí se registra el ID de HisEjemplar de Aprobacion'
+            default: '0'
+            column: inEjeRegHisAprobDueno
+        inejereghisaprobsolic:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: 'Si el solicitante aprobó un negocio, aquí se registra el ID de HisEjemplar de Aprobacion'
+            default: '0'
+            column: inEjeRegHisAprobSolic
+        inejereghisentrega:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: 'Si el dueno Entrego un ejemplar, aquí se registra el ID de HisEjemplar de Entrega'
+            default: '0'
+            column: inEjeRegHisEntrega
+        inejereghisrecibido:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: 'Si el solicitante Recibio un ejemplar, aquí se registra el ID de HisEjemplar de Recibo'
+            default: '0'
+            column: inEjeRegHisRecibido
+            
     manyToOne:
         inejelibro:
             targetEntity: LbLibros

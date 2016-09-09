@@ -683,6 +683,8 @@ CREATE TABLE IF NOT EXISTS `dotEx4read`.`lb_preciosplanes` (
 ENGINE = InnoDB
 COMMENT = 'Precios de todos los planes';
 
+--CREAR EN TODOS AMBIENTES
+
 ALTER TABLE `dotex4read`.`lb_negociacion` 
 ADD COLUMN `txNegIdConversacion` VARCHAR(50) NOT NULL AFTER `inNegMensEliminado`;
 
@@ -692,3 +694,14 @@ ADD INDEX `fk_lb_negociacion_idconversacion_idx` (`txNegIdConversacion` ASC);
 
 ALTER TABLE `dotex4read`.`lb_negociacion` 
 ADD INDEX `fk_lb_negociacion_idconversacion2_idx` (`txNegIdConversacion` DESC);
+
+
+ALTER TABLE `dotex4read`.`lb_ejemplares` 
+ADD COLUMN `inEjeEstadoNegocio` INT(11) NOT NULL DEFAULT 0 COMMENT 'Estado de la negocuación actual : 0 - No en negociacion,1 - Solicitado por usuario, 2 - En proceso de aprobación del negocio, 3 - Aprobado negocio por Ambos actores, 4 - En proceso de entrega\n5 - Entregado, 6 - Recibido' AFTER `inEjeSoloventa`,
+ADD COLUMN `inEjeRegHisBloqueo` INT(11) NOT NULL DEFAULT 0 COMMENT 'Si está bloqueado, aquí se registra el ID de HisEjemplar de bloqueo vigente' AFTER `inEjeEstadoNegocio`,
+ADD COLUMN `inEjeRegHisPublicacion` INT(11) NOT NULL DEFAULT 0 COMMENT 'Si esta / No publicado Publicado, aquí se registra el ID de HisEjemplar de publicacion / Despublicacion vigente' AFTER `inEjeRegHisBloqueo`,
+ADD COLUMN `inEjeRegHisBajaSis` INT(11) NOT NULL DEFAULT 0 COMMENT 'Si se dió de baja, aquí se registra el ID de HisEjemplar de Baja del sistema' AFTER `inEjeRegHisPublicacion`,
+ADD COLUMN `inEjeRegHisAprobDueno` INT(11) NOT NULL DEFAULT 0 COMMENT 'Si el dueno aprobó un negocio, aquí se registra el ID de HisEjemplar de Aprobacion' AFTER `inEjeRegHisBajaSis`,
+ADD COLUMN `inEjeRegHisAprobSolic` INT(11) NOT NULL DEFAULT 0 COMMENT 'Si el solicitante aprobó un negocio, aquí se registra el ID de HisEjemplar de Aprobacion' AFTER `inEjeRegHisAprobDueno`,
+ADD COLUMN `inEjeRegHisEntrega` INT(11) NOT NULL DEFAULT 0 COMMENT 'Si el dueno Entrego un ejemplar, aquí se registra el ID de HisEjemplar de Entrega' AFTER `inEjeRegHisAprobSolic`,
+ADD COLUMN `inEjeRegHisRecibido` INT(11) NOT NULL DEFAULT 0 COMMENT 'Si el solicitante Recibio un ejemplar, aquí se registra el ID de HisEjemplar de Recibo' AFTER `inEjeRegHisEntrega`;

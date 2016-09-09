@@ -103,6 +103,54 @@ class LbEjemplares
      * })
      */
     private $inejeusudueno;
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="inEjeEstadoNegocio", type="integer", nullable=false)
+     */
+    private $inejeestadonegocio;
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="inEjeRegHisBloqueo", type="integer", nullable=false)
+     */
+    private $inejereghisbloqueo;
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="inEjeRegHisPublicacion", type="integer", nullable=false)
+     */
+    private $inejereghispublicacion;
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="inEjeRegHisBajaSis", type="integer", nullable=false)
+     */
+    private $inejereghisbajasis;
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="inEjeRegHisAprobDueno", type="integer", nullable=false)
+     */
+    private $inejereghisaprobdueno;
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="inEjeRegHisAprobSolic", type="integer", nullable=false)
+     */
+    private $inejereghisaprobsolic;
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="inEjeRegHisEntrega", type="integer", nullable=false)
+     */
+    private $inejereghisentrega;
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="inEjeRegHisRecibido", type="integer", nullable=false)
+     */
+    private $inejereghisrecibido;
 
 
 
@@ -368,4 +416,189 @@ class LbEjemplares
     {
         return $this->inejeusudueno;
     }
-}
+    
+     /**
+     * Set inejeestadonegocio
+     *
+     * @param integer $inejeestadonegocio
+     * @return LbEjemplares
+     */
+    public function setInejeestadonegocio($inejeestadonegocio)
+    {
+        $this->inejeestadonegocio = $inejeestadonegocio;
+
+        return $this;
+    }
+
+    /**
+     * Get inejeestadonegocio
+     *
+     * @return integer 
+     */
+    public function getInejeestadonegocio()
+    {
+        return $this->inejeestadonegocio;
+    }
+   
+     /**
+     * Set inejereghisbloqueo
+     *
+     * @param integer $inejereghisbloqueo
+     * @return LbEjemplares
+     */
+    public function setInejereghisbloqueo($inejereghisbloqueo)
+    {
+        $this->inejereghisbloqueo = $inejereghisbloqueo;
+
+        return $this;
+    }
+
+    /**
+     * Get inejereghisbloqueo
+     *
+     * @return integer 
+     */
+    public function getInejereghisbloqueo()
+    {
+        return $this->inejereghisbloqueo;
+    }
+
+     /**
+     * Set inejereghispublicacion
+     *
+     * @param integer $inejereghispublicacion
+     * @return LbEjemplares
+     */
+    public function setInejereghispublicacion($inejereghispublicacion)
+    {
+        $this->inejereghispublicacion = $inejereghispublicacion;
+
+        return $this;
+    }
+
+    /**
+     * Get inejereghispublicacion
+     *
+     * @return integer 
+     */
+    public function getInejereghispublicacion()
+    {
+        return $this->inejereghispublicacion;
+    }
+    
+     /**
+     * Set inejereghisbajasis
+     *
+     * @param integer $inejereghisbajasis
+     * @return LbEjemplares
+     */
+    public function setInejereghisbajasis($inejereghisbajasis)
+    {
+        $this->inejereghisbajasis = $inejereghisbajasis;
+
+        return $this;
+    }
+
+    /**
+     * Get inejereghisbajasis
+     *
+     * @return integer 
+     */
+    public function getInejereghisbajasis()
+    {
+        return $this->inejereghisbajasis;
+    }
+    
+    
+     /**
+     * Set inejereghisaprobdueno
+     *
+     * @param integer $inejereghisaprobdueno
+     * @return LbEjemplares
+     */
+    public function setInejereghisaprobdueno($inejereghisaprobdueno)
+    {
+        $this->inejereghisaprobdueno = $inejereghisaprobdueno;
+
+        return $this;
+    }
+
+    /**
+     * Get inejereghisaprobdueno
+     *
+     * @return integer 
+     */
+    public function getInejereghisaprobdueno()
+    {
+        return $this->inejereghisaprobdueno;
+    }
+     /**
+     * Set inejereghisaprobsolic
+     *
+     * @param integer $inejereghisaprobsolic
+     * @return LbEjemplares
+     */
+    public function setInejereghisaprobsolic($inejereghisaprobsolic)
+    {
+        $this->inejereghisaprobsolic = $inejereghisaprobsolic;
+
+        return $this;
+    }
+
+    /**
+     * Get inejereghisaprobsolic
+     *
+     * @return integer 
+     */
+    public function getInejereghisaprobsolic()
+    {
+        return $this->inejereghisaprobsolic;
+    }
+    
+     /**
+     * Set inejereghisentrega
+     *
+     * @param integer $inejereghisentrega
+     * @return LbEjemplares
+     */
+    public function setInejereghisentrega($inejereghisentrega)
+    {
+        $this->inejereghisentrega = $inejereghisentrega;
+
+        return $this;
+    }
+
+    /**
+     * Get inejereghisentrega
+     *
+     * @return integer 
+     */
+    public function getInejereghisentrega()
+    {
+        return $this->inejereghisentrega;
+    }
+    
+     /**
+     * Set inejereghisrecibido
+     *
+     * @param integer $inejereghisrecibido
+     * @return LbEjemplares
+     */
+    public function setInejereghisrecibido($inejereghisrecibido)
+    {
+        $this->inejereghisrecibido = $inejereghisrecibido;
+
+        return $this;
+    }
+
+    /**
+     * Get inejereghisrecibido
+     *
+     * @return integer 
+     */
+    public function getInejereghisrecibido()
+    {
+        return $this->inejereghisrecibido;
+    }
+    
+ }
