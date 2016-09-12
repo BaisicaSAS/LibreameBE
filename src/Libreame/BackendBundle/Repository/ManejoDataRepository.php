@@ -28,6 +28,7 @@ use Libreame\BackendBundle\Entity\LbMegusta;
 use Libreame\BackendBundle\Entity\LbComentarios;
 use Libreame\BackendBundle\Entity\LbNegociacion;
 use Libreame\BackendBundle\Entity\LbHistejemplar;
+use Libreame\BackendBundle\Entity\LbPlanes;
 use Libreame\BackendBundle\Helpers\Solicitud;
 
 
@@ -364,6 +365,31 @@ class ManejoDataRepository extends EntityRepository {
             
             //echo "megusta ".$meg;
             return $meg;
+        } catch (Exception $ex) {
+                return AccesoController::inDatoCer;
+        } 
+    }
+
+    //Obtiene la suma de puntos de usuario
+    public function getPuntosUsuario(LbUsuarios $pUsuario)
+    {   
+        try{
+            $em = $this->getDoctrine()->getManager();
+            $qpu = $em->createQueryBuilder()
+                ->select('SUM(a.inpuuscantpuntos) AS inpuuscantpuntos')
+                ->from('LibreameBackendBundle:LbPuntosusuario', 'a')
+                ->Where('a.inpuususuario = :pusuario')
+                ->setParameter('pusuario', $pUsuario)
+                ->setMaxResults(1);
+            
+            $puntos = AccesoController::inDatoCer;
+            if($qpu->getQuery()->getOneOrNullResult() == NULL){
+                $puntos = AccesoController::inDatoCer; //Si ho hay registros devuelve Puntos = 0
+            } else {
+                $puntos = $qpu->getQuery()->getOneOrNullResult();//Si hay registros devuelve lo que hay
+            }    
+            
+            return $puntos;
         } catch (Exception $ex) {
                 return AccesoController::inDatoCer;
         } 
@@ -801,6 +827,23 @@ class ManejoDataRepository extends EntityRepository {
             return $query->getResult();
         } catch (Exception $ex) {
                 return new LbGrupos();
+        } 
+    }
+                
+    //Obtiene todos los grupos a los que pertenece el usuario
+    public function getPlanUsuario(LbUsuarios $usuario)
+    {   
+        try{
+            $em = $this->getDoctrine()->getManager();
+            $sql = "SELECT p,pp  FROM LibreameBackendBundle:LbPlanes p, "
+                    . " LibreameBackendBundle:LbPrecioslanes pp, "
+                    . " LibreameBackendBundle:LbPlanesusuarios pu"
+                    . " WHERE p.inplan = pu.inplusplanes AND pp.inidprepidplan = pu.inplusplanes"
+                    . " AND pu.inusuplan = :usuario";
+            $query = $em->createQuery($sql)->setParameter('usuario', $usuario);
+            return $query->getResult();
+        } catch (Exception $ex) {
+                return new LbPlanes();
         } 
     }
                 

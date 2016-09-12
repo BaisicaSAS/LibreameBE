@@ -371,36 +371,43 @@ class Logica {
         try {
             //Recupera el lugar, de la tabla de Lugares
             
+            //echo "Va a generar respusta DatosUsuari0 \n";
             $lugar = new LbLugares();
             if ($respuesta->getRespuesta()== AccesoController::inULogged){
                 $lugar = ManejoDataRepository::getLugar($respuesta->RespUsuarios[0]->getInusulugar());
             }
             
-            if ($respuesta->RespUsuarios[0]->getFeusunacimiento() == NULL) {
-                $fecha = "";
-            } else {
-                $fecha = $respuesta->RespUsuarios[0]->getFeusunacimiento()->format('Y-m-d H:i:s');
+            if (!is_null($respuesta->RespUsuarios[0])){
+                if (is_null($respuesta->RespUsuarios[0]->getFeusunacimiento())) {
+                    $fecha = "";
+                } else {
+                    $fecha = $respuesta->RespUsuarios[0]->getFeusunacimiento()->format('Y-m-d H:i:s');
+                }
             }
+            //echo "genero fecha \n";
+
             return array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
                     'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr(), 
                     'iddevice'=> $pSolicitud->getDeviceMac(), 'marca'=>$pSolicitud->getDeviceMarca(), 
                     'modelo'=>$pSolicitud->getDeviceModelo(), 'so'=>$pSolicitud->getDeviceSO()), 
                     'idrespuesta' => array('respuesta' => $respuesta->getRespuesta(),
                     'usuario' => array('idusuario' => $respuesta->RespUsuarios[0]->getInusuario(), 
-                        'nomusuario' => $respuesta->RespUsuarios[0]->getTxusunombre(),
-                        'nommostusuario' => $respuesta->RespUsuarios[0]->getTxusunommostrar(), 
-                        'email' => $respuesta->RespUsuarios[0]->getTxusuemail(),
-                        'usutelefono' => $respuesta->RespUsuarios[0]->getTxusutelefono(), 
+                        'nomusuario' => utf8_encode($respuesta->RespUsuarios[0]->getTxusunombre()),
+                        'nommostusuario' => utf8_encode($respuesta->RespUsuarios[0]->getTxusunommostrar()), 
+                        'email' => utf8_encode($respuesta->RespUsuarios[0]->getTxusuemail()),
+                        'usutelefono' => utf8_encode($respuesta->RespUsuarios[0]->getTxusutelefono()), 
                         'usugenero' => $respuesta->RespUsuarios[0]->getInusugenero(),
                         //La siguiente línea debe habilitarse, e integrar el CAST de BLOB a TEXT??
-                        //'usuimagen' => $respuesta->RespUsuarios[0]->getTxusuimagen(), 
-                        'usuimagen' => base64_decode($respuesta->RespUsuarios[0]->getTxusuimagen()), 
+                        //'usuimagen' => utf8_encode(base64_decode($respuesta->RespUsuarios[0]->getTxusuimagen())), 
+                        'usuimagen' => utf8_encode($respuesta->RespUsuarios[0]->getTxusuimagen()), 
                         'usufecnac' => $fecha,
                         'usulugar' => $lugar->getInlugar(), 
-                        'usunomlugar' => $lugar->getTxlugnombre(),
+                        'usunomlugar' => utf8_encode($lugar->getTxlugnombre()),
                         'usupromcalifica' => $respuesta->getPromCalificaciones(),
+                        'puntosusuario' => $respuesta->getPuntosUsuario(),
                         'comentariosreci' => $respuesta->getArrCalificaciones(),
                         'comentariosreali' => $respuesta->getArrCalificaciones(),
+                        'planusuario' => $respuesta->getPlanUsuario(),
                         'resumen' => array('ejemplares' => '5', 'vendidos' => '4', 'comprados' => '0', 
                             'cambiados' => '3', 'donados' => '1'),
                         'preferencias' => array('generos' => 'Genero 1, Genero 2',

@@ -71,6 +71,13 @@ class LbHistejemplar
      * })
      */
     private $inhisejeejemplar;
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="inHisEjeEstado", type="integer", nullable=false)
+     */
+    private $inhisejeestado;
+
 
 
 
@@ -213,12 +220,39 @@ class LbHistejemplar
     }
 
     /**
-     * Get inhisejeejemplar
+     * Get inhisejestado
      *
      * @return \Libreame\BackendBundle\Entity\LbEjemplares 
      */
     public function getInhisejeejemplar()
     {
-        return $this->inhisejeejemplar;
+        return $this->inhisejeestado;
     }
+    
+    
+    
+    /**
+     * Set inhisejeestado
+     *
+     * @param integer $inhisejeestado
+     * @return LbHistejemplar
+     */
+    public function setInhisejeestado($inhisejeestado)
+    {
+        $this->inhisejeestado = $inhisejeestado;
+
+        return $this;
+    }
+
+    /**
+     * Get inhisejemodoentrega
+     *
+     * @return integer 
+     */
+    public function getInhisejeestado()
+    {
+        return $this->inhisejemodoentrega;
+    }
+
+    
 }

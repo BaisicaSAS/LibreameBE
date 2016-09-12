@@ -62,4 +62,11 @@ Libreame\BackendBundle\Entity\LbPlanes:
             nullable: true
             comment: 'Si es ilimitado la fecha es 30 anhos adelante'
             column: fePlanFinVigencia
+        inplancantejemes:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: 'Cantidad de ejemplares que se pueden negociar mensualment en el plan , -1: ilimitado'
+            default: '1'
+            column: inPlanCantEjeMes
     lifecycleCallbacks: {  }

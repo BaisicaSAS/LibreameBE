@@ -42,9 +42,16 @@ class GestionUsuarios {
                 if ($usuario != NULL) 
                 {
                     $calificaciones = ManejoDataRepository::getCalificaUsuarioRecibidas($usuario);
+                    $planusuario = ManejoDataRepository::getPlanUsuario($usuario);
                     //echo "<script>alert('RESP cali ".count($califica)." ')</script>";
-                    $grupos = ManejoDataRepository::getGruposUsuario($usuario);
-                    //echo "<script>alert('RESP grup ".count($grupos)." ')</script>";
+                    $grupo= ManejoDataRepository::getObjetoGruposUsuario($usuario);
+
+                    $arrGru = array();
+                    foreach ($grupo as $gru){
+                        $arrGru[] = $gru->getIngrupo();
+                    }
+
+                    //echo "<script>alert('RESP grup ".count($arrGru)." ')</script>";
                     //echo "<script>alert('La sesion es ".$usuario->getTxusuemail()."')</script>";
 
                     //SE INACTIVA PORQUE PUEDE GENERAR UNA GRAN CANTIDAD DE REGISTROS EN UNA SOLA SESION
@@ -60,7 +67,21 @@ class GestionUsuarios {
                     //Ingresa el usuario en el arreglo de la Clase respuesta
                     //echo "<script>alert('ALEX ')</script>";
                     $respuesta->setArrUsuarios($usuario);
+                    $respuesta->setPromCalificaciones(ManejoDataRepository::getPromedioCalifica($usuario->getInusuario()));
+                    $respuesta->setPuntosUsuario(ManejoDataRepository::getPuntosUsuario($usuario));
                     //echo "<script>alert('ALEX ".$respuesta->RespUsuarios[0]->getTxusunombre()." ')</script>";
+                    
+                    
+                    $arrPlanUsuario = array();
+                    foreach ($planusuario as $plan) {
+                       $arrPlanUsuario[] = array("inplan"=>$plan->getInplan(),
+                                            "txplannombre" => $plan->getTxplannombr(),
+                                            "txplandescripcion" => $plan->getTxplandescripcion(),
+                                            "gratis" => $plan->getInplanfree(),
+                                            "maxlibmes" => $plan->getInplancantejemes(),
+                                            "vigencia" => $plan->getFeplanfinvigencia(),
+                                            "fecha" => $plan->getFeplanfinvigencia()->format('Y-m-d H:i:s'));
+                    }
                     
                     $arrCalifica = array();
                     foreach ($calificaciones as $califica) {
@@ -72,8 +93,10 @@ class GestionUsuarios {
                                             "fecha" => $califica->getfeFecha()->format('Y-m-d H:i:s'));
                     }
                     
+                    $respuesta->setArrPlanUsuario($arrPlanUsuario);
                     $respuesta->setArrCalificaciones($arrCalifica);
-                    $respuesta->setArrGrupos($grupos);
+                    $respuesta->setArrGrupos($arrGru);
+                    //echo "<script>alert('Finaliza - va a respuesta ".$respuesta->RespUsuarios[0]->getTxusunombre()." ')</script>";
                 } else {
                     $usuario = new LbUsuarios();
                     $respuesta->setRespuesta(AccesoController::inMenNoEx);

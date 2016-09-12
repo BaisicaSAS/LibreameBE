@@ -705,3 +705,10 @@ ADD COLUMN `inEjeRegHisAprobDueno` INT(11) NOT NULL DEFAULT 0 COMMENT 'Si el due
 ADD COLUMN `inEjeRegHisAprobSolic` INT(11) NOT NULL DEFAULT 0 COMMENT 'Si el solicitante aprobó un negocio, aquí se registra el ID de HisEjemplar de Aprobacion' AFTER `inEjeRegHisAprobDueno`,
 ADD COLUMN `inEjeRegHisEntrega` INT(11) NOT NULL DEFAULT 0 COMMENT 'Si el dueno Entrego un ejemplar, aquí se registra el ID de HisEjemplar de Entrega' AFTER `inEjeRegHisAprobSolic`,
 ADD COLUMN `inEjeRegHisRecibido` INT(11) NOT NULL DEFAULT 0 COMMENT 'Si el solicitante Recibio un ejemplar, aquí se registra el ID de HisEjemplar de Recibo' AFTER `inEjeRegHisEntrega`;
+
+
+ALTER TABLE `dotex4read`.`lb_histejemplar` ADD COLUMN `inHisEjeEstado` INT(11) NOT NULL DEFAULT 1 COMMENT 'Estado 0: Inactivo, 1: Activo. Aplica principalmente para registros de Publicacion y negociacion'  AFTER `inHisEjeModoEntrega` ;
+
+ALTER TABLE  `dotex4read`.`lb_planes` CHANGE COLUMN  `txPlanDescripcion`  `txPlanDescripcion` TEXT NULL COMMENT 'Descripcion del plan',
+CHANGE COLUMN  `fePlanFinVigencia`  `fePlanFinVigencia` DATETIME NULL COMMENT  'Si es ilimitado la fecha es 30 anhos adelante',
+ADD COLUMN  `inPlanCantEjeMes` INT( 11 ) NOT NULL DEFAULT 1 COMMENT 'Cantidad de ejemplares que se pueden negociar mensualment en el plan , -1: ilimitado' AFTER  `fePlanFinVigencia`

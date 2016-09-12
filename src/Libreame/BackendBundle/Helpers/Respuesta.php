@@ -21,6 +21,7 @@ class Respuesta {
     public  $RespUsuarios; //Arreglo de Usuarios 
     private $RespCalifUsu; //Arreglo de calificaciones de usuario
     private $RespGrupos; //Arreglo de calificaciones de usuario
+    private $RespPlanUsuario; //Arreglo plan de usuario
     //Respuestas para PublicarEjemplar
     private $pTitulo; //Titulo del libro ofrecido
     private $pIdlibro; //Id del libro ofrecido
@@ -40,6 +41,7 @@ class Respuesta {
     private $pFeMensaje; //Fecha Mensaje recibido (La plataforma publica el ejemplar)
     private $pIdPadre; //Id Mensaje padre del hilo
     private $pPromCalificaciones; //Promedio de calificaciones  
+    private $pPuntosUsuario; //Puntos del usuario
     
     /*
      *  Bloque de getter para los atributos de la clase
@@ -74,6 +76,11 @@ class Respuesta {
     public function getArrGrupos()
     {
         return $this->RespGrupos;
+    }   
+
+    public function getArrPlanUsuario()
+    {
+        return $this->RespPlanUsuario;
     }   
 
     public function getTitulo()
@@ -167,6 +174,11 @@ class Respuesta {
         return $this->pPromCalificaciones;
     }   
 
+    public function getPuntosUsuario()
+    {
+        return $this->pPuntosUsuario;
+    }   
+
     /*
      *  Bloque de setter para los atributos de la clase
      */
@@ -203,15 +215,15 @@ class Respuesta {
         return $this;
     }   
 
+    public function setArrPlanUsuario(array $planusuario)
+    {
+        $this->RespPlanUsuario = $planusuario;
+        return $this;
+    }   
+
     public function setArrUsuarios(LbUsuarios $usuario)
     {
         $this->RespUsuarios[] = $usuario;
-        return $this;
-    }   
-    
-    public function setPromCalifUsu($PromCalifUsu)
-    {
-        $this->pProCalifUsu = $PromCalifUsu;
         return $this;
     }   
     
@@ -321,6 +333,12 @@ class Respuesta {
     public function setPromCalificaciones($pPromCalifica)
     {
         $this->pPromCalificaciones = $pPromCalifica;
+        return $this;
+    }   
+
+    public function setPuntosUsuario($pPuntosUsario)
+    {
+        $this->pPuntosUsuario = $pPuntosUsario;
         return $this;
     }   
 

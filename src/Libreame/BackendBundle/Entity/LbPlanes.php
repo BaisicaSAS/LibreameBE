@@ -77,6 +77,12 @@ class LbPlanes
      */
     private $feplanfinvigencia;
 
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="inPlanCantEjeMes", type="integer", nullable=false)
+     */
+    private $inplancantejemes;
 
 
     /**
@@ -272,4 +278,29 @@ class LbPlanes
     {
         return $this->feplanfinvigencia;
     }
+    
+    
+    /**
+     * Set inplancantejemes
+     *
+     * @param integer $inplancantejemes
+     * @return LbPlanes
+     */
+    public function setInplancantejemes($inplancantejemes)
+    {
+        $this->inplancantejemes = $inplancantejemes;
+
+        return $this;
+    }
+
+    /**
+     * Get inplancantejemes
+     *
+     * @return integer 
+     */
+    public function getInplancantejemes()
+    {
+        return $this->inplancantejemes;
+    }
+    
 }

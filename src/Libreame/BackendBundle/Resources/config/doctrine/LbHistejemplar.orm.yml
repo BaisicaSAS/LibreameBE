@@ -40,6 +40,13 @@ Libreame\BackendBundle\Entity\LbHistejemplar:
             unsigned: false
             comment: '0: En el domicilio, 1: Encontrandose, 3. Courrier local, 4: Courrier Nacional, 5: Courrier internacional'
             column: inHisEjeModoEntrega
+        inhisejeestado:
+            type: integer
+            nullable: true
+            unsigned: false
+            comment: 'Estado 0: Inactivo, 1: Activo. Aplica principalmente para registros de Publicacion y negociacion'
+            default: '1'
+            column: inHisEjeEstado
     manyToOne:
         inhisejepadre:
             targetEntity: LbHistejemplar
