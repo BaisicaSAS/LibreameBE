@@ -34,16 +34,18 @@ class GestionUsuarios {
         try {
             //Valida que la sesión corresponda y se encuentre activa
             $respSesionVali=ManejoDataRepository::validaSesionUsuario($psolicitud);
-           //echo "<script>alert(' obtenerParametros :: Validez de sesion ".$respSesionVali." ')</script>";
+            //echo "<script>alert(' obtenerParametros :: Validez de sesion ".$respSesionVali." ')</script>";
             if ($respSesionVali==AccesoController::inULogged) 
             {    
                 //Busca el usuario 
                 $usuario = ManejoDataRepository::getUsuarioByEmail($psolicitud->getEmail());
-                if ($usuario != NULL) 
+                if (!is_null($usuario)) 
                 {
-                    $calificaciones = ManejoDataRepository::getCalificaUsuarioRecibidas($usuario);
-                    $planusuario = ManejoDataRepository::getPlanUsuario($usuario);
-                    //echo "<script>alert('RESP cali ".count($califica)." ')</script>";
+                    //echo "<script>alert(' SI ESTA EL USUARIO ".$respSesionVali." ')</script>";
+                    $califiRecibidas = ManejoDataRepository::getCalificaUsuarioRecibidas($usuario);
+                    //echo "<script>alert(' SI ESTA EL USUARIO ".$respSesionVali." ')</script>";
+                    $califiRealizadas = ManejoDataRepository::getCalificaUsuarioRealizadas($usuario);
+                   //echo "<script>alert('RESP CALIFICA  ".count($califica)." ')</script>";
                     $grupo= ManejoDataRepository::getObjetoGruposUsuario($usuario);
 
                     $arrGru = array();
@@ -51,7 +53,7 @@ class GestionUsuarios {
                         $arrGru[] = $gru->getIngrupo();
                     }
 
-                    //echo "<script>alert('RESP grup ".count($arrGru)." ')</script>";
+                    //echo "<script>alert('RESP GRUPO ".count($arrGru)." ')</script>";
                     //echo "<script>alert('La sesion es ".$usuario->getTxusuemail()."')</script>";
 
                     //SE INACTIVA PORQUE PUEDE GENERAR UNA GRAN CANTIDAD DE REGISTROS EN UNA SOLA SESION
@@ -66,43 +68,58 @@ class GestionUsuarios {
                     //echo "<script>alert('2 Validez de sesion ".$respuesta." ')</script>";
                     //Ingresa el usuario en el arreglo de la Clase respuesta
                     //echo "<script>alert('ALEX ')</script>";
-                    $respuesta->setArrUsuarios($usuario);
+                    //$respuesta->setArrUsuarios($usuario);
                     $respuesta->setPromCalificaciones(ManejoDataRepository::getPromedioCalifica($usuario->getInusuario()));
                     $respuesta->setPuntosUsuario(ManejoDataRepository::getPuntosUsuario($usuario));
                     //echo "<script>alert('ALEX ".$respuesta->RespUsuarios[0]->getTxusunombre()." ')</script>";
                     
                     
-                    $arrPlanUsuario = array();
-                    foreach ($planusuario as $plan) {
-                       $arrPlanUsuario[] = array("inplan"=>$plan->getInplan(),
-                                            "txplannombre" => $plan->getTxplannombr(),
-                                            "txplandescripcion" => $plan->getTxplandescripcion(),
-                                            "gratis" => $plan->getInplanfree(),
-                                            "maxlibmes" => $plan->getInplancantejemes(),
-                                            "vigencia" => $plan->getFeplanfinvigencia(),
-                                            "fecha" => $plan->getFeplanfinvigencia()->format('Y-m-d H:i:s'));
+                    $arrCalifiRecibidas = array();
+                    foreach ($califiRecibidas as $calificaRc) {
+                       $arrCalifiRecibidas[] = array("idcalifica"=>$calificaRc->getInidcalifica(),
+                                            "idusrcalif" => $calificaRc->getIncalusucalifica()->getInusuario(),
+                                            "nomusrcalif" => $calificaRc->getIncalusucalifica()->getTxusunommostrar(),
+                                            "incalificacion" => $calificaRc->getIncalcalificacion(),
+                                            "comentario" => $calificaRc->getTxcalcomentario(),
+                                            "fecha" => $calificaRc->getFecalfecha()->format('Y-m-d H:i:s'));
                     }
                     
-                    $arrCalifica = array();
-                    foreach ($calificaciones as $califica) {
-                       $arrCalifica[] = array("idcalifica"=>$califica->getIncalificacion(),
-                                            "idusrcalif" => $califica->getIncalusucalifica()->getInusuario(),
-                                            "nomusrcalif" => $califica->getIncalusucalifica()->getTxusunommostrar(),
-                                            "incalificacion" => $califica->getIncalcalificacion(),
-                                            "comentario" => $califica->getTxcalobservacion(),
-                                            "fecha" => $califica->getfeFecha()->format('Y-m-d H:i:s'));
+                    $arrCalifiRealizadas = array();
+                    foreach ($califiRealizadas as $calificaRe) {
+                       $arrCalifiRealizadas[] = array("idcalifica"=>$calificaRe->getInidcalifica(),
+                                            "idusrcalif" => $calificaRe->getIncalusucalificado()->getInusuario(),
+                                            "nomusrcalif" => $calificaRe->getIncalusucalificado()->getTxusunommostrar(),
+                                            "incalificacion" => $calificaRe->getIncalcalificacion(),
+                                            "comentario" => $calificaRe->getTxcalcomentario(),
+                                            "fecha" => $calificaRe->getFecalfecha()->format('Y-m-d H:i:s'));
                     }
                     
-                    $respuesta->setArrPlanUsuario($arrPlanUsuario);
-                    $respuesta->setArrCalificaciones($arrCalifica);
+                    $respuesta->setArrCalificacionesReali($arrCalifiRealizadas);
+                    $respuesta->setArrCalificacionesReci($arrCalifiRecibidas);
                     $respuesta->setArrGrupos($arrGru);
+                    $planusuario = ManejoDataRepository::getPlanUsuario($usuario);
+                    //echo "<script>alert('RESP PLANES ".count($planusuario)." ')</script>";
+                    
+                    //$arrPlanUsuario = array();
+                    //foreach ($planusuario as $plan) {
+                       $arrPlanUsuario[] = array("inplan"=>$planusuario['inplan'],
+                                            "txplannombre" => $planusuario->getTxplannombr(),
+                                            "txplandescripcion" => $planusuario->getTxplandescripcion(),
+                                            "gratis" => $planusuario->getInplanfree(),
+                                            "maxlibmes" => $planusuario->getInplancantejemes(),
+                                            "vigencia" => $planusuario->getFeplanfinvigencia(),
+                                            "fecha" => $planusuario->getFeplanfinvigencia()->format('Y-m-d H:i:s'));
+                    //}
+                    $respuesta->setArrPlanUsuario($arrPlanUsuario);
                     //echo "<script>alert('Finaliza - va a respuesta ".$respuesta->RespUsuarios[0]->getTxusunombre()." ')</script>";
                 } else {
+                    //echo "No encontro usuario";
                     $usuario = new LbUsuarios();
                     $respuesta->setRespuesta(AccesoController::inMenNoEx);
                     $respuesta->setArrUsuarios($usuario);
                 }
             } else {
+                //echo "No logueado";
                 $usuario = new LbUsuarios();
                 $respuesta->setRespuesta($respSesionVali);
                 $respuesta->setArrUsuarios($usuario);

@@ -19,8 +19,9 @@ class Respuesta {
     private $pSession; //Sesion ???? 
     private $pCantMensajes; //Cantidad de Mensajes
     public  $RespUsuarios; //Arreglo de Usuarios 
-    private $RespCalifUsu; //Arreglo de calificaciones de usuario
-    private $RespGrupos; //Arreglo de calificaciones de usuario
+    private $RespCalifUsuReci; //Arreglo de calificaciones de usuario recibidas
+    private $RespCalifUsuReali; //Arreglo de calificaciones de usuario realizadas
+    private $RespGrupos; //Arreglo de grupos de usuario
     private $RespPlanUsuario; //Arreglo plan de usuario
     //Respuestas para PublicarEjemplar
     private $pTitulo; //Titulo del libro ofrecido
@@ -68,9 +69,14 @@ class Respuesta {
         return $this->RespUsuarios;
     }   
 
-    public function getArrCalificaciones()
+    public function getArrCalificacionesReci()
     {
-        return $this->RespCalifUsu;
+        return $this->RespCalifUsuReci;
+    }   
+
+    public function getArrCalificacionesReali()
+    {
+        return $this->RespCalifUsuReali;
     }   
 
     public function getArrGrupos()
@@ -203,9 +209,15 @@ class Respuesta {
     }
 
 
-    public function setArrCalificaciones(array $califica)
+    public function setArrCalificacionesReci(array $califica)
     {
-        $this->RespCalifUsu = $califica;
+        $this->RespCalifUsuReci = $califica;
+        return $this;
+    }   
+
+    public function setArrCalificacionesReali(array $califica)
+    {
+        $this->RespCalifUsuReali = $califica;
         return $this;
     }   
 

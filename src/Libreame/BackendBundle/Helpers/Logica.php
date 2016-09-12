@@ -372,16 +372,17 @@ class Logica {
             //Recupera el lugar, de la tabla de Lugares
             
             //echo "Va a generar respusta DatosUsuari0 \n";
+            $usuario = new LbUsuarios();
+            $usuario = ManejoDataRepository::getUsuarioByEmail($pSolicitud->getEmail());
             $lugar = new LbLugares();
             if ($respuesta->getRespuesta()== AccesoController::inULogged){
-                $lugar = ManejoDataRepository::getLugar($respuesta->RespUsuarios[0]->getInusulugar());
+                $lugar = ManejoDataRepository::getLugar($usuario->getInusulugar());
             }
-            
-            if (!is_null($respuesta->RespUsuarios[0])){
-                if (is_null($respuesta->RespUsuarios[0]->getFeusunacimiento())) {
+            if (!is_null($usuario)){
+                if (is_null($usuario->getFeusunacimiento())) {
                     $fecha = "";
                 } else {
-                    $fecha = $respuesta->RespUsuarios[0]->getFeusunacimiento()->format('Y-m-d H:i:s');
+                    $fecha = $usuario->getFeusunacimiento()->format('Y-m-d H:i:s');
                 }
             }
             //echo "genero fecha \n";
@@ -391,23 +392,23 @@ class Logica {
                     'iddevice'=> $pSolicitud->getDeviceMac(), 'marca'=>$pSolicitud->getDeviceMarca(), 
                     'modelo'=>$pSolicitud->getDeviceModelo(), 'so'=>$pSolicitud->getDeviceSO()), 
                     'idrespuesta' => array('respuesta' => $respuesta->getRespuesta(),
-                    'usuario' => array('idusuario' => $respuesta->RespUsuarios[0]->getInusuario(), 
-                        'nomusuario' => utf8_encode($respuesta->RespUsuarios[0]->getTxusunombre()),
-                        'nommostusuario' => utf8_encode($respuesta->RespUsuarios[0]->getTxusunommostrar()), 
-                        'email' => utf8_encode($respuesta->RespUsuarios[0]->getTxusuemail()),
-                        'usutelefono' => utf8_encode($respuesta->RespUsuarios[0]->getTxusutelefono()), 
-                        'usugenero' => $respuesta->RespUsuarios[0]->getInusugenero(),
+                    'usuario' => array('idusuario' => $usuario->getInusuario(), 
+                        'nomusuario' => utf8_encode($usuario->getTxusunombre()),
+                        'nommostusuario' => utf8_encode($usuario->getTxusunommostrar()), 
+                        'email' => utf8_encode($usuario->getTxusuemail()),
+                        'usutelefono' => utf8_encode($usuario->getTxusutelefono()), 
+                        'usugenero' => $usuario->getInusugenero(),
                         //La siguiente línea debe habilitarse, e integrar el CAST de BLOB a TEXT??
                         //'usuimagen' => utf8_encode(base64_decode($respuesta->RespUsuarios[0]->getTxusuimagen())), 
-                        'usuimagen' => utf8_encode($respuesta->RespUsuarios[0]->getTxusuimagen()), 
+                        'usuimagen' => utf8_encode($usuario->getTxusuimagen()), 
                         'usufecnac' => $fecha,
                         'usulugar' => $lugar->getInlugar(), 
                         'usunomlugar' => utf8_encode($lugar->getTxlugnombre()),
                         'usupromcalifica' => $respuesta->getPromCalificaciones(),
                         'puntosusuario' => $respuesta->getPuntosUsuario(),
-                        'comentariosreci' => $respuesta->getArrCalificaciones(),
-                        'comentariosreali' => $respuesta->getArrCalificaciones(),
-                        'planusuario' => $respuesta->getPlanUsuario(),
+                        'comentariosreci' => $respuesta->getArrCalificacionesReci(),
+                        'comentariosreali' => $respuesta->getArrCalificacionesReali(),
+                        'planusuario' => $respuesta->getArrPlanUsuario(),
                         'resumen' => array('ejemplares' => '5', 'vendidos' => '4', 'comprados' => '0', 
                             'cambiados' => '3', 'donados' => '1'),
                         'preferencias' => array('generos' => 'Genero 1, Genero 2',

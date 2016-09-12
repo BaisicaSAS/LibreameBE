@@ -836,13 +836,14 @@ class ManejoDataRepository extends EntityRepository {
         try{
             $em = $this->getDoctrine()->getManager();
             $sql = "SELECT p,pp  FROM LibreameBackendBundle:LbPlanes p, "
-                    . " LibreameBackendBundle:LbPrecioslanes pp, "
-                    . " LibreameBackendBundle:LbPlanesusuarios pu"
-                    . " WHERE p.inplan = pu.inplusplanes AND pp.inidprepidplan = pu.inplusplanes"
-                    . " AND pu.inusuplan = :usuario";
+                    . " LibreameBackendBundle:LbPreciosplanes pp, "
+                    . " LibreameBackendBundle:LbPlanesusuarios pu "
+                    . " WHERE pu.inusuplan = :usuario"
+                    . " AND p.inplan = pu.inplusplanes AND pp.inidprepidplan = p.inplan";
             $query = $em->createQuery($sql)->setParameter('usuario', $usuario);
-            return $query->getResult();
+            return $query->getOneOrNullResult();
         } catch (Exception $ex) {
+                //ECHO "ERROR PLANES";
                 return new LbPlanes();
         } 
     }
@@ -1073,6 +1074,7 @@ class ManejoDataRepository extends EntityRepository {
             return $em->getRepository('LibreameBackendBundle:LbCalificausuarios')->
                     findBy(array('incalusucalificado' => $usuario));
         } catch (Exception $ex) {
+                echo "erro";
                 return new LbCalificausuarios();
         } 
     }
