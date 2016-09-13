@@ -29,6 +29,7 @@ use Libreame\BackendBundle\Entity\LbComentarios;
 use Libreame\BackendBundle\Entity\LbNegociacion;
 use Libreame\BackendBundle\Entity\LbHistejemplar;
 use Libreame\BackendBundle\Entity\LbPlanes;
+use Libreame\BackendBundle\Entity\LbPlanesusuarios;
 use Libreame\BackendBundle\Helpers\Solicitud;
 
 
@@ -835,16 +836,47 @@ class ManejoDataRepository extends EntityRepository {
     {   
         try{
             $em = $this->getDoctrine()->getManager();
-            $sql = "SELECT p,pp  FROM LibreameBackendBundle:LbPlanes p, "
-                    . " LibreameBackendBundle:LbPreciosplanes pp, "
-                    . " LibreameBackendBundle:LbPlanesusuarios pu "
-                    . " WHERE pu.inusuplan = :usuario"
-                    . " AND p.inplan = pu.inplusplanes AND pp.inidprepidplan = p.inplan";
-            $query = $em->createQuery($sql)->setParameter('usuario', $usuario);
-            return $query->getOneOrNullResult();
+            
+            $planus = new LbPlanesusuarios();
+            $planus = $em->getRepository('LibreameBackendBundle:LbPlanesusuarios')->
+                    findOneBy(array('inusuplan' => $usuario));
+            
+            $q = $em->createQueryBuilder()
+                ->select('p')
+                ->from('LibreameBackendBundle:LbPlanes', 'p')
+                ->leftJoin('LibreameBackendBundle:LbPreciosplanes', 'pp', \Doctrine\ORM\Query\Expr\Join::WITH, 'pp.inidprepidplan = p.inplan')
+                ->Where(' p.inplan = :plan ')
+                ->setParameter('plan', $planus->getInplusplanes());
+            return $q->getQuery()->getOneOrNullResult();
+
         } catch (Exception $ex) {
                 //ECHO "ERROR PLANES";
                 return new LbPlanes();
+        } 
+    }
+                
+    //Obtiene todos los grupos a los que pertenece el usuario
+    public function getResumenUsuario(LbUsuarios $usuario)
+    {   
+        try{
+            $em = $this->getDoctrine()->getManager();
+            //Arreglo para almacenar el resumen
+            $arrResumen = array();
+            //Cantidad de ejemplares de un usuario
+            
+            $qej = $em->createQueryBuilder()
+                ->select('count(e)')
+                ->from('LibreameBackendBundle:LbEjemplares', 'e')
+                ->Where(' e.inejeusudueno = :usuario ')
+                ->setParameter('usuario', $usuario);
+            $arrResumen[] = 'ejemplares' => $qej->getQuery()->getOneOrNullResult();
+            , 'entregados' => $qej->getQuery()->getOneOrNullResult(), 
+                'recibidos' => $qej->getQuery()->getOneOrNullResult(), 'donados' => $qej->getQuery()->getOneOrNullResult());
+
+        return $arrResumen;
+        } catch (Exception $ex) {
+                //ECHO "ERROR PLANES";
+                return array();
         } 
     }
                 

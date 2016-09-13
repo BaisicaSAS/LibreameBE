@@ -23,6 +23,7 @@ class Respuesta {
     private $RespCalifUsuReali; //Arreglo de calificaciones de usuario realizadas
     private $RespGrupos; //Arreglo de grupos de usuario
     private $RespPlanUsuario; //Arreglo plan de usuario
+    private $RespResumenU; //Arreglo resumen del usuario
     //Respuestas para PublicarEjemplar
     private $pTitulo; //Titulo del libro ofrecido
     private $pIdlibro; //Id del libro ofrecido
@@ -82,6 +83,11 @@ class Respuesta {
     public function getArrGrupos()
     {
         return $this->RespGrupos;
+    }   
+
+    public function getArrResumenU()
+    {
+        return $this->RespResumenU;
     }   
 
     public function getArrPlanUsuario()
@@ -224,6 +230,12 @@ class Respuesta {
     public function setArrGrupos(array $grupos)
     {
         $this->RespGrupos = $grupos;
+        return $this;
+    }   
+
+    public function setArrResumenU(array $resumenu)
+    {
+        $this->RespResumenU = $resumenu;
         return $this;
     }   
 

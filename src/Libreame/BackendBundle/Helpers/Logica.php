@@ -409,8 +409,9 @@ class Logica {
                         'comentariosreci' => $respuesta->getArrCalificacionesReci(),
                         'comentariosreali' => $respuesta->getArrCalificacionesReali(),
                         'planusuario' => $respuesta->getArrPlanUsuario(),
-                        'resumen' => array('ejemplares' => '5', 'vendidos' => '4', 'comprados' => '0', 
-                            'cambiados' => '3', 'donados' => '1'),
+                        'resumen' => $respuesta->getArrResumenU(),
+                        //'resumen' => array('ejemplares' => '5', 'vendidos' => '4', 'comprados' => '0', 
+                        //    'cambiados' => '3', 'donados' => '1'),
                         'preferencias' => array('generos' => 'Genero 1, Genero 2',
                             'autores' => 'Autor 1, Autor 2', 
                             'editoriales' => 'editorial 1, editorial 2')))

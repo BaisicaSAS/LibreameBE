@@ -98,19 +98,19 @@ class GestionUsuarios {
                     $respuesta->setArrCalificacionesReci($arrCalifiRecibidas);
                     $respuesta->setArrGrupos($arrGru);
                     $planusuario = ManejoDataRepository::getPlanUsuario($usuario);
-                    //echo "<script>alert('RESP PLANES ".count($planusuario)." ')</script>";
-                    
                     //$arrPlanUsuario = array();
                     //foreach ($planusuario as $plan) {
-                       $arrPlanUsuario[] = array("inplan"=>$planusuario['inplan'],
-                                            "txplannombre" => $planusuario->getTxplannombr(),
-                                            "txplandescripcion" => $planusuario->getTxplandescripcion(),
+                    $arrPlanUsuario = array("inplan"=>$planusuario->getInplan(),
+                                            "txplannombre" => utf8_encode($planusuario->getTxplannombr()),
+                                            "txplandescripcion" => utf8_encode($planusuario->getTxplandescripcion()),
                                             "gratis" => $planusuario->getInplanfree(),
                                             "maxlibmes" => $planusuario->getInplancantejemes(),
-                                            "vigencia" => $planusuario->getFeplanfinvigencia(),
-                                            "fecha" => $planusuario->getFeplanfinvigencia()->format('Y-m-d H:i:s'));
-                    //}
+                                            //"vigencia" => utf8_encode($planusuario->getFeplanfinvigencia()->format('Y-m-d H:i:s')),
+                                            "fecha" => utf8_encode($planusuario->getFeplanfinvigencia()->format('Y-m-d H:i:s')));
+                    //echo "<script>alert('RESP PLANES ".count($planusuario)." ')</script>";
                     $respuesta->setArrPlanUsuario($arrPlanUsuario);
+                    
+                    $respuesta->setArrResumenU(ManejoDataRepository::getResumenUsuario($usuario)); 
                     //echo "<script>alert('Finaliza - va a respuesta ".$respuesta->RespUsuarios[0]->getTxusunombre()." ')</script>";
                 } else {
                     //echo "No encontro usuario";
@@ -125,6 +125,7 @@ class GestionUsuarios {
                 $respuesta->setArrUsuarios($usuario);
             }
         } catch (Exception $ex) {
+            echo "Error...";
             $respuesta->setRespuesta(AccesoController::inPlatCai);
         } finally {
             return $objLogica::generaRespuesta($respuesta, $psolicitud, $usuario);
