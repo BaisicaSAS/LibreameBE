@@ -683,7 +683,7 @@ CREATE TABLE IF NOT EXISTS `dotEx4read`.`lb_preciosplanes` (
 ENGINE = InnoDB
 COMMENT = 'Precios de todos los planes';
 
---CREAR EN TODOS AMBIENTES
+##CREAR EN TODOS AMBIENTES
 
 ALTER TABLE `dotex4read`.`lb_negociacion` 
 ADD COLUMN `txNegIdConversacion` VARCHAR(50) NOT NULL AFTER `inNegMensEliminado`;

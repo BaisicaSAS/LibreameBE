@@ -70,7 +70,7 @@ class GestionUsuarios {
                     //echo "<script>alert('ALEX ')</script>";
                     //$respuesta->setArrUsuarios($usuario);
                     $respuesta->setPromCalificaciones(ManejoDataRepository::getPromedioCalifica($usuario->getInusuario()));
-                    $respuesta->setPuntosUsuario(ManejoDataRepository::getPuntosUsuario($usuario));
+                    $respuesta->setPunUsuario(ManejoDataRepository::getPuntosUsuario($usuario));
                     //echo "<script>alert('ALEX ".$respuesta->RespUsuarios[0]->getTxusunombre()." ')</script>";
                     
                     
@@ -111,6 +111,7 @@ class GestionUsuarios {
                     $respuesta->setArrPlanUsuario($arrPlanUsuario);
                     
                     $respuesta->setArrResumenU(ManejoDataRepository::getResumenUsuario($usuario)); 
+                    $respuesta->setArrPreferenciasU(ManejoDataRepository::getPreferenciasUsuario($usuario, 5)); //Solo 5 registros de preferencias máximo
                     //echo "<script>alert('Finaliza - va a respuesta ".$respuesta->RespUsuarios[0]->getTxusunombre()." ')</script>";
                 } else {
                     //echo "No encontro usuario";
@@ -125,7 +126,7 @@ class GestionUsuarios {
                 $respuesta->setArrUsuarios($usuario);
             }
         } catch (Exception $ex) {
-            echo "Error...";
+            //echo "Error...";
             $respuesta->setRespuesta(AccesoController::inPlatCai);
         } finally {
             return $objLogica::generaRespuesta($respuesta, $psolicitud, $usuario);

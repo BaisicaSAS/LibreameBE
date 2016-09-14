@@ -24,6 +24,7 @@ class Respuesta {
     private $RespGrupos; //Arreglo de grupos de usuario
     private $RespPlanUsuario; //Arreglo plan de usuario
     private $RespResumenU; //Arreglo resumen del usuario
+    private $RespPreferenciasU; //Arreglo preferencias del usuario
     //Respuestas para PublicarEjemplar
     private $pTitulo; //Titulo del libro ofrecido
     private $pIdlibro; //Id del libro ofrecido
@@ -88,6 +89,11 @@ class Respuesta {
     public function getArrResumenU()
     {
         return $this->RespResumenU;
+    }   
+
+    public function getArrPreferenciasU()
+    {
+        return $this->RespPreferenciasU;
     }   
 
     public function getArrPlanUsuario()
@@ -186,7 +192,7 @@ class Respuesta {
         return $this->pPromCalificaciones;
     }   
 
-    public function getPuntosUsuario()
+    public function getPunUsuario()
     {
         return $this->pPuntosUsuario;
     }   
@@ -236,6 +242,12 @@ class Respuesta {
     public function setArrResumenU(array $resumenu)
     {
         $this->RespResumenU = $resumenu;
+        return $this;
+    }   
+
+    public function setArrPreferenciasU(array $preferu)
+    {
+        $this->RespPreferenciasU = $preferu;
         return $this;
     }   
 
@@ -360,7 +372,7 @@ class Respuesta {
         return $this;
     }   
 
-    public function setPuntosUsuario($pPuntosUsario)
+    public function setPunUsuario($pPuntosUsario)
     {
         $this->pPuntosUsuario = $pPuntosUsario;
         return $this;

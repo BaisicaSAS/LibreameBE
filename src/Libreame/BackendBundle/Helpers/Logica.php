@@ -405,16 +405,12 @@ class Logica {
                         'usulugar' => $lugar->getInlugar(), 
                         'usunomlugar' => utf8_encode($lugar->getTxlugnombre()),
                         'usupromcalifica' => $respuesta->getPromCalificaciones(),
-                        'puntosusuario' => $respuesta->getPuntosUsuario(),
+                        'puntosusuario' => $respuesta->getPunUsuario(),
                         'comentariosreci' => $respuesta->getArrCalificacionesReci(),
                         'comentariosreali' => $respuesta->getArrCalificacionesReali(),
                         'planusuario' => $respuesta->getArrPlanUsuario(),
                         'resumen' => $respuesta->getArrResumenU(),
-                        //'resumen' => array('ejemplares' => '5', 'vendidos' => '4', 'comprados' => '0', 
-                        //    'cambiados' => '3', 'donados' => '1'),
-                        'preferencias' => array('generos' => 'Genero 1, Genero 2',
-                            'autores' => 'Autor 1, Autor 2', 
-                            'editoriales' => 'editorial 1, editorial 2')))
+                        'preferencias' => $respuesta->getArrPreferenciasU()))
                 );
         } catch (Exception $ex) {
                 return AccesoController::inPlatCai;

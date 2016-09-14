@@ -377,7 +377,7 @@ class ManejoDataRepository extends EntityRepository {
         try{
             $em = $this->getDoctrine()->getManager();
             $qpu = $em->createQueryBuilder()
-                ->select('SUM(a.inpuuscantpuntos) AS inpuuscantpuntos')
+                ->select('COALESCE(SUM(a.inpuuscantpuntos), 0) AS inpuuscantpuntos')
                 ->from('LibreameBackendBundle:LbPuntosusuario', 'a')
                 ->Where('a.inpuususuario = :pusuario')
                 ->setParameter('pusuario', $pUsuario)
@@ -387,7 +387,7 @@ class ManejoDataRepository extends EntityRepository {
             if($qpu->getQuery()->getOneOrNullResult() == NULL){
                 $puntos = AccesoController::inDatoCer; //Si ho hay registros devuelve Puntos = 0
             } else {
-                $puntos = $qpu->getQuery()->getOneOrNullResult();//Si hay registros devuelve lo que hay
+                $puntos = (int)$qpu->getQuery()->getSingleScalarResult();//Si hay registros devuelve lo que hay
             }    
             
             return $puntos;
@@ -855,7 +855,7 @@ class ManejoDataRepository extends EntityRepository {
         } 
     }
                 
-    //Obtiene todos los grupos a los que pertenece el usuario
+    //Obtiene el resumen de ejemplares del usuario
     public function getResumenUsuario(LbUsuarios $usuario)
     {   
         try{
@@ -865,17 +865,145 @@ class ManejoDataRepository extends EntityRepository {
             //Cantidad de ejemplares de un usuario
             
             $qej = $em->createQueryBuilder()
+                ->select('COALESCE(count(e), 0)')
+                ->from('LibreameBackendBundle:LbEjemplares', 'e')
+                ->Where(' e.inejeusudueno = :usuario ')
+                ->setParameter('usuario', $usuario)
+                ->setMaxResults(1);
+            $ejemplares = (Int)$qej->getQuery()->getSingleScalarResult();
+            
+            $qen = $em->createQueryBuilder()
+                ->select('COALESCE(count(e), 0)')
+                ->from('LibreameBackendBundle:LbHistejemplar', 'e')
+                ->Where(' e.inhisejeusuario = :usuario ')
+                ->setParameter('usuario', $usuario)
+                //Movimiento = Entregado
+                ->andWhere(' e.inhisejemovimiento = :entregado ')
+                ->setParameter('entregado', AccesoController::inMovEntrEje)
+                ->setMaxResults(1);
+            $entregados = (Int)$qen->getQuery()->getSingleScalarResult();
+            
+            $qre = $em->createQueryBuilder()
+                ->select('COALESCE(count(e), 0)')
+                ->from('LibreameBackendBundle:LbHistejemplar', 'e')
+                ->Where(' e.inhisejeusuario = :usuario ')
+                ->setParameter('usuario', $usuario)
+                //Movimiento = Recibido = 5
+                ->andWhere(' e.inhisejemovimiento = :recibido ')
+                ->setParameter('recibido', AccesoController::inMovReciEje)
+                ->setMaxResults(1);
+            $recibidos = (Int)$qre->getQuery()->getSingleScalarResult();
+            
+            
+            $donados = 0;
+            /*AUN NO SE ACTIVA ESTA OPCION :: POR AHORA ES CERO
+             * $qdo = $em->createQueryBuilder()
                 ->select('count(e)')
                 ->from('LibreameBackendBundle:LbEjemplares', 'e')
                 ->Where(' e.inejeusudueno = :usuario ')
                 ->setParameter('usuario', $usuario);
-            $arrResumen[] = 'ejemplares' => $qej->getQuery()->getOneOrNullResult();
-            , 'entregados' => $qej->getQuery()->getOneOrNullResult(), 
-                'recibidos' => $qej->getQuery()->getOneOrNullResult(), 'donados' => $qej->getQuery()->getOneOrNullResult());
+            $donados = $qre->getQuery()->getOneOrNullResult();
+             */
+            
+            $arrResumen[] = array('ejemplares' => $ejemplares, 'entregados' => $entregados, 
+                'recibidos' => $recibidos, 'donados' => $donados);
 
         return $arrResumen;
         } catch (Exception $ex) {
                 //ECHO "ERROR PLANES";
+                return array();
+        } 
+    }
+                
+    //Obtiene las preferencias del usuario
+    public function getPreferenciasUsuario(LbUsuarios $usuario, $numpref)
+    {   
+        try{
+            $em = $this->getDoctrine()->getManager();
+            //Arreglo para almacenar el resumen
+            $arrPreferencias = array();
+            //Cantidad de ejemplares de un usuario
+            
+            //$ejeusu = new LbEjemplares();
+            $ejeusu = $em->getRepository('LibreameBackendBundle:LbEjemplares')->
+                    findBy(array('inejeusudueno' => $usuario));
+            
+            $libusu = $em->getRepository('LibreameBackendBundle:LbLibros')->
+                    findBy(array('inlibro' => $ejeusu));
+            
+            //generos
+            $qg = $em->createQueryBuilder()
+                ->select('g.ingenero, g.txgennombre, count(g.ingenero) as num')
+                ->from('LibreameBackendBundle:LbGeneros', 'g')
+                ->leftJoin('LibreameBackendBundle:LbGeneroslibros', 'gl', \Doctrine\ORM\Query\Expr\Join::WITH, 'gl.ingligenero = g.ingenero')
+                ->Where(' gl.inglilibro in (:libro) ')
+                ->setParameter('libro', $libusu)
+                ->groupBy('g.ingenero')
+                //->having(' count(g.ingenero) > 1')
+                ->orderBy(' num ', 'DESC')
+                ->setMaxResults($numpref);
+            
+            $generos = $qg->getQuery()->getResult();
+            //echo "generos-[".count($generos)."]  \n";
+            
+            //autores
+            $qa = $em->createQueryBuilder()
+                ->select('a.inidautor, a.txautnombre, count(a.inidautor) as num')
+                ->from('LibreameBackendBundle:LbAutores', 'a')
+                ->leftJoin('LibreameBackendBundle:LbAutoreslibros', 'al', \Doctrine\ORM\Query\Expr\Join::WITH, 'al.inautlidautor = a.inidautor')
+                ->Where(' al.inautlidlibro in (:libro) ')
+                ->setParameter('libro', $libusu)
+                ->groupBy('a.inidautor')
+                //->having(' count(a.inidautor) > 1')
+                ->orderBy(' num ', 'DESC')
+                ->setMaxResults($numpref);
+            $autores = $qa->getQuery()->getResult();
+            //echo "autores-[".count($autores)."]  \n";
+            
+            //editoriales
+            $qe = $em->createQueryBuilder()
+                ->select('e.inideditorial, e.txedinombre, count(e.inideditorial) as num')
+                ->from('LibreameBackendBundle:LbEditoriales', 'e')
+                ->leftJoin('LibreameBackendBundle:LbEditorialeslibros', 'el', \Doctrine\ORM\Query\Expr\Join::WITH, 'el.inedilibroeditorial = e.inideditorial')
+                ->Where(' el.inediliblibro in (:libro) ')
+                ->setParameter('libro', $libusu)
+                ->groupBy('e.inideditorial')
+                //->having(' count(e.inideditorial) > 2')
+                ->orderBy(' num ', 'DESC')
+                ->setMaxResults($numpref);
+            $editoriales = $qe->getQuery()->getResult();
+            //echo "editoriales-[".count($editoriales)."]  \n";
+
+            $arrGeneros = array();
+            foreach ($generos as $gen){
+                if (!in_array($gen, $arrGeneros)) {
+                    $arrGeneros[] = array("idgenero" => $gen['ingenero'],"nomgenero" => utf8_encode($gen['txgennombre']));
+                }
+            }
+            //echo "Cargó arreglo generos \n";
+            
+            $arrAutores = array();
+            foreach ($autores as $aut){
+                if (!in_array($aut, $arrAutores)) {
+                    $arrAutores[] = array("idautor" => $aut['inidautor'],"nomautor" => utf8_encode($aut['txautnombre']));
+                }
+            }
+            //echo "Cargó arreglo autores \n";
+            
+            $arrEditoriales = array();
+            foreach ($editoriales as $edi){
+                if (!in_array($edi, $arrEditoriales)) {
+                    $arrEditoriales[] = array("ideditorial" => $edi['inideditorial'],"nomeditorial" => utf8_encode($edi['txedinombre']));
+                }
+            }
+            //echo "Cargó arreglo editoriales  \n";
+            
+            $arrPreferencias[] = array('generos' => $arrGeneros, 'autores' => $arrAutores, 
+                'editoriales' => $arrEditoriales);
+
+        return $arrPreferencias;
+        } catch (Exception $ex) {
+                //ECHO "ERROR PREFERENCIAS ".$ex;
                 return array();
         } 
     }
@@ -1106,7 +1234,7 @@ class ManejoDataRepository extends EntityRepository {
             return $em->getRepository('LibreameBackendBundle:LbCalificausuarios')->
                     findBy(array('incalusucalificado' => $usuario));
         } catch (Exception $ex) {
-                echo "erro";
+                //echo "error";
                 return new LbCalificausuarios();
         } 
     }
