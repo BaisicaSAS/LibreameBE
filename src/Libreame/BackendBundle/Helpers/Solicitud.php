@@ -68,6 +68,7 @@ class Solicitud {
     private $pIdComentario; //Id del comentario - cuando se edita o borra
     private $pAccioncom; //Id del comentario - cuando se edita o borra
     private $pFiltro; //Id del comentario - cuando se edita o borra
+    private $pIdUsuarioDes; //Id del usuario destinatario del mensaje
     
     
     
@@ -217,6 +218,10 @@ class Solicitud {
 
     public function getIdusuariover() {
         return $this->pIdUsuarioVer;
+    }
+    
+    public function getIdusuariodes() {
+        return $this->pIdUsuarioDes;
     }
     
     public function getImageneje() {
@@ -436,6 +441,11 @@ class Solicitud {
     
     public function setIdusuariover($pIdUsrVer) {
         $this->pIdUsuarioVer = $pIdUsrVer;
+        return $this;
+    }
+    
+    public function setIdusuariodes($pIdUsrDes) {
+        $this->pIdUsuarioDes = $pIdUsrDes;
         return $this;
     }
     

@@ -403,7 +403,7 @@ class ManejoDataRepository extends EntityRepository {
     public function getDescCondicionActualEjemplar($condactual)
     {   
         try{
-            $desCondactual = "Ejemplar no está en negociacion";
+            $desCondactual = "Ejemplar no está en negociación";
             switch($condactual){
                 case (AccesoController::inConEjeNoNe): $desCondactual = AccesoController::txConEjeNoNe; break;
                 case (AccesoController::inConEjeSoli): $desCondactual = AccesoController::txConEjeSoli; break;
@@ -702,6 +702,25 @@ class ManejoDataRepository extends EntityRepository {
                 $promedio = $suma / $cant;
             //echo "\n promedio:".$promedio;
             return $promedio;
+        } catch (Exception $ex) {
+                return AccesoController::inDatoCer;
+        } 
+    }
+    
+    //Obtiene todo el chat por su id 
+    public function getChatNegociacionById($idconversa)
+    {   
+        try{
+            $em = $this->getDoctrine()->getManager();
+            $qs = $em->createQueryBuilder()
+                ->select('n')
+                ->from('LibreameBackendBundle:LbNegociacion', 'n')
+                ->Where('n.txnegidconversacion = :idconv')
+                ->setParameter('idconv', $idconversa)
+                ->orderBy('n.fenegfechamens', 'ASC');
+            $conversacion = $qs->getQuery()->getResult();
+            
+            return $conversacion;
         } catch (Exception $ex) {
                 return AccesoController::inDatoCer;
         } 
@@ -1753,7 +1772,7 @@ class ManejoDataRepository extends EntityRepository {
         } 
     }
     
-   //Marca un Megusta en un ejemplar
+   //Envia un comentario a un ejemplar
     public function setComentarioEjemplar(Solicitud $psolicitud)
     {   
         try{
@@ -1794,4 +1813,47 @@ class ManejoDataRepository extends EntityRepository {
         } 
     }
  
+   //Envia un mensaje en el chat de negociacion por un ejemplar
+    public function setMensajeChat(Solicitud $psolicitud)
+    {   
+        try{
+            $respuesta = NULL;
+            setlocale (LC_TIME, "es_CO");
+            $fecha = new \DateTime;
+            $em = $this->getDoctrine()->getManager();
+            $objEjemplar = ManejoDataRepository::getEjemplarById($psolicitud->getIdEjemplar());
+            $usrEscribe = ManejoDataRepository::getUsuarioByEmail($psolicitud->getEmail());
+            $usrDestino = ManejoDataRepository::getUsuarioById($psolicitud->getIdusuariodes());
+            $usrPropiet = $objEjemplar->getInejeusudueno();
+            if ($usrEscribe == $usrPropiet) { //Si el usuario que escribe es el propietario, solicitante = destinatario; si son diferentes, solicitante = escribe
+                $usrSolicit = $usrDestino;
+            } else {
+                $usrSolicit = $usrEscribe;
+            } 
+            $negIdConver = "D".$usrPropiet->getInusuario()."S".$usrSolicit->getInusuario()."E".$objEjemplar->getInejemplar();
+            $chatNegociacion = new LbNegociacion();
+            $chatNegociacion->setFenegfechamens($fecha);
+            $chatNegociacion->setInnegmensleidodue(AccesoController::inDatoCer);
+            $chatNegociacion->setInnegmensleidosol(AccesoController::inDatoCer);
+            $chatNegociacion->setInnegmenseliminado(AccesoController::inDatoCer);
+            $chatNegociacion->setInnegejemplar($objEjemplar);
+            $chatNegociacion->setInnegusuduenho($usrPropiet);
+            $chatNegociacion->setInnegusuescribe($usrEscribe);
+            $chatNegociacion->setInnegususolicita($usrSolicit);
+            $chatNegociacion->setTxnegmensaje(utf8_decode($psolicitud->getComentario()));
+            $chatNegociacion->setTxnegidconversacion($negIdConver);
+
+            $em->persist($chatNegociacion);
+
+            $em->flush();
+            $respuesta = $negIdConver;
+            return $respuesta;
+
+        } catch (Exception $ex) {
+                return AccesoController::inDatoCer;
+        } 
+    }
+ 
+    
+    
 }

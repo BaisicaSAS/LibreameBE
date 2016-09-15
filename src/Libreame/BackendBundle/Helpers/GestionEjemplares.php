@@ -507,5 +507,63 @@ class GestionEjemplares {
        
     }
     
+    public function enviarMensajeChat(Solicitud $psolicitud)
+    {   
+        /*setlocale (LC_TIME, "es_CO");
+        $fecha = new \DateTime;*/
+        $respuesta = new Respuesta();   
+        $objLogica = $this->get('logica_service');
+        try {
+            //Valida que la sesión corresponda y se encuentre activa
+            $respSesionVali=  ManejoDataRepository::validaSesionUsuario($psolicitud);
+            //echo "<script>alert(' buscarEjemplares :: Validez de sesion ".$respSesionVali." ')</script>";
+            if ($respSesionVali==AccesoController::inULogged) 
+            {    
+
+                //SE INACTIVA PORQUE PUEDE GENERAR UNA GRAN CANTIDAD DE REGISTROS EN UNA SOLA SESION
+                //Busca y recupera el objeto de la sesion:: 
+                //$sesion = ManejoDataRepository::recuperaSesionUsuario($usuario,$psolicitud);
+                //echo "<script>alert('La sesion es ".$sesion->getTxsesnumero()." ')</script>";
+                //Guarda la actividad de la sesion:: 
+                //ManejoDataRepository::generaActSesion($sesion,AccesoController::inDatoUno,"Recupera Feed de Ejemplares".$psolicitud->getEmail()." recuperados con éxito ",$psolicitud->getAccion(),$fecha,$fecha);
+                //echo "<script>alert('Generó actividad de sesion ')</script>";
+                $resp = ManejoDataRepository::setMensajeChat($psolicitud);
+                
+                if (is_null($resp)) {
+                    $respuesta->setRespuesta(AccesoController::inPlatCai);
+                } else {
+                    $respuesta->setRespuesta(AccesoController::inDatoUno);
+                    $arrConversacion =  array();
+                    $objConv = new \Libreame\BackendBundle\Entity\LbNegociacion();
+                    $objConv = ManejoDataRepository::getChatNegociacionById($resp);
+                    foreach ($objConv as $neg){
+                        if($neg->getInnegusuescribe() == $neg->getInnegusuduenho()){
+                            $usrrecibe = $neg->getInnegususolicita();
+                        } else {
+                            $usrrecibe = $neg->getInnegusuduenho();
+                        }
+                        $arrConversacion[] = array('fecha' => $neg->getFenegfechamens()->format(("Y-m-d H:i:s")), 
+                           'usrescribe' => $neg->getInnegusuescribe()->getInusuario(),
+                           'usrdestino' => $usrrecibe->getInusuario(),
+                           'txmensaje' => utf8_encode($neg->getTxnegmensaje()),
+                           'idconversa' => utf8_encode($neg->getTxnegidconversacion()));
+                    }
+                }    
+                
+                                
+                //echo "esto es lo que hay en respuesta";
+                //print_r($respuesta);
+            
+                return $objLogica::generaRespuesta($respuesta, $psolicitud, $arrConversacion);
+            } else {
+                $respuesta->setRespuesta($respSesionVali);
+                return $objLogica::generaRespuesta($respuesta, $psolicitud, $arrConversacion);
+            }
+        } catch (Exception $ex) {
+            $respuesta->setRespuesta(AccesoController::inPlatCai);
+            return $objLogica::generaRespuesta($respuesta, $psolicitud, $arrConversacion);
+        }
+    }
+
     
 }

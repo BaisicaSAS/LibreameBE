@@ -128,6 +128,13 @@ class Logica {
                     break;
                 } 
 
+                case AccesoController::txAccPubMensa: {//Dato:19 : Chatear
+                    //echo "<script>alert('Antes de entrar a Chatear-".$solicitud->getEmail()."')</script>";
+                    $objGestEjemplares = $this->get('gest_ejemplares_service');
+                    $respuesta = $objGestEjemplares::enviarMensajeChat($solicitud);
+                    break;
+                } 
+
                 case AccesoController::txAccRecClave: {//Dato:29 : Cambio de clave
                     //echo "<script>alert('Antes de entrar a Cambio de clave -".$solicitud->getEmail()."')</script>";
                     $objGestUsuarios = $this->get('gest_usuarios_service');
@@ -261,6 +268,11 @@ class Logica {
                 //accion de Visualizar biblioteca
                 case AccesoController::txAccVisuaBib:  //Dato: 16
                     $JSONResp = Logica::respuestaVisualizarBiblioteca($respuesta, $pSolicitud, $parreglo);
+                    break;
+
+                //accion de Chatear
+                case AccesoController::txAccPubMensa:  //Dato: 19
+                    $JSONResp = Logica::respuestaEnviarMensajeChat($respuesta, $pSolicitud, $parreglo);
                     break;
 
                 case AccesoController::txAccRecClave: //Dato:29 : Cambio de clave
@@ -602,7 +614,7 @@ class Logica {
             $usuario = new LbUsuarios();
             $arrTmp = array();
             $calificacion = new LbCalificausuarios();
-            foreach ($respuesta->getArrCalificaciones() as $calificacion){
+            foreach ($respuesta->getArrCalificacionesReci() as $calificacion){
                 //$usuario = ManejoDataRepository::getUsuarioById($calificacion->getIncalusucalifica()->getInusuario());
                 
                 $arrTmp[] = array('idcalifica'=>$calificacion->getInidcalifica(),
@@ -929,6 +941,23 @@ class Logica {
         } 
     }    
     
+    /*
+        * respuestaEnviarMensajeChat: 
+     * Funcion que genera el JSON de respuesta para la accion de enviarMensajeChat:: AccesoController::txAccPublMens
+
+     */
+    public function respuestaEnviarMensajeChat(Respuesta $respuesta, Solicitud $pSolicitud, $parreglo){
+        try {
+            return array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
+                            'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr(), 
+                            'iddevice'=> $pSolicitud->getDeviceMac(), 'marca'=>$pSolicitud->getDeviceMarca(), 
+                            'modelo'=>$pSolicitud->getDeviceModelo(), 'so'=>$pSolicitud->getDeviceSO()), 
+                            'idrespuesta' => (array('respuesta' => $respuesta->getRespuesta(), 'conversacion' => $parreglo )));
+        } catch (Exception $ex) {
+                return AccesoController::inPlatCai;
+        } 
+    }    
+
     /*
         * respuestaVerComentariosEjemplar: 
      * Funcion que genera el JSON de respuesta para la accion de comentar a ejemplar:: AccesoController::txAccCommEjem

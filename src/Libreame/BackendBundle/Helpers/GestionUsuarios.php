@@ -246,7 +246,7 @@ class GestionUsuarios {
                     //echo "<script>alert('ALEX ')</script>";
                     $respuesta->setArrUsuarios($usuario);
                     //echo "<script>alert('ALEX ".$respuesta->RespUsuarios[0]->getTxusunombre()." ')</script>";
-                    $respuesta->setArrCalificaciones($califica);
+                    $respuesta->setArrCalificacionesReci($califica);
                     $promcal = ManejoDataRepository::getPromedioCalifica($usuario);
                     //echo "prom ".$promcal."\n";
                     $respuesta->setPromCalificaciones($promcal);

@@ -77,7 +77,7 @@ class AccesoController extends Controller
     const txAccVisuaBib =  '16'; //Visualizar Biblioteca
     const txAccModifOfe =  '17'; //Modificar una oferta
     const txAccElimiOfe =  '18'; //Eliminar una oferta
-    const txAccPubMensa =  '19'; //Interactuar con oferta::Enviar un mensaje a una solicitud especifica / Publicar o Responder
+    const txAccPubMensa =  '19'; //CHATEAR :: Interactuar con oferta::Enviar un mensaje a una solicitud especifica / Publicar o Responder
     //DEPRECADO: const txAccConcNego =  '20'; //Concretar una negociación: Aceptar un usuario y descartar a los demás
     //DEPRECADO: const txAccDesiNego =  '21'; //Desistir de una negociación ya realizada
     const txAccCaliTrat =  '22'; //Calificar un trato
@@ -161,7 +161,7 @@ class AccesoController extends Controller
     const inMovVendEje = 15;//15: Vendio ejemplar (trato cerrado)
     const txMovVendEje = "Ejemplar vendido";//15: Vendio ejemplar (trato cerrado)
     const inMovCompEje = 16;//16: Compro ejemplar(trato cerrado)
-    const txMovCompEje = "Ejemplar compardo";//16: Compro ejemplar(trato cerrado)
+    const txMovCompEje = "Ejemplar comprado";//16: Compro ejemplar(trato cerrado)
     const inMovAcepEje = 17;//17: Acepta solicitud de ejemplar
     const txMovAcepEje = "Solicitud de ejemplar aceptada";//17: Acepta solicitud de ejemplar
     const inMovRechEje = 18;//18: Solicitud de ejemplar rechazada
@@ -404,6 +404,16 @@ class AccesoController extends Controller
                         $this->objSolicitud->setFiltro($json_datos['idsolicitud']['filtro']);
                         break;
                     }
+
+                    case self::txAccPubMensa: { //Dato:19 : Chatear
+                        //echo "<script>alert('ENTRA POR Chatear')</script>";
+                        $this->objSolicitud->setEmail($json_datos['idsolicitud']['email']);
+                        $this->objSolicitud->setClave($json_datos['idsolicitud']['clave']);
+                        $this->objSolicitud->setIdEjemplar($json_datos['idsolicitud']['idejemplar']);
+                        $this->objSolicitud->setComentario($json_datos['idsolicitud']['txmensaje']);
+                        $this->objSolicitud->setIdusuariodes($json_datos['idsolicitud']['idusrdestino']);
+                        break;
+                    }
                     
                     case self::txAccMarcMens: { //Dato:36 : Marcar mensaje / Leído - No leído
                         //echo "<script>alert('ENTRA POR MARCAR MENSAJES')</script>";
@@ -592,6 +602,14 @@ class AccesoController extends Controller
                         break;
                     }
 
+                    case self::txAccPubMensa: { //Dato:19 : Chatear
+                        //echo "<script>alert('VAL ENTRA CHATEAR')</script>";
+                        $resp = (isset($datos['idsolicitud']['email']) and isset($datos['idsolicitud']['clave'])
+                                and isset($datos['idsolicitud']['idejemplar']) and isset($datos['idsolicitud']['txmensaje'])
+                                and isset($datos['idsolicitud']['idusrdestino']));
+                        break;
+                    }
+                        
                     case self::txAccMarcMens: { //Dato:36 : Marcar mensaje / Leído - No leído
                         //echo "<script>alert('VAL ENTRA POR MARCAR MENSAJES')</script>";
                         $resp = (isset($datos['idsolicitud']['email']) and isset($datos['idsolicitud']['clave']) and
