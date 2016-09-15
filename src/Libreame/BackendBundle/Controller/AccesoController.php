@@ -287,6 +287,7 @@ class AccesoController extends Controller
                 //echo "<script>alert(':::TRANS: ".$json_datos['idsesion']['idtrx']."')</script>"; 
                 //echo "<script>alert(':::TRANS: ')</script>"; 
                 $resp = self::inExitoso;
+                //$json_datos['idsolicitud']['email'] = strtolower($json_datos['idsolicitud']['email']);
                 $this->objSolicitud->setAccion($json_datos['idsesion']['idaccion']);
                 $this->objSolicitud->setSession($json_datos['idsesion']['idtrx']);
                 $this->objSolicitud->setIPaddr($json_datos['idsesion']['ipaddr']);

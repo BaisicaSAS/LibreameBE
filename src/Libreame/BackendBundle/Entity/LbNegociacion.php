@@ -31,9 +31,16 @@ class LbNegociacion
     /**
      * @var integer
      *
-     * @ORM\Column(name="inNegMensLeido", type="integer", nullable=false)
+     * @ORM\Column(name="inNegMensLeidoSol", type="integer", nullable=false)
      */
-    private $innegmensleido;
+    private $innegmensleidosol;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="inNegMensLeidoDue", type="integer", nullable=false)
+     */
+    private $innegmensleidodue;
 
     /**
      * @var \DateTime
@@ -130,27 +137,51 @@ class LbNegociacion
     }
 
     /**
-     * Set innegmensleido
+     * Set innegmensleidosol
      *
-     * @param integer $innegmensleido
+     * @param integer $innegmensleidosol
      * @return LbNegociacion
      */
-    public function setInnegmensleido($innegmensleido)
+    public function setInnegmensleidosol($innegmensleidosol)
     {
-        $this->innegmensleido = $innegmensleido;
+        $this->innegmensleidosol = $innegmensleidosol;
 
         return $this;
     }
 
     /**
-     * Get innegmensleido
+     * Get innegmensleidosol
      *
      * @return integer 
      */
-    public function getInnegmensleido()
+    public function getInnegmensleidosol()
     {
-        return $this->innegmensleido;
+        return $this->innegmensleidosol;
     }
+
+    /**
+     * Set innegmensleidodue
+     *
+     * @param integer $innegmensleidodue
+     * @return LbNegociacion
+     */
+    public function setInnegmensleidodue($innegmensleidodue)
+    {
+        $this->innegmensleidodue = $innegmensleidodue;
+
+        return $this;
+    }
+
+        /**
+     * Get innegmensleidodue
+     *
+     * @return integer 
+     */
+    public function getInnegmensleidodue()
+    {
+        return $this->innegmensleidodue;
+    }
+
 
     /**
      * Set fenegfechamens

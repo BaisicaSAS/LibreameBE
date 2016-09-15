@@ -32,13 +32,20 @@ Libreame\BackendBundle\Entity\LbNegociacion:
             fixed: false
             comment: 'Texto del mensaje'
             column: txNegMensaje
-        innegmensleido:
+        innegmensleidosol:
             type: integer
             nullable: false
             unsigned: false
-            comment: 'Leido: 1, No leido : 0'
+            comment: 'Por solicitante : Leido: 1, No leido : 0'
             default: '0'
-            column: inNegMensLeido
+            column: inNegMensLeidoSol
+        innegmensleidodue:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: 'Por dueno : Leido: 1, No leido : 0'
+            default: '0'
+            column: inNegMensLeidoDue
         fenegfechamens:
             type: datetime
             nullable: false

@@ -348,7 +348,7 @@ class ManejoDataRepository extends EntityRepository {
         try{
             $em = $this->getDoctrine()->getManager();
             $qmg = $em->createQueryBuilder()
-                ->select('a.inmegmegusta')
+                ->select('COALESCE(a.inmegmegusta, 0)')
                 ->from('LibreameBackendBundle:LbMegusta', 'a')
                 ->Where('a.inmegejemplar = :pejemplar')
                 ->setParameter('pejemplar', $pEjemplar)
@@ -361,7 +361,7 @@ class ManejoDataRepository extends EntityRepository {
             if($qmg->getQuery()->getOneOrNullResult() == NULL){
                 $meg = AccesoController::inDatoCer; //Si ho hay registro devuelve no me gusta (0)
             } else {
-                $meg = $qmg->getQuery()->getOneOrNullResult();//Si hay registro devuelve lo que hay
+                $meg = (int)$qmg->getQuery()->getSingleScalarResult();//Si hay registro devuelve lo que hay
             }    
             
             //echo "megusta ".$meg;
@@ -460,7 +460,8 @@ class ManejoDataRepository extends EntityRepository {
                 ->setParameter('pusuario', $pusuario);
             
             $arrNegociacion = array();
-            foreach($qneg->getQuery()->getResult() as $idconversacion){
+            $idneg = $qneg->getQuery()->getResult();
+            foreach($idneg as $idconversacion){
                 //echo "conversa ".$idconversacion;
                 
                 $negociacion = $em->getRepository('LibreameBackendBundle:LbNegociacion')->
@@ -476,8 +477,14 @@ class ManejoDataRepository extends EntityRepository {
                     $promcalUsNeg = ManejoDataRepository::getPromedioCalifica($usuaNeg->getInusuario());
                     $promcalUsEsc = ManejoDataRepository::getPromedioCalifica($usuaEsc->getInusuario());
                     $promcalUsSol = ManejoDataRepository::getPromedioCalifica($usuaSol->getInusuario());
+                    if($pusuario == $negoc->getInnegusuduenho()){
+                        $leido = $negoc->getInnegmensleidodue();
+                    } else {
+                        $leido = $negoc->getInnegmensleidosol();
+                    }
+                    
                     $arrConversacion[] = array('inidnegociacion' => $negoc->getInidnegociacion(),
-                        'innegmensleido' => $negoc->getInnegmensleido(),
+                        'innegmensleido' => $leido,
                         'fenegfechamens' => $negoc->getFenegfechamens()->format("Y-m-d H:i:s"),
                         'txnegmensaje' => utf8_encode($negoc->getTxnegmensaje()),
                         'usrescribe' =>  $usuaEsc->getInusuario(),
@@ -573,7 +580,7 @@ class ManejoDataRepository extends EntityRepository {
                         'inhisejemodoentrega' => $hisEjePH->getInhisejemodoentrega(), /*0: En el domicilio, 1: Encontrandose, 3. Courrier local, 4: Courrier Nacional, 5: Courrier internacional*/
                         'inhisejemovimiento' => $hisEjePH->getInhisejemovimiento(),
                         'txhisejedescmovimiento' => utf8_encode($descMovimiento),
-                        'inhisejeejemplar' => $hisEjePH->getInhisejeejemplar()->getInejemplar(),
+                        'inhisejeejemplar' => $hisEjePH->getInhisejeejemplar(),
                         'inhisejepadre' => $hisEjePH->getInhisejepadre(),
                         'usrtrx' => array('inusuario' => $usuaHist->getInusuario(),
                                 'txusunommostrar' => utf8_encode($usuaHist->getTxusunommostrar()),
@@ -1304,13 +1311,17 @@ class ManejoDataRepository extends EntityRepository {
             $em = $this->getDoctrine()->getManager();
             
             $usuario = ManejoDataRepository::getUsuarioByEmail($psolicitud->getEmail());
+            $negociacion = new LbNegociacion();
+            $negociacion = $em->getRepository('LibreameBackendBundle:LbNegociacion')->
+                    findOneBy(array('inidnegociacion' => $psolicitud->getIdmensaje()));
             
-            $mensaje = $em->getRepository('LibreameBackendBundle:LbMensajes')->
-                    findOneBy(array('inmensaje' => $psolicitud->getIdmensaje(), 'inmenusuario' => $usuario));
-            
-            if ($mensaje != NULL) {
-                $mensaje->setInmenleido($psolicitud->getMarcacomo());
-                $em->persist($mensaje);
+            if ($negociacion != NULL) {
+                if($negociacion->getInnegusuduenho()==$usuario) {
+                    $negociacion->setInnegmensleidodue($psolicitud->getMarcacomo());
+                } else {
+                    $negociacion->setInnegmensleidosol($psolicitud->getMarcacomo());
+                }
+                $em->persist($negociacion);
                 $em->flush();
                 $resp = AccesoController::inExitoso;
             } else {

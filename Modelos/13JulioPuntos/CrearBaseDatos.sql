@@ -685,30 +685,34 @@ COMMENT = 'Precios de todos los planes';
 
 ##CREAR EN TODOS AMBIENTES
 
-ALTER TABLE `dotex4read`.`lb_negociacion` 
-ADD COLUMN `txNegIdConversacion` VARCHAR(50) NOT NULL AFTER `inNegMensEliminado`;
+	ALTER TABLE `dotex4read`.`lb_negociacion` 
+	ADD COLUMN `txNegIdConversacion` VARCHAR(50) NOT NULL AFTER `inNegMensEliminado`;
 
 
-ALTER TABLE `dotex4read`.`lb_negociacion` 
-ADD INDEX `fk_lb_negociacion_idconversacion_idx` (`txNegIdConversacion` ASC);
+	ALTER TABLE `dotex4read`.`lb_negociacion` 
+	ADD INDEX `fk_lb_negociacion_idconversacion_idx` (`txNegIdConversacion` ASC);
 
-ALTER TABLE `dotex4read`.`lb_negociacion` 
-ADD INDEX `fk_lb_negociacion_idconversacion2_idx` (`txNegIdConversacion` DESC);
-
-
-ALTER TABLE `dotex4read`.`lb_ejemplares` 
-ADD COLUMN `inEjeEstadoNegocio` INT(11) NOT NULL DEFAULT 0 COMMENT 'Estado de la negocuación actual : 0 - No en negociacion,1 - Solicitado por usuario, 2 - En proceso de aprobación del negocio, 3 - Aprobado negocio por Ambos actores, 4 - En proceso de entrega\n5 - Entregado, 6 - Recibido' AFTER `inEjeSoloventa`,
-ADD COLUMN `inEjeRegHisBloqueo` INT(11) NOT NULL DEFAULT 0 COMMENT 'Si está bloqueado, aquí se registra el ID de HisEjemplar de bloqueo vigente' AFTER `inEjeEstadoNegocio`,
-ADD COLUMN `inEjeRegHisPublicacion` INT(11) NOT NULL DEFAULT 0 COMMENT 'Si esta / No publicado Publicado, aquí se registra el ID de HisEjemplar de publicacion / Despublicacion vigente' AFTER `inEjeRegHisBloqueo`,
-ADD COLUMN `inEjeRegHisBajaSis` INT(11) NOT NULL DEFAULT 0 COMMENT 'Si se dió de baja, aquí se registra el ID de HisEjemplar de Baja del sistema' AFTER `inEjeRegHisPublicacion`,
-ADD COLUMN `inEjeRegHisAprobDueno` INT(11) NOT NULL DEFAULT 0 COMMENT 'Si el dueno aprobó un negocio, aquí se registra el ID de HisEjemplar de Aprobacion' AFTER `inEjeRegHisBajaSis`,
-ADD COLUMN `inEjeRegHisAprobSolic` INT(11) NOT NULL DEFAULT 0 COMMENT 'Si el solicitante aprobó un negocio, aquí se registra el ID de HisEjemplar de Aprobacion' AFTER `inEjeRegHisAprobDueno`,
-ADD COLUMN `inEjeRegHisEntrega` INT(11) NOT NULL DEFAULT 0 COMMENT 'Si el dueno Entrego un ejemplar, aquí se registra el ID de HisEjemplar de Entrega' AFTER `inEjeRegHisAprobSolic`,
-ADD COLUMN `inEjeRegHisRecibido` INT(11) NOT NULL DEFAULT 0 COMMENT 'Si el solicitante Recibio un ejemplar, aquí se registra el ID de HisEjemplar de Recibo' AFTER `inEjeRegHisEntrega`;
+	ALTER TABLE `dotex4read`.`lb_negociacion` 
+	ADD INDEX `fk_lb_negociacion_idconversacion2_idx` (`txNegIdConversacion` DESC);
 
 
-ALTER TABLE `dotex4read`.`lb_histejemplar` ADD COLUMN `inHisEjeEstado` INT(11) NOT NULL DEFAULT 1 COMMENT 'Estado 0: Inactivo, 1: Activo. Aplica principalmente para registros de Publicacion y negociacion'  AFTER `inHisEjeModoEntrega` ;
+	ALTER TABLE `dotex4read`.`lb_ejemplares` 
+	ADD COLUMN `inEjeEstadoNegocio` INT(11) NOT NULL DEFAULT 0 COMMENT 'Estado de la negocuación actual : 0 - No en negociacion,1 - Solicitado por usuario, 2 - En proceso de aprobación del negocio, 3 - Aprobado negocio por Ambos actores, 4 - En proceso de entrega\n5 - Entregado, 6 - Recibido' AFTER `inEjeSoloventa`,
+	ADD COLUMN `inEjeRegHisBloqueo` INT(11) NOT NULL DEFAULT 0 COMMENT 'Si está bloqueado, aquí se registra el ID de HisEjemplar de bloqueo vigente' AFTER `inEjeEstadoNegocio`,
+	ADD COLUMN `inEjeRegHisPublicacion` INT(11) NOT NULL DEFAULT 0 COMMENT 'Si esta / No publicado Publicado, aquí se registra el ID de HisEjemplar de publicacion / Despublicacion vigente' AFTER `inEjeRegHisBloqueo`,
+	ADD COLUMN `inEjeRegHisBajaSis` INT(11) NOT NULL DEFAULT 0 COMMENT 'Si se dió de baja, aquí se registra el ID de HisEjemplar de Baja del sistema' AFTER `inEjeRegHisPublicacion`,
+	ADD COLUMN `inEjeRegHisAprobDueno` INT(11) NOT NULL DEFAULT 0 COMMENT 'Si el dueno aprobó un negocio, aquí se registra el ID de HisEjemplar de Aprobacion' AFTER `inEjeRegHisBajaSis`,
+	ADD COLUMN `inEjeRegHisAprobSolic` INT(11) NOT NULL DEFAULT 0 COMMENT 'Si el solicitante aprobó un negocio, aquí se registra el ID de HisEjemplar de Aprobacion' AFTER `inEjeRegHisAprobDueno`,
+	ADD COLUMN `inEjeRegHisEntrega` INT(11) NOT NULL DEFAULT 0 COMMENT 'Si el dueno Entrego un ejemplar, aquí se registra el ID de HisEjemplar de Entrega' AFTER `inEjeRegHisAprobSolic`,
+	ADD COLUMN `inEjeRegHisRecibido` INT(11) NOT NULL DEFAULT 0 COMMENT 'Si el solicitante Recibio un ejemplar, aquí se registra el ID de HisEjemplar de Recibo' AFTER `inEjeRegHisEntrega`;
 
-ALTER TABLE  `dotex4read`.`lb_planes` CHANGE COLUMN  `txPlanDescripcion`  `txPlanDescripcion` TEXT NULL COMMENT 'Descripcion del plan',
-CHANGE COLUMN  `fePlanFinVigencia`  `fePlanFinVigencia` DATETIME NULL COMMENT  'Si es ilimitado la fecha es 30 anhos adelante',
-ADD COLUMN  `inPlanCantEjeMes` INT( 11 ) NOT NULL DEFAULT 1 COMMENT 'Cantidad de ejemplares que se pueden negociar mensualment en el plan , -1: ilimitado' AFTER  `fePlanFinVigencia`
+
+	ALTER TABLE `dotex4read`.`lb_histejemplar` ADD COLUMN `inHisEjeEstado` INT(11) NOT NULL DEFAULT 1 COMMENT 'Estado 0: Inactivo, 1: Activo. Aplica principalmente para registros de Publicacion y negociacion'  AFTER `inHisEjeModoEntrega` ;
+
+	ALTER TABLE  `dotex4read`.`lb_planes` CHANGE COLUMN  `txPlanDescripcion`  `txPlanDescripcion` TEXT NULL COMMENT 'Descripcion del plan',
+	CHANGE COLUMN  `fePlanFinVigencia`  `fePlanFinVigencia` DATETIME NULL COMMENT  'Si es ilimitado la fecha es 30 anhos adelante',
+	ADD COLUMN  `inPlanCantEjeMes` INT( 11 ) NOT NULL DEFAULT 1 COMMENT 'Cantidad de ejemplares que se pueden negociar mensualment en el plan , -1: ilimitado' AFTER  `fePlanFinVigencia`;
+
+ALTER TABLE `dotex4read`.`lb_negociacion` CHANGE COLUMN `inNegMensLeido` `inNegMensLeidoSol` INT(11) NOT NULL DEFAULT '0' COMMENT 'Por solicitante : Leido: 1, No leido : 0'  ;
+
+ALTER TABLE `dotex4read`.`lb_negociacion` ADD COLUMN `inNegMensLeidoDue` INT(11) NOT NULL DEFAULT 0 COMMENT 'Por dueno : Leido: 1, No leido : 0'  AFTER `txNegIdConversacion` ;

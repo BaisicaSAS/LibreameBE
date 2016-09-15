@@ -348,7 +348,7 @@ class GestionUsuarios {
        
     }    
 
-    public function cambiarClave(Solicitud $psolicitud)
+    public function actualizarClaveUsuario(Solicitud $psolicitud)
     {   
         /*setlocale (LC_TIME, "es_CO");
         $fecha = new \DateTime;*/
