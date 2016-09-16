@@ -135,6 +135,13 @@ class Logica {
                     break;
                 } 
 
+                case AccesoController::txAccCaliTrat: {//Dato:22 : Calificar usuario trato
+                    //echo "<script>alert('Antes de entrar a Chatear-".$solicitud->getEmail()."')</script>";
+                    $objGestEjemplares = $this->get('gest_usuarios_service');
+                    $respuesta = $objGestEjemplares::calificarUsuarioTrato($solicitud);
+                    break;
+                } 
+
                 case AccesoController::txAccRecClave: {//Dato:29 : Cambio de clave
                     //echo "<script>alert('Antes de entrar a Cambio de clave -".$solicitud->getEmail()."')</script>";
                     $objGestUsuarios = $this->get('gest_usuarios_service');
@@ -273,6 +280,11 @@ class Logica {
                 //accion de Chatear
                 case AccesoController::txAccPubMensa:  //Dato: 19
                     $JSONResp = Logica::respuestaEnviarMensajeChat($respuesta, $pSolicitud, $parreglo);
+                    break;
+
+                //accion de Calificar usuario trato
+                case AccesoController::txAccCaliTrat:  //Dato: 22
+                    $JSONResp = Logica::respuestaCalificarUsuarioTrato($respuesta, $pSolicitud);
                     break;
 
                 case AccesoController::txAccRecClave: //Dato:29 : Cambio de clave
@@ -1090,6 +1102,22 @@ class Logica {
     }    
     
     
+    /*
+        * respuestaCalificarUsuarioTrato: 
+     * Funcion que genera el JSON de respuesta para la accion de CAlificarUsuarioTRato:: AccesoController::txAccCaliTrat
+
+     */
+    public function respuestaCalificarUsuarioTrato(Respuesta $respuesta, Solicitud $pSolicitud){
+        try {
+            return array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
+                            'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr(), 
+                            'iddevice'=> $pSolicitud->getDeviceMac(), 'marca'=>$pSolicitud->getDeviceMarca(), 
+                            'modelo'=>$pSolicitud->getDeviceModelo(), 'so'=>$pSolicitud->getDeviceSO()), 
+                            'idrespuesta' => (array('respuesta' => $respuesta->getRespuesta())));
+        } catch (Exception $ex) {
+                return AccesoController::inPlatCai;
+        } 
+    }    
     
     /*
      * enviaMailRegistro 

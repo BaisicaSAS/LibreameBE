@@ -69,6 +69,8 @@ class Solicitud {
     private $pAccioncom; //Id del comentario - cuando se edita o borra
     private $pFiltro; //Id del comentario - cuando se edita o borra
     private $pIdUsuarioDes; //Id del usuario destinatario del mensaje
+    private $pinCalificacion; //Calificacion dada por el usuario
+    private $pinRegHisPublicacion; //Id del registro de publicacion del ejemplar
     
     
     
@@ -255,6 +257,16 @@ class Solicitud {
     public function getFiltro() {
         return $this->pFiltro;
     }
+
+    public function getInCalificacion() {
+        return $this->pinCalificacion;
+    }
+
+    public function getInRegHisPublicacion() {
+        return $this->pinRegHisPublicacion;
+    }
+    
+    
     /*
      *  Bloque de setter para los atributos de la clase
      */
@@ -486,6 +498,16 @@ class Solicitud {
     
     public function setFiltro($pfiltro) {
         $this->pFiltro = $pfiltro;
+        return $this;
+    }
+    
+    public function setCalificacion($pcalificacion) {
+        $this->pinCalificacion = $pcalificacion;
+        return $this;
+    }
+    
+    public function setRegHisPublicacion($preghispublicacion) {
+        $this->pinRegHisPublicacion = $preghispublicacion;
         return $this;
     }
     

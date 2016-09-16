@@ -360,6 +360,39 @@ class GestionUsuarios {
             //echo "<script>alert(' marcarMensajes :: Validez de sesion ".$respSesionVali." ')</script>";
             if ($respSesionVali==AccesoController::inULogged) 
             {    
+               
+                $actualiza = ManejoDataRepository::setActualizaUsuario($psolicitud);
+                if ($actualiza == AccesoController::inFallido){
+                    $respuesta->setRespuesta(AccesoController::inFallido);
+                } else {
+                    $respuesta->setRespuesta($respSesionVali);
+                }
+                
+                return $objLogica::generaRespuesta($respuesta, $psolicitud, NULL);
+            } else {
+                $respuesta->setRespuesta($respSesionVali);
+                return $objLogica::generaRespuesta($respuesta, $psolicitud, NULL);
+            }
+        } catch (Exception $ex) {
+            $respuesta->setRespuesta(AccesoController::inPlatCai);
+            return $objLogica::generaRespuesta($respuesta, $psolicitud, NULL);
+        }
+       
+    }    
+    
+    
+    public function calificarUsuarioTrato(Solicitud $psolicitud)
+    {   
+        /*setlocale (LC_TIME, "es_CO");
+        $fecha = new \DateTime;*/
+        $respuesta = new Respuesta();
+        $objLogica = $this->get('logica_service');
+        try {
+            //Valida que la sesión corresponda y se encuentre activa
+            $respSesionVali=  ManejoDataRepository::validaSesionUsuario($psolicitud);
+            //echo "<script>alert(' marcarMensajes :: Validez de sesion ".$respSesionVali." ')</script>";
+            if ($respSesionVali==AccesoController::inULogged) 
+            {    
                 //Genera la oferta para el ejemplar
                 $actualiza = ManejoDataRepository::setActualizaUsuario($psolicitud);
                 if ($actualiza == AccesoController::inFallido){
@@ -379,4 +412,5 @@ class GestionUsuarios {
         }
        
     }    
+
 }

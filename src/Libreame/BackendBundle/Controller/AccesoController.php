@@ -415,6 +415,18 @@ class AccesoController extends Controller
                         break;
                     }
                     
+                    case self::txAccCaliTrat: { //Dato:22 : Calificar usuario trato
+                        //echo "<script>alert('ENTRA POR Chatear')</script>";
+                        $this->objSolicitud->setEmail($json_datos['idsolicitud']['email']);
+                        $this->objSolicitud->setClave($json_datos['idsolicitud']['clave']);
+                        $this->objSolicitud->setIdEjemplar($json_datos['idsolicitud']['inejemplar']);
+                        $this->objSolicitud->setRegHisPublicacion($json_datos['idsolicitud']['reghisejemplar']);
+                        $this->objSolicitud->setIdusuariodes($json_datos['idsolicitud']['idusuariocalificado']);
+                        $this->objSolicitud->setInCalificacion($json_datos['idsolicitud']['incalificacion']);
+                        $this->objSolicitud->setComentario($json_datos['idsolicitud']['txcomentario']);
+                        break;
+                    }
+                    
                     case self::txAccMarcMens: { //Dato:36 : Marcar mensaje / Leído - No leído
                         //echo "<script>alert('ENTRA POR MARCAR MENSAJES')</script>";
                         $this->objSolicitud->setEmail($json_datos['idsolicitud']['email']);
@@ -609,7 +621,16 @@ class AccesoController extends Controller
                                 and isset($datos['idsolicitud']['idusrdestino']));
                         break;
                     }
-                        
+                    
+                    case self::txAccCaliTrat: { //Dato:22 : Califica usuario trato
+                        //echo "<script>alert('VAL ENTRA CHATEAR')</script>";
+                        $resp = (isset($datos['idsolicitud']['email']) and isset($datos['idsolicitud']['clave'])
+                                and isset($datos['idsolicitud']['inejemplar']) and isset($datos['idsolicitud']['reghisejemplar'])
+                                and isset($datos['idsolicitud']['idusuariocalificado']) and isset($datos['idsolicitud']['incalificacion'])
+                                and isset($datos['idsolicitud']['txcomentario']));
+                        break;
+                    }
+                    
                     case self::txAccMarcMens: { //Dato:36 : Marcar mensaje / Leído - No leído
                         //echo "<script>alert('VAL ENTRA POR MARCAR MENSAJES')</script>";
                         $resp = (isset($datos['idsolicitud']['email']) and isset($datos['idsolicitud']['clave']) and
