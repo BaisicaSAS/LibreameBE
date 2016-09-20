@@ -1894,6 +1894,9 @@ class ManejoDataRepository extends EntityRepository {
             $regHisCalifica->setInhisejeestado($fecha);
             $regHisCalifica->setInhisejemodoentrega($fecha);
             //Determinar cual es el usuario que califica AccesoController::txMovUsPCali
+            //Si el registro padre es de Recibo = txMovReciEje, quien califica es el Solicitante
+            //Si el registro padre es de Entrega = txMovEntrEje, quien califica es el Dueño
+            if 
             $regHisCalifica->setInhisejemovimiento(20);
             $regHisCalifica->setInhisejepadre($regHisRecEntr);
             $regHisCalifica->setInhisejeusuario($usrCalifica);
