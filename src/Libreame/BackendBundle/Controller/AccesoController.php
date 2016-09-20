@@ -422,7 +422,7 @@ class AccesoController extends Controller
                         $this->objSolicitud->setIdEjemplar($json_datos['idsolicitud']['inejemplar']);
                         $this->objSolicitud->setRegHisPublicacion($json_datos['idsolicitud']['reghisejemplar']);
                         $this->objSolicitud->setIdusuariodes($json_datos['idsolicitud']['idusuariocalificado']);
-                        $this->objSolicitud->setInCalificacion($json_datos['idsolicitud']['incalificacion']);
+                        $this->objSolicitud->setCalificacion($json_datos['idsolicitud']['incalificacion']);
                         $this->objSolicitud->setComentario($json_datos['idsolicitud']['txcomentario']);
                         break;
                     }

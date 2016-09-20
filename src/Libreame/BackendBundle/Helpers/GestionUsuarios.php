@@ -394,7 +394,7 @@ class GestionUsuarios {
             if ($respSesionVali==AccesoController::inULogged) 
             {    
                 //Genera la oferta para el ejemplar
-                $actualiza = ManejoDataRepository::setActualizaUsuario($psolicitud);
+                $actualiza = ManejoDataRepository::setCalificaUsuarioTrato($psolicitud);
                 if ($actualiza == AccesoController::inFallido){
                     $respuesta->setRespuesta(AccesoController::inFallido);
                 } else {

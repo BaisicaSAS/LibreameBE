@@ -726,6 +726,24 @@ class ManejoDataRepository extends EntityRepository {
         } 
     }
     
+    //Obtiene un Registro histórico por su ID
+    public function getRegHisById($idregistro)
+    {   
+        try{
+            $em = $this->getDoctrine()->getManager();
+            $qs = $em->createQueryBuilder()
+                ->select('h')
+                ->from('LibreameBackendBundle:LbHistejemplar', 'h')
+                ->Where('h.inhistejemplar = :idreg')
+                ->setParameter('idreg', $idregistro);
+            $registro = $qs->getQuery()->getResult();
+            
+            return $registro;
+        } catch (Exception $ex) {
+                return new LbHistejemplar();
+        } 
+    }
+    
     //Obtiene el dato del genero según el Objeto
     public function getGenero($genero)
     {   
@@ -1831,6 +1849,65 @@ class ManejoDataRepository extends EntityRepository {
                 $usrSolicit = $usrEscribe;
             } 
             $negIdConver = "D".$usrPropiet->getInusuario()."S".$usrSolicit->getInusuario()."E".$objEjemplar->getInejemplar();
+            $chatNegociacion = new LbNegociacion();
+            $chatNegociacion->setFenegfechamens($fecha);
+            $chatNegociacion->setInnegmensleidodue(AccesoController::inDatoCer);
+            $chatNegociacion->setInnegmensleidosol(AccesoController::inDatoCer);
+            $chatNegociacion->setInnegmenseliminado(AccesoController::inDatoCer);
+            $chatNegociacion->setInnegejemplar($objEjemplar);
+            $chatNegociacion->setInnegusuduenho($usrPropiet);
+            $chatNegociacion->setInnegusuescribe($usrEscribe);
+            $chatNegociacion->setInnegususolicita($usrSolicit);
+            $chatNegociacion->setTxnegmensaje(utf8_decode($psolicitud->getComentario()));
+            $chatNegociacion->setTxnegidconversacion($negIdConver);
+
+            $em->persist($chatNegociacion);
+
+            $em->flush();
+            $respuesta = $negIdConver;
+            return $respuesta;
+
+        } catch (Exception $ex) {
+                return AccesoController::inDatoCer;
+        } 
+    }
+ 
+    
+   //Envia un mensaje en el chat de negociacion por un ejemplar
+    public function setCalificaUsuarioTrato(Solicitud $psolicitud)
+    {   
+        try{
+            $respuesta = NULL;
+            setlocale (LC_TIME, "es_CO");
+            $fecha = new \DateTime;
+            $em = $this->getDoctrine()->getManager();
+            //Obtiene : Ejemplar, usuario que califica y usuario calificado + Registro HistEjemplar de entrega o recibo. Hasta que no s
+            $objEjemplar = ManejoDataRepository::getEjemplarById($psolicitud->getIdEjemplar());
+            $usrCalifica = ManejoDataRepository::getUsuarioByEmail($psolicitud->getEmail());
+            $usrCalificado = ManejoDataRepository::getUsuarioById($psolicitud->getIdusuariodes());
+            //Registro historico de entrega o recibo
+            $regHisRecEntr = ManejoDataRepository::getRegHisById($psolicitud->getInRegHisPublicacion());
+            
+            $regHisCalifica = new LbHistejemplar();
+            $regHisCalifica->setFehisejeregistro($fecha);
+            $regHisCalifica->setInhisejeejemplar($objEjemplar);
+            $regHisCalifica->setInhisejeestado($fecha);
+            $regHisCalifica->setInhisejemodoentrega($fecha);
+            //Determinar cual es el usuario que califica AccesoController::txMovUsPCali
+            $regHisCalifica->setInhisejemovimiento(20);
+            $regHisCalifica->setInhisejepadre($regHisRecEntr);
+            $regHisCalifica->setInhisejeusuario($usrCalifica);
+            
+            $regCalifica = new LbCalificausuarios();
+            $regCalifica->setFecalfecha($fecha);
+            $regCalifica->setIncalcalificacion($psolicitud->getInCalificacion());
+            $regCalifica->setIncalhisejemplar($objEjemplar);
+            $regCalifica->setIncalusucalifica($usrCalifica);
+            $regCalifica->setIncalusucalificado($usrCalificado);
+            $regCalifica->setTxcalcomentario($psolicitud>getCo);
+            $regCalifica->set($fecha);
+            
+                    
             $chatNegociacion = new LbNegociacion();
             $chatNegociacion->setFenegfechamens($fecha);
             $chatNegociacion->setInnegmensleidodue(AccesoController::inDatoCer);

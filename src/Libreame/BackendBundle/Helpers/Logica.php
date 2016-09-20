@@ -137,8 +137,8 @@ class Logica {
 
                 case AccesoController::txAccCaliTrat: {//Dato:22 : Calificar usuario trato
                     //echo "<script>alert('Antes de entrar a Chatear-".$solicitud->getEmail()."')</script>";
-                    $objGestEjemplares = $this->get('gest_usuarios_service');
-                    $respuesta = $objGestEjemplares::calificarUsuarioTrato($solicitud);
+                    $objGestUsuarios = $this->get('gest_usuarios_service');
+                    $respuesta = $objGestUsuarios::calificarUsuarioTrato($solicitud);
                     break;
                 } 
 
