@@ -361,7 +361,7 @@ class GestionUsuarios {
             if ($respSesionVali==AccesoController::inULogged) 
             {    
                
-                $actualiza = ManejoDataRepository::setActualizaUsuario($psolicitud);
+                $actualiza = ManejoDataRepository::setCambiarClave($psolicitud);
                 if ($actualiza == AccesoController::inFallido){
                     $respuesta->setRespuesta(AccesoController::inFallido);
                 } else {

@@ -731,13 +731,9 @@ class ManejoDataRepository extends EntityRepository {
     {   
         try{
             $em = $this->getDoctrine()->getManager();
-            $qs = $em->createQueryBuilder()
-                ->select('h')
-                ->from('LibreameBackendBundle:LbHistejemplar', 'h')
-                ->Where('h.inhistejemplar = :idreg')
-                ->setParameter('idreg', $idregistro);
-            $registro = $qs->getQuery()->getResult();
-            
+            $registro = $em->getRepository('LibreameBackendBundle:LbHistejemplar')->
+                findOneBy(array('inhistejemplar' => $idregistro));
+
             return $registro;
         } catch (Exception $ex) {
                 return new LbHistejemplar();
@@ -1404,28 +1400,20 @@ class ManejoDataRepository extends EntityRepository {
         } 
     }
     
-    //Actualiza datos de usuario
+    //Actualiza clave de usuario
     public function setCambiarClave(Solicitud $psolicitud)
     {   
         try{
+            $resp = AccesoController::inFallido;
             $em = $this->getDoctrine()->getManager();
             
             $usuario = ManejoDataRepository::getUsuarioByEmail($psolicitud->getEmail());
-            $lugar = ManejoDataRepository::getLugar($psolicitud->getUsuLugar());
+            echo "usuario fALLIDO".$resp;
+            //if ($psolicitud->getUsuFecNac() != ""){
+            //    $d = new DateTime($psolicitud->getUsuFecNac());
+            //}
             
-            if ($psolicitud->getUsuFecNac() != ""){
-                $d = new DateTime($psolicitud->getUsuFecNac());
-            }
-            
-            $usuario->setTxusutelefono($psolicitud->getTelefono());
-            $usuario->setInusulugar($lugar);
-            $usuario->setInusugenero($psolicitud->getUsuGenero());
-            $usuario->setTxusuimagen($psolicitud->getUsuImagen());
-            $usuario->setTxusunombre($psolicitud->getNomUsuario());
-            $usuario->setTxusunommostrar($psolicitud->getNomMostUsuario());
-            if ($psolicitud->getUsuFecNac() != ""){
-                $usuario->setFeusunacimiento($d);
-            }
+            $usuario->setTxusuclave($psolicitud->getClaveNueva());
            
             $em->persist($usuario);
             $em->flush();
@@ -1873,7 +1861,7 @@ class ManejoDataRepository extends EntityRepository {
     }
  
     
-   //Envia un mensaje en el chat de negociacion por un ejemplar
+   //Envia un registro de calificacion a un usuario y un registro historico del ejemplar:: Cierra el ciclo de negociacion
     public function setCalificaUsuarioTrato(Solicitud $psolicitud)
     {   
         try{
@@ -1888,49 +1876,47 @@ class ManejoDataRepository extends EntityRepository {
             //Registro historico de entrega o recibo
             $regHisRecEntr = ManejoDataRepository::getRegHisById($psolicitud->getInRegHisPublicacion());
             
+            //Crea el registro histórico
             $regHisCalifica = new LbHistejemplar();
             $regHisCalifica->setFehisejeregistro($fecha);
             $regHisCalifica->setInhisejeejemplar($objEjemplar);
             $regHisCalifica->setInhisejeestado($fecha);
-            $regHisCalifica->setInhisejemodoentrega($fecha);
-            //Determinar cual es el usuario que califica AccesoController::txMovUsPCali
-            //Si el registro padre es de Recibo = txMovReciEje, quien califica es el Solicitante
-            //Si el registro padre es de Entrega = txMovEntrEje, quien califica es el Dueño
-            if 
-            $regHisCalifica->setInhisejemovimiento(20);
+            $regHisCalifica->setInhisejemodoentrega($regHisRecEntr->getInhisejemodoentrega());
             $regHisCalifica->setInhisejepadre($regHisRecEntr);
             $regHisCalifica->setInhisejeusuario($usrCalifica);
+            //Determinar cual es el usuario que califica AccesoController::txMovUsPCali
+            //Si el registro padre es de Recibo = txMovReciEje, quien califica es el Solicitante  inMovUsSCali
+            //Si el registro padre es de Entrega = txMovEntrEje, quien califica es el Dueño inMovUsPCali
+            $fallido = AccesoController::inFallido;
+            if ($regHisRecEntr->getInhisejemovimiento() == AccesoController::inMovEntrEje){
+                $regHisCalifica->setInhisejemovimiento(AccesoController::inMovUsPCali);
+                $fallido  = AccesoController::inExitoso; 
+            } elseif ($regHisRecEntr->getInhisejemovimiento() == AccesoController::inMovReciEje) {
+                $regHisCalifica->setInhisejemovimiento(AccesoController::inMovUsSCali);
+                $fallido = AccesoController::inExitoso; 
+            }
             
-            $regCalifica = new LbCalificausuarios();
-            $regCalifica->setFecalfecha($fecha);
-            $regCalifica->setIncalcalificacion($psolicitud->getInCalificacion());
-            $regCalifica->setIncalhisejemplar($objEjemplar);
-            $regCalifica->setIncalusucalifica($usrCalifica);
-            $regCalifica->setIncalusucalificado($usrCalificado);
-            $regCalifica->setTxcalcomentario($psolicitud>getCo);
-            $regCalifica->set($fecha);
+            if ($fallido  == AccesoController::inExitoso){
+                //Crea el registro de calificaicon
+                $regCalifica = new LbCalificausuarios();
+                $regCalifica->setFecalfecha($fecha);
+                $regCalifica->setIncalcalificacion($psolicitud->getInCalificacion());
+                $regCalifica->setIncalhisejemplar($objEjemplar);
+                $regCalifica->setIncalusucalifica($usrCalifica);
+                $regCalifica->setIncalusucalificado($usrCalificado);
+                $regCalifica->setTxcalcomentario($psolicitud->getComentario());
+
+                $em->persist($regHisCalifica);
+                $em->persist($regCalifica);
+                $em->flush();
+            }
             
-                    
-            $chatNegociacion = new LbNegociacion();
-            $chatNegociacion->setFenegfechamens($fecha);
-            $chatNegociacion->setInnegmensleidodue(AccesoController::inDatoCer);
-            $chatNegociacion->setInnegmensleidosol(AccesoController::inDatoCer);
-            $chatNegociacion->setInnegmenseliminado(AccesoController::inDatoCer);
-            $chatNegociacion->setInnegejemplar($objEjemplar);
-            $chatNegociacion->setInnegusuduenho($usrPropiet);
-            $chatNegociacion->setInnegusuescribe($usrEscribe);
-            $chatNegociacion->setInnegususolicita($usrSolicit);
-            $chatNegociacion->setTxnegmensaje(utf8_decode($psolicitud->getComentario()));
-            $chatNegociacion->setTxnegidconversacion($negIdConver);
+            $respuesta = $fallido;
 
-            $em->persist($chatNegociacion);
-
-            $em->flush();
-            $respuesta = $negIdConver;
             return $respuesta;
 
         } catch (Exception $ex) {
-                return AccesoController::inDatoCer;
+                return AccesoController::inFallido;
         } 
     }
  
