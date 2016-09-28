@@ -366,7 +366,10 @@ class GestionEjemplares {
                 //echo "<script>alert('Generó actividad de sesion ')</script>";
                 
                 $resp = ManejoDataRepository::setMegustaEjemplar($psolicitud->getIdEjemplar(), $psolicitud->getMegusta(), $psolicitud->getEmail());
+                
                 $respuesta->setRespuesta($resp);
+                $respuesta->setCantComenta(ManejoDataRepository::getCantComment($psolicitud->getIdEjemplar()));
+                $respuesta->setCantMegusta(ManejoDataRepository::getCantMegusta($psolicitud->getIdEjemplar()));
                                 
                 //echo "esto es lo que hay en respuesta";
                 //print_r($respuesta);
@@ -450,6 +453,8 @@ class GestionEjemplares {
                 
                 $resp = ManejoDataRepository::setComentarioEjemplar($psolicitud);
                 $respuesta->setRespuesta($resp);
+                $respuesta->setCantComenta(ManejoDataRepository::getCantComment($psolicitud->getIdEjemplar()));
+                $respuesta->setCantMegusta(ManejoDataRepository::getCantMegusta($psolicitud->getIdEjemplar()));
                                 
                 //echo "esto es lo que hay en respuesta";
                 //print_r($respuesta);

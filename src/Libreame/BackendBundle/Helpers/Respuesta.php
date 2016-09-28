@@ -45,6 +45,8 @@ class Respuesta {
     private $pIdPadre; //Id Mensaje padre del hilo
     private $pPromCalificaciones; //Promedio de calificaciones  
     private $pPuntosUsuario; //Puntos del usuario
+    private $pCantMegusta; //Cantidad de Megusta de un ejemplar
+    private $pCantComenta; //Cantidad de Comentarios de un ejemplar
     
     /*
      *  Bloque de getter para los atributos de la clase
@@ -197,6 +199,14 @@ class Respuesta {
         return $this->pPuntosUsuario;
     }   
 
+    public function getCantMegusta() {
+        return $this->pCantMegusta;
+    }
+    
+    public function getCantComenta() {
+        return $this->pCantComenta;
+    }
+    
     /*
      *  Bloque de setter para los atributos de la clase
      */
@@ -377,6 +387,16 @@ class Respuesta {
         $this->pPuntosUsuario = $pPuntosUsario;
         return $this;
     }   
+
+    public function setCantMegusta($pCantMegusta) {
+        $this->pCantMegusta = $pCantMegusta;
+        return $this;
+    }
+
+    public function setCantComenta($pCantComenta) {
+        $this->pCantComenta = $pCantComenta;
+        return $this;
+    }
 
 }
 
