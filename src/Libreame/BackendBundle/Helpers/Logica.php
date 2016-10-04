@@ -1141,7 +1141,8 @@ class Logica {
                 ->setBody($this->renderView(
                     'LibreameBackendBundle:Registro:registro.html.twig',
                     array('usuario' => $usuario->getTxusuemail(), 
-                        'crurl' => "http://www.ex4read.co/web/registro/".$cadena)
+                        'crurl' => "http://ex4read.co/exservices/web/registro/".$cadena)
+                        //'crurl' => "http://www.ex4read.co/web/registro/".$cadena)
                         //'crurl' => "http://www.ex4read.co/web/registro/".Logica::generaCadenaURL($usuario))
             ),'text/html');
 
