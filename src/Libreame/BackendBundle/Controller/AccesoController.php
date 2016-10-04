@@ -90,7 +90,7 @@ class AccesoController extends Controller
     const txAccRecLista =  '28'; //recuperar listas del sistema
     const txAccRecClave =  '29'; //Recuperar clave perdida
     const txAccSolLibro =  '30'; //Solicitar Libro:: Automático
-    const txAccModifPub =  '31'; //modificar Publicacion
+    //const txAccModifPub =  '31'; //modificar Publicacion
     const txAccReaOfert =  '32'; //Realizar oferta
     const txAccRecPubli =  '33'; //Recuperar publicacion
     const txAccRecTrato =  '34'; //Recuperar informacion Trato
@@ -378,22 +378,17 @@ class AccesoController extends Controller
                         //echo "<script>alert('ENTRA POR PUBLICAR')</script>";
                         $this->objSolicitud->setEmail($json_datos['idsolicitud']['email']);
                         $this->objSolicitud->setClave($json_datos['idsolicitud']['clave']);
-                        $this->objSolicitud->setIdOferta($json_datos['idsolicitud']['idoferta']);
-                        $this->objSolicitud->setTitulo($json_datos['idsolicitud']['titulo']);
+                        $this->objSolicitud->setImageneje($json_datos['idsolicitud']['imagen']);
+                        $this->objSolicitud->setAccionCom($json_datos['idsolicitud']['accion']);
                         $this->objSolicitud->setIdLibro($json_datos['idsolicitud']['idlibro']);
+                        $this->objSolicitud->setTitulo($json_datos['idsolicitud']['titulo']);
+                        $this->objSolicitud->setAutor($json_datos['idsolicitud']['autor']);
+                        $this->objSolicitud->setEditorial($json_datos['idsolicitud']['editorial']);
+                        $this->objSolicitud->setEdicion($json_datos['idsolicitud']['edicion']);
                         $this->objSolicitud->setIdioma($json_datos['idsolicitud']['idioma']);
+                        $this->objSolicitud->setEstado($json_datos['idsolicitud']['estado']);
+                        $this->objSolicitud->setModoPublica($json_datos['idsolicitud']['modopublica']);
                         $this->objSolicitud->setAvaluo($json_datos['idsolicitud']['avaluo']);
-                        $this->objSolicitud->setValventa($json_datos['idsolicitud']['valventa']);
-
-                        $this->objSolicitud->setTituloSol1($json_datos['idsolicitud']['titulosol1']);
-                        $this->objSolicitud->setIdLibroSol1($json_datos['idsolicitud']['idlibrosol1']);
-                        $this->objSolicitud->setValAdicSol1($json_datos['idsolicitud']['valadicsol1']);
-                        $this->objSolicitud->setTituloSol2($json_datos['idsolicitud']['titulosol2']);
-                        $this->objSolicitud->setIdLibroSol2($json_datos['idsolicitud']['idlibrosol2']);
-                        $this->objSolicitud->setValAdicSol2($json_datos['idsolicitud']['valadicsol2']);
-                        $this->objSolicitud->setObservaSol($json_datos['idsolicitud']['observasol']);
-                        $this->objSolicitud->setImageneje($json_datos['idsolicitud']['foto']);
-
                         break;
                     }
 
@@ -597,13 +592,12 @@ class AccesoController extends Controller
                     case self::txAccPubliEje: { //Dato:13 : Publicar un Ejemplar
                         //echo "<script>alert('VAL ENTRA POR PUBLICAR')</script>";
                         $resp = (isset($datos['idsolicitud']['email']) and isset($datos['idsolicitud']['clave']) and 
-                                  isset($datos['idsolicitud']['idoferta']) and  isset($datos['idsolicitud']['titulo']) and 
-                                 isset($datos['idsolicitud']['idlibro']) and  isset($datos['idsolicitud']['idioma']) and 
-                                 isset($datos['idsolicitud']['avaluo']) and  isset($datos['idsolicitud']['valventa']) and 
-                                 isset($datos['idsolicitud']['titulosol1']) and  isset($datos['idsolicitud']['idlibrosol1']) and 
-                                 isset($datos['idsolicitud']['valadicsol1']) and  isset($datos['idsolicitud']['titulosol2']) and 
-                                 isset($datos['idsolicitud']['idlibrosol2']) and  isset($datos['idsolicitud']['valadicsol2']) and 
-                                 isset($datos['idsolicitud']['observasol']) and isset($datos['idsolicitud']['foto']));
+                                 isset($datos['idsolicitud']['imagen']) and  isset($datos['idsolicitud']['accion']) and 
+                                 isset($datos['idsolicitud']['idlibro']) and  isset($datos['idsolicitud']['titulo']) and 
+                                 isset($datos['idsolicitud']['autor']) and  isset($datos['idsolicitud']['editorial']) and 
+                                 isset($datos['idsolicitud']['edicion']) and  isset($datos['idsolicitud']['idioma']) and 
+                                 isset($datos['idsolicitud']['estado']) and  isset($datos['idsolicitud']['modopublica']) and 
+                                 isset($datos['idsolicitud']['avaluo']));
                         break;
                     }
                     

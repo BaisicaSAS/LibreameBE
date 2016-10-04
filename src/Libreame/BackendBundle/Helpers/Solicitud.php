@@ -72,6 +72,11 @@ class Solicitud {
     private $pinCalificacion; //Calificacion dada por el usuario
     private $pinRegHisPublicacion; //Id del registro de publicacion del ejemplar
     
+    private $pAutor; // Autor
+    private $pEditorial; // Editorial
+    private $pEdicion; // Edicion
+    private $pEstado; // Estado del ejemplar
+    private $pModopublica; // Modo publicacion
     
     
     /*
@@ -264,6 +269,26 @@ class Solicitud {
 
     public function getInRegHisPublicacion() {
         return $this->pinRegHisPublicacion;
+    }
+    
+    public function getAutor() {
+        return $this->pAutor;
+    }
+    
+    public function getEditorial() {
+        return $this->pEditorial;
+    }
+    
+    public function getEdicion() {
+        return $this->pEdicion;
+    }
+    
+    public function getEstado() {
+        return $this->pEstado;
+    }
+    
+    public function getModopublica() {
+        return $this->pModopublica;
     }
     
     
@@ -510,5 +535,31 @@ class Solicitud {
         $this->pinRegHisPublicacion = $preghispublicacion;
         return $this;
     }
+    
+    public function setAutor($pautor) {
+        $this->pAutor = $pautor;
+        return $this;
+    }
+    
+    public function setEditorial($peditorial) {
+        $this->pEditorial = $peditorial;
+        return $this;
+    }
+    
+    public function setEdicion($pedicion) {
+        $this->pEdicion = $pedicion;
+        return $this;
+    }
+    
+    public function setEstado($pestado) {
+        $this->pEstado = $pestado;
+        return $this;
+    }
+    
+    public function setModopublica($pmodopublica) {
+        $this->pModopublica = $pmodopublica;
+        return $this;
+    }
+    
     
 }
