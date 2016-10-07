@@ -379,6 +379,7 @@ class GestionEjemplares {
             
                 return $objLogica::generaRespuesta($respuesta, $psolicitud, NULL);
             } else {
+                //echo 'sesion invalida';
                 $respuesta->setRespuesta($respSesionVali);
                 return $objLogica::generaRespuesta($respuesta, $psolicitud, NULL);
             }

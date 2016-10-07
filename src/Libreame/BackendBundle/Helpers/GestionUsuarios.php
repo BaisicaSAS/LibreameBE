@@ -350,7 +350,8 @@ class GestionUsuarios {
 
     public function actualizarClaveUsuario(Solicitud $psolicitud)
     {   
-        /*setlocale (LC_TIME, "es_CO");
+        //echo 'INGRESA ACTUALIZAR CLAVE ';
+         /*setlocale (LC_TIME, "es_CO");
         $fecha = new \DateTime;*/
         $respuesta = new Respuesta();
         $objLogica = $this->get('logica_service');
@@ -361,15 +362,19 @@ class GestionUsuarios {
             if ($respSesionVali==AccesoController::inULogged) 
             {    
                
+                //echo 'Esta logueado';
                 $actualiza = ManejoDataRepository::setCambiarClave($psolicitud);
                 if ($actualiza == AccesoController::inFallido){
+                    //echo 'Responde fallido';
                     $respuesta->setRespuesta(AccesoController::inFallido);
                 } else {
+                    //echo 'Responde sesion valida';
                     $respuesta->setRespuesta($respSesionVali);
                 }
                 
                 return $objLogica::generaRespuesta($respuesta, $psolicitud, NULL);
             } else {
+                //echo 'NO LOGUEADO';
                 $respuesta->setRespuesta($respSesionVali);
                 return $objLogica::generaRespuesta($respuesta, $psolicitud, NULL);
             }

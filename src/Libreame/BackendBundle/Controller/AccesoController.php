@@ -422,6 +422,14 @@ class AccesoController extends Controller
                         break;
                     }
                     
+                    case self::txAccRecClave: { //Dato:29 : Cambiar clave usuario
+                        //echo "<script>alert('ENTRA POR MARCAR MENSAJES')</script>";
+                        $this->objSolicitud->setEmail($json_datos['idsolicitud']['email']);
+                        $this->objSolicitud->setClave($json_datos['idsolicitud']['claveactual']);
+                        $this->objSolicitud->setClaveNueva($json_datos['idsolicitud']['clavenueva']);
+                        break;
+                    }
+
                     case self::txAccMarcMens: { //Dato:36 : Marcar mensaje / Leído - No leído
                         //echo "<script>alert('ENTRA POR MARCAR MENSAJES')</script>";
                         $this->objSolicitud->setEmail($json_datos['idsolicitud']['email']);
@@ -430,6 +438,7 @@ class AccesoController extends Controller
                         $this->objSolicitud->setMarcarcomo($json_datos['idsolicitud']['marcacomo']);
                         break;
                     }
+
                     case self::txAccListaIdi: { //Dato:37 : Listar Idiomas
                         //echo "<script>alert('ENTRA POR LISTAR DE IDIOMAS')</script>";
                         $this->objSolicitud->setEmail($json_datos['idsolicitud']['email']);
@@ -625,6 +634,13 @@ class AccesoController extends Controller
                         break;
                     }
                     
+                    case self::txAccRecClave: { //Dato:29 : Cambiar clave usuario
+                        //echo "<script>alert('VAL ENTRA POR CAMBIAR CLAVE')</script>";
+                        $resp = (isset($datos['idsolicitud']['email']) and isset($datos['idsolicitud']['claveactual']) and
+                                isset($datos['idsolicitud']['clavenueva']));
+                        break;
+                    }
+
                     case self::txAccMarcMens: { //Dato:36 : Marcar mensaje / Leído - No leído
                         //echo "<script>alert('VAL ENTRA POR MARCAR MENSAJES')</script>";
                         $resp = (isset($datos['idsolicitud']['email']) and isset($datos['idsolicitud']['clave']) and

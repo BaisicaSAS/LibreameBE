@@ -1405,10 +1405,11 @@ class ManejoDataRepository extends EntityRepository {
     {   
         try{
             $resp = AccesoController::inFallido;
+            //echo 'usuario FALLIDO '.$resp;
             $em = $this->getDoctrine()->getManager();
             
             $usuario = ManejoDataRepository::getUsuarioByEmail($psolicitud->getEmail());
-            echo "usuario fALLIDO".$resp;
+            //echo 'usuario FALLIDO '.$resp;
             //if ($psolicitud->getUsuFecNac() != ""){
             //    $d = new DateTime($psolicitud->getUsuFecNac());
             //}
@@ -1421,7 +1422,7 @@ class ManejoDataRepository extends EntityRepository {
             
             return $resp;
         } catch (Exception $ex) {
-                return new LbUsuarios();
+                return  AccesoController::inFallido;
         } 
     }
                 
