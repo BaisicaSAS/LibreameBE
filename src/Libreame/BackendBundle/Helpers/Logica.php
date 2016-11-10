@@ -372,12 +372,19 @@ class Logica {
      */
     public function respuestaLogin(Respuesta $respuesta, Solicitud $pSolicitud){
         try {
+            $usuario = $respuesta->RespUsuarios[0];
+            if ($usuario == NULL)  {
+                $idusuario = NULL;
+            } else {
+                $idusuario = $usuario->getInusuario();
+            }
+                
             return array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
                             'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr(), 
                             'iddevice'=> $pSolicitud->getDeviceMac(), 'marca'=>$pSolicitud->getDeviceMarca(), 
                             'modelo'=>$pSolicitud->getDeviceModelo(), 'so'=>$pSolicitud->getDeviceSO()), 
                             'idrespuesta' => (array('respuesta' => $respuesta->getRespuesta(),
-                            'idusuario' => $respuesta->RespUsuarios[0]->getInusuario(),
+                            'idusuario' => $idusuario,
                             'idsesion' => $respuesta->getSession(), 
                             'cantmensajes' => $respuesta->getCantMensajes())));
         } catch (Exception $ex) {
@@ -1227,27 +1234,6 @@ class Logica {
         //echo "\n cadena_def: ".$cadena;
         return $cadena;
     }
-    
-    /*
-     * validarRegistroUsuario: 
-     * Funcion que genera realiza la validación del registro de usuario en el sistema, desde el email enviado por ex4read
-     */
-    public function validarRegistroUsuario($usuario, $clave)
-    {
-        try {
-            $vUsuario = ManejoDataRepository::datosUsuarioValidos($usuario, $clave);
-            $respuesta = AccesoController::inExitoso;
-            if ($vUsuario == NULL) { $respuesta = AccesoController::inFallido; }
-            
-            if ($respuesta==AccesoController::inExitoso) {
-                $respuesta = ManejoDataRepository::activarUsuarioRegistro($vUsuario);
-            }
-            return $respuesta;
-        } catch (Exception $ex) {
-                return AccesoController::inPlatCai;
-        } 
-    }
-    
     
     /*
      * generaRand: 

@@ -1593,61 +1593,7 @@ class ManejoDataRepository extends EntityRepository {
             return new LbLibros();
         } 
     }
-    
-    //Valida datos de registro de un usuario
-    public function datosUsuarioValidos($usuario, $clave)
-    {
-        try{
-            $em = $this->getDoctrine()->getManager();
 
-            $vUsuario = $em->getRepository('LibreameBackendBundle:LbUsuarios')->
-                    findOneBy(array('txusuemail' => $usuario, 
-                        'txusuvalidacion' => $clave, 
-                        'inusuestado' => AccesoController::inDatoCer));
-            
-            $em->flush();
-            
-            return $vUsuario;
-
-        } catch (Exception $ex) {
-                return NULL;
-        } 
-    }
-
-    //Activa un usuario en accion de Validacion de Registro
-    public function activarUsuarioRegistro(LbUsuarios $usuario)
-    {
-        try{
-            /*  3. Marcar el usuario como activo
-                4. Cambiar en la BD el ID. 
-                5. Crear los registros en movimientos y bitacoras.
-                6. Finalizar y mostrar web de confirmación.*/
-            $respuesta=  AccesoController::inFallido; 
-            $fecha = new \DateTime;
-            
-            $em = $this->getDoctrine()->getManager();
-            $em->getConnection()->beginTransaction();
-            $usuario->setInusuestado(AccesoController::inDatoUno);
-            $usuario->setTxusuvalidacion($usuario->getTxusuvalidacion().'OK');
-
-            $dispUsuario = ManejoDataRepository::getDispositivoUsuario(AccesoController::txAnyData,$usuario,$em);
-            //Genera la sesion:: $pEstado,$pFecIni,$pFecFin,$pDevice,$pIpAdd
-            $sesion = ManejoDataRepository::generaSesion(AccesoController::inSesInac, $fecha, $fecha, $dispUsuario, AccesoController::txMeNoIdS, $em);
-            //Guarda la actividad de la sesion:: 
-            ManejoDataRepository::generaActSesion($sesion,AccesoController::inDatoUno,'Registro confirmado para usuario '.$usuario->getTxusuemail(), AccesoController::txAccConfRegi, $fecha, $fecha, $em);
-            
-            $em->persist($usuario);
-            
-            $em->flush();
-            $em->getConnection()->commit();
-            $respuesta=  AccesoController::inExitoso; 
-            
-            return $respuesta;
-
-        } catch (Exception $ex) {
-                return  AccesoController::inFallido;
-        } 
-    }
 
     //Función que retorna la cantidad de mensajes que un usuario tiene sin leer en la plataforma
     public function cantMsgUsr($usuario)
@@ -1920,7 +1866,21 @@ class ManejoDataRepository extends EntityRepository {
                 return AccesoController::inFallido;
         } 
     }
- 
     
-    
+    public static function finalizarRegistroUsuario($usuario, $fecha, $em){
+        try{
+
+            $dispUsuario = ManejoDataRepository::getDispositivoUsuario(AccesoController::txAnyData,$usuario,$em);
+            //Genera la sesion:: $pEstado,$pFecIni,$pFecFin,$pDevice,$pIpAdd
+            $sesion = ManejoDataRepository::generaSesion(AccesoController::inSesInac, $fecha, $fecha, $dispUsuario, AccesoController::txMeNoIdS, $em);
+            //Guarda la actividad de la sesion:: 
+            ManejoDataRepository::generaActSesion($sesion,AccesoController::inDatoUno,'Registro confirmado para usuario '.$usuario->getTxusuemail(), AccesoController::txAccConfRegi, $fecha, $fecha, $em);
+
+            return AccesoController::inExitoso;
+        } catch (Exception $ex) {
+                return AccesoController::inFallido;
+        }
+        
+    }
+
 }
