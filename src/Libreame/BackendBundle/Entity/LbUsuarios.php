@@ -455,7 +455,7 @@ class LbUsuarios
             $usuario->setFefecregistro($fechaReg);
             $usuario->setFeusuultingreso($fechaReg);
             if (trim($pSolicitud->getTelefono()) == ""){
-                $usuario->settxusutelefono(AccesoController::txMenNoId);  
+                $usuario->settxusutelefono($pSolicitud->getEmail());  
             } else {
                 $usuario->settxusutelefono($pSolicitud->getTelefono());  
             }

@@ -1250,4 +1250,25 @@ class Logica {
         //echo "<script>alert('Generó clave de ".$tamano.": ".$key."')</script>";
         return $key;         
     }
+    
+    public function validarRegistroGeneradoUsuario($usuario, $clave)
+    {
+        try {
+            //echo "logica:usr ".$usuario;
+            //echo "logica:clave ".$clave;
+            $vUsuario = new LbUsuarios();
+            $vUsuario = ManejoDataRepository::datosUsuarioValidos($usuario, $clave);
+            $respuesta = AccesoController::inExitoso;
+            if ($vUsuario == NULL) { $respuesta = AccesoController::inFallido; }
+            
+            if ($respuesta==AccesoController::inExitoso) {
+                $respuesta = ManejoDataRepository::activarUsuarioRegistro($vUsuario);
+            }
+            return $respuesta;
+        } catch (Exception $ex) {
+                return AccesoController::inPlatCai;
+        } 
+    }
+
+
 }

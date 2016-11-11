@@ -32,11 +32,15 @@ class RegistroController extends Controller
     public function confirmarRegistroAction($id)
     {   
         try {
+            error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING & ~E_STRICT & ~E_DEPRECATED);
             //$objMDR = $this->get('manejodatos_repo_service');
             //$objLogica = new Logica();
             $this->descomponerDatosEntrada($id);
 
-            $respuesta = $this->validarRegistroUsuario($this->usuario, $this->clave);
+            //echo "regcontroller:usr ".$this->usuario;
+            //echo "regcontroller:clave ".$this->clave;
+            $respuesta = Logica::validarRegistroGeneradoUsuario($this->usuario, $this->clave);
+            
             if ($respuesta == AccesoController::inExitoso) {
                 return $this->render('LibreameBackendBundle:Registro:confirmarRegistro.html.twig', array('id' => $this->clave, 'usr' => $this->usuario));
             } else {
@@ -50,78 +54,7 @@ class RegistroController extends Controller
     }
     
     
-    /* validarRegistroUsuario: 
-     * Funcion que genera realiza la validación del registro de usuario en el sistema, desde el email enviado por ex4read
-     */
-    public function validarRegistroUsuario($usuario, $clave)
-    {
-        try {
-            $vUsuario = new LbUsuarios();
-            $vUsuario = $this->datosUsuarioValidos($usuario, $clave);
-            $respuesta = AccesoController::inExitoso;
-            if ($vUsuario == NULL) { $respuesta = AccesoController::inFallido; }
-            
-            if ($respuesta==AccesoController::inExitoso) {
-                $respuesta = $this->activarUsuarioRegistro($vUsuario);
-            }
-            return $respuesta;
-        } catch (Exception $ex) {
-                return AccesoController::inPlatCai;
-        } 
-    }
 
-    //Valida datos de registro de un usuario
-    public function datosUsuarioValidos($usuario, $clave)
-    {
-        try{
-            $em = $this->getDoctrine()->getManager();
-
-            $vUsuario = $em->getRepository('LibreameBackendBundle:LbUsuarios')->
-                    findOneBy(array('txusuemail' => $usuario, 
-                        'txusuvalidacion' => $clave, 
-                        'inusuestado' => AccesoController::inDatoCer));
-            
-            $em->flush();
-            
-            return $vUsuario;
-
-        } catch (Exception $ex) {
-                return NULL;
-        } 
-    }
-    
-    //Activa un usuario en accion de Validacion de Registro
-    public function activarUsuarioRegistro(LbUsuarios $usuario)
-    {
-        try{
-            /*  3. Marcar el usuario como activo
-                4. Cambiar en la BD el ID. 
-                5. Crear los registros en movimientos y bitacoras.
-                6. Finalizar y mostrar web de confirmación.*/
-            $respuesta=  AccesoController::inFallido; 
-            $fecha = new \DateTime;
-            
-            $em = $this->getDoctrine()->getManager();
-            $em->getConnection()->beginTransaction();
-
-
-            $usuario->setInusuestado(AccesoController::inDatoUno);
-            $usuario->setTxusuvalidacion($usuario->getTxusuvalidacion().'OK');
-
-            ManejoDataRepository::finalizarRegistroUsuario($usuario, $fecha, $em);    
-            
-            $em->persist($usuario);
-            
-            $em->flush();
-            $em->getConnection()->commit();
-            $respuesta=  AccesoController::inExitoso; 
-            
-            return $respuesta;
-
-        } catch (Exception $ex) {
-                return  AccesoController::inFallido;
-        } 
-    }
     
     /*
      * descomponerDatosEntrada: 
