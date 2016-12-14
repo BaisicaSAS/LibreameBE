@@ -31,7 +31,7 @@ use Libreame\BackendBundle\Entity\LbHistejemplar;
 use Libreame\BackendBundle\Entity\LbPlanes;
 use Libreame\BackendBundle\Entity\LbPlanesusuarios;
 use Libreame\BackendBundle\Helpers\Solicitud;
-
+use Libreame\BackendBundle\DQL\MatchAgainstFunction;
 
 /**
  * Description of ManejoDataRepository
@@ -1105,7 +1105,8 @@ class ManejoDataRepository extends EntityRepository {
     public function getBuscarEjemplares(LbUsuarios $usuario, Array $grupos, $texto)
     {   
         //echo "getBuscarEjemplares\n";
-        $arPalDescartar = array('a', 'ante', 'bajo', 'con', 'contra', 'de', 'desde', 
+        //14 DICIEMBRE DE 2016: CAMBIADO METODO DE BUSCAR POR FULLTEXT
+        /*$arPalDescartar = array('a', 'ante', 'bajo', 'con', 'contra', 'de', 'desde', 
                 'en', 'entre', 'hacia', 'hasta', 'para', 'por', 'segun', 'sin', 'so', 
                 'sobre', 'tras', 'yo', 'tu', 'usted', 'el', 'nosotros', 'vosotros', 
                 'ellos', 'ellas', 'ella', 'la', 'los', 'la', 'un', 'una', 'unos', 
@@ -1141,6 +1142,51 @@ class ManejoDataRepository extends EntityRepository {
                         //echo "LIBRO :".$libro->getTxlibtitulo()."\n";
                     }
                 }
+            }*/
+            
+            //Recuperar ejemplares por búsqueda full text a las tablas Libro y Autores
+        try{
+            $em = $this->getDoctrine()->getManager();
+            setlocale (LC_TIME, "es_CO");
+            $fecha = new \DateTime;
+            $objBusqueda = new LbBusquedasusuarios();
+            $objBusqueda->setFebusfecha($fecha);
+            $objBusqueda->setInbususuario($usuario);
+            $objBusqueda->setTxbuspalabra(utf8_encode($texto));
+            $em->persist($objBusqueda);
+            $em->flush();
+            $arLibros =[];
+            
+            /*$qb = $this->getEntityManager()->createQueryBuilder();
+            $qb
+            ->select('m')
+            ->from('MyBundle:MyEntity', 'm')
+            ->andWhere('MATCH (m.field) AGAINST (:field) > 1')
+            ->setParameter('field', 'value')
+                ;
+            return $qb;*/
+            /*$result = $yourRepository->createQueryBuilder('p')
+    ->addSelect("MATCH_AGAINST (p.fieldName1, p.fieldName2, p.fieldName3, :searchterm 'IN NATURAL MODE') as score")
+    ->add('where', 'MATCH_AGAINST(p.fieldName1, p.fieldName2, p.fieldName3, :searchterm) > 0.8')
+    ->setParameter('searchterm', "Test word")
+    ->orderBy('score', 'desc')
+    ->getQuery()
+    ->getResult();*/
+                
+            $query = $em->createQueryBuilder('e')
+                    ->From('LibreameBackendBundle:LbLibros','e')
+                    ->addSelect("MATCH_AGAINST (e.txlibtitulo,e.txlibedicionpais,e.txediciondescripcion,e.txlibcodigoofic,e.txlibcodigoofic13,"
+                    . " e.txlibresumen,e.txlibvolumen, :busqueda 'IN NATURAL MODE') as score")
+                    ->add('where', 'e.txlibtitulo,e.txlibedicionpais,e.txediciondescripcion,e.txlibcodigoofic,e.txlibcodigoofic13,"
+                    . " e.txlibresumen,e.txlibvolumen, :busqueda) > 0.8')
+                    ->setParameter('busqueda', $texto);
+            //$libro = new LbLibros();
+            //$libros = new Libreame\BackendBundle\Entity\LbLibros();
+            $libros = $query->getQuery()->getResult();
+            foreach ($libros as $libro) {
+                $arLibros[] = $libro->getInlibro();
+                $libroID = $libro->getInlibro();
+                echo "LIBRO :".$libro->getTxlibtitulo()."\n";
             }
             
             $q = $em->createQueryBuilder()
