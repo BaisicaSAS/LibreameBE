@@ -4,6 +4,7 @@ namespace Libreame\BackendBundle\Repository;
 
 use DateTime;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query\ResultSetMapping;
 use Doctrine\ORM\Query;
 use Libreame\BackendBundle\Controller\AccesoController;
 use Libreame\BackendBundle\Entity\LbLugares;
@@ -1157,38 +1158,38 @@ class ManejoDataRepository extends EntityRepository {
             $em->flush();
             $arLibros =[];
             
-            /*$qb = $this->getEntityManager()->createQueryBuilder();
-            $qb
-            ->select('m')
-            ->from('MyBundle:MyEntity', 'm')
-            ->andWhere('MATCH (m.field) AGAINST (:field) > 1')
-            ->setParameter('field', 'value')
-                ;
-            return $qb;*/
-            /*$result = $yourRepository->createQueryBuilder('p')
-    ->addSelect("MATCH_AGAINST (p.fieldName1, p.fieldName2, p.fieldName3, :searchterm 'IN NATURAL MODE') as score")
-    ->add('where', 'MATCH_AGAINST(p.fieldName1, p.fieldName2, p.fieldName3, :searchterm) > 0.8')
-    ->setParameter('searchterm', "Test word")
-    ->orderBy('score', 'desc')
-    ->getQuery()
-    ->getResult();*/
-                
-            $query = $em->createQueryBuilder('e')
-                    ->From('LibreameBackendBundle:LbLibros','e')
-                    ->addSelect("MATCH_AGAINST (e.txlibtitulo,e.txlibedicionpais,e.txediciondescripcion,e.txlibcodigoofic,e.txlibcodigoofic13,"
-                    . " e.txlibresumen,e.txlibvolumen, :busqueda 'IN NATURAL MODE') as score")
-                    ->add('where', 'e.txlibtitulo,e.txlibedicionpais,e.txediciondescripcion,e.txlibcodigoofic,e.txlibcodigoofic13,"
-                    . " e.txlibresumen,e.txlibvolumen, :busqueda) > 0.8')
-                    ->setParameter('busqueda', $texto);
+            $em = $this->getDoctrine()->getManager();
+            $rsm   = new ResultSetMapping();
+            /*$query = $em->createNativeQuery( 'CALL getResultadoBusqueda(?)', $rsm )
+                        ->setParameter( 1, $texto 
+                        );*/
+            $txsql = "SELECT inlibro FROM lb_libros "
+                     ." WHERE MATCH(txlibtitulo,txlibedicionpais," 
+                     ." txediciondescripcion,txlibcodigoofic,txlibcodigoofic13," 
+                     ." txlibresumen,txlibvolumen) AGAINST ('".$texto."*' IN BOOLEAN MODE)";
+            echo "SQL :[ ".$txsql."] \n";
+            $query = $em->createNativeQuery( $txsql, $rsm ); 
             //$libro = new LbLibros();
-            //$libros = new Libreame\BackendBundle\Entity\LbLibros();
-            $libros = $query->getQuery()->getResult();
+            //$libros = new LbLibros();
+            echo "Cantidad: ".count($query->getResult())."\n";
+            $libros = $query->getResult();
+            //$libros = $query->getQuery()->getResult();
+            
             foreach ($libros as $libro) {
+                echo "ENTRO:"."\n";
                 $arLibros[] = $libro->getInlibro();
                 $libroID = $libro->getInlibro();
                 echo "LIBRO :".$libro->getTxlibtitulo()."\n";
             }
             
+            $arLibros = $query->getResult();
+            echo "VA A ENTRAR:".count($arLibros)."\n";
+            foreach ($arLibros as $libro) {
+                echo "ENTRO:"."\n";
+                //$arLibros[] = $libro->getInlibro();
+                //$libroID = $libro->getInlibro();
+                echo "LIBRO :".$libro->getTxlibtitulo()."\n";
+            }
             $q = $em->createQueryBuilder()
                 ->select('e')
                 ->from('LibreameBackendBundle:LbEjemplares', 'e')
@@ -1208,6 +1209,7 @@ class ManejoDataRepository extends EntityRepository {
                 ->setMaxResults(100)
                 ->orderBy(' h.fehisejeregistro ', 'DESC');
             
+           echo "ACABO: "."\n";
            return $q->getQuery()->getResult();
             
         } catch (Exception $ex) {

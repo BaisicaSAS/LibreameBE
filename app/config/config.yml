@@ -59,10 +59,6 @@ doctrine:
     orm:
         auto_generate_proxy_classes: "%kernel.debug%"
         auto_mapping: true
-        dql:
-            string_functions:
-                # Match agains should have the path to the MatchAgainst class created in the previous step
-                MATCH_AGAINST: Libreame\BackendBundle\Extensions\Doctrine\MatchAgainst
                 
 # Swiftmailer Configuration
 swiftmailer:
