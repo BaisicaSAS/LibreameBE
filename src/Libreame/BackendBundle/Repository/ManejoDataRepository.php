@@ -750,16 +750,32 @@ class ManejoDataRepository extends EntityRepository {
                 findOneBy(array('ingenero' => $genero));
         } catch (Exception $ex) {
                 return new LbGeneros();
-        } 
+        }   
     }
     
     //Obtiene el objeto Libro según su ID 
     public function getLibro($inlibro)
     {   
         try{
+            /*echo "El libro solicitado: ".$inlibro." \n";
             $em = $this->getDoctrine()->getManager();
-            return $em->getRepository('LibreameBackendBundle:LbLibros')->
-                findOneBy(array('inlibro' => $inlibro));
+            $q = $em->createQueryBuilder()
+                ->select('l')
+                ->from('LibreameBackendBundle:LbLibros', 'l')
+                ->Where(' l.inlibro = :inlibro ')
+                ->setMaxResults(1)
+                ->setParameter('inlibro', $inlibro);
+            $libro = $q->getQuery()->getSingleResult();
+            echo "Recuperó el libro ".$libro->getInlibro()."-".$libro->getTxlibtitulo()."\n";
+            return $libro;*/
+            echo "El libro solicitado: ".$inlibro." \n";
+            $em = $this->getDoctrine()->getManager();
+            $libro = new LbLibros();
+            $libro = $em->getRepository('LibreameBackendBundle:LbLibros')->
+                find($inlibro);
+  
+            echo "Recuperó el libro ".$libro->getInlibro()."-".$libro->getTxlibedicionpais()."\n";
+            return $libro;
         } catch (Exception $ex) {
                 return new LbLibros();
         } 
@@ -1105,47 +1121,8 @@ class ManejoDataRepository extends EntityRepository {
    //Obtiene todos los Ejemplares, que coincidan con el texto OFRECIDOS, o SOLICITADOS
     public function getBuscarEjemplares(LbUsuarios $usuario, Array $grupos, $texto)
     {   
-        //echo "getBuscarEjemplares\n";
         //14 DICIEMBRE DE 2016: CAMBIADO METODO DE BUSCAR POR FULLTEXT
-        /*$arPalDescartar = array('a', 'ante', 'bajo', 'con', 'contra', 'de', 'desde', 
-                'en', 'entre', 'hacia', 'hasta', 'para', 'por', 'segun', 'sin', 'so', 
-                'sobre', 'tras', 'yo', 'tu', 'usted', 'el', 'nosotros', 'vosotros', 
-                'ellos', 'ellas', 'ella', 'la', 'los', 'la', 'un', 'una', 'unos', 
-                'unas', 'es', 'del', 'de', 'mi', 'mis', 'su', 'sus', 'lo', 'le', 'se', 
-                'si', 'lo', 'identificar', 'no', 'al', 'que', '1', '2', '3', '4', '5', 
-                '6', '7', '8', '9', '0', '(', ',', '.', ')', '"', '&', '/', '-', '=', 
-                'y', 'o', '¡', '¿', '?', ':'); 
-        $vtexto = explode(" ", utf8_encode($texto));
-        $arLibros =[];
-        $em = $this->getDoctrine()->getManager();
-        //Almacenar la búsqueda del usuario
-        setlocale (LC_TIME, "es_CO");
-        $fecha = new \DateTime;
-        $objBusqueda = new LbBusquedasusuarios();
-        $objBusqueda->setFebusfecha($fecha);
-        $objBusqueda->setInbususuario($usuario);
-        $objBusqueda->setTxbuspalabra(utf8_encode($texto));
-        $em->persist($objBusqueda);
-        $em->flush();
-        try{
-            foreach ($vtexto as $palabra)
-            {   
-                if(!in_array(strtolower($palabra), $arPalDescartar)){
-                    //Recupera cada uno de los ejemplares con ID > al del parametro
-                    $sql = "SELECT e FROM LibreameBackendBundle:LbIndicepalabra e"
-                            . " WHERE e.lbindpalpalabra LIKE :palabra";
-                    $query = $em->createQuery($sql)->setParameter('palabra', "%".strtolower($palabra)."%");
-                    //$libro = new LbLibros();
-                    $palabrasindice = $query->getResult();
-                    foreach ($palabrasindice as $indice) {
-                        $arLibros[] = $indice->getLbindpallibro();
-                        $libro = $indice->getLbindpallibro();
-                        //echo "LIBRO :".$libro->getTxlibtitulo()."\n";
-                    }
-                }
-            }*/
-            
-            //Recuperar ejemplares por búsqueda full text a las tablas Libro y Autores
+        //Recuperar ejemplares por búsqueda full text a las tablas Libro y Autores
         try{
             $em = $this->getDoctrine()->getManager();
             setlocale (LC_TIME, "es_CO");
@@ -1160,43 +1137,35 @@ class ManejoDataRepository extends EntityRepository {
             
             $em = $this->getDoctrine()->getManager();
             $rsm   = new ResultSetMapping();
-            /*$query = $em->createNativeQuery( 'CALL getResultadoBusqueda(?)', $rsm )
-                        ->setParameter( 1, $texto 
-                        );*/
+            $rsm->addEntityResult('LibreameBackendBundle:LbLibros', 'l');
+            $rsm->addFieldResult('l', 'inlibro', 'inlibro');
+
             $txsql = "SELECT inlibro FROM lb_libros "
                      ." WHERE MATCH(txlibtitulo,txlibedicionpais," 
                      ." txediciondescripcion,txlibcodigoofic,txlibcodigoofic13," 
-                     ." txlibresumen,txlibvolumen) AGAINST ('".$texto."*' IN BOOLEAN MODE)";
-            echo "SQL :[ ".$txsql."] \n";
+                     //." txlibresumen,txlibvolumen) AGAINST ('".$texto."*' IN BOOLEAN MODE)";
+                     ." txlibresumen,txlibvolumen) AGAINST ('".$texto."*' )";
+            //echo "SQL :[ ".$txsql."] \n";
             $query = $em->createNativeQuery( $txsql, $rsm ); 
-            //$libro = new LbLibros();
-            //$libros = new LbLibros();
-            echo "Cantidad: ".count($query->getResult())."\n";
+
+            //echo "Cantidad: ".$rsm->getEntityResultCount()."\n";
             $libros = $query->getResult();
-            //$libros = $query->getQuery()->getResult();
+
             
             foreach ($libros as $libro) {
-                echo "ENTRO:"."\n";
+                //echo "ENTRO:"."\n";
                 $arLibros[] = $libro->getInlibro();
                 $libroID = $libro->getInlibro();
-                echo "LIBRO :".$libro->getTxlibtitulo()."\n";
+                //echo "LIBRO :".$libro->getTxlibtitulo()."\n";
             }
             
-            $arLibros = $query->getResult();
-            echo "VA A ENTRAR:".count($arLibros)."\n";
-            foreach ($arLibros as $libro) {
-                echo "ENTRO:"."\n";
-                //$arLibros[] = $libro->getInlibro();
-                //$libroID = $libro->getInlibro();
-                echo "LIBRO :".$libro->getTxlibtitulo()."\n";
-            }
             $q = $em->createQueryBuilder()
                 ->select('e')
                 ->from('LibreameBackendBundle:LbEjemplares', 'e')
                 ->leftJoin('LibreameBackendBundle:LbUsuarios', 'u', \Doctrine\ORM\Query\Expr\Join::WITH, 'u.inusuario = e.inejeusudueno')
                 ->leftJoin('LibreameBackendBundle:LbMembresias', 'm', \Doctrine\ORM\Query\Expr\Join::WITH, 'm.inmemusuario = e.inejeusudueno')
                 ->leftJoin('LibreameBackendBundle:LbHistejemplar', 'h', \Doctrine\ORM\Query\Expr\Join::WITH, 'h.inhisejeejemplar = e.inejemplar and h.inhisejeusuario = e.inejeusudueno')
-                ->where(' e.inejelibro in (:plibros)')
+                ->where(' e.inejelibro in (:plibros)')  
                 ->setParameter('plibros', $arLibros)
                 ->andWhere(' u.inusuestado = :estado')//Solo los usuarios con estado 1
                 ->setParameter('estado', 1)//Solo los usuarios con estado 1
@@ -1209,7 +1178,7 @@ class ManejoDataRepository extends EntityRepository {
                 ->setMaxResults(100)
                 ->orderBy(' h.fehisejeregistro ', 'DESC');
             
-           echo "ACABO: "."\n";
+           //echo "ACABO: "."\n";
            return $q->getQuery()->getResult();
             
         } catch (Exception $ex) {
@@ -1495,7 +1464,8 @@ class ManejoDataRepository extends EntityRepository {
         try{
             $em = $this->getDoctrine()->getManager();
             return $em->getRepository('LibreameBackendBundle:LbLibros')->
-                    findOneBy(array('inlibro' => $idlibro));
+                    findOneById($idlibro);
+                    //findOneBy(array('inlibro' => $idlibro));
 
         } catch (Exception $ex) {
                 return new LbLibros();

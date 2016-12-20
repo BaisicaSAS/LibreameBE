@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * LbLibros
  *
- * @ORM\Table(name="lb_libros", indexes={@ORM\Index(name="idx_tipopublica", columns={"txLibTipoPublica"}), @ORM\Index(name="idx_titulo", columns={"txLibTitulo"}), @ORM\Index(name="idx_ISBN10", columns={"txLibCodigoOfic"}), @ORM\Index(name="idx_ISBN13", columns={"txLibCodigoOfic13"}), @ORM\Index(name="fk_lb_libros_lb_titulos1_idx", columns={"inLibTitTitulo"}), @ORM\Index(name="fk_lb_libros_lb_idiomas1_idx", columns={"inLibIdioma"})})
+ * @ORM\Table(name="lb_libros", indexes={@ORM\Index(name="idx_tipopublica", columns={"txLibTipoPublica"}), @ORM\Index(name="idx_titulo", columns={"txLibTitulo"}), @ORM\Index(name="idx_ISBN10", columns={"txLibCodigoOfic"}), @ORM\Index(name="idx_ISBN13", columns={"txLibCodigoOfic13"}), @ORM\Index(name="fk_lb_libros_lb_titulos1_idx", columns={"inLibTitTitulo"}), @ORM\Index(name="fk_lb_libros_lb_idiomas1_idx", columns={"inLibIdioma"}), @ORM\Index(name="indextxLibTitulo", columns={"txLibTitulo", "txLibEdicionPais", "txEdicionDescripcion", "txLibCodigoOfic", "txLibCodigoOfic13", "txLibResumen", "txLibVolumen"})})
  * @ORM\Entity
  */
 class LbLibros

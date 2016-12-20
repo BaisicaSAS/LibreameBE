@@ -20,6 +20,15 @@ Libreame\BackendBundle\Entity\LbLibros:
         fk_lb_libros_lb_idiomas1_idx:
             columns:
                 - inLibIdioma
+        indextxLibTitulo:
+            columns:
+                - txLibTitulo
+                - txLibEdicionPais
+                - txEdicionDescripcion
+                - txLibCodigoOfic
+                - txLibCodigoOfic13
+                - txLibResumen
+                - txLibVolumen
     id:
         inlibro:
             type: integer

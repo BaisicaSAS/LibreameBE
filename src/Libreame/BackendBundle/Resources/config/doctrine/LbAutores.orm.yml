@@ -1,6 +1,10 @@
 Libreame\BackendBundle\Entity\LbAutores:
     type: entity
     table: lb_autores
+    indexes:
+        txAutNombre:
+            columns:
+                - txAutNombre
     id:
         inidautor:
             type: integer
