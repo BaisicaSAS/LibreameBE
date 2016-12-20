@@ -678,14 +678,15 @@ class Logica {
                 $generos = new LbGeneros();
                 $autores = new LbAutores();
                 $editoriales = new LbEditoriales();
-                //$libros = new LbLibros();
+                $libros = new LbLibros();
                 $usuario = new LbUsuarios();
                 if ($respuesta->getRespuesta()== AccesoController::inULogged){
                     echo "Ingresa al libro [".utf8_encode($ejemplar->getInejelibro()->getInlibro())."] \n";
                     $libros = ManejoDataRepository::getLibro($ejemplar->getInejelibro()->getInlibro());
+                    //$libros = $ejemplar->getInejelibro();
                     //$libros = $ejemplar->getInejelibro()->getInlibro();
                     echo "libro: [".utf8_encode($libros->getTxlibtitulo())."]\n";
-                    echo "ejemplar: [".$ejemplar->getInejemplar()."-".$ejemplar->getInejelibro()->getInlibro()."] libro: [".utf8_encode($libros->getTxlibtitulo())."]\n";
+                    echo "ejemplar: [".$ejemplar->getInejemplar()."-".$ejemplar->getInejelibro()->getInlibro()."] libro: [".utf8_encode($ejemplar->getInejelibro()->getTxlibtitulo())."]\n";
                     $generos = ManejoDataRepository::getGenerosLibro($ejemplar->getInejelibro()->getInlibro());
                     //echo "...generos \n";
                     $autores = ManejoDataRepository::getAutoresLibro($ejemplar->getInejelibro()->getInlibro());
