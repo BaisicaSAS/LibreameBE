@@ -64,10 +64,10 @@ class LbNegociacion extends \Libreame\BackendBundle\Entity\LbNegociacion impleme
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', 'inidnegociacion', 'txnegmensaje', 'innegmensleido', 'fenegfechamens', 'innegmenseliminado', 'innegejemplar', 'innegusuduenho', 'innegususolicita', 'innegusuescribe');
+            return array('__isInitialized__', 'inidnegociacion', 'txnegmensaje', 'innegmensleidosol', 'innegmensleidodue', 'fenegfechamens', 'innegmenseliminado', 'innegejemplar', 'innegusuduenho', 'innegususolicita', 'innegusuescribe', 'txnegidconversacion');
         }
 
-        return array('__isInitialized__', 'inidnegociacion', 'txnegmensaje', 'innegmensleido', 'fenegfechamens', 'innegmenseliminado', 'innegejemplar', 'innegusuduenho', 'innegususolicita', 'innegusuescribe');
+        return array('__isInitialized__', 'inidnegociacion', 'txnegmensaje', 'innegmensleidosol', 'innegmensleidodue', 'fenegfechamens', 'innegmenseliminado', 'innegejemplar', 'innegusuduenho', 'innegususolicita', 'innegusuescribe', 'txnegidconversacion');
     }
 
     /**
@@ -213,23 +213,45 @@ class LbNegociacion extends \Libreame\BackendBundle\Entity\LbNegociacion impleme
     /**
      * {@inheritDoc}
      */
-    public function setInnegmensleido($innegmensleido)
+    public function setInnegmensleidosol($innegmensleidosol)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setInnegmensleido', array($innegmensleido));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setInnegmensleidosol', array($innegmensleidosol));
 
-        return parent::setInnegmensleido($innegmensleido);
+        return parent::setInnegmensleidosol($innegmensleidosol);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getInnegmensleido()
+    public function getInnegmensleidosol()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getInnegmensleido', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getInnegmensleidosol', array());
 
-        return parent::getInnegmensleido();
+        return parent::getInnegmensleidosol();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setInnegmensleidodue($innegmensleidodue)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setInnegmensleidodue', array($innegmensleidodue));
+
+        return parent::setInnegmensleidodue($innegmensleidodue);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getInnegmensleidodue()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getInnegmensleidodue', array());
+
+        return parent::getInnegmensleidodue();
     }
 
     /**
@@ -362,6 +384,28 @@ class LbNegociacion extends \Libreame\BackendBundle\Entity\LbNegociacion impleme
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getInnegusuescribe', array());
 
         return parent::getInnegusuescribe();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setTxnegidconversacion($txnegidconversacion)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setTxnegidconversacion', array($txnegidconversacion));
+
+        return parent::setTxnegidconversacion($txnegidconversacion);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getTxnegidconversacion()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getTxnegidconversacion', array());
+
+        return parent::getTxnegidconversacion();
     }
 
 }

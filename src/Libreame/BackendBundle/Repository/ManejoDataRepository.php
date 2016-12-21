@@ -31,6 +31,8 @@ use Libreame\BackendBundle\Entity\LbNegociacion;
 use Libreame\BackendBundle\Entity\LbHistejemplar;
 use Libreame\BackendBundle\Entity\LbPlanes;
 use Libreame\BackendBundle\Entity\LbPlanesusuarios;
+use Libreame\BackendBundle\Entity\LbEditorialeslibros;
+use Libreame\BackendBundle\Entity\LbAutoreslibros;
 use Libreame\BackendBundle\Helpers\Solicitud;
 use Libreame\BackendBundle\DQL\MatchAgainstFunction;
 
@@ -757,24 +759,14 @@ class ManejoDataRepository extends EntityRepository {
     public function getLibro($inlibro)
     {   
         try{
-            /*echo "El libro solicitado: ".$inlibro." \n";
+            //echo "El libro solicitado: -[".$inlibro."]- \n";
             $em = $this->getDoctrine()->getManager();
-            $q = $em->createQueryBuilder()
-                ->select('l')
-                ->from('LibreameBackendBundle:LbLibros', 'l')
-                ->Where(' l.inlibro = :inlibro ')
-                ->setMaxResults(1)
-                ->setParameter('inlibro', $inlibro);
-            $libro = $q->getQuery()->getSingleResult();
-            echo "Recuperó el libro ".$libro->getInlibro()."-".$libro->getTxlibtitulo()."\n";
-            return $libro;*/
-            echo "El libro solicitado: ".$inlibro." \n";
-            $em = $this->getDoctrine()->getManager();
-            $libro = new LbLibros();
+            //$libro = new LbLibros();
             $libro = $em->getRepository('LibreameBackendBundle:LbLibros')->
-                find($inlibro);
+                //findOneBy(array("inlibro"=>$inlibro));
+                findOneByInlibro($inlibro);
   
-            echo "Recuperó el libro ".$libro->getInlibro()."-".$libro->getTxlibedicionpais()."\n";
+            //echo "Recuperó el libro ".$libro->getInlibro()."-".$libro->getTxlibtitulo()."\n";
             return $libro;
         } catch (Exception $ex) {
                 return new LbLibros();
@@ -871,6 +863,30 @@ class ManejoDataRepository extends EntityRepository {
                     findOneBy(array('inejemplar' => $ejemplar));
         } catch (Exception $ex) {
                 return new LbEjemplares();
+        } 
+    }
+                
+    //Obtiene todos los libros de un autor
+    public function getLibrosByAutor($autor)
+    {   
+        try{
+            $em = $this->getDoctrine()->getManager();
+            return $em->getRepository('LibreameBackendBundle:LbAutoreslibros')->
+                    findBy(array('inautlidautor' => $autor));
+        } catch (Exception $ex) {
+                return new LbAutoreslibros();
+        } 
+    }
+                
+    //Obtiene todos los libros de una editorial
+    public function getLibrosByEditorial($editorial)
+    {   
+        try{
+            $em = $this->getDoctrine()->getManager();
+            return $em->getRepository('LibreameBackendBundle:LbEditorialeslibros')->
+                    findBy(array('inedilibroeditorial' => $editorial));
+        } catch (Exception $ex) {
+                return new LbEditorialeslibros();
         } 
     }
                 
@@ -1139,26 +1155,73 @@ class ManejoDataRepository extends EntityRepository {
             $rsm   = new ResultSetMapping();
             $rsm->addEntityResult('LibreameBackendBundle:LbLibros', 'l');
             $rsm->addFieldResult('l', 'inlibro', 'inlibro');
-
-            $txsql = "SELECT inlibro FROM lb_libros "
-                     ." WHERE MATCH(txlibtitulo,txlibedicionpais," 
+            $rsm->addFieldResult('l', 'txlibtipopublica', 'txlibtipopublica');
+            $rsm->addFieldResult('l', 'txlibtitulo', 'txlibtitulo');
+            $rsm->addFieldResult('l', 'txlibedicionanio', 'txlibedicionanio');
+            $rsm->addFieldResult('l', 'txlibedicionnum', 'txlibedicionnum');
+            $rsm->addFieldResult('l', 'txlibedicionpais', 'txlibedicionpais');
+            $rsm->addFieldResult('l', 'txediciondescripcion', 'txediciondescripcion');
+            $rsm->addFieldResult('l', 'txlibcodigoofic', 'txlibcodigoofic');
+            $rsm->addFieldResult('l', 'txlibcodigoofic13', 'txlibcodigoofic13');
+            $rsm->addFieldResult('l', 'txlibresumen', 'txlibresumen');
+            $rsm->addFieldResult('l', 'txlibtomo', 'txlibtomo');
+            $rsm->addFieldResult('l', 'txlibvolumen', 'txlibvolumen');
+            //$rsm->addFieldResult('l', 'inlibidioma', 'inlibidioma');
+            $rsm->addFieldResult('l', 'txlibpaginas', 'txlibpaginas');
+            //$rsm->addFieldResult('l', 'inlibtittitulo', 'inlibtittitulo');
+            $rsm->addEntityResult('LibreameBackendBundle:LbAutores', 'a');
+            $rsm->addFieldResult('a', 'inidautor', 'inidautor');
+            $rsm->addFieldResult('a', 'txautnombre', 'txautnombre');
+            $rsm->addFieldResult('a', 'txautpais', 'txautpais');
+            $rsm->addEntityResult('LibreameBackendBundle:LbEditoriales', 'e');
+            $rsm->addFieldResult('e', 'inideditorial', 'inideditorial');
+            $rsm->addFieldResult('e', 'txedinombre', 'txedinombre');
+            $rsm->addFieldResult('e', 'txedipais', 'txedipais');
+            //Consulta libros por indice en tabla libro
+            $txsql = "SELECT inlibro, txlibtipopublica, txlibtitulo,txlibedicionanio, txlibedicionnum, "
+                    . "txlibedicionpais, txediciondescripcion, txlibcodigoofic, txlibcodigoofic13, "
+                    . "txlibresumen, txlibtomo, txlibvolumen, txlibpaginas FROM lb_libros "
+                     ." WHERE MATCH(txlibtitulo,txlibedicionpais, " 
                      ." txediciondescripcion,txlibcodigoofic,txlibcodigoofic13," 
-                     //." txlibresumen,txlibvolumen) AGAINST ('".$texto."*' IN BOOLEAN MODE)";
-                     ." txlibresumen,txlibvolumen) AGAINST ('".$texto."*' )";
-            //echo "SQL :[ ".$txsql."] \n";
+                     ." txlibresumen,txlibvolumen) AGAINST ('".$texto."*' IN BOOLEAN MODE)";
             $query = $em->createNativeQuery( $txsql, $rsm ); 
-
-            //echo "Cantidad: ".$rsm->getEntityResultCount()."\n";
             $libros = $query->getResult();
-
-            
             foreach ($libros as $libro) {
                 //echo "ENTRO:"."\n";
                 $arLibros[] = $libro->getInlibro();
                 $libroID = $libro->getInlibro();
-                //echo "LIBRO :".$libro->getTxlibtitulo()."\n";
+                //echo "**BUSCAR LIBRO :".$libroID."-".$libro->getTxlibtitulo()."\n";
+            }
+
+            //Consulta libros por indice en tabla autores
+            $txsql = "SELECT inidautor, txautnombre, txautpais FROM lb_autores "
+                     ." WHERE MATCH(txautnombre,txautpais) AGAINST ('".$texto."*' IN BOOLEAN MODE)";
+            $query = $em->createNativeQuery( $txsql, $rsm ); 
+            $autores = $query->getResult();
+            foreach ($autores as $autor) {
+                $aut_libros = ManejoDataRepository::getLibrosByAutor($autor->getInidautor());
+                foreach ($aut_libros as $autlibro) {
+                    //echo "ENTRO:"."\n";
+                    $arLibros[] = $autlibro->getInautlidlibro();
+                    $libroID = $autlibro->getInautlidlibro();
+                    //echo "**BUSCAR LIBRO :".$libroID."-".$libro->getTxlibtitulo()."\n";
+                }
             }
             
+            //Consulta libros por indice en tabla editoriales
+            $txsql = "SELECT inideditorial, txedinombre, txedipais FROM lb_editoriales "
+                     ." WHERE MATCH(txedinombre,txedipais) AGAINST ('".$texto."*' IN BOOLEAN MODE)";
+            $query = $em->createNativeQuery( $txsql, $rsm ); 
+            $editoriales = $query->getResult();
+            foreach ($editoriales as $editorial) {
+                $edi_libros = ManejoDataRepository::getLibrosByEditorial($editorial->getInideditorial());
+                foreach ($edi_libros as $edilibro) {
+                    //echo "ENTRO:"."\n";
+                    $arLibros[] = $edilibro->getInediliblibro();
+                    $libroID = $edilibro->getInediliblibro();
+                    //echo "**BUSCAR LIBRO :".$libroID."-".$libro->getTxlibtitulo()."\n";
+                }
+            }
             $q = $em->createQueryBuilder()
                 ->select('e')
                 ->from('LibreameBackendBundle:LbEjemplares', 'e')
@@ -1175,11 +1238,14 @@ class ManejoDataRepository extends EntityRepository {
                 ->setParameter('pmovimiento', 1)//Todos los ejemplares con registro de movimiento en historia ejemplar: publicados 
                 ->andWhere(' m.inmemgrupo in (:grupos) ')//Para los grupos del usuario
                 ->setParameter('grupos', $grupos)
-                ->setMaxResults(100)
+                ->setMaxResults(30)
                 ->orderBy(' h.fehisejeregistro ', 'DESC');
             
            //echo "ACABO: "."\n";
-           return $q->getQuery()->getResult();
+          $resejemplares = $q->getQuery()->getResult();  
+          $em->flush();
+
+          return $resejemplares;
             
         } catch (Exception $ex) {
                 return new LbEjemplares();
@@ -1457,21 +1523,7 @@ class ManejoDataRepository extends EntityRepository {
         } 
     }
     
-    /*
-     * Recupera un libro, con su Id numerico
-     */
-    public function getLibroById($idlibro){
-        try{
-            $em = $this->getDoctrine()->getManager();
-            return $em->getRepository('LibreameBackendBundle:LbLibros')->
-                    findOneById($idlibro);
-                    //findOneBy(array('inlibro' => $idlibro));
-
-        } catch (Exception $ex) {
-                return new LbLibros();
-        } 
-    }
-    
+   
     /*
      * Recupera un comentario, con su Id numerico
      */
@@ -1891,7 +1943,7 @@ class ManejoDataRepository extends EntityRepository {
         try{
             $em = $this->getDoctrine()->getManager();
             
-           // echo "manejodarepo:usr ".$usuario;
+           //echo "manejodarepo:usr ".$usuario;
             //echo "manejodarepo:clave ".$clave;
             $vUsuario = new LbUsuarios();
             $vUsuario = $em->getRepository('LibreameBackendBundle:LbUsuarios')->
@@ -1946,6 +1998,20 @@ class ManejoDataRepository extends EntityRepository {
         } 
     }    
     
-    
+     //Genera la carga y publicación de un ejemplar a la plataforma
+    public function generarPublicacionEjemplar(LbUsuarios $usuario){
+        //Para publicar un ejemplar
+        //1. Validar en front end el Libro y auto..completar si es necesario,  @TODO:  está fuincion debe realizarse
+        //2. Revisa si el libro existe, si no existe lo crea, de Igual manera la editorial y el / los autores y el género
+        //   De igual manera debe crearse el TITULO, el IDIOMA, el Pais de la editorial como del Autor
+        //3. Elige 3 usuarios activos para que califiquen el precio del libro, el libro queda pendiente por publicacion , envía correos
+        //4. Se crea el ejemplar
+        //5. DEBO REVISAR SI EL USUARIO TIENE PENDIENTES?, DE CAMBIO O DE ALGO PARA PERMITIR O NO PUBLICAR O PARA BLOQUEAR EL EJEMPLAR.
+        //6. DEBO REVISAR TAMBIEN EL PLANES DE USUARIO 
+        //7. En este momento los puntos del usuario no le aparecen, hasta que no haya sido validado
+        //8. Se crea un registro de historialejemplar, hay que revisar con que tipo de Movimiento, porque debe adicionarse
+    }
+            
+   
 
 }

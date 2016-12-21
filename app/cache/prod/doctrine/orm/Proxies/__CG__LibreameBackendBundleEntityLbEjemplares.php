@@ -64,10 +64,10 @@ class LbEjemplares extends \Libreame\BackendBundle\Entity\LbEjemplares implement
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', 'inejemplar', 'inejecantidad', 'dbejeavaluo', 'txejeimagen', 'inejepuntos', 'inejepublicado', 'inejebloqueado', 'inejeestado', 'inejecondicion', 'inejesoloventa', 'inejelibro', 'inejeusudueno');
+            return array('__isInitialized__', 'inejemplar', 'inejecantidad', 'dbejeavaluo', 'txejeimagen', 'inejepuntos', 'inejepublicado', 'inejebloqueado', 'inejeestado', 'inejecondicion', 'inejesoloventa', 'inejelibro', 'inejeusudueno', 'inejeestadonegocio', 'inejereghisbloqueo', 'inejereghispublicacion', 'inejereghisbajasis', 'inejereghisaprobdueno', 'inejereghisaprobsolic', 'inejereghisentrega', 'inejereghisrecibido');
         }
 
-        return array('__isInitialized__', 'inejemplar', 'inejecantidad', 'dbejeavaluo', 'txejeimagen', 'inejepuntos', 'inejepublicado', 'inejebloqueado', 'inejeestado', 'inejecondicion', 'inejesoloventa', 'inejelibro', 'inejeusudueno');
+        return array('__isInitialized__', 'inejemplar', 'inejecantidad', 'dbejeavaluo', 'txejeimagen', 'inejepuntos', 'inejepublicado', 'inejebloqueado', 'inejeestado', 'inejecondicion', 'inejesoloventa', 'inejelibro', 'inejeusudueno', 'inejeestadonegocio', 'inejereghisbloqueo', 'inejereghispublicacion', 'inejereghisbajasis', 'inejereghisaprobdueno', 'inejereghisaprobsolic', 'inejereghisentrega', 'inejereghisrecibido');
     }
 
     /**
@@ -428,6 +428,182 @@ class LbEjemplares extends \Libreame\BackendBundle\Entity\LbEjemplares implement
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getInejeusudueno', array());
 
         return parent::getInejeusudueno();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setInejeestadonegocio($inejeestadonegocio)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setInejeestadonegocio', array($inejeestadonegocio));
+
+        return parent::setInejeestadonegocio($inejeestadonegocio);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getInejeestadonegocio()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getInejeestadonegocio', array());
+
+        return parent::getInejeestadonegocio();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setInejereghisbloqueo($inejereghisbloqueo)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setInejereghisbloqueo', array($inejereghisbloqueo));
+
+        return parent::setInejereghisbloqueo($inejereghisbloqueo);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getInejereghisbloqueo()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getInejereghisbloqueo', array());
+
+        return parent::getInejereghisbloqueo();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setInejereghispublicacion($inejereghispublicacion)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setInejereghispublicacion', array($inejereghispublicacion));
+
+        return parent::setInejereghispublicacion($inejereghispublicacion);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getInejereghispublicacion()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getInejereghispublicacion', array());
+
+        return parent::getInejereghispublicacion();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setInejereghisbajasis($inejereghisbajasis)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setInejereghisbajasis', array($inejereghisbajasis));
+
+        return parent::setInejereghisbajasis($inejereghisbajasis);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getInejereghisbajasis()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getInejereghisbajasis', array());
+
+        return parent::getInejereghisbajasis();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setInejereghisaprobdueno($inejereghisaprobdueno)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setInejereghisaprobdueno', array($inejereghisaprobdueno));
+
+        return parent::setInejereghisaprobdueno($inejereghisaprobdueno);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getInejereghisaprobdueno()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getInejereghisaprobdueno', array());
+
+        return parent::getInejereghisaprobdueno();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setInejereghisaprobsolic($inejereghisaprobsolic)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setInejereghisaprobsolic', array($inejereghisaprobsolic));
+
+        return parent::setInejereghisaprobsolic($inejereghisaprobsolic);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getInejereghisaprobsolic()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getInejereghisaprobsolic', array());
+
+        return parent::getInejereghisaprobsolic();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setInejereghisentrega($inejereghisentrega)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setInejereghisentrega', array($inejereghisentrega));
+
+        return parent::setInejereghisentrega($inejereghisentrega);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getInejereghisentrega()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getInejereghisentrega', array());
+
+        return parent::getInejereghisentrega();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setInejereghisrecibido($inejereghisrecibido)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setInejereghisrecibido', array($inejereghisrecibido));
+
+        return parent::setInejereghisrecibido($inejereghisrecibido);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getInejereghisrecibido()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getInejereghisrecibido', array());
+
+        return parent::getInejereghisrecibido();
     }
 
 }

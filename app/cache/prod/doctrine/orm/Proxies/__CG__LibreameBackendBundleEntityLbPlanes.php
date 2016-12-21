@@ -64,10 +64,10 @@ class LbPlanes extends \Libreame\BackendBundle\Entity\LbPlanes implements \Doctr
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', 'inplan', 'txplannombr', 'txplandescripcion', 'inplanvigente', 'inplanfree', 'inplandiasfree', 'feplancreacion', 'feplaninivigencia', 'feplanfinvigencia');
+            return array('__isInitialized__', 'inplan', 'txplannombr', 'txplandescripcion', 'inplanvigente', 'inplanfree', 'inplandiasfree', 'feplancreacion', 'feplaninivigencia', 'feplanfinvigencia', 'inplancantejemes');
         }
 
-        return array('__isInitialized__', 'inplan', 'txplannombr', 'txplandescripcion', 'inplanvigente', 'inplanfree', 'inplandiasfree', 'feplancreacion', 'feplaninivigencia', 'feplanfinvigencia');
+        return array('__isInitialized__', 'inplan', 'txplannombr', 'txplandescripcion', 'inplanvigente', 'inplanfree', 'inplandiasfree', 'feplancreacion', 'feplaninivigencia', 'feplanfinvigencia', 'inplancantejemes');
     }
 
     /**
@@ -362,6 +362,28 @@ class LbPlanes extends \Libreame\BackendBundle\Entity\LbPlanes implements \Doctr
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getFeplanfinvigencia', array());
 
         return parent::getFeplanfinvigencia();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setInplancantejemes($inplancantejemes)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setInplancantejemes', array($inplancantejemes));
+
+        return parent::setInplancantejemes($inplancantejemes);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getInplancantejemes()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getInplancantejemes', array());
+
+        return parent::getInplancantejemes();
     }
 
 }

@@ -449,6 +449,122 @@ class Logica {
     }    
 
     /*
+     * respuestaBuscarEjemplares: 
+     * Funcion que genera el JSON de respuesta para la accion de Buscar ejemplares :: AccesoController::txAccBusEjem:
+     */
+    public function respuestaBuscarEjemplares(Respuesta $respuesta, Solicitud $pSolicitud, $parreglo){
+        try{
+            $arrTmp = array();
+            $ejemplar = new LbEjemplares();
+            $usuarioConsulta = ManejoDataRepository::getUsuarioByEmail($pSolicitud->getEmail());
+            //echo "Va a generar la respuestaBuscarEjemplares :: Logica.php [365] \n";
+            foreach ($parreglo as $ejemplar){
+                //Recupera nombre del genero, Nombre del libro, Nombre del uduario Dueño
+                $generos = new LbGeneros();
+                $autores = new LbAutores();
+                $editoriales = new LbEditoriales();
+                $libros = new LbLibros();
+                $usuario = new LbUsuarios();
+                if ($respuesta->getRespuesta()== AccesoController::inULogged){
+                    $libros = ManejoDataRepository::getLibro($ejemplar->getInejelibro()->getInlibro());
+                    //echo "titulo libro: [".utf8_encode($libros->getTxlibtitulo())."]\n";
+                    //echo "ejemplar: [".$ejemplar->getInejemplar()."--".$ejemplar->getInejelibro()->getInlibro()."] libro: [".utf8_encode($libros->getTxlibtitulo())."]\n";
+                    $generos = ManejoDataRepository::getGenerosLibro($ejemplar->getInejelibro()->getInlibro());
+                    //echo "...generos \n";
+                    $autores = ManejoDataRepository::getAutoresLibro($ejemplar->getInejelibro()->getInlibro());
+                    //echo "...autores \n";
+                    $editoriales = ManejoDataRepository::getEditorialesLibro($ejemplar->getInejelibro()->getInlibro());
+                    //echo "...editoriales \n";
+                    $megusta = ManejoDataRepository::getMegustaEjemplar($ejemplar, $usuarioConsulta);
+                    //echo "...megusta \n";
+                    $cantmegusta = ManejoDataRepository::getCantMegusta($ejemplar->getInejemplar());
+                    //echo "...cantmegusta \n";
+                    $cantcomment = ManejoDataRepository::getCantComment($ejemplar->getInejemplar());
+                    //echo "...cantcomment \n";
+                    $usuario = ManejoDataRepository::getUsuarioById($ejemplar->getInejeusudueno()->getInusuario());
+                    //echo "...usuario [".utf8_encode($usuario->getTxusunommostrar())."] \n";
+                    $promcalifica = ManejoDataRepository::getPromedioCalifica($usuario->getInusuario());
+                    //echo "...promcalifica \n";
+                    $fecpublica = ManejoDataRepository::getFechaPublicacion($ejemplar, $usuario);
+                    //echo "...$fecpublica \n";
+                    //echo "RECUPERO DATOS\n";*/
+                }
+                
+                $arrAutores = array();
+                foreach ($autores as $autor) {
+                    //echo "...autor [".utf8_encode($autor->getTxautnombre())."] \n";
+                    $arrAutores[] = array('inidautor' => $autor->getInidautor(),
+                        'txautnombre' => utf8_encode($autor->getTxautnombre()));
+                }
+                $arrEditoriales = array();
+                foreach ($editoriales as $editorial) {
+                    //echo "...editorial [".utf8_encode($editorial->getTxedinombre())."] \n";
+                    $arrEditoriales[] = array('inideditorial' => $editorial->getInideditorial(),
+                        'txedinombre' => utf8_encode($editorial->getTxedinombre()));
+                }
+                $arrGeneros = array();
+                foreach ($generos as $genero) {
+                    //echo "...genero [".utf8_encode($genero->getTxgennombre())."] \n";
+                    $arrGeneros[] = array('ingenero' => $genero->getIngenero(),
+                        'txgennombre' => utf8_encode($genero->getTxgennombre()));
+                }
+                
+                $titulo = utf8_encode($libros->getTxlibtitulo());
+                $precio = utf8_encode($ejemplar->getDbejeavaluo());  //Precio del libro
+                $puntos = utf8_encode($ejemplar->getInejepuntos()); //Cantidad de puntos
+                $estado = utf8_encode($ejemplar->getInejeestado()); // de 1 a 10
+                $usado = utf8_encode($ejemplar->getInejecondicion()); //0 nuevo - 1 usado
+                $vencam = utf8_encode($ejemplar->getInejesoloventa()); //1: Solo venta - 2: venta / cambio - 3: Solo cambio
+                $edicion = utf8_encode($libros->getTxediciondescripcion());
+                $isbn10 = utf8_encode($libros->getTxlibcodigoofic());
+                $isbn13 = utf8_encode($libros->getTxlibcodigoofic13());
+                $imagen = utf8_encode($ejemplar->getTxejeimagen());
+                $lugar = $usuario->getInusulugar();
+                $condactual = $ejemplar->getInejeestadonegocio(); // 0 - No en negociacion,1 - Solicitado por usuario, 2 - En proceso de aprobación del negocio, 3 - Aprobado negocio por Ambos actores, 4 - En proceso de entrega, 5 - Entregado, 6 - Recibido
+                $desccondactual = utf8_encode(ManejoDataRepository::getDescCondicionActualEjemplar($ejemplar->getInejeestadonegocio())); // 0 - No en negociacion,1 - Solicitado por usuario, 2 - En proceso de aprobación del negocio, 3 - Aprobado negocio por Ambos actores, 4 - En proceso de entrega, 5 - Entregado, 6 - Recibido
+                //echo "Titulo + Descripcion edicion : [".$titulo."] - [".$edicion."]\n";
+                $arrTmp[] = array('idejemplar' => $ejemplar->getInejemplar(), 
+                    'titulo' => $titulo, 
+                    'precio' => $precio, 
+                    'puntos' => $puntos, 
+                    'estado' => $estado, 
+                    'usado' => $usado, 
+                    'vencam' => $vencam, 
+                    'imagen' => $imagen, 
+                    'edicion' => $edicion,
+                    'isbn10' => $isbn10,
+                    'isbn13' => $isbn13,
+                    'megusta' => $megusta,
+                    'fechapublica' => $fecpublica,
+                    'cantmegusta' => $cantmegusta,
+                    'cantcomment' => $cantcomment,
+                    'condactual' => $condactual,
+                    'desccondactual' => $desccondactual,
+                    'lugar' => array('inlugar' => $lugar->getInlugar(), 'txlugnombre' => utf8_encode($lugar->getTxlugnombre())),
+                    'autores' => $arrAutores,
+                    'editoriales' => $arrEditoriales,
+                    'generos' => $arrGeneros,
+                    'usrdueno' => array('inusuario' => $usuario->getInusuario(),
+                        'txusunommostrar' => utf8_encode($usuario->getTxusunommostrar()),
+                        'txusuimagen' => utf8_encode($usuario->getTxusuimagen()),
+                        'calificacion' => $promcalifica)
+                );
+                
+            }
+            
+            return array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
+                    'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr(), 
+                    'iddevice'=> $pSolicitud->getDeviceMac(), 'marca'=>$pSolicitud->getDeviceMarca(), 
+                    'modelo'=>$pSolicitud->getDeviceModelo(), 'so'=>$pSolicitud->getDeviceSO()), 
+                    'idrespuesta' => array('respuesta' => $respuesta->getRespuesta(), 
+                    'ejemplares' => $arrTmp ));
+
+        } catch (Exception $ex) {
+                return AccesoController::inPlatCai;
+        } 
+    }    
+    
+    /*
      * respuestaFeedEjemplares: 
      * Funcion que genera el JSON de respuesta para la accion de recuperar Feed de ejemplares :: AccesoController::txAccRecFeeds:
      */
@@ -467,7 +583,7 @@ class Logica {
                 $usuario = new LbUsuarios();
                 if ($respuesta->getRespuesta()== AccesoController::inULogged){
                     $libros = ManejoDataRepository::getLibro($ejemplar->getInejelibro()->getInlibro());
-                    //echo "libro: [".utf8_encode($libros->getTxlibtitulo())."]\n";
+                    //echo "titulo libro: [".utf8_encode($libros->getTxlibtitulo())."]\n";
                     //echo "ejemplar: [".$ejemplar->getInejemplar()."--".$ejemplar->getInejelibro()->getInlibro()."] libro: [".utf8_encode($libros->getTxlibtitulo())."]\n";
                     $generos = ManejoDataRepository::getGenerosLibro($ejemplar->getInejelibro()->getInlibro());
                     //echo "...generos \n";
@@ -664,126 +780,6 @@ class Logica {
     }    
     
     /*
-     * respuestaBuscarEjemplares: 
-     * Funcion que genera el JSON de respuesta para la accion de Buscar ejemplares :: AccesoController::txAccBusEjem:
-     */
-    public function respuestaBuscarEjemplares(Respuesta $respuesta, Solicitud $pSolicitud, $parreglo){
-        try{
-            $arrTmp = array();
-            $ejemplar = new LbEjemplares();
-            $usuarioConsulta = ManejoDataRepository::getUsuarioByEmail($pSolicitud->getEmail());
-            //echo "Va a generar la respuestaBuscarEjemplares :: Logica.php [365] \n";
-            foreach ($parreglo as $ejemplar){
-                //Recupera nombre del genero, Nombre del libro, Nombre del uduario Dueño
-                $generos = new LbGeneros();
-                $autores = new LbAutores();
-                $editoriales = new LbEditoriales();
-                $libros = new LbLibros();
-                $usuario = new LbUsuarios();
-                if ($respuesta->getRespuesta()== AccesoController::inULogged){
-                    echo "Ingresa al libro [".utf8_encode($ejemplar->getInejelibro()->getInlibro())."] \n";
-                    $libros = ManejoDataRepository::getLibro($ejemplar->getInejelibro()->getInlibro());
-                    //$libros = $ejemplar->getInejelibro();
-                    //$libros = $ejemplar->getInejelibro()->getInlibro();
-                    echo "libro: [".utf8_encode($libros->getTxlibtitulo())."]\n";
-                    echo "ejemplar: [".$ejemplar->getInejemplar()."-".$ejemplar->getInejelibro()->getInlibro()."] libro: [".utf8_encode($ejemplar->getInejelibro()->getTxlibtitulo())."]\n";
-                    $generos = ManejoDataRepository::getGenerosLibro($ejemplar->getInejelibro()->getInlibro());
-                    //echo "...generos \n";
-                    $autores = ManejoDataRepository::getAutoresLibro($ejemplar->getInejelibro()->getInlibro());
-                    //echo "...autores \n";
-                    $editoriales = ManejoDataRepository::getEditorialesLibro($ejemplar->getInejelibro()->getInlibro());
-                    //echo "...editoriales \n";
-                    $megusta = ManejoDataRepository::getMegustaEjemplar($ejemplar, $usuarioConsulta);
-                    //echo "...megusta \n";
-                    $cantmegusta = ManejoDataRepository::getCantMegusta($ejemplar->getInejemplar());
-                    //echo "...cantmegusta \n";
-                    $cantcomment = ManejoDataRepository::getCantComment($ejemplar->getInejemplar());
-                    //echo "...cantcomment \n";
-                    $usuario = ManejoDataRepository::getUsuarioById($ejemplar->getInejeusudueno()->getInusuario());
-                    //echo "...usuario [".utf8_encode($usuario->getTxusunommostrar())."] \n";
-                    $promcalifica = ManejoDataRepository::getPromedioCalifica($usuario->getInusuario());
-                    //echo "...promcalifica \n";
-                    $fecpublica = ManejoDataRepository::getFechaPublicacion($ejemplar, $usuario);
-                    //echo "...$fecpublica \n";
-                    //echo "RECUPERO DATOS\n";*/
-                }
-                
-                $arrAutores = array();
-                foreach ($autores as $autor) {
-                    //echo "...autor [".utf8_encode($autor->getTxautnombre())."] \n";
-                    $arrAutores[] = array('inidautor' => $autor->getInidautor(),
-                        'txautnombre' => utf8_encode($autor->getTxautnombre()));
-                }
-                $arrEditoriales = array();
-                foreach ($editoriales as $editorial) {
-                    //echo "...editorial [".utf8_encode($editorial->getTxedinombre())."] \n";
-                    $arrEditoriales[] = array('inideditorial' => $editorial->getInideditorial(),
-                        'txedinombre' => utf8_encode($editorial->getTxedinombre()));
-                }
-                $arrGeneros = array();
-                foreach ($generos as $genero) {
-                    //echo "...genero [".utf8_encode($genero->getTxgennombre())."] \n";
-                    $arrGeneros[] = array('ingenero' => $genero->getIngenero(),
-                        'txgennombre' => utf8_encode($genero->getTxgennombre()));
-                }
-                
-                $titulo = utf8_encode($libros->getTxlibtitulo());
-                echo "título: ".$titulo."\n";
-                $precio = utf8_encode($ejemplar->getDbejeavaluo());  //Precio del libro
-                $puntos = utf8_encode($ejemplar->getInejepuntos()); //Cantidad de puntos
-                $estado = utf8_encode($ejemplar->getInejeestado()); // de 1 a 10
-                $usado = utf8_encode($ejemplar->getInejecondicion()); //0 nuevo - 1 usado
-                $vencam = utf8_encode($ejemplar->getInejesoloventa()); //1: Solo venta - 2: venta / cambio - 3: Solo cambio
-                $edicion = utf8_encode($libros->getTxediciondescripcion());
-                $isbn10 = utf8_encode($libros->getTxlibcodigoofic());
-                $isbn13 = utf8_encode($libros->getTxlibcodigoofic13());
-                $imagen = utf8_encode($ejemplar->getTxejeimagen());
-                $lugar = $usuario->getInusulugar();
-                $condactual = $ejemplar->getInejeestadonegocio(); // 0 - No en negociacion,1 - Solicitado por usuario, 2 - En proceso de aprobación del negocio, 3 - Aprobado negocio por Ambos actores, 4 - En proceso de entrega, 5 - Entregado, 6 - Recibido
-                $desccondactual = utf8_encode(ManejoDataRepository::getDescCondicionActualEjemplar($ejemplar->getInejeestadonegocio())); // 0 - No en negociacion,1 - Solicitado por usuario, 2 - En proceso de aprobación del negocio, 3 - Aprobado negocio por Ambos actores, 4 - En proceso de entrega, 5 - Entregado, 6 - Recibido
-                //echo "Titulo + Descripcion edicion : [".$titulo."] - [".$edicion."]\n";
-                $arrTmp[] = array('idejemplar' => $ejemplar->getInejemplar(), 
-                    'titulo' => $titulo, 
-                    'precio' => $precio, 
-                    'puntos' => $puntos, 
-                    'estado' => $estado, 
-                    'usado' => $usado, 
-                    'vencam' => $vencam, 
-                    'imagen' => $imagen, 
-                    'edicion' => $edicion,
-                    'isbn10' => $isbn10,
-                    'isbn13' => $isbn13,
-                    'megusta' => $megusta,
-                    'fechapublica' => $fecpublica,
-                    'cantmegusta' => $cantmegusta,
-                    'cantcomment' => $cantcomment,
-                    'condactual' => $condactual,
-                    'desccondactual' => $desccondactual,
-                    'lugar' => array('inlugar' => $lugar->getInlugar(), 'txlugnombre' => utf8_encode($lugar->getTxlugnombre())),
-                    'autores' => $arrAutores,
-                    'editoriales' => $arrEditoriales,
-                    'generos' => $arrGeneros,
-                    'usrdueno' => array('inusuario' => $usuario->getInusuario(),
-                        'txusunommostrar' => utf8_encode($usuario->getTxusunommostrar()),
-                        'txusuimagen' => utf8_encode($usuario->getTxusuimagen()),
-                        'calificacion' => $promcalifica)
-                );
-                
-            }
-            
-            return array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
-                    'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr(), 
-                    'iddevice'=> $pSolicitud->getDeviceMac(), 'marca'=>$pSolicitud->getDeviceMarca(), 
-                    'modelo'=>$pSolicitud->getDeviceModelo(), 'so'=>$pSolicitud->getDeviceSO()), 
-                    'idrespuesta' => array('respuesta' => $respuesta->getRespuesta(), 
-                    'ejemplares' => $arrTmp ));
-
-        } catch (Exception $ex) {
-                return AccesoController::inPlatCai;
-        } 
-    }    
-    
-    /*
      * respuestaCerrarSesion: 
      * Funcion que genera el JSON de respuesta para la accion de Cerrar Sesion :: AccesoController::txAccCerraSes
      */
@@ -831,13 +827,7 @@ class Logica {
                         'titulo'=>$respuesta->getTitulo(), 'idlibro' => $respuesta->getIdlibro(),
                         'idioma'=>$respuesta->getIdioma(),'avaluo'=>$respuesta->getAvaluo(),
                         'valventa'=>$respuesta->getValVenta()),
-                    'oferta'=>array('idoferta'=>$respuesta->getIdOferta(),'observasol'=>$respuesta->getObservaSol(),
-                        'idlibrosol1'=>$respuesta->getIdLibroSol1(),'titulosol1'=>$respuesta->getTituloSol1(),
-                        'valadicsol1'=>$respuesta->getValAdicSol1(),'idlibrosol2'=>$respuesta->getIdLibroSol2(),
-                        'titulosol2'=>$respuesta->getTituloSol2(),'valadicsol2'=>$respuesta->getValAdicSol2()),
-                    'mensaje'=>array('idmensaje'=>$respuesta->getIdMensaje(),
-                        'fecha'=>$respuesta->getFeMensaje(), 'padre'=>$respuesta->getIdPadre(),
-                        'descripcion'=>$respuesta->getTxMensaje())));
+                    ));
     }    
     
     /*

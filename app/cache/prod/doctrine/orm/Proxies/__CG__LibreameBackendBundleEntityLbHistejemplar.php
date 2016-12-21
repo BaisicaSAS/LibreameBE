@@ -64,10 +64,10 @@ class LbHistejemplar extends \Libreame\BackendBundle\Entity\LbHistejemplar imple
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', 'inhistejemplar', 'fehisejeregistro', 'inhisejemovimiento', 'inhisejemodoentrega', 'inhisejepadre', 'inhisejeusuario', 'inhisejeejemplar');
+            return array('__isInitialized__', 'inhistejemplar', 'fehisejeregistro', 'inhisejemovimiento', 'inhisejemodoentrega', 'inhisejepadre', 'inhisejeusuario', 'inhisejeejemplar', 'inhisejeestado');
         }
 
-        return array('__isInitialized__', 'inhistejemplar', 'fehisejeregistro', 'inhisejemovimiento', 'inhisejemodoentrega', 'inhisejepadre', 'inhisejeusuario', 'inhisejeejemplar');
+        return array('__isInitialized__', 'inhistejemplar', 'fehisejeregistro', 'inhisejemovimiento', 'inhisejemodoentrega', 'inhisejepadre', 'inhisejeusuario', 'inhisejeejemplar', 'inhisejeestado');
     }
 
     /**
@@ -318,6 +318,28 @@ class LbHistejemplar extends \Libreame\BackendBundle\Entity\LbHistejemplar imple
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getInhisejeejemplar', array());
 
         return parent::getInhisejeejemplar();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setInhisejeestado($inhisejeestado)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setInhisejeestado', array($inhisejeestado));
+
+        return parent::setInhisejeestado($inhisejeestado);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getInhisejeestado()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getInhisejeestado', array());
+
+        return parent::getInhisejeestado();
     }
 
 }
