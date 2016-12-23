@@ -328,6 +328,30 @@ class ManejoDataRepository extends EntityRepository {
         } 
     }
     
+    //Obtiene un autor por el nombre
+    public function getAutorByNombre($autnombre)
+    {   
+        try{
+            $em = $this->getDoctrine()->getManager();
+            return $em->getRepository('LibreameBackendBundle:LbAutores')->
+                findOneBy(array('txautnombre' => $autnombre));
+        } catch (Exception $ex) {
+                return new LbAutores();
+        } 
+    }
+    
+    //Obtiene una editorial por el nombre
+    public function getEditorialByNombre($edinombre)
+    {   
+        try{
+            $em = $this->getDoctrine()->getManager();
+            return $em->getRepository('LibreameBackendBundle:LbAutores')->
+                findOneBy(array('txedinombre' => $edinombre));
+        } catch (Exception $ex) {
+                return new LbEditoriales();
+        } 
+    }
+    
     //Obtiene varios objetos Autor según el ID del libro 
     public function getAutoresLibro($inlibro)
     {   
@@ -863,6 +887,30 @@ class ManejoDataRepository extends EntityRepository {
                     findOneBy(array('inejemplar' => $ejemplar));
         } catch (Exception $ex) {
                 return new LbEjemplares();
+        } 
+    }
+                
+    //Obtiene los datos de un autor por su ID
+    public function getAutorById($idautor)
+    {   
+        try{
+            $em = $this->getDoctrine()->getManager();
+            return $em->getRepository('LibreameBackendBundle:LbAutores')->
+                    findOneBy(array('inidautor' => $idautor));
+        } catch (Exception $ex) {
+                return new LbAutores();
+        } 
+    }
+                
+    //Obtiene una editorial por su ID
+    public function getEditorialById($ideditorial)
+    {   
+        try{
+            $em = $this->getDoctrine()->getManager();
+            return $em->getRepository('LibreameBackendBundle:LbEditoriales')->
+                    findOneBy(array('inideditorial' => $ideditorial));
+        } catch (Exception $ex) {
+                return new LbEditoriales();
         } 
     }
                 
@@ -1999,19 +2047,134 @@ class ManejoDataRepository extends EntityRepository {
     }    
     
      //Genera la carga y publicación de un ejemplar a la plataforma
-    public function generarPublicacionEjemplar(LbUsuarios $usuario){
+    public function generarPublicacionEjemplar(Solicitud $psolicitud){
+        
         //Para publicar un ejemplar
-        //1. Validar en front end el Libro y auto..completar si es necesario,  @TODO:  está fuincion debe realizarse
-        //2. Revisa si el libro existe, si no existe lo crea, de Igual manera la editorial y el / los autores y el género
-        //   De igual manera debe crearse el TITULO, el IDIOMA, el Pais de la editorial como del Autor
-        //3. Elige 3 usuarios activos para que califiquen el precio del libro, el libro queda pendiente por publicacion , envía correos
+        //1. Validar en front end el Libro y autocompletar si es necesario,  
+        //   @TODO:  está funcion debe realizarse como servicio
+        //Cuando llega a este punto ya ha validado todas las condiciones del usuario, 
+        //planes, restricciones, penalizaciones, etc...DEFINIR BIEN
+        try{
+
+            $respuesta=  AccesoController::inFallido; 
+            $fecha = new \DateTime;
+            
+            $em = $this->getDoctrine()->getManager();
+            $em->getConnection()->beginTransaction();
+            
+            //Recupera todas las variables de la solicitud
+            $usuario = ManejoDataRepository::getUsuarioByEmail($psolicitud->getEmail());
+            $libro = new LbLibros();
+            $autor = new LbAutores();
+            $editorial = new LbEditoriales();
+            $imgbase64 = $psolicitud->getImageneje();
+            $libroExiste = AccesoController::inFallido;
+            //Si existe el libro, en la base de datos, se recupera por el ID
+            if ($psolicitud->getIdLibro() != ""){
+                echo "Libro ID no es vacio: Entra a recuperarlo \n";
+                $libroExiste = AccesoController::inExitoso;
+                $libro = ManejoDataRepository::getLibro($psolicitud->getIdLibro());
+                $autor = ManejoDataRepository::getAutorByNombre($psolicitud->getAutor());
+                $editorial = ManejoDataRepository::getEditorialByNombre($psolicitud->getEditorial());
+            } else {
+                echo "Libro ID es vacio: Entra a crearlo ".$psolicitud->getAutor()." - ".$psolicitud->getEditorial()."\n";
+                $libro->setTxlibtitulo($psolicitud->getTitulo());
+                $libro->setTxlibtipopublica(AccesoController::inTPLibro);
+                $libro->setTxediciondescripcion($psolicitud->getEdicion());
+                $em->persist($libro);
+                $em->flush();
+                echo "Libro ID [".$libro->getInlibro()."] \n";
+                
+                if ($psolicitud->getAutor() != "") {
+                    $autor = ManejoDataRepository::getAutorByNombre($psolicitud->getAutor());
+                    if ($autor == NULL) {
+                        echo "Asigna el autor al objeto ".$psolicitud->getAutor()."\n";
+                        $autor = new LbAutores();
+                        $autor->setTxautnombre($psolicitud->getAutor());
+                        $em->persist($autor);
+                        $em->flush();
+                    }
+                }    
+                
+                if ($psolicitud->getEditorial() != "") {
+                    $editorial = ManejoDataRepository::getEditorialByNombre($psolicitud->getEditorial());
+                    if ($editorial == NULL) {
+                        echo "Asigna la editorial al objeto ".$psolicitud->getEditorial()."\n";
+                        $editorial = new LbEditoriales();
+                        $editorial->setTxedinombre($psolicitud->getEditorial());
+                        $em->persist($editorial);
+                        $em->flush();
+                    }
+                }    
+                
+            }
+            
+            $avaluo = (Double)$psolicitud->getAvaluo();
+            $puntos = (Integer)$avaluo/ AccesoController::inValPunto;
+            $ejemplar = new LbEjemplares();
+            $ejemplar->setInejelibro($libro);
+            $ejemplar->setInejeusudueno($usuario);
+            $ejemplar->setDbejeavaluo($avaluo);
+            $ejemplar->setTxejeimagen(AccesoController::txMeNoIdS);
+            $ejemplar->setInejepuntos($puntos);
+            $ejemplar->setInejeestado($psolicitud->getEstado());
+            $em->persist($ejemplar);
+            $em->flush();
+            echo "Ejemplar ID [".$ejemplar->getInejemplar()."] \n";
+            
+            $ejemplar->setTxejeimagen(ManejoDataRepository::getImportarImagenB64($psolicitud->getImageneje(), $ejemplar->getInejemplar()));
+            
+                    
+                    
+            
+            $em->flush();
+            $em->getConnection()->rollback();
+            $respuesta = AccesoController::inExitoso; 
+            
+            return $respuesta;
+
+        } catch (Exception $ex) {
+                return  AccesoController::inFallido;
+        } 
+        //2. Revisa si el libro existe, si no existe lo crea, de Igual manra la 
+        //   editorial y el / los autores y el género
+        //   De igual manera debe crearse el TITULO, el IDIOMA, el Pais de la 
+        //   editorial como del Autor
+        //3. Elige 10 usuarios activos para que califiquen el precio del libro, 
+        //   el libro queda pendiente por publicacion, 
+        //   envía correos y se crean tareas para los usuarios
         //4. Se crea el ejemplar
-        //5. DEBO REVISAR SI EL USUARIO TIENE PENDIENTES?, DE CAMBIO O DE ALGO PARA PERMITIR O NO PUBLICAR O PARA BLOQUEAR EL EJEMPLAR.
-        //6. DEBO REVISAR TAMBIEN EL PLANES DE USUARIO 
-        //7. En este momento los puntos del usuario no le aparecen, hasta que no haya sido validado
-        //8. Se crea un registro de historialejemplar, hay que revisar con que tipo de Movimiento, porque debe adicionarse
+        //5.  
+        //7. En este momento los puntos del usuario no le aparecen, hasta que 
+        //   no haya sido validado
+        //8. Se crea un registro de historialejemplar, hay que revisar con que 
+        //   tipo de Movimiento, porque debe adicionarse
+        
     }
             
-   
+    public function getImportarImagenB64($txImagenB64, $idEjemplar) {
+        $ejem = (String)$idEjemplar;
+        echo "La cadena ".$ejem." \n";
+        
+        $chars = preg_split('//', $ejem, -1, PREG_SPLIT_NO_EMPTY);
+        //WIN \  LINUX /
+        $carpeta = ".\/web\/img\/p\/";
+        foreach ($chars as $digito) {
+            $carpeta = $carpeta.$digito."\/";
+            if (!file_exists($carpeta)) {
+                echo "No existe directory [".$carpeta."], se creará ahora \n";
+                mkdir($carpeta,  false);
+            } else {
+                echo "Si existe directory [".$carpeta."] \n";
+            }
+        }
+        $archivo = $carpeta.$ejem.".jpg"; // or image.jpg
+        echo "El arhivo a crear : ".$archivo;
+        // Finalmente guarda la imágen en el directorio especificado y con la informacion dada
+        file_put_contents($carpeta, $txImagenB64);        
+        echo "Se creo el archivo: ".$archivo.", con los datos [".$txImagenB64."] \n";
+        return "http://ex4read.co/services/web/img/p/".$chars[0]."/".$chars[1]."/".$chars[2]."/".$ejem.".jpg";
+        //   return "PENDIENTE;";
+    }
 
 }

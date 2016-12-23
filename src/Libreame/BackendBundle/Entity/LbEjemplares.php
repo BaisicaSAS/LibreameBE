@@ -26,14 +26,14 @@ class LbEjemplares
      *
      * @ORM\Column(name="inEjeCantidad", type="integer", nullable=false)
      */
-    private $inejecantidad;
+    private $inejecantidad = 1;
 
     /**
      * @var float
      *
      * @ORM\Column(name="dbEjeAvaluo", type="float", precision=10, scale=0, nullable=false)
      */
-    private $dbejeavaluo;
+    private $dbejeavaluo = 0;
 
     /**
      * @var string
@@ -47,42 +47,42 @@ class LbEjemplares
      *
      * @ORM\Column(name="inEjePuntos", type="integer", nullable=false)
      */
-    private $inejepuntos;
+    private $inejepuntos = 0;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="inEjePublicado", type="integer", nullable=false)
      */
-    private $inejepublicado;
+    private $inejepublicado = 0;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="inEjeBloqueado", type="integer", nullable=false)
      */
-    private $inejebloqueado;
+    private $inejebloqueado = 0;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="inEjeEstado", type="integer", nullable=false)
      */
-    private $inejeestado;
+    private $inejeestado = 1;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="inEjeCondicion", type="integer", nullable=false)
      */
-    private $inejecondicion;
+    private $inejecondicion = 1;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="inEjeSoloventa", type="integer", nullable=false)
      */
-    private $inejesoloventa;
+    private $inejesoloventa = 0;
 
     /**
      * @var \Libreame\BackendBundle\Entity\LbLibros
@@ -108,49 +108,49 @@ class LbEjemplares
      *
      * @ORM\Column(name="inEjeEstadoNegocio", type="integer", nullable=false)
      */
-    private $inejeestadonegocio;
+    private $inejeestadonegocio = 0;
     /**
      * @var integer
      *
      * @ORM\Column(name="inEjeRegHisBloqueo", type="integer", nullable=false)
      */
-    private $inejereghisbloqueo;
+    private $inejereghisbloqueo = 0;
     /**
      * @var integer
      *
      * @ORM\Column(name="inEjeRegHisPublicacion", type="integer", nullable=false)
      */
-    private $inejereghispublicacion;
+    private $inejereghispublicacion = 0;
     /**
      * @var integer
      *
      * @ORM\Column(name="inEjeRegHisBajaSis", type="integer", nullable=false)
      */
-    private $inejereghisbajasis;
+    private $inejereghisbajasis = 0;
     /**
      * @var integer
      *
      * @ORM\Column(name="inEjeRegHisAprobDueno", type="integer", nullable=false)
      */
-    private $inejereghisaprobdueno;
+    private $inejereghisaprobdueno = 0;
     /**
      * @var integer
      *
      * @ORM\Column(name="inEjeRegHisAprobSolic", type="integer", nullable=false)
      */
-    private $inejereghisaprobsolic;
+    private $inejereghisaprobsolic = 0;
     /**
      * @var integer
      *
      * @ORM\Column(name="inEjeRegHisEntrega", type="integer", nullable=false)
      */
-    private $inejereghisentrega;
+    private $inejereghisentrega = 0;
     /**
      * @var integer
      *
      * @ORM\Column(name="inEjeRegHisRecibido", type="integer", nullable=false)
      */
-    private $inejereghisrecibido;
+    private $inejereghisrecibido = 0;
 
 
 
@@ -161,7 +161,7 @@ class LbEjemplares
      */
     public function getInejemplar()
     {
-        return $this->inejemplar;
+        return $this->inejemplar;   
     }
 
     /**

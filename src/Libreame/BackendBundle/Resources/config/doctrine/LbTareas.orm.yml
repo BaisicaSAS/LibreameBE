@@ -1,0 +1,89 @@
+Libreame\BackendBundle\Entity\LbTareas:
+    type: entity
+    table: lb_tareas
+    indexes:
+        fk_lb_tareas_lb_usuarios1_idx:
+            columns:
+                - inUsuarioTareaAsi
+        fk_lb_tareas_lb_usuarios2_idx:
+            columns:
+                - inUsuarioTareaDes
+        fk_lb_tareas_lb_ejemplares1_idx:
+            columns:
+                - inEjemplarTareaDes
+    id:
+        intarea:
+            type: bigint
+            nullable: false
+            unsigned: false
+            comment: 'Id de la tarea'
+            id: true
+            column: inTarea
+            generator:
+                strategy: IDENTITY
+    fields:
+        fefechatarea:
+            type: datetime
+            nullable: false
+            comment: 'Fecha de asignacion de la tarea'
+            column: feFechaTarea
+        fefechafinalizada:
+            type: datetime
+            nullable: true
+            comment: 'Fecha de realizacion de la tarea'
+            column: feFechaFinalizada
+        intipotarea:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: 'Tipo de tarea: 0 - Calificar un usuario, 1 - Aprobar valor ejemplar'
+            column: inTipoTarea
+        inestadotarea:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: 'Estado de la tarea: 0-Pendiente, 1-Realizada, 2-Expirada'
+            column: inEstadoTarea
+        dbvalorejesugerido:
+            type: float
+            nullable: true
+            precision: 10
+            scale: 0
+            comment: 'Valor sugerido del ejemplar, si el usuario no aprueba el valor dado por el usuario, sugiere uno en este campo'
+            column: dbValorEjeSugerido
+        inaprobadovaloreje:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: '1: si aprueba el valor sugerido por el usuario, 0: si no está de acuerdo con el valor'
+            default: '0'
+            column: inAprobadoValorEje
+    manyToOne:
+        inusuariotareaasi:
+            targetEntity: LbUsuarios
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                inUsuarioTareaAsi:
+                    referencedColumnName: inUsuario
+            orphanRemoval: false
+        inusuariotareades:
+            targetEntity: LbUsuarios
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                inUsuarioTareaDes:
+                    referencedColumnName: inUsuario
+            orphanRemoval: false
+        inejemplartareades:
+            targetEntity: LbEjemplares
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                inEjemplarTareaDes:
+                    referencedColumnName: inEjemplar
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

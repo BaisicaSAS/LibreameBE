@@ -26,6 +26,13 @@ use Libreame\BackendBundle\Entity\LbGeneros;
  */
 class AccesoController extends Controller
 {   
+    //Tipo publicacion
+    const inTPLibro =  0; //Tipo publicación : Libro
+    const inTPRevista = 1; //Tipo publicación : Revista
+    
+    //Valor de cada punto en ex4read
+    const inValPunto = 200; //Vlor de cada punto en el sistema en pesos = $ 200
+    
     //Constantes globales
     const inFallido =  0; //Proceso fallido
     const inDescone = -1; //Proceso fallido por conexión de plataforma

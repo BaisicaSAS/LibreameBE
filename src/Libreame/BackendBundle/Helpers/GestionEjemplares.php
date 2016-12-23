@@ -156,8 +156,8 @@ class GestionEjemplares {
             if ($respSesionVali==AccesoController::inULogged) 
             {    
                 //Genera la oferta para el ejemplar
-                $respuesta = ManejoDataRepository::generarPublicacionEjemplar($psolicitud);
-                $respuesta->setRespuesta($respSesionVali);
+                $respPub = ManejoDataRepository::generarPublicacionEjemplar($psolicitud);
+                $respuesta->setRespuesta($respPub);
                 
                 return $objLogica::generaRespuesta($respuesta, $psolicitud, NULL);
             } else {
