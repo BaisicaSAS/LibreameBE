@@ -824,9 +824,8 @@ class Logica {
                     'modelo'=>$pSolicitud->getDeviceModelo(), 'so'=>$pSolicitud->getDeviceSO()), 
                     'idrespuesta' => array('respuesta' => $respuesta->getRespuesta(), 
                     'ejemplar' => array('idejemplar' => $respuesta->getIdEjemplar(),
-                        'titulo'=>$respuesta->getTitulo(), 'idlibro' => $respuesta->getIdlibro(),
-                        'idioma'=>$respuesta->getIdioma(),'avaluo'=>$respuesta->getAvaluo(),
-                        'valventa'=>$respuesta->getValVenta()),
+                        'titulo'=>$respuesta->getTitulo(), 'idlibro' => $respuesta->getIdlibro()
+                            )
                     ));
     }    
     

@@ -179,6 +179,15 @@ class AccesoController extends Controller
     const txMovUsPCali = "Usuario propietario Calificó";//20: Usuario propietario Calificó
     const inMovUsSCali = 21;//21: Usuario solicitante Calificó
     const txMovUsSCali = "Usuario solicitante Calificó";//21: Usuario solicitante Calificó
+    //Modos de entrega
+    const inModEntDomi = 0;//0: Modo entrega en el Domicilio
+    const txModEntDomi = "Entrega en el domicilio";//0: Ofrece entregar el ejemplar en el domicilio
+    
+    const inAccPublica = 1;//1 Accion de pubblicar ejemplar
+    const inAccDespubl = 2;//2 Accion de DES-pubblicar ejemplar
+    const inAccModific = 3;//3 Accion de modificar ejemplar
+    const inAccElimina = 4;//4 ACCION DE ELIMINAR EJEMPLAR ??????
+    
     
     //Constantes para Estado de negociación ejemplar
     const inConEjeNoNe = 0;//0: Ejemplar no está en negociacion

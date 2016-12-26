@@ -152,13 +152,18 @@ class GestionEjemplares {
         try {
             //Valida que la sesión corresponda y se encuentre activa
             $respSesionVali=  ManejoDataRepository::validaSesionUsuario($psolicitud);
-            //echo "<script>alert(' recuperarFeedEjemplares :: Validez de sesion ".$respSesionVali." ')</script>";
+            //echo "<script>alert(' Publicar :: Validez de sesion ".$respSesionVali." ')</script>";
             if ($respSesionVali==AccesoController::inULogged) 
             {    
-                //Genera la oferta para el ejemplar
-                $respPub = ManejoDataRepository::generarPublicacionEjemplar($psolicitud);
-                $respuesta->setRespuesta($respPub);
-                
+                //Genera la oferta para el ejemplar si la accion es 1}
+                //echo "Decide accion para ejemplar : ".$psolicitud->getAccionComm();
+                if ($psolicitud->getAccionComm() == AccesoController::inAccPublica) {
+                    //echo "\n La acion es publicar";
+                    $respPub = ManejoDataRepository::generarPublicacionEjemplar($psolicitud);
+                    $respuesta->setRespuesta($respPub);
+                } elseif ($psolicitud->getAccionComm() == AccesoController::inAccDespubl) {
+                } elseif ($psolicitud->getAccionComm() == AccesoController::inAccModific) {
+                } elseif ($psolicitud->getAccionComm() == AccesoController::inAccElimina) {}
                 return $objLogica::generaRespuesta($respuesta, $psolicitud, NULL);
             } else {
                 $respuesta->setRespuesta($respSesionVali);
