@@ -188,7 +188,16 @@ class AccesoController extends Controller
     const inAccModific = 3;//3 Accion de modificar ejemplar
     const inAccElimina = 4;//4 ACCION DE ELIMINAR EJEMPLAR ??????
     
+    //Tipo de tarea
+    const inTipTarCali = 0;//0 - Calificar un usuario
+    const inTipTarApru = 1;//1 - Aprobar valor ejemplar
+    //Estado de la tarea 
+    const inEstTarPend = 0;//0-Pendiente
+    const inEstTarReal = 1;//1-Realizada
+    const inEstTarExpi = 2;//2-Expirada
     
+    
+
     //Constantes para Estado de negociación ejemplar
     const inConEjeNoNe = 0;//0: Ejemplar no está en negociacion
     const txConEjeNoNe = "Ejemplar no está en negociacion";//0: Ejemplar no está en negociacion

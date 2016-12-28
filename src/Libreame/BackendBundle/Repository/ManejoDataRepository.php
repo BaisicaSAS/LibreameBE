@@ -33,8 +33,8 @@ use Libreame\BackendBundle\Entity\LbPlanes;
 use Libreame\BackendBundle\Entity\LbPlanesusuarios;
 use Libreame\BackendBundle\Entity\LbEditorialeslibros;
 use Libreame\BackendBundle\Entity\LbAutoreslibros;
+use Libreame\BackendBundle\Entity\LbTareas;
 use Libreame\BackendBundle\Helpers\Solicitud;
-use Libreame\BackendBundle\DQL\MatchAgainstFunction;
 
 /**
  * Description of ManejoDataRepository
@@ -2193,7 +2193,37 @@ class ManejoDataRepository extends EntityRepository {
             $em->persist($hisReg);
             //$em->flush();
             
-            ///PROXIMO PASO : CREAR LA TAREA PARA LOS USUARIOS QUE DARÁN VISTO BUENO
+            ///PROXIMO PASO : CREAR LA TAREA PARA LOS USUARIOS QUE DARÁN VISTO BUENO AL PRECIO DEL LIBRO
+            //Se buscan 10 usuarios de manera aleatoria para generarle una tarea
+            $cont = 0;
+            $arrUsers = [];
+            $cantUsuarios = ManejoDataRepository::getCantidadUsuarios();
+            while ($cont < 10) {
+               $idRand = rand(1, $cantUsuarios);
+               $usuConsulta = ManejoDataRepository::getUsuarioById($idRand);
+               if ($usuConsulta != NULL){
+                    if (($usuConsulta->getInusuestado() == AccesoController::inUsuActi) && (!in_array($idRand, $arrUsers))){
+                       $arrUsers[] = $idRand;
+                       $cont++;
+                    }
+               }
+            }
+            
+            for ($i=0;$i<10;$i++){
+               $usuConsulta = ManejoDataRepository::getUsuarioById($arrUsers[$i]);
+               $tarea = new LbTareas();
+               $tarea->setFefechatarea($fecha);
+               $tarea->setInusuariotareaasi($usuConsulta);
+               $tarea->setInusuariotareades($usuario);
+               $tarea->setDbvalorejesugerido($avaluo);
+               $tarea->setInejemplartareades($ejemplar);
+               $tarea->setInaprobadovaloreje(AccesoController::inDatoCer);
+               $tarea->setIntipotarea(AccesoController::inTipTarApru);
+               $tarea->setInestadotarea(AccesoController::inEstTarPend);
+               
+               $em->persist($tarea);
+            }
+            
             
             $em->flush();
             $em->getConnection()->commit();
@@ -2217,7 +2247,22 @@ class ManejoDataRepository extends EntityRepository {
         //   tipo de Movimiento, porque debe adicionarse
         
     }
+
+    public function getCantidadUsuarios() {
+        try{
+            $em = $this->getDoctrine()->getManager();
+            $qs = $em->createQueryBuilder()
+                ->select('count(u.inusuario)')
+                ->from('LibreameBackendBundle:LbUsuarios', 'u');
+            $cuenta = $qs->getQuery()->getSingleScalarResult();
             
+            return $cuenta;
+        } catch (Exception $ex) {
+                return AccesoController::inDatoCer;
+        } 
+        
+    }
+    
     public function getImportarImagenB64($txImagenB64, $idEjemplar) {
         
         $ejem = (String)$idEjemplar;
