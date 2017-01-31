@@ -196,6 +196,16 @@ class AccesoController extends Controller
     const inEstTarReal = 1;//1-Realizada
     const inEstTarExpi = 2;//2-Expirada
     
+    //Direcciones para almacenamiento de imágenes
+    const txCarpetaImgEjem = "/home/baisicasas/public_html/www.ex4read.co/exservices/web/img/p/";
+    const txCarpWEMImgEjem = "http://ex4read.co/exservices/web/img/p/";
+    const txIndCarpImgEjem = "E";
+
+    const txCarpetaImgUsua = "/home/baisicasas/public_html/www.ex4read.co/exservices/web/img/u/";
+    const txCarpWEMImgUsua = "http://ex4read.co/exservices/web/img/u/";
+    const txIndCarpImgUsua = "U";
+
+    
     
 
     //Constantes para Estado de negociación ejemplar

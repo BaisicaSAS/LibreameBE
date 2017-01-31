@@ -369,6 +369,36 @@ class ManejoDataRepository extends EntityRepository {
         } 
     }
     
+    //Obtiene el máximo ID en ejemplares 
+    public function getMaxEjemplar()
+    {  
+        try{
+            $em = $this->getDoctrine()->getManager();
+            $qmx = $em->createQueryBuilder()
+                ->select('MAX(e.inejemplar)')
+                ->from('LibreameBackendBundle:LbEjemplares', 'e');
+            
+            $max = (int)$qmx->getQuery()->getSingleScalarResult();//Si hay registro devuelve lo que hay
+            
+            return $max;
+        } catch (Exception $ex) {
+                return AccesoController::inDatoCer;
+        } 
+    }
+
+    //Obtiene el registro de Megusta del ejemplar
+    public function getRegMegustaEjemplar(LbEjemplares $pEjemplar, LbUsuarios $pUsuario)
+    {   
+        try{
+            $em = $this->getDoctrine()->getManager();
+            return $em->getRepository('LibreameBackendBundle:LbMegusta')->
+                findOneBy(array('inmegejemplar' => $pEjemplar, 'inmegusuario' => $pUsuario));
+        } catch (Exception $ex) { 
+                return new LbMegusta();
+        } 
+    }
+
+    
     //Obtiene la cantidad de Megusta del ejemplar : Condicion megusta - nomegusta 
     public function getMegustaEjemplar(LbEjemplares $pEjemplar, LbUsuarios $pUsuario)
     {   
@@ -670,19 +700,20 @@ class ManejoDataRepository extends EntityRepository {
                 ->andWhere('a.inmegmegusta = :pmeg')
                 ->setParameter('pmeg', 1);
                 
-            $qnmg = $em->createQueryBuilder()
+            /*$qnmg = $em->createQueryBuilder()
                 ->select('count(a)')
                 ->from('LibreameBackendBundle:LbMegusta', 'a')
                 ->Where('a.inmegejemplar = :pejemplar')
                 ->setParameter('pejemplar', $inejemplar)
                 ->andWhere('a.inmegmegusta = :pnomeg')
                 ->setParameter('pnomeg', 0);
-            
+            */
             $meg = $qmg->getQuery()->getSingleScalarResult();
-            $nomeg = $qnmg->getQuery()->getSingleScalarResult();
+            //$nomeg = $qnmg->getQuery()->getSingleScalarResult();
             
             //echo "megusta ".$meg." - nomegusta ".$nomeg;
-            return $meg - $nomeg;
+            //return $meg - $nomeg;
+            return $meg;
         } catch (Exception $ex) {
                 return AccesoController::inDatoCer;
         } 
@@ -1171,6 +1202,23 @@ class ManejoDataRepository extends EntityRepository {
             //Recupera cada uno de los ejemplares con ID > al del parametro
             //Los ejemplares cuya membresías coincidan con las del usuario que solicita
             //El usuario debe estar activo
+            
+            //Si el ultimo ejemplar es 0, la lista es de los 30 más recientes, 
+            //si es positivo la lista los 30 superiores al numero y si es negativo
+            //lista los 30 anteriores
+            if ($inultejemplar == 0){ //Si es cero, trae los 30 más recientes
+                $limiteSup = ManejoDataRepository::getMaxEjemplar();
+                $limiteInf = $limiteSup - 30;
+            } else if($inultejemplar > 0) { //Si es Positivo trae los 30 siguientes al numero
+                $limiteInf = $inultejemplar + 1;
+                $limiteSup = $limiteInf + 30;
+            } else if ($inultejemplar < 0) { //Si es negativo trae los 30 anteriores 
+                $limiteSup = ($inultejemplar*-1) - 1;
+                $limiteInf =  $limiteSup -30;
+            }
+            
+            $nulo = "NULL";
+            $blanco = "";
             $em = $this->getDoctrine()->getManager();
             $q = $em->createQueryBuilder()
                 ->select('e')
@@ -1178,10 +1226,12 @@ class ManejoDataRepository extends EntityRepository {
                 ->leftJoin('LibreameBackendBundle:LbUsuarios', 'u', \Doctrine\ORM\Query\Expr\Join::WITH, 'u.inusuario = e.inejeusudueno')
                 ->leftJoin('LibreameBackendBundle:LbMembresias', 'm', \Doctrine\ORM\Query\Expr\Join::WITH, 'm.inmemusuario = e.inejeusudueno')
                 ->leftJoin('LibreameBackendBundle:LbHistejemplar', 'h', \Doctrine\ORM\Query\Expr\Join::WITH, 'h.inhisejeejemplar = e.inejemplar and h.inhisejeusuario = e.inejeusudueno')
-                ->where(' e.txejeimagen IS NOT NULL')
-                //->where(' e.inejemplar BETWEEN :pejemplar AND :pFejemplar')
-                //->setParameter('pejemplar', $inultejemplar)
-                //->setParameter('pFejemplar', $inultejemplar+30)
+                ->where(' (e.txejeimagen IS NOT NULL) AND (e.txejeimagen <> :nulo) AND (e.txejeimagen <> :blanco)')
+                ->setParameter('nulo', $nulo)
+                ->setParameter('blanco', $blanco)
+                ->andWhere(' e.inejemplar BETWEEN :pejemplar AND :pFejemplar')
+                ->setParameter('pejemplar', $limiteInf)
+                ->setParameter('pFejemplar', $limiteSup)
                 ->andWhere(' u.inusuestado = :estado')//Solo los usuarios con estado 1
                 ->setParameter('estado', 1)//Solo los usuarios con estado 1
                 ->andWhere(' e.inejepublicado <= :ppublicado')//Debe cambiar a solo los ejemplares publicados = 1
@@ -1192,7 +1242,8 @@ class ManejoDataRepository extends EntityRepository {
                 ->setParameter('grupos', $grupos)
                     
                 ->setMaxResults(30)
-                ->orderBy(' h.fehisejeregistro ', 'DESC');
+                //->orderBy(' h.fehisejeregistro ', 'DESC');
+                ->orderBy(' e.inejemplar ', 'DESC');
 
             return $q->getQuery()->getResult();
             //return $q->getArrayResult();
@@ -1847,12 +1898,19 @@ class ManejoDataRepository extends EntityRepository {
             $em = $this->getDoctrine()->getManager();
             $ObjEjemplar = ManejoDataRepository::getEjemplarById($ejemplar);
             $ObjUsuario = ManejoDataRepository::getUsuarioByEmail($usuario);
-            $megustaEjemplar = new LbMegusta();
-            $megustaEjemplar->setInmegejemplar($ObjEjemplar);
-            $megustaEjemplar->setInmegusuario($ObjUsuario);
-            $megustaEjemplar->setInmegmegusta($megusta);
-            $megustaEjemplar->setFemegmegusta($fecha);
-
+            
+            $megustaEjemplar = ManejoDataRepository::getRegMegustaEjemplar($ObjEjemplar, $ObjUsuario);
+            
+            if ($megustaEjemplar == NULL) {
+                $megustaEjemplar = new LbMegusta();
+                $megustaEjemplar->setInmegejemplar($ObjEjemplar);
+                $megustaEjemplar->setInmegusuario($ObjUsuario);
+                $megustaEjemplar->setInmegmegusta($megusta);
+                $megustaEjemplar->setFemegmegusta($fecha);
+            } else {
+                $megustaEjemplar->setInmegmegusta($megusta);
+                $megustaEjemplar->setFemegmegusta($fecha);
+            }
             $em->persist($megustaEjemplar);
 
             $em->flush();
@@ -2179,7 +2237,7 @@ class ManejoDataRepository extends EntityRepository {
             $em->persist($ejemplar);
             $em->flush();
             //echo "Ejemplar ID [".$ejemplar->getInejemplar()."] \n";
-            $ejemplar->setTxejeimagen(ManejoDataRepository::getImportarImagenB64($psolicitud->getImageneje(), $ejemplar->getInejemplar()));
+            $ejemplar->setTxejeimagen(ManejoDataRepository::getImportarImagenB64($psolicitud->getImageneje(), $ejemplar->getInejemplar(), AccesoController::txIndCarpImgEjem));
             $em->persist($ejemplar);
             
             //Genera histótrico de registro
@@ -2263,16 +2321,23 @@ class ManejoDataRepository extends EntityRepository {
         
     }
     
-    public function getImportarImagenB64($txImagenB64, $idEjemplar) {
+    //El parámetro $idElemento indica el ID del objeto, bien sea Usuario o Ejemplar
+    //El parámetro $blEjemUsuario, indica "E", si es un ejemplar o "U" si es un usuario
+    public function getImportarImagenB64($txImagenB64, $idElemento, $blEjemUsuario) {
         
-        $ejem = (String)$idEjemplar;
+        $elem = (String)$idElemento;
         //echo "La cadena ".$ejem." \n";
         
         $chars = preg_split('//', $ejem, -1, PREG_SPLIT_NO_EMPTY);
         //WIN \  LINUX /
-        //Para el servidor
-        $carpeta = "/home/baisicasas/public_html/www.ex4read.co/exservices/web/img/p/";
-        $carpetaWEB = "http://ex4read.co/exservices/web/img/p/";
+        //Pregunta si es imagen de ejemplar, o de usuario
+        if ($blEjemUsuario == AccesoController::txIndCarpImgEjem) {
+            $carpeta = AccesoController::txCarpetaImgEjem;
+            $carpetaWEB = AccesoController::txCarpWEMImgEjem;
+        } else {
+            $carpeta = AccesoController::txCarpetaImgUsua;
+            $carpetaWEB = AccesoController::txCarpWEMImgUsua;
+        }
         //Para el pruebas
         //$carpeta = "C:/xampp/htdocs/Ex4readBE/web/img/p/";
         //echo "Carpeta [".$carpeta."] \n";
@@ -2292,8 +2357,8 @@ class ManejoDataRepository extends EntityRepository {
         // y usar base64_decode para obtener la información binaria de la imagen
         $data = base64_decode($base_to_php[1]);// BBBFBfj42Pj4....
 
-        $archivo = $carpeta.$ejem.".jpg"; // or image.jpg
-        $archivoWEB = $carpetaWEB.$ejem.".jpg"; // or image.jpg
+        $archivo = $carpeta.$elem.".jpg"; // or image.jpg
+        $archivoWEB = $carpetaWEB.$elem.".jpg"; // or image.jpg
         //echo "El arhivo a crear : ".$archivo." \n";
         // Finalmente guarda la imágen en el directorio especificado y con la informacion dada
         file_put_contents($archivo, $data);        
