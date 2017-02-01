@@ -1259,112 +1259,118 @@ class ManejoDataRepository extends EntityRepository {
         //14 DICIEMBRE DE 2016: CAMBIADO METODO DE BUSCAR POR FULLTEXT
         //Recuperar ejemplares por búsqueda full text a las tablas Libro y Autores
         try{
-            $em = $this->getDoctrine()->getManager();
-            setlocale (LC_TIME, "es_CO");
-            $fecha = new \DateTime;
-            $objBusqueda = new LbBusquedasusuarios();
-            $objBusqueda->setFebusfecha($fecha);
-            $objBusqueda->setInbususuario($usuario);
-            $objBusqueda->setTxbuspalabra(utf8_encode($texto));
-            $em->persist($objBusqueda);
-            $em->flush();
-            $arLibros =[];
-            
-            $em = $this->getDoctrine()->getManager();
-            $rsm   = new ResultSetMapping();
-            $rsm->addEntityResult('LibreameBackendBundle:LbLibros', 'l');
-            $rsm->addFieldResult('l', 'inlibro', 'inlibro');
-            $rsm->addFieldResult('l', 'txlibtipopublica', 'txlibtipopublica');
-            $rsm->addFieldResult('l', 'txlibtitulo', 'txlibtitulo');
-            $rsm->addFieldResult('l', 'txlibedicionanio', 'txlibedicionanio');
-            $rsm->addFieldResult('l', 'txlibedicionnum', 'txlibedicionnum');
-            $rsm->addFieldResult('l', 'txlibedicionpais', 'txlibedicionpais');
-            $rsm->addFieldResult('l', 'txediciondescripcion', 'txediciondescripcion');
-            $rsm->addFieldResult('l', 'txlibcodigoofic', 'txlibcodigoofic');
-            $rsm->addFieldResult('l', 'txlibcodigoofic13', 'txlibcodigoofic13');
-            $rsm->addFieldResult('l', 'txlibresumen', 'txlibresumen');
-            $rsm->addFieldResult('l', 'txlibtomo', 'txlibtomo');
-            $rsm->addFieldResult('l', 'txlibvolumen', 'txlibvolumen');
-            //$rsm->addFieldResult('l', 'inlibidioma', 'inlibidioma');
-            $rsm->addFieldResult('l', 'txlibpaginas', 'txlibpaginas');
-            //$rsm->addFieldResult('l', 'inlibtittitulo', 'inlibtittitulo');
-            $rsm->addEntityResult('LibreameBackendBundle:LbAutores', 'a');
-            $rsm->addFieldResult('a', 'inidautor', 'inidautor');
-            $rsm->addFieldResult('a', 'txautnombre', 'txautnombre');
-            $rsm->addFieldResult('a', 'txautpais', 'txautpais');
-            $rsm->addEntityResult('LibreameBackendBundle:LbEditoriales', 'e');
-            $rsm->addFieldResult('e', 'inideditorial', 'inideditorial');
-            $rsm->addFieldResult('e', 'txedinombre', 'txedinombre');
-            $rsm->addFieldResult('e', 'txedipais', 'txedipais');
-            //Consulta libros por indice en tabla libro
-            $txsql = "SELECT inlibro, txlibtipopublica, txlibtitulo,txlibedicionanio, txlibedicionnum, "
-                    . "txlibedicionpais, txediciondescripcion, txlibcodigoofic, txlibcodigoofic13, "
-                    . "txlibresumen, txlibtomo, txlibvolumen, txlibpaginas FROM lb_libros "
-                     ." WHERE MATCH(txlibtitulo,txlibedicionpais, " 
-                     ." txediciondescripcion,txlibcodigoofic,txlibcodigoofic13," 
-                     ." txlibresumen,txlibvolumen) AGAINST ('".$texto."*' IN BOOLEAN MODE)";
-            $query = $em->createNativeQuery( $txsql, $rsm ); 
-            $libros = $query->getResult();
-            foreach ($libros as $libro) {
-                //echo "ENTRO:"."\n";
-                $arLibros[] = $libro->getInlibro();
-                $libroID = $libro->getInlibro();
-                //echo "**BUSCAR LIBRO :".$libroID."-".$libro->getTxlibtitulo()."\n";
-            }
+            //Si la palabra de búsqueda viene en cero, el resultset es los 30 ejemplares más recientes
+            if ($texto == "") {
+                $resejemplares = ManejoDataRepository::getEjemplaresDisponibles($grupos, AccesoController::inDatoCer);
+                return $resejemplares;
+            } else {
+                $em = $this->getDoctrine()->getManager();
+                setlocale (LC_TIME, "es_CO");
+                $fecha = new \DateTime;
+                $objBusqueda = new LbBusquedasusuarios();
+                $objBusqueda->setFebusfecha($fecha);
+                $objBusqueda->setInbususuario($usuario);
+                $objBusqueda->setTxbuspalabra(utf8_encode($texto));
+                $em->persist($objBusqueda);
+                $em->flush();
+                $arLibros =[];
 
-            //Consulta libros por indice en tabla autores
-            $txsql = "SELECT inidautor, txautnombre, txautpais FROM lb_autores "
-                     ." WHERE MATCH(txautnombre,txautpais) AGAINST ('".$texto."*' IN BOOLEAN MODE)";
-            $query = $em->createNativeQuery( $txsql, $rsm ); 
-            $autores = $query->getResult();
-            foreach ($autores as $autor) {
-                $aut_libros = ManejoDataRepository::getLibrosByAutor($autor->getInidautor());
-                foreach ($aut_libros as $autlibro) {
+                $em = $this->getDoctrine()->getManager();
+                $rsm   = new ResultSetMapping();
+                $rsm->addEntityResult('LibreameBackendBundle:LbLibros', 'l');
+                $rsm->addFieldResult('l', 'inlibro', 'inlibro');
+                $rsm->addFieldResult('l', 'txlibtipopublica', 'txlibtipopublica');
+                $rsm->addFieldResult('l', 'txlibtitulo', 'txlibtitulo');
+                $rsm->addFieldResult('l', 'txlibedicionanio', 'txlibedicionanio');
+                $rsm->addFieldResult('l', 'txlibedicionnum', 'txlibedicionnum');
+                $rsm->addFieldResult('l', 'txlibedicionpais', 'txlibedicionpais');
+                $rsm->addFieldResult('l', 'txediciondescripcion', 'txediciondescripcion');
+                $rsm->addFieldResult('l', 'txlibcodigoofic', 'txlibcodigoofic');
+                $rsm->addFieldResult('l', 'txlibcodigoofic13', 'txlibcodigoofic13');
+                $rsm->addFieldResult('l', 'txlibresumen', 'txlibresumen');
+                $rsm->addFieldResult('l', 'txlibtomo', 'txlibtomo');
+                $rsm->addFieldResult('l', 'txlibvolumen', 'txlibvolumen');
+                //$rsm->addFieldResult('l', 'inlibidioma', 'inlibidioma');
+                $rsm->addFieldResult('l', 'txlibpaginas', 'txlibpaginas');
+                //$rsm->addFieldResult('l', 'inlibtittitulo', 'inlibtittitulo');
+                $rsm->addEntityResult('LibreameBackendBundle:LbAutores', 'a');
+                $rsm->addFieldResult('a', 'inidautor', 'inidautor');
+                $rsm->addFieldResult('a', 'txautnombre', 'txautnombre');
+                $rsm->addFieldResult('a', 'txautpais', 'txautpais');
+                $rsm->addEntityResult('LibreameBackendBundle:LbEditoriales', 'e');
+                $rsm->addFieldResult('e', 'inideditorial', 'inideditorial');
+                $rsm->addFieldResult('e', 'txedinombre', 'txedinombre');
+                $rsm->addFieldResult('e', 'txedipais', 'txedipais');
+                //Consulta libros por indice en tabla libro
+                $txsql = "SELECT inlibro, txlibtipopublica, txlibtitulo,txlibedicionanio, txlibedicionnum, "
+                        . "txlibedicionpais, txediciondescripcion, txlibcodigoofic, txlibcodigoofic13, "
+                        . "txlibresumen, txlibtomo, txlibvolumen, txlibpaginas FROM lb_libros "
+                         ." WHERE MATCH(txlibtitulo,txlibedicionpais, " 
+                         ." txediciondescripcion,txlibcodigoofic,txlibcodigoofic13," 
+                         ." txlibresumen,txlibvolumen) AGAINST ('".$texto."*' IN BOOLEAN MODE)";
+                $query = $em->createNativeQuery( $txsql, $rsm ); 
+                $libros = $query->getResult();
+                foreach ($libros as $libro) {
                     //echo "ENTRO:"."\n";
-                    $arLibros[] = $autlibro->getInautlidlibro();
-                    $libroID = $autlibro->getInautlidlibro();
+                    $arLibros[] = $libro->getInlibro();
+                    $libroID = $libro->getInlibro();
                     //echo "**BUSCAR LIBRO :".$libroID."-".$libro->getTxlibtitulo()."\n";
                 }
-            }
-            
-            //Consulta libros por indice en tabla editoriales
-            $txsql = "SELECT inideditorial, txedinombre, txedipais FROM lb_editoriales "
-                     ." WHERE MATCH(txedinombre,txedipais) AGAINST ('".$texto."*' IN BOOLEAN MODE)";
-            $query = $em->createNativeQuery( $txsql, $rsm ); 
-            $editoriales = $query->getResult();
-            foreach ($editoriales as $editorial) {
-                $edi_libros = ManejoDataRepository::getLibrosByEditorial($editorial->getInideditorial());
-                foreach ($edi_libros as $edilibro) {
-                    //echo "ENTRO:"."\n";
-                    $arLibros[] = $edilibro->getInediliblibro();
-                    $libroID = $edilibro->getInediliblibro();
-                    //echo "**BUSCAR LIBRO :".$libroID."-".$libro->getTxlibtitulo()."\n";
-                }
-            }
-            $q = $em->createQueryBuilder()
-                ->select('e')
-                ->from('LibreameBackendBundle:LbEjemplares', 'e')
-                ->leftJoin('LibreameBackendBundle:LbUsuarios', 'u', \Doctrine\ORM\Query\Expr\Join::WITH, 'u.inusuario = e.inejeusudueno')
-                ->leftJoin('LibreameBackendBundle:LbMembresias', 'm', \Doctrine\ORM\Query\Expr\Join::WITH, 'm.inmemusuario = e.inejeusudueno')
-                ->leftJoin('LibreameBackendBundle:LbHistejemplar', 'h', \Doctrine\ORM\Query\Expr\Join::WITH, 'h.inhisejeejemplar = e.inejemplar and h.inhisejeusuario = e.inejeusudueno')
-                ->where(' e.inejelibro in (:plibros)')  
-                ->setParameter('plibros', $arLibros)
-                ->andWhere(' u.inusuestado = :estado')//Solo los usuarios con estado 1
-                ->setParameter('estado', 1)//Solo los usuarios con estado 1
-                ->andWhere(' e.inejepublicado <= :ppublicado')//Debe cambiar a solo los ejemplares publicados = 1
-                ->setParameter('ppublicado', 1)//Debe cambiar a solo los ejemplares publicados = 1                    
-                ->andWhere(' h.inhisejemovimiento = :pmovimiento')
-                ->setParameter('pmovimiento', 1)//Todos los ejemplares con registro de movimiento en historia ejemplar: publicados 
-                ->andWhere(' m.inmemgrupo in (:grupos) ')//Para los grupos del usuario
-                ->setParameter('grupos', $grupos)
-                ->setMaxResults(30)
-                ->orderBy(' h.fehisejeregistro ', 'DESC');
-            
-           //echo "ACABO: "."\n";
-          $resejemplares = $q->getQuery()->getResult();  
-          $em->flush();
 
-          return $resejemplares;
+                //Consulta libros por indice en tabla autores
+                $txsql = "SELECT inidautor, txautnombre, txautpais FROM lb_autores "
+                         ." WHERE MATCH(txautnombre,txautpais) AGAINST ('".$texto."*' IN BOOLEAN MODE)";
+                $query = $em->createNativeQuery( $txsql, $rsm ); 
+                $autores = $query->getResult();
+                foreach ($autores as $autor) {
+                    $aut_libros = ManejoDataRepository::getLibrosByAutor($autor->getInidautor());
+                    foreach ($aut_libros as $autlibro) {
+                        //echo "ENTRO:"."\n";
+                        $arLibros[] = $autlibro->getInautlidlibro();
+                        $libroID = $autlibro->getInautlidlibro();
+                        //echo "**BUSCAR LIBRO :".$libroID."-".$libro->getTxlibtitulo()."\n";
+                    }
+                }
+
+                //Consulta libros por indice en tabla editoriales
+                $txsql = "SELECT inideditorial, txedinombre, txedipais FROM lb_editoriales "
+                         ." WHERE MATCH(txedinombre,txedipais) AGAINST ('".$texto."*' IN BOOLEAN MODE)";
+                $query = $em->createNativeQuery( $txsql, $rsm ); 
+                $editoriales = $query->getResult();
+                foreach ($editoriales as $editorial) {
+                    $edi_libros = ManejoDataRepository::getLibrosByEditorial($editorial->getInideditorial());
+                    foreach ($edi_libros as $edilibro) {
+                        //echo "ENTRO:"."\n";
+                        $arLibros[] = $edilibro->getInediliblibro();
+                        $libroID = $edilibro->getInediliblibro();
+                        //echo "**BUSCAR LIBRO :".$libroID."-".$libro->getTxlibtitulo()."\n";
+                    }
+                }
+                $q = $em->createQueryBuilder()
+                    ->select('e')
+                    ->from('LibreameBackendBundle:LbEjemplares', 'e')
+                    ->leftJoin('LibreameBackendBundle:LbUsuarios', 'u', \Doctrine\ORM\Query\Expr\Join::WITH, 'u.inusuario = e.inejeusudueno')
+                    ->leftJoin('LibreameBackendBundle:LbMembresias', 'm', \Doctrine\ORM\Query\Expr\Join::WITH, 'm.inmemusuario = e.inejeusudueno')
+                    ->leftJoin('LibreameBackendBundle:LbHistejemplar', 'h', \Doctrine\ORM\Query\Expr\Join::WITH, 'h.inhisejeejemplar = e.inejemplar and h.inhisejeusuario = e.inejeusudueno')
+                    ->where(' e.inejelibro in (:plibros)')  
+                    ->setParameter('plibros', $arLibros)
+                    ->andWhere(' u.inusuestado = :estado')//Solo los usuarios con estado 1
+                    ->setParameter('estado', 1)//Solo los usuarios con estado 1
+                    ->andWhere(' e.inejepublicado <= :ppublicado')//Debe cambiar a solo los ejemplares publicados = 1
+                    ->setParameter('ppublicado', 1)//Debe cambiar a solo los ejemplares publicados = 1                    
+                    ->andWhere(' h.inhisejemovimiento = :pmovimiento')
+                    ->setParameter('pmovimiento', 1)//Todos los ejemplares con registro de movimiento en historia ejemplar: publicados 
+                    ->andWhere(' m.inmemgrupo in (:grupos) ')//Para los grupos del usuario
+                    ->setParameter('grupos', $grupos)
+                    ->setMaxResults(30)
+                    ->orderBy(' h.fehisejeregistro ', 'DESC');
+
+                //echo "ACABO: "."\n";
+                $resejemplares = $q->getQuery()->getResult();  
+                $em->flush();
+
+                return $resejemplares;
+            }
             
         } catch (Exception $ex) {
                 return new LbEjemplares();
