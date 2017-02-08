@@ -441,7 +441,7 @@ class AccesoController extends Controller
                         $this->objSolicitud->setClave($json_datos['idsolicitud']['clave']);
                         $this->objSolicitud->setIdEjemplar($json_datos['idsolicitud']['idejemplar']);
                         $this->objSolicitud->setComentario($json_datos['idsolicitud']['txmensaje']);
-                        $this->objSolicitud->setIdusuariodes($json_datos['idsolicitud']['idusrdestino']);
+                        $this->objSolicitud->setTratoAcep($json_datos['idsolicitud']['tratoacep']);
                         break;
                     }
                     
@@ -656,7 +656,7 @@ class AccesoController extends Controller
                         //echo "<script>alert('VAL ENTRA CHATEAR')</script>";
                         $resp = (isset($datos['idsolicitud']['email']) and isset($datos['idsolicitud']['clave'])
                                 and isset($datos['idsolicitud']['idejemplar']) and isset($datos['idsolicitud']['txmensaje'])
-                                and isset($datos['idsolicitud']['idusrdestino']));
+                                and isset($datos['idsolicitud']['idusrdestino']) and isset($datos['idsolicitud']['tratoacep']) );
                         break;
                     }
                     

@@ -554,7 +554,8 @@ class GestionEjemplares {
                         }
                         $arrConversacion[] = array('fecha' => $neg->getFenegfechamens()->format(("Y-m-d H:i:s")), 
                            'usrescribe' => $neg->getInnegusuescribe()->getInusuario(),
-                           'usrdestino' => $usrrecibe->getInusuario(),
+                           'idusrdestino' => $usrrecibe->getInusuario(), 
+                           'nommostusr' => utf8_encode($usrrecibe->getTxusunommostrar()),
                            'txmensaje' => utf8_encode($neg->getTxnegmensaje()),
                            'idconversa' => utf8_encode($neg->getTxnegidconversacion()));
                     }

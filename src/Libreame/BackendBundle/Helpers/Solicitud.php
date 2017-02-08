@@ -78,6 +78,8 @@ class Solicitud {
     private $pEstado; // Estado del ejemplar
     private $pModopublica; // Modo publicacion
     
+    private $pTratoAcep; // trato aceptado por el usuario: 1 Aceptado, 0 Rechazado, -1: no indica
+    
     
     /*
      *  Bloque de getter para los atributos de la clase
@@ -290,6 +292,11 @@ class Solicitud {
     public function getModopublica() {
         return $this->pModopublica;
     }
+    
+    public function getTratoAcep() {
+        return $this->pTratoAcep;
+    }
+    
     
     
     /*
@@ -560,6 +567,12 @@ class Solicitud {
         $this->pModopublica = $pmodopublica;
         return $this;
     }
+    
+    public function setTratoAcep($ptratoacep) {
+        $this->pTratoAcep = $ptratoacep;
+        return $this;
+    }
+    
     
     
 }

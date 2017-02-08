@@ -1972,6 +1972,7 @@ class ManejoDataRepository extends EntityRepository {
     public function setMensajeChat(Solicitud $psolicitud)
     {   
         try{
+            //Si el mensaje viene en blanco, no se genera nada
             $respuesta = NULL;
             setlocale (LC_TIME, "es_CO");
             $fecha = new \DateTime;
@@ -1986,22 +1987,26 @@ class ManejoDataRepository extends EntityRepository {
                 $usrSolicit = $usrEscribe;
             } 
             $negIdConver = "D".$usrPropiet->getInusuario()."S".$usrSolicit->getInusuario()."E".$objEjemplar->getInejemplar();
-            $chatNegociacion = new LbNegociacion();
-            $chatNegociacion->setFenegfechamens($fecha);
-            $chatNegociacion->setInnegmensleidodue(AccesoController::inDatoCer);
-            $chatNegociacion->setInnegmensleidosol(AccesoController::inDatoCer);
-            $chatNegociacion->setInnegmenseliminado(AccesoController::inDatoCer);
-            $chatNegociacion->setInnegejemplar($objEjemplar);
-            $chatNegociacion->setInnegusuduenho($usrPropiet);
-            $chatNegociacion->setInnegusuescribe($usrEscribe);
-            $chatNegociacion->setInnegususolicita($usrSolicit);
-            $chatNegociacion->setTxnegmensaje(utf8_decode($psolicitud->getComentario()));
-            $chatNegociacion->setTxnegidconversacion($negIdConver);
+            if ($psolicitud->getComentario() != "")
+            {
+                $chatNegociacion = new LbNegociacion();
+                $chatNegociacion->setFenegfechamens($fecha);
+                $chatNegociacion->setInnegmensleidodue(AccesoController::inDatoCer);
+                $chatNegociacion->setInnegmensleidosol(AccesoController::inDatoCer);
+                $chatNegociacion->setInnegmenseliminado(AccesoController::inDatoCer);
+                $chatNegociacion->setInnegejemplar($objEjemplar);
+                $chatNegociacion->setInnegusuduenho($usrPropiet);
+                $chatNegociacion->setInnegusuescribe($usrEscribe);
+                $chatNegociacion->setInnegususolicita($usrSolicit);
+                $chatNegociacion->setTxnegmensaje(utf8_decode($psolicitud->getComentario()));
+                $chatNegociacion->setTxnegidconversacion($negIdConver);
 
-            $em->persist($chatNegociacion);
+                $em->persist($chatNegociacion);
 
-            $em->flush();
+                $em->flush();
+            }
             $respuesta = $negIdConver;
+                
             return $respuesta;
 
         } catch (Exception $ex) {
