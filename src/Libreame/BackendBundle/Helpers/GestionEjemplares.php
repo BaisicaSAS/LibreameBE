@@ -11,6 +11,7 @@ use Libreame\BackendBundle\Entity\LbIdiomas;
 use Libreame\BackendBundle\Entity\LbUsuarios;
 use Libreame\BackendBundle\Entity\LbEjemplares;
 use Libreame\BackendBundle\Entity\LbSesiones;
+use Libreame\BackendBundle\Entity\LbNegociacion;
 /**
  * Description of Feeds
  *
@@ -538,36 +539,40 @@ class GestionEjemplares {
                 //ManejoDataRepository::generaActSesion($sesion,AccesoController::inDatoUno,"Recupera Feed de Ejemplares".$psolicitud->getEmail()." recuperados con éxito ",$psolicitud->getAccion(),$fecha,$fecha);
                 //echo "<script>alert('Generó actividad de sesion ')</script>";
                 $resp = ManejoDataRepository::setMensajeChat($psolicitud);
-                
+                //echo "respuesta ".$resp;
                 if (is_null($resp)) {
                     $respuesta->setRespuesta(AccesoController::inPlatCai);
                 } else {
                     $respuesta->setRespuesta(AccesoController::inDatoUno);
                     $arrConversacion =  array();
-                    $objConv = new \Libreame\BackendBundle\Entity\LbNegociacion();
+                    $objConv = new LbNegociacion();
                     $objConv = ManejoDataRepository::getChatNegociacionById($resp);
                     
-                    $usuarioEnv = ManejoDataRepository::getUsuarioByEmail($psolicitud->getEmail());
-                    $usuarioDes = ManejoDataRepository::getUsuarioById($psolicitud->getIdusuariodes());
-                    
-                    foreach ($objConv as $neg){
-                        $idconversa = $neg->getTxnegidconversacion();
-                        if($neg->getInnegusuescribe() == $neg->getInnegusuduenho()){
-                            $usrrecibe = $neg->getInnegususolicita();
-                        } else {
-                            $usrrecibe = $neg->getInnegusuduenho();
-                        }
-                        $arrConversacion[] = array('fecha' => $neg->getFenegfechamens()->format(("Y-m-d H:i:s")), 
-                           'usrescribe' => $neg->getInnegusuescribe()->getInusuario(),
-                           'idusrdestino' => $usrrecibe->getInusuario(), 
-                           'nommostusr' => utf8_encode($usrrecibe->getTxusunommostrar()),
-                           'txmensaje' => utf8_encode($neg->getTxnegmensaje()),
-                           'idconversa' => utf8_encode($neg->getTxnegidconversacion()));
-                    }
+                    //echo "respuesta ".$resp;
 
-                    $respuesta->setIndAcept(ManejoDataRepository::getUsAceptTrato($usuarioEnv, $idconversa));
-                    $respuesta->setIndOtroAcept(ManejoDataRepository::getUsAceptTrato($usuarioDes, $idconversa));
-                    
+                    if (!empty($objConv)) {
+                        $usuarioEnv = ManejoDataRepository::getUsuarioByEmail($psolicitud->getEmail());
+                        $usuarioDes = ManejoDataRepository::getUsuarioById($psolicitud->getIdusuariodes());
+
+                        foreach ($objConv as $neg){
+                            $idconversa = $neg->getTxnegidconversacion();
+                            if($neg->getInnegusuescribe() == $neg->getInnegusuduenho()){
+                                $usrrecibe = $neg->getInnegususolicita();
+                            } else {
+                                $usrrecibe = $neg->getInnegusuduenho();
+                            }
+                            $arrConversacion[] = array('fecha' => $neg->getFenegfechamens()->format(("Y-m-d H:i:s")), 
+                               'usrescribe' => $neg->getInnegusuescribe()->getInusuario(),
+                               'nommostusrescribe' => utf8_encode($neg->getInnegusuescribe()->getTxusunommostrar()),
+                               'idusrdestino' => $usrrecibe->getInusuario(), 
+                               'nommostusrdest' => utf8_encode($usrrecibe->getTxusunommostrar()),
+                               'txmensaje' => utf8_encode($neg->getTxnegmensaje()),
+                               'idconversa' => utf8_encode($neg->getTxnegidconversacion()));
+                        }
+
+                        $respuesta->setIndAcept(ManejoDataRepository::getUsAceptTrato($usuarioEnv, $idconversa));
+                        $respuesta->setIndOtroAcept(ManejoDataRepository::getUsAceptTrato($usuarioDes, $idconversa));
+                    }
                 }    
                 
                 //echo "esto es lo que hay en respuesta";

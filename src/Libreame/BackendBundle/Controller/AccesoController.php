@@ -224,6 +224,9 @@ class AccesoController extends Controller
     const inConEjeReci = 6;//6: Recibido
     const txConEjeReci = "Recibido";//6: Recibido
     
+    const txMsgRechazoTr = " :( Otra vez será. %usuario no aceptó el trato";
+    const txMsgAceptaTr = " :) Que bien !!! El trato fue aceptado por %usuario";
+    
     var $objSolicitud;
     /*
      * IngresarSistema es la UNICA funcion que recibe la información desde el cliente, para revisar y despachar

@@ -810,6 +810,7 @@ class ManejoDataRepository extends EntityRepository {
     public function getChatNegociacionById($idconversa)
     {   
         try{
+            //echo "busca conversación ".$idconversa;
             $em = $this->getDoctrine()->getManager();
             $qs = $em->createQueryBuilder()
                 ->select('n')
@@ -2027,8 +2028,21 @@ class ManejoDataRepository extends EntityRepository {
             } else {
                 $usrSolicit = $usrEscribe;
             } 
+            $mensaje = $psolicitud->getComentario();
             $negIdConver = "D".$usrPropiet->getInusuario()."S".$usrSolicit->getInusuario()."E".$objEjemplar->getInejemplar();
-            if ($psolicitud->getComentario() != "")
+            //echo "tratoacep : ".$psolicitud->getTratoAcep();
+            // Si el registro es de 1 Aceptacion o 0: Rechazo, el mensaje es personalizado con una constante
+            if ($psolicitud->getTratoAcep() == AccesoController::inDescone) { //si es = -1
+                //echo "entro a tratoacep : -1";
+                $mensaje = $psolicitud->getComentario();
+            } else if ($psolicitud->getTratoAcep() == AccesoController::inDatoCer) { //Si es un registro de rechazo  = 0
+                //echo "entro a tratoacep : 0";
+                $mensaje = str_replace("%usuario", $usrEscribe->getTxusunommostrar(), AccesoController::txMsgRechazoTr);
+            } else if ($psolicitud->getTratoAcep() == AccesoController::inDatoUno) { //Si es un registro de aceptación = 1
+                //echo "entro a tratoacep : 1";
+                $mensaje = str_replace("%usuario", $usrEscribe->getTxusunommostrar(), AccesoController::txMsgAceptaTr);
+            }
+            if ($mensaje != "")
             {
                 $chatNegociacion = new LbNegociacion();
                 $chatNegociacion->setFenegfechamens($fecha);
@@ -2039,7 +2053,7 @@ class ManejoDataRepository extends EntityRepository {
                 $chatNegociacion->setInnegusuduenho($usrPropiet);
                 $chatNegociacion->setInnegusuescribe($usrEscribe);
                 $chatNegociacion->setInnegususolicita($usrSolicit);
-                $chatNegociacion->setTxnegmensaje(utf8_encode($psolicitud->getComentario()));
+                $chatNegociacion->setTxnegmensaje(utf8_encode($mensaje));
                 $chatNegociacion->setTxnegidconversacion($negIdConver);
                 $chatNegociacion->setInnegtratoacep($psolicitud->getTratoAcep());
 
@@ -2048,6 +2062,8 @@ class ManejoDataRepository extends EntityRepository {
                 $em->flush();
             }
             $respuesta = $negIdConver;
+            
+            //echo "Conversacion : ".$negIdConver;
                 
             return $respuesta;
 
