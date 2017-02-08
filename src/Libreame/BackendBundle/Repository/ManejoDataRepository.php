@@ -765,6 +765,47 @@ class ManejoDataRepository extends EntityRepository {
         } 
     }
     
+    //Obtiene el indicador de si el usuario ha aceptado 1, rechazado 0, o no ha indicado el trato -1
+    public function getUsAceptTrato($usrescribe, $idconversa)
+    {
+        try{
+            $indicador = -1;
+            $em = $this->getDoctrine()->getManager();
+            $qs = $em->createQueryBuilder()
+                ->select('count(n)')
+                ->from('LibreameBackendBundle:LbNegociacion', 'n')
+                ->Where('n.txnegidconversacion = :idconv')
+                ->andWhere('n.innegusuescribe = :idusr')
+                ->andWhere('n.innegtratoacep = :acep')
+                ->setParameter('idconv', $idconversa)
+                ->setParameter('idusr', $usrescribe)
+                ->setParameter('acep', 0); //Busca rechazo
+            $indrechazo = $qs->getQuery()->getSingleScalarResult();
+            if ($indrechazo > 0) {
+                $indicador = $indrechazo;
+            } else {
+                $qt = $em->createQueryBuilder()
+                    ->select('count(n)')
+                    ->from('LibreameBackendBundle:LbNegociacion', 'n')
+                    ->Where('n.txnegidconversacion = :idconv')
+                    ->andWhere('n.innegusuescribe = :idusr')
+                    ->andWhere('n.innegtratoacep = :acep')
+                    ->setParameter('idconv', $idconversa)
+                    ->setParameter('idusr', $usrescribe)
+                    ->setParameter('acep', 1); //Busca aceptacion
+                $indacepta = $qt->getQuery()->getSingleScalarResult();
+                if ($indacepta > 0) {
+                    $indicador = $indacepta;
+                }
+            }
+            
+            return $indicador;
+        } catch (Exception $ex) {
+                return AccesoController::inDatoCer;
+        } 
+    }
+    
+    
     //Obtiene todo el chat por su id 
     public function getChatNegociacionById($idconversa)
     {   
@@ -1998,8 +2039,9 @@ class ManejoDataRepository extends EntityRepository {
                 $chatNegociacion->setInnegusuduenho($usrPropiet);
                 $chatNegociacion->setInnegusuescribe($usrEscribe);
                 $chatNegociacion->setInnegususolicita($usrSolicit);
-                $chatNegociacion->setTxnegmensaje(utf8_decode($psolicitud->getComentario()));
+                $chatNegociacion->setTxnegmensaje(utf8_encode($psolicitud->getComentario()));
                 $chatNegociacion->setTxnegidconversacion($negIdConver);
+                $chatNegociacion->setInnegtratoacep($psolicitud->getTratoAcep());
 
                 $em->persist($chatNegociacion);
 

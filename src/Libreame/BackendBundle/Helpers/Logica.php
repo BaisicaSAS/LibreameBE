@@ -966,7 +966,7 @@ class Logica {
                             'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr(), 
                             'iddevice'=> $pSolicitud->getDeviceMac(), 'marca'=>$pSolicitud->getDeviceMarca(), 
                             'modelo'=>$pSolicitud->getDeviceModelo(), 'so'=>$pSolicitud->getDeviceSO()), 
-                            'idrespuesta' => (array('respuesta' => $respuesta->getRespuesta(), 'conversacion' => $parreglo )));
+                            'idrespuesta' => (array('respuesta' => $respuesta->getRespuesta(), 'indacept' => $respuesta->getIndAcept(), 'indotroacept' => $respuesta->getIndOtroAcept(), 'conversacion' => $parreglo )));
         } catch (Exception $ex) {
                 return AccesoController::inPlatCai;
         } 

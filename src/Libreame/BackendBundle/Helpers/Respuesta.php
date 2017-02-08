@@ -47,6 +47,8 @@ class Respuesta {
     private $pPuntosUsuario; //Puntos del usuario
     private $pCantMegusta; //Cantidad de Megusta de un ejemplar
     private $pCantComenta; //Cantidad de Comentarios de un ejemplar
+    private $pIndAcept; //Indica si el usuario acepto el trato / no lo acepto / No lo ha indicado
+    private $pIndOtroAcept; //Indica si el usuario CONTRAPARTE acepto el trato / no lo acepto / No lo ha indicado
     
     /*
      *  Bloque de getter para los atributos de la clase
@@ -205,6 +207,14 @@ class Respuesta {
     
     public function getCantComenta() {
         return $this->pCantComenta;
+    }
+    
+    public function getIndAcept() {
+        return $this->pIndAcept;
+    }
+    
+    public function getIndOtroAcept() {
+        return $this->pIndOtroAcept;
     }
     
     /*
@@ -395,6 +405,16 @@ class Respuesta {
 
     public function setCantComenta($pCantComenta) {
         $this->pCantComenta = $pCantComenta;
+        return $this;
+    }
+
+    public function setIndAcept($pIndAcept) {
+        $this->pIndAcept = $pIndAcept;
+        return $this;
+    }
+
+    public function setIndOtroAcept($pIndOtroAcept) {
+        $this->pIndOtroAcept = $pIndOtroAcept;
         return $this;
     }
 

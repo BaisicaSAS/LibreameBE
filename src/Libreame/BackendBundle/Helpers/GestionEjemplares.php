@@ -546,7 +546,12 @@ class GestionEjemplares {
                     $arrConversacion =  array();
                     $objConv = new \Libreame\BackendBundle\Entity\LbNegociacion();
                     $objConv = ManejoDataRepository::getChatNegociacionById($resp);
+                    
+                    $usuarioEnv = ManejoDataRepository::getUsuarioByEmail($psolicitud->getEmail());
+                    $usuarioDes = ManejoDataRepository::getUsuarioById($psolicitud->getIdusuariodes());
+                    
                     foreach ($objConv as $neg){
+                        $idconversa = $neg->getTxnegidconversacion();
                         if($neg->getInnegusuescribe() == $neg->getInnegusuduenho()){
                             $usrrecibe = $neg->getInnegususolicita();
                         } else {
@@ -559,9 +564,12 @@ class GestionEjemplares {
                            'txmensaje' => utf8_encode($neg->getTxnegmensaje()),
                            'idconversa' => utf8_encode($neg->getTxnegidconversacion()));
                     }
+
+                    $respuesta->setIndAcept(ManejoDataRepository::getUsAceptTrato($usuarioEnv, $idconversa));
+                    $respuesta->setIndOtroAcept(ManejoDataRepository::getUsAceptTrato($usuarioDes, $idconversa));
+                    
                 }    
                 
-                                
                 //echo "esto es lo que hay en respuesta";
                 //print_r($respuesta);
             

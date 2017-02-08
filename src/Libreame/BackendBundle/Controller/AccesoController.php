@@ -439,6 +439,7 @@ class AccesoController extends Controller
                         //echo "<script>alert('ENTRA POR Chatear')</script>";
                         $this->objSolicitud->setEmail($json_datos['idsolicitud']['email']);
                         $this->objSolicitud->setClave($json_datos['idsolicitud']['clave']);
+                        $this->objSolicitud->setIdusuariodes($json_datos['idsolicitud']['idusrdestino']);
                         $this->objSolicitud->setIdEjemplar($json_datos['idsolicitud']['idejemplar']);
                         $this->objSolicitud->setComentario($json_datos['idsolicitud']['txmensaje']);
                         $this->objSolicitud->setTratoAcep($json_datos['idsolicitud']['tratoacep']);

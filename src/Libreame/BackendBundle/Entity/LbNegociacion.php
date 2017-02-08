@@ -99,9 +99,16 @@ class LbNegociacion
     /**
      * @var string
      *
-     * @ORM\Column(name="txNegIdConversacion",  type="string", length=50, nullable=false)
+     * @ORM\Column(name="",  type="string", length=50, nullable=false)
      */
     private $txnegidconversacion;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="inNegTratoAcep", type="integer", nullable=false)
+     */
+    private $innegtratoacep;
 
     /**
      * Get inidnegociacion
@@ -342,6 +349,29 @@ class LbNegociacion
     public function getTxnegidconversacion()
     {
         return $this->txnegidconversacion;
+    }
+
+    /**
+     * Set innegtratoacep
+     *
+     * @param integer $innegtratoacep
+     * @return LbNegociacion
+     */
+    public function setInnegtratoacep($innegtratoacep)
+    {
+        $this->innegtratoacep = $innegtratoacep;
+
+        return $this;
+    }
+
+    /**
+     * Get innegtratoacep
+     *
+     * @return integer 
+     */
+    public function getInnegtratoacep()
+    {
+        return $this->innegtratoacep;
     }
 
     

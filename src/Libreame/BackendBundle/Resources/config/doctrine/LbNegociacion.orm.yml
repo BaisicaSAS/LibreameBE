@@ -63,6 +63,14 @@ Libreame\BackendBundle\Entity\LbNegociacion:
             nullable: false
             length: 50
             column: txNegIdConversacion
+        innegtratoacep:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: 'Indica si el registro es normal, de aceptación o de rechazo del trato'
+            default: '-1'
+            column: inNegTratoAcep
+
     manyToOne:
         innegejemplar:
             targetEntity: LbEjemplares
