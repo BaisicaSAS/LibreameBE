@@ -2204,6 +2204,9 @@ class ManejoDataRepository extends EntityRepository {
         //planes, restricciones, penalizaciones, etc...DEFINIR BIEN
         try{
             //echo "Inicia a generar la publicacion !!!";
+            /*echo utf8_encode($psolicitud->getTitulo())."\n";
+            echo $psolicitud->getTitulo()."\n";
+            echo utf8_decode($psolicitud->getTitulo())."\n";*/
             
             $respuesta=  AccesoController::inFallido; 
             $fecha = new \DateTime;
@@ -2390,14 +2393,14 @@ class ManejoDataRepository extends EntityRepository {
         
     }
     
-    //El parámetro $idElemento indica el ID del objeto, bien sea Usuario o Ejemplar
+        //El parámetro $idElemento indica el ID del objeto, bien sea Usuario o Ejemplar
     //El parámetro $blEjemUsuario, indica "E", si es un ejemplar o "U" si es un usuario
     public function getImportarImagenB64($txImagenB64, $idElemento, $blEjemUsuario) {
         
         $elem = (String)$idElemento;
         //echo "La cadena ".$ejem." \n";
         
-        $chars = preg_split('//', $ejem, -1, PREG_SPLIT_NO_EMPTY);
+        $chars = preg_split('//', $elem, -1, PREG_SPLIT_NO_EMPTY);
         //WIN \  LINUX /
         //Pregunta si es imagen de ejemplar, o de usuario
         if ($blEjemUsuario == AccesoController::txIndCarpImgEjem) {
@@ -2425,16 +2428,26 @@ class ManejoDataRepository extends EntityRepository {
         // El segundo item del array base_to_php contiene la información que necesitamos (base64 plano)
         // y usar base64_decode para obtener la información binaria de la imagen
         $data = base64_decode($base_to_php[1]);// BBBFBfj42Pj4....
-
-        $archivo = $carpeta.$elem.".jpg"; // or image.jpg
+        
+        $archivoOri = $carpeta.$elem."FULL.jpg"; // or image.jpg
+        $archivoOpt = $carpeta.$elem.".jpg"; // or image.jpg
         $archivoWEB = $carpetaWEB.$elem.".jpg"; // or image.jpg
+        
+        file_put_contents($archivoOri, $data);  
+
+        $imagen = imagecreatefromjpeg($archivoOri);
+        //imagejpeg($imagen, $archivo, 50);        
+        imagejpeg($imagen, $archivoOpt, 30);   
+        unlink($archivoOri);
+        
+        
         //echo "El arhivo a crear : ".$archivo." \n";
         // Finalmente guarda la imágen en el directorio especificado y con la informacion dada
-        file_put_contents($archivo, $data);        
         //echo "Se creo el archivo: ".$archivo." [".$archivoWEB."], con los datos [".$txImagenB64."] \n";
         //echo "Se creo el archivo: ".$archivo." [".$archivoWEB."] \n";
         return $archivoWEB;
         //   return "PENDIENTE;";
     }
-
+    
+    
 }
