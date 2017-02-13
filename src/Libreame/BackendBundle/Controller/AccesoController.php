@@ -418,6 +418,7 @@ class AccesoController extends Controller
                         $this->objSolicitud->setClave($json_datos['idsolicitud']['clave']);
                         $this->objSolicitud->setImageneje($json_datos['idsolicitud']['imagen']);
                         $this->objSolicitud->setAccionCom($json_datos['idsolicitud']['accion']);
+                        $this->objSolicitud->setIdEjemplar($json_datos['idsolicitud']['idejemplar']);
                         $this->objSolicitud->setIdLibro($json_datos['idsolicitud']['idlibro']);
                         $this->objSolicitud->setTitulo($json_datos['idsolicitud']['titulo']);
                         $this->objSolicitud->setAutor($json_datos['idsolicitud']['autor']);
@@ -641,6 +642,7 @@ class AccesoController extends Controller
                         //echo "<script>alert('VAL ENTRA POR PUBLICAR')</script>";
                         $resp = (isset($datos['idsolicitud']['email']) and isset($datos['idsolicitud']['clave']) and 
                                  isset($datos['idsolicitud']['imagen']) and  isset($datos['idsolicitud']['accion']) and 
+                                 isset($datos['idsolicitud']['idejemplar']) and
                                  isset($datos['idsolicitud']['idlibro']) and  isset($datos['idsolicitud']['titulo']) and 
                                  isset($datos['idsolicitud']['autor']) and  isset($datos['idsolicitud']['editorial']) and 
                                  isset($datos['idsolicitud']['edicion']) and  isset($datos['idsolicitud']['idioma']) and 
