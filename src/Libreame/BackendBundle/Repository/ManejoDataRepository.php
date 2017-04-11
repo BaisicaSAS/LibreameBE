@@ -287,6 +287,23 @@ class ManejoDataRepository extends EntityRepository {
     {   
         try{
             $em = $this->getDoctrine()->getManager();
+            
+            $sql = "SELECT i FROM LibreameBackendBundle:LbLugares i WHERE i.inlugelegible = 1 ORDER BY i.txlugnombre";
+            $query = $em->createQuery($sql);
+            foreach ($query->getResult() as $reglugar){
+                 $lugares[] = $reglugar->getTxlugnombre();
+                //echo $lugares;
+            }            
+            //echo $query->getResult(); 
+            //echo "Acabo"; 
+            return $query->getResult();
+
+        } catch (Exception $ex) {
+                return new LbIdiomas();
+        } 
+
+        try{
+            $em = $this->getDoctrine()->getManager();
             return $em->getRepository('LibreameBackendBundle:LbLugares')->
                 findBy(array('inlugelegible' => "1"), array('txlugnombre' => 'ASC'));
         } catch (Exception $ex) {
@@ -1052,13 +1069,19 @@ class ManejoDataRepository extends EntityRepository {
             $planus = new LbPlanesusuarios();
             $planus = $em->getRepository('LibreameBackendBundle:LbPlanesusuarios')->
                     findOneBy(array('inusuplan' => $usuario));
+            //echo "****** usuario ".$usuario->getInusuario(). " *************";
+            //echo "****** plan ".$planus->getInplusplanes()->getInplan(). " *************";
+            
+            $plan = new LbPlanes();
+            $plan = $planus->getInplusplanes();
+            
             
             $q = $em->createQueryBuilder()
                 ->select('p')
                 ->from('LibreameBackendBundle:LbPlanes', 'p')
                 ->leftJoin('LibreameBackendBundle:LbPreciosplanes', 'pp', \Doctrine\ORM\Query\Expr\Join::WITH, 'pp.inidprepidplan = p.inplan')
                 ->Where(' p.inplan = :plan ')
-                ->setParameter('plan', $planus->getInplusplanes());
+                ->setParameter('plan', $plan);
             return $q->getQuery()->getOneOrNullResult();
 
         } catch (Exception $ex) {

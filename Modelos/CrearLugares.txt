@@ -1155,3 +1155,6 @@ insert into exdb4read.lb_lugares  (txlugcodigo, txlugnombre, inlugpadre) values 
 insert into exdb4read.lb_lugares  (txlugcodigo, txlugnombre, inlugpadre) values ('99524','LA PRIMAVERA',35);
 insert into exdb4read.lb_lugares  (txlugcodigo, txlugnombre, inlugpadre) values ('99624','SANTA ROSALÍA',35);
 insert into exdb4read.lb_lugares  (txlugcodigo, txlugnombre, inlugpadre) values ('99773','CUMARIBO',35);
+
+
+update exdb4read.lb_lugares set inlugelegible = 1 where txlugcodigo in('05001', '08001', '11001', '13001', '15001', '50001', '68001', '73001', '76001');
