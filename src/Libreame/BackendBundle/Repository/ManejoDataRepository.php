@@ -66,7 +66,7 @@ class ManejoDataRepository extends EntityRepository {
             //echo "<script>alert('validaSesionUsuario :: ingreso')</script>";
             if (!$em->getRepository('LibreameBackendBundle:LbUsuarios')->
                         findOneBy(array('txusuemail' => $psolicitud->getEmail()))){
-               //echo " <script>alert('validaSesionUsuario :: No existe el USUARIO')</script>";
+                //echo " <script>alert('validaSesionUsuario :: No existe el USUARIO')</script>";
                 $respuesta = AccesoController::inUsClInv; //Usuario o clave inválidos
             } else {    
                 $usuario = $em->getRepository('LibreameBackendBundle:LbUsuarios')->
@@ -79,18 +79,19 @@ class ManejoDataRepository extends EntityRepository {
                 if (!$em->getRepository('LibreameBackendBundle:LbDispusuarios')->findOneBy(array(
                         'txdisid' => $psolicitud->getDeviceMAC(), 
                         'indisusuario' => $usuario))){
-                       //echo "<script>alert('validaSesionUsuario :: Sesion inactiva')</script>";
+                        //echo "<script>alert('validaSesionUsuario :: Sesion inactiva')</script>";
+                        //echo "<script>alert(' usuario ".$usuario->getTxusuemail()."')</script>";
                         $respuesta = AccesoController::inUsSeIna; //Si la sesion no existe para el dispositivo
                 } else {
                     //Si el usuario está INACTIVO
                     if ($estado != AccesoController::inUsuActi)
                     {
-                       //echo "<script>alert('validaSesionUsuario :: Usuario inactivo')</script>";
+                        //echo "<script>alert('validaSesionUsuario :: Usuario inactivo')</script>";
                         $respuesta = AccesoController::inUsuConf; //Usuario Inactiva
                     } else {
                         //Si la clave enviada es inválida
                         if ($usuario->getTxusuclave() != $psolicitud->getClave()){
-                           //echo "<script>alert('validaSesionUsuario :: Clave invalida')</script>";
+                            //echo "<script>alert('validaSesionUsuario :: Clave invalida')</script>";
                             $respuesta = AccesoController::inUsClInv; //Usuario o clave inválidos
                         } else {
                             //Valida si la sesion está activa
@@ -101,12 +102,12 @@ class ManejoDataRepository extends EntityRepository {
                                 'txsesnumero' =>  $psolicitud->getSession(),
                                 'insesdispusuario' => $device,
                                 'insesactiva' => AccesoController::inSesActi))){
-                               //echo "<script>alert('validaSesionUsuario :: Sesion inactiva')</script>";
+                                //echo "<script>alert('validaSesionUsuario :: Sesion inactiva')</script>";
                                 $respuesta = AccesoController::inUsSeIna; //Usuario o clave inválidos
 
                             } else {
                                 $respuesta = AccesoController::inULogged; //Usuario o clave inválidos
-                               //echo "<script>alert('La sesion es VALIDA')</script>";
+                                //echo "<script>alert('La sesion es VALIDA')</script>";
                             }
                         }   
                     }
@@ -562,6 +563,7 @@ class ManejoDataRepository extends EntityRepository {
                         'fenegfechamens' => $negoc->getFenegfechamens()->format("Y-m-d H:i:s"),
                         'txnegmensaje' => utf8_encode($negoc->getTxnegmensaje()),
                         'usrescribe' =>  $usuaEsc->getInusuario(),
+                        'tratoacep' => $negoc->getInnegtratoacep(),
                     );
                 }
                 $arrNegociacion[] = array('txnegidconversacion' => $idconversacion, 'usrsolicita' =>  array('inusuario' => $usuaSol->getInusuario(),
@@ -1656,6 +1658,8 @@ class ManejoDataRepository extends EntityRepository {
             $usuario->setTxusutelefono($psolicitud->getTelefono());
             $usuario->setInusulugar($lugar);
             $usuario->setInusugenero($psolicitud->getUsuGenero());
+            //Cargar imágen usuario
+            $usuario->setTxusuimagen(AccesoController::txMeNoIdS);
             $usuario->setTxusuimagen($psolicitud->getUsuImagen());
             $usuario->setTxusunombre($psolicitud->getNomUsuario());
             $usuario->setTxusunommostrar($psolicitud->getNomMostUsuario());
@@ -1665,6 +1669,11 @@ class ManejoDataRepository extends EntityRepository {
            
             $em->persist($usuario);
             $em->flush();
+            //Cargar imágen usuario
+            $usuario->setTxusuimagen(ManejoDataRepository::getImportarImagenB64($psolicitud->getUsuImagen(), $usuario->getInusuario(), AccesoController::txIndCarpImgUsua));
+            $em->persist($usuario);
+            $em->flush();
+            
             $resp = AccesoController::inExitoso;
             
             return $resp;
@@ -2331,6 +2340,7 @@ class ManejoDataRepository extends EntityRepository {
             $ejemplar->setInejeestado($psolicitud->getEstado());
             $em->persist($ejemplar);
             $em->flush();
+            //Cargar imágen ejemplar 
             //echo "Ejemplar ID [".$ejemplar->getInejemplar()."] \n";
             $ejemplar->setTxejeimagen(ManejoDataRepository::getImportarImagenB64($psolicitud->getImageneje(), $ejemplar->getInejemplar(), AccesoController::txIndCarpImgEjem));
             $em->persist($ejemplar);
@@ -2452,15 +2462,20 @@ class ManejoDataRepository extends EntityRepository {
         // y usar base64_decode para obtener la información binaria de la imagen
         $data = base64_decode($base_to_php[1]);// BBBFBfj42Pj4....
         
+        //echo "DATA : ".$data;
+        
         $archivoOri = $carpeta.$elem."FULL.jpg"; // or image.jpg
+        //echo $archivoOri." \n";
         $archivoOpt = $carpeta.$elem.".jpg"; // or image.jpg
+        //echo $archivoOpt." \n";
         $archivoWEB = $carpetaWEB.$elem.".jpg"; // or image.jpg
+        //echo $archivoWEB." \n";
         
         file_put_contents($archivoOri, $data);  
 
         $imagen = imagecreatefromjpeg($archivoOri);
         //imagejpeg($imagen, $archivo, 50);        
-        imagejpeg($imagen, $archivoOpt, 30);   
+        imagejpeg($imagen, $archivoOpt);   
         unlink($archivoOri);
         
         

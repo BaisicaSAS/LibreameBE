@@ -567,7 +567,8 @@ class GestionEjemplares {
                                'idusrdestino' => $usrrecibe->getInusuario(), 
                                'nommostusrdest' => utf8_encode($usrrecibe->getTxusunommostrar()),
                                'txmensaje' => utf8_encode($neg->getTxnegmensaje()),
-                               'idconversa' => utf8_encode($neg->getTxnegidconversacion()));
+                               'idconversa' => utf8_encode($neg->getTxnegidconversacion()),
+                               'tratoacep' => $neg->getInnegtratoacep());
                         }
 
                         $respuesta->setIndAcept(ManejoDataRepository::getUsAceptTrato($usuarioEnv, $idconversa));
