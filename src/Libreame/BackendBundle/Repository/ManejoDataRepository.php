@@ -43,6 +43,8 @@ use Libreame\BackendBundle\Helpers\Solicitud;
  */
 class ManejoDataRepository extends EntityRepository {
 
+    var $inImagenValida;
+    
     
     /*
      * validaSesionUsuario 
@@ -1655,12 +1657,16 @@ class ManejoDataRepository extends EntityRepository {
                 $d = new DateTime($psolicitud->getUsuFecNac());
             }
             
-            $usuario->setTxusutelefono($psolicitud->getTelefono());
+            if ($psolicitud->getTelefono() == "")
+                $usuario->setTxusutelefono($psolicitud->getEmail());
+            else
+                $usuario->setTxusutelefono($psolicitud->getTelefono());
+            
             $usuario->setInusulugar($lugar);
             $usuario->setInusugenero($psolicitud->getUsuGenero());
             //Cargar imágen usuario
             $usuario->setTxusuimagen(AccesoController::txMeNoIdS);
-            $usuario->setTxusuimagen($psolicitud->getUsuImagen());
+            //$usuario->setTxusuimagen($psolicitud->getUsuImagen());
             $usuario->setTxusunombre($psolicitud->getNomUsuario());
             $usuario->setTxusunommostrar($psolicitud->getNomMostUsuario());
             if ($psolicitud->getUsuFecNac() != ""){
@@ -1670,11 +1676,18 @@ class ManejoDataRepository extends EntityRepository {
             $em->persist($usuario);
             $em->flush();
             //Cargar imágen usuario
-            $usuario->setTxusuimagen(ManejoDataRepository::getImportarImagenB64($psolicitud->getUsuImagen(), $usuario->getInusuario(), AccesoController::txIndCarpImgUsua));
-            $em->persist($usuario);
-            $em->flush();
+            if ($psolicitud->getUsuImagen() != "")
+                $usuario->setTxusuimagen(ManejoDataRepository::getImportarImagenB64($psolicitud->getUsuImagen(), $usuario->getInusuario(), AccesoController::txIndCarpImgUsua));
+            else
+                $this->inImagenValida = AccesoController::inDatoUno;
             
-            $resp = AccesoController::inExitoso;
+            if ($this->inImagenValida == AccesoController::inDatoUno){
+                $em->persist($usuario);
+                $em->flush();
+                $resp = AccesoController::inExitoso;
+            } else {
+                $resp = AccesoController::inFallido;
+            }
             
             return $resp;
         } catch (Exception $ex) {
@@ -2426,10 +2439,12 @@ class ManejoDataRepository extends EntityRepository {
         
     }
     
-        //El parámetro $idElemento indica el ID del objeto, bien sea Usuario o Ejemplar
+
+    //El parámetro $idElemento indica el ID del objeto, bien sea Usuario o Ejemplar
     //El parámetro $blEjemUsuario, indica "E", si es un ejemplar o "U" si es un usuario
     public function getImportarImagenB64($txImagenB64, $idElemento, $blEjemUsuario) {
         
+        //set_error_handler("myFunctionErrorHandler", E_NOTICE);    
         $elem = (String)$idElemento;
         //echo "La cadena ".$ejem." \n";
         
@@ -2461,7 +2476,7 @@ class ManejoDataRepository extends EntityRepository {
         // El segundo item del array base_to_php contiene la información que necesitamos (base64 plano)
         // y usar base64_decode para obtener la información binaria de la imagen
         $data = base64_decode($base_to_php[1]);// BBBFBfj42Pj4....
-        
+        //echo "DATA DECODE ".$data;
         //echo "DATA : ".$data;
         
         $archivoOri = $carpeta.$elem."FULL.jpg"; // or image.jpg
@@ -2472,13 +2487,30 @@ class ManejoDataRepository extends EntityRepository {
         //echo $archivoWEB." \n";
         
         file_put_contents($archivoOri, $data);  
-
-        $imagen = imagecreatefromjpeg($archivoOri);
-        //imagejpeg($imagen, $archivo, 50);        
-        imagejpeg($imagen, $archivoOpt);   
-        unlink($archivoOri);
+        //set_error_handler(call_user_func(array($this,'myFunctionErrorHandler')), E_WARNING);
+        set_error_handler(array($this,'myFunctionErrorHandler'), E_WARNING);
         
+        try{
+            $imagen = imagecreatefromjpeg($archivoOri);
+            if ($imagen != NULL) {
+                $this->inImagenValida = AccesoController::inDatoUno;
+                //echo "Dato uno";
+            } else {
+                $this->inImagenValida = AccesoController::inDatoCer;
+                //echo "Dato Cero";
+            }
+        } catch (Exception $e) {
+            //imagejpeg($imagen, $archivo, 50);        
+        }
         
+        if ($this->inImagenValida == AccesoController::inDatoUno)
+        {
+            imagejpeg($imagen, $archivoOpt);   
+            unlink($archivoOri);
+        }
+        
+        restore_error_handler();
+            
         //echo "El arhivo a crear : ".$archivo." \n";
         // Finalmente guarda la imágen en el directorio especificado y con la informacion dada
         //echo "Se creo el archivo: ".$archivo." [".$archivoWEB."], con los datos [".$txImagenB64."] \n";
