@@ -1676,17 +1676,22 @@ class ManejoDataRepository extends EntityRepository {
             $em->persist($usuario);
             $em->flush();
             //Cargar imágen usuario
-            if ($psolicitud->getUsuImagen() != "")
+            if ($psolicitud->getUsuImagen() != "") {
+                //echo "setActualizaUsuario: Calcula imágen  \n" ;
                 $usuario->setTxusuimagen(ManejoDataRepository::getImportarImagenB64($psolicitud->getUsuImagen(), $usuario->getInusuario(), AccesoController::txIndCarpImgUsua));
-            else
+            } else {
+                //echo "setActualizaUsuario: La imágen viene vacia \n" ;
                 $this->inImagenValida = AccesoController::inDatoUno;
+            }
             
             if ($this->inImagenValida == AccesoController::inDatoUno){
                 $em->persist($usuario);
                 $em->flush();
                 $resp = AccesoController::inExitoso;
+                //echo "setActualizaUsuario: La imágen es válida [".$resp."]\n" ;
             } else {
-                $resp = AccesoController::inFallido;
+                $resp = AccesoController::inErrImag;
+                //echo "setActualizaUsuario: La imágen NO es válida [".$resp."] \n" ;
             }
             
             return $resp;
@@ -2250,8 +2255,8 @@ class ManejoDataRepository extends EntityRepository {
         try{
             //echo "Inicia a generar la publicacion !!!";
             /*echo utf8_encode($psolicitud->getTitulo())."\n";
-            echo $psolicitud->getTitulo()."\n";
-            echo utf8_decode($psolicitud->getTitulo())."\n";*/
+            //echo $psolicitud->getTitulo()."\n";
+            //echo utf8_decode($psolicitud->getTitulo())."\n";*/
             
             $respuesta=  AccesoController::inFallido; 
             $fecha = new \DateTime;
@@ -2485,18 +2490,49 @@ class ManejoDataRepository extends EntityRepository {
         //echo $archivoOpt." \n";
         $archivoWEB = $carpetaWEB.$elem.".jpg"; // or image.jpg
         //echo $archivoWEB." \n";
+        //echo "getImportarImagenB64: Borra archivos anteriores\n" ;
+        if (file_exists($archivoOri)) {
+            //echo "getImportarImagenB64: Existe ". $archivoOri ."\n" ;
+            unlink($archivoOri);
+        }
+        if (file_exists($archivoOpt)) {
+            //echo "getImportarImagenB64: Existe ". $archivoOpt ."\n" ;
+            unlink($archivoOpt);
+        }
         
+        //echo "getImportarImagenB64: El archivo se poblará con datos". $archivoOri ."\n" ;
         file_put_contents($archivoOri, $data);  
         //set_error_handler(call_user_func(array($this,'myFunctionErrorHandler')), E_WARNING);
         set_error_handler(array($this,'myFunctionErrorHandler'), E_WARNING);
         
         try{
-            $imagen = imagecreatefromjpeg($archivoOri);
+            $inTipoImg = exif_imagetype($archivoOri); 
+            switch ($inTipoImg) {
+                case IMAGETYPE_JPEG: {
+                    //echo "getImportarImagenB64: JPEG \n" ;
+                    $imagen = imagecreatefromjpeg($archivoOri);
+                    break;
+                }
+                case IMAGETYPE_PNG: {
+                    //echo "getImportarImagenB64: PNG \n" ;
+                    $imagen = imagecreatefrompng($archivoOri);
+                    break;
+                }
+                default: {
+                    //echo "getImportarImagenB64: PNG \n" ;
+                    $imagen = NULL;
+                    break;
+                }
+            }
+            
             if ($imagen != NULL) {
+                //echo "getImportarImagenB64: Imágen valida \n" ;
                 $this->inImagenValida = AccesoController::inDatoUno;
                 //echo "Dato uno";
             } else {
-                $this->inImagenValida = AccesoController::inDatoCer;
+                //echo "getImportarImagenB64: Imágen NO valida \n" ;
+                $this->inImagenValida = AccesoController::inErrImag;
+                unlink($archivoOri);
                 //echo "Dato Cero";
             }
         } catch (Exception $e) {
@@ -2505,8 +2541,18 @@ class ManejoDataRepository extends EntityRepository {
         
         if ($this->inImagenValida == AccesoController::inDatoUno)
         {
-            imagejpeg($imagen, $archivoOpt);   
+            //echo "getImportarImagenB64: Si es válida : Almacena imagen \n" ;
+            switch ($inTipoImg) {
+                case IMAGETYPE_JPEG: imagejpeg($imagen, $archivoOpt);
+                case IMAGETYPE_PNG: imagepng($imagen, $archivoOpt);;
+            }
+               
             unlink($archivoOri);
+            //echo "Se creo el archivo: ".$archivoOri." [".$archivoWEB."] \n";
+            return $archivoWEB;
+        } else {
+            //echo "--NO Se creo el archivo: ".$archivoOri." [".$archivoWEB."] \n";
+            return AccesoController::txMeNoIdS;
         }
         
         restore_error_handler();
@@ -2514,8 +2560,7 @@ class ManejoDataRepository extends EntityRepository {
         //echo "El arhivo a crear : ".$archivo." \n";
         // Finalmente guarda la imágen en el directorio especificado y con la informacion dada
         //echo "Se creo el archivo: ".$archivo." [".$archivoWEB."], con los datos [".$txImagenB64."] \n";
-        //echo "Se creo el archivo: ".$archivo." [".$archivoWEB."] \n";
-        return $archivoWEB;
+        //echo "Se creo el archivo: ".$archivoOri." [".$archivoWEB."] \n";
         //   return "PENDIENTE;";
     }
     

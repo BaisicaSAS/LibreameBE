@@ -333,6 +333,8 @@ class GestionUsuarios {
                 $actualiza = ManejoDataRepository::setActualizaUsuario($psolicitud);
                 if ($actualiza == AccesoController::inFallido){
                     $respuesta->setRespuesta(AccesoController::inFallido);
+                } else if ($actualiza == AccesoController::inErrImag){
+                    $respuesta->setRespuesta(AccesoController::inErrImag);
                 } else {
                     $respuesta->setRespuesta($respSesionVali);
                 }

@@ -127,6 +127,7 @@ class AccesoController extends Controller
     //Constante funcion marcar mensaje
     const inMenNoEx = -6; //Mensaje no existe
     const inMenNoAc = -7; //Mensaje no activo - inactivo
+    const inErrImag = -8; //Error en la carga de imágen
 
     const inIdGeneral = 1; //Id General para datos basicos :: Genero, Lugar, Grupo
     //
