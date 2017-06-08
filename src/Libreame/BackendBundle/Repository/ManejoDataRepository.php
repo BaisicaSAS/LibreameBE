@@ -1483,7 +1483,7 @@ class ManejoDataRepository extends EntityRepository {
                         ->setParameter('pusuario', $usuario)
                         ->andWhere(' m.inmemgrupo in (:grupos) ')//Para los grupos del usuario
                         ->setParameter('grupos', $grupos)
-                        ->andWhere(' e.inEjeEstadoNegocio IN (1, 2, 3, 4) ')//En negociación (Si está entregado o recibido, ya no es del usuario)
+                        ->andWhere(' e.inejeestadonegocio IN (1, 2, 3, 4) ')//En negociación (Si está entregado o recibido, ya no es del usuario)
                         //->setMaxResults(10000)
                         ->orderBy(' h.fehisejeregistro ', 'DESC');
                         break;

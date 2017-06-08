@@ -1063,6 +1063,17 @@ class Logica {
                 $condactual = $ejemplar->getInejeestadonegocio(); // 0 - No en negociacion,1 - Solicitado por usuario, 2 - En proceso de aprobación del negocio, 3 - Aprobado negocio por Ambos actores, 4 - En proceso de entrega, 5 - Entregado, 6 - Recibido
                 $desccondactual = utf8_encode(ManejoDataRepository::getDescCondicionActualEjemplar($ejemplar->getInejeestadonegocio())); // 0 - No en negociacion,1 - Solicitado por usuario, 2 - En proceso de aprobación del negocio, 3 - Aprobado negocio por Ambos actores, 4 - En proceso de entrega, 5 - Entregado, 6 - Recibido
                 //echo "Titulo + Descripcion edicion : [".$titulo."] - [".$edicion."]\n";
+                if ($condactual == 0) {///Si el ejemplar NO está en negociacion se puede editar
+                    //Si está bloqueado no se puede editar
+                    if ($ejemplar->getInejebloqueado() == AccesoController::inDatoUno){
+                        $puedeeditar = AccesoController::inDatoCer;
+                    } else  {
+                        $puedeeditar = AccesoController::inDatoUno;
+                    }
+                } else { //En negociacion NO se puede editar
+                    $puedeeditar = AccesoController::inDatoCer;
+                }
+                    
                 $arrTmp[] = array('idejemplar' => $ejemplar->getInejemplar(), 
                     'titulo' => $titulo, 
                     'precio' => $precio, 
@@ -1081,6 +1092,7 @@ class Logica {
                     'cantcomment' => $cantcomment,
                     'condactual' => $condactual,
                     'desccondactual' => $desccondactual,
+                    'puedeeditar' => $puedeeditar,
                     'lugar' => array('inlugar' => $lugar->getInlugar(), 'txlugnombre' => utf8_encode($lugar->getTxlugnombre())),
                     'autores' => $arrAutores,
                     'editoriales' => $arrEditoriales,
