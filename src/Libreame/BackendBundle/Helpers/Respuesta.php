@@ -49,6 +49,7 @@ class Respuesta {
     private $pCantComenta; //Cantidad de Comentarios de un ejemplar
     private $pIndAcept; //Indica si el usuario acepto el trato / no lo acepto / No lo ha indicado
     private $pIndOtroAcept; //Indica si el usuario CONTRAPARTE acepto el trato / no lo acepto / No lo ha indicado
+    private $pBotonesMostrar; //Lista de botones a mostrar
     
     /*
      *  Bloque de getter para los atributos de la clase
@@ -215,6 +216,10 @@ class Respuesta {
     
     public function getIndOtroAcept() {
         return $this->pIndOtroAcept;
+    }
+    
+    public function getBotonesMostrar() {
+        return $this->pBotonesMostrar;
     }
     
     /*
@@ -415,6 +420,11 @@ class Respuesta {
 
     public function setIndOtroAcept($pIndOtroAcept) {
         $this->pIndOtroAcept = $pIndOtroAcept;
+        return $this;
+    }
+
+    public function setBotonesMostrar($pBotonesMostrar) {
+        $this->pBotonesMostrar = $pBotonesMostrar;
         return $this;
     }
 

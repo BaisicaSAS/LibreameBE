@@ -78,7 +78,22 @@ class Solicitud {
     private $pEstado; // Estado del ejemplar
     private $pModopublica; // Modo publicacion
     
-    private $pTratoAcep; // trato aceptado por el usuario: 1 Aceptado, 0 Rechazado, -1: no indica
+    /*  La variable tratoacep es realmente el indicador del significado del mensaje 
+        -1	S, D	Mensaje de texto normal (El que existe actualente para enviar un mensaje en el chat)
+        0	S, D	Cancelar el trato actual
+        1	S, D	Aceptar el trato
+        2	S	Ofertar un valor por un ejemplar
+        3	D	Contraofertar una oferta realizada por el Solicitante
+        4	D	Entregar el ejemplar (Se informa a la plataforma que físicamente se entrego)
+        5	S	Recibir el ejemplar (Se informa a la plataforma que físicamente se recibió)
+        6	S	Calificación (El solicitante califica)
+        7	D	Calificación (El dueño califica)
+        10	S, D	TRATO FINALIZADO
+     */
+    private $pTratoAcep; 
+    private $pValor; // Valor que envía un usuario para oferta o contraoferta - 
+                     //  Tambien se utiliza para enviar la calificación luego de completar la transaccion
+    private $pUnidad; // Unidad Puntos / Pesos
     
     
     /*
@@ -295,6 +310,14 @@ class Solicitud {
     
     public function getTratoAcep() {
         return $this->pTratoAcep;
+    }
+    
+    public function getValor() {
+        return $this->pValor;
+    }
+    
+    public function getUnidad() {
+        return $this->pUnidad;
     }
     
     
@@ -570,6 +593,16 @@ class Solicitud {
     
     public function setTratoAcep($ptratoacep) {
         $this->pTratoAcep = $ptratoacep;
+        return $this;
+    }
+    
+    public function setValor($pvalor) {
+        $this->pValor = $pvalor;
+        return $this;
+    }
+    
+    public function setUnidad($punidad) {
+        $this->pUnidad = $punidad;
         return $this;
     }
     

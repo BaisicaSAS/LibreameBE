@@ -2082,15 +2082,48 @@ class ManejoDataRepository extends EntityRepository {
             $negIdConver = "D".$usrPropiet->getInusuario()."S".$usrSolicit->getInusuario()."E".$objEjemplar->getInejemplar();
             //echo "tratoacep : ".$psolicitud->getTratoAcep();
             // Si el registro es de 1 Aceptacion o 0: Rechazo, el mensaje es personalizado con una constante
-            if ($psolicitud->getTratoAcep() == AccesoController::inDescone) { //si es = -1
-                //echo "entro a tratoacep : -1";
-                $mensaje = $psolicitud->getComentario();
-            } else if ($psolicitud->getTratoAcep() == AccesoController::inDatoCer) { //Si es un registro de rechazo  = 0
-                //echo "entro a tratoacep : 0";
-                $mensaje = str_replace("%usuario", $usrEscribe->getTxusunommostrar(), AccesoController::txMsgRechazoTr);
-            } else if ($psolicitud->getTratoAcep() == AccesoController::inDatoUno) { //Si es un registro de aceptación = 1
-                //echo "entro a tratoacep : 1";
-                $mensaje = str_replace("%usuario", $usrEscribe->getTxusunommostrar(), AccesoController::txMsgAceptaTr);
+            
+            switch ($psolicitud->getTratoAcep()) {
+                case AccesoController::inAccMsgNormal: //si es = -1
+                    //echo "entro a tratoacep : -1";
+                    $mensaje = $psolicitud->getComentario();
+                    break;
+                case AccesoController::inAccMsgCancel: //si es = 0
+                    //echo "entro a tratoacep : 0";
+                    $mensaje = str_replace("%usuario", $usrEscribe->getTxusunommostrar(), AccesoController::txMsgRechazoTr);
+                    break;
+                case AccesoController::inAccMsgAcepta: //si es = 1
+                    //echo "entro a tratoacep : 1";
+                    $mensaje = str_replace("%usuario", $usrEscribe->getTxusunommostrar(), AccesoController::txMsgAceptaTr);
+                    break;
+                case AccesoController::inAccMsgOferta: //si es = 2
+                    //echo "entro a tratoacep : 2";
+                    $mensaje = str_replace("%usuario", $usrEscribe->getTxusunommostrar(), AccesoController::txMsgHaceOferta);
+                    break;
+                case AccesoController::inAccMsgContra: //si es = 3
+                    //echo "entro a tratoacep : 3";
+                    $mensaje = str_replace("%usuario", $usrEscribe->getTxusunommostrar(), AccesoController::txMsgContraoferta);
+                    break;
+                case AccesoController::inAccMsgEntreg: //si es = 4
+                    //echo "entro a tratoacep : 4";
+                    $mensaje = str_replace("%usuario", $usrEscribe->getTxusunommostrar(), AccesoController::txMsgEntregaEjem);
+                    break;
+                case AccesoController::inAccMsgRecibe: //si es = 5
+                    //echo "entro a tratoacep : 5";
+                    $mensaje = str_replace("%usuario", $usrEscribe->getTxusunommostrar(), AccesoController::txMsgRecibeEjem);
+                    break;
+                case AccesoController::inAccMsgSCalif: //si es = 6
+                    //echo "entro a tratoacep : 6";
+                    $mensaje = str_replace("%usuario", $usrEscribe->getTxusunommostrar(), AccesoController::txMsgCalificacion);
+                    break;
+                case AccesoController::inAccMsgDCalif: //si es = 7
+                    //echo "entro a tratoacep : 7";
+                    $mensaje = str_replace("%usuario", $usrEscribe->getTxusunommostrar(), AccesoController::txMsgCalificacion);
+                    break;
+                case AccesoController::inAccMsgFinali: //si es = 10
+                    //echo "entro a tratoacep : 10";
+                    $mensaje = AccesoController::txMsgFinalizacion;
+                    break;
             }
             if ($mensaje != "")
             {
@@ -2564,5 +2597,20 @@ class ManejoDataRepository extends EntityRepository {
         //   return "PENDIENTE;";
     }
     
+    public function getBotonesMostrar($conversa, $usuario)
+    {
+        try {
+            //Buscar los botones a mostrar dependiendo del usuario que está escribiendo
+            //y del estado de la negociacion
+            $botones = "-1,0,1";
+            return $botones;
+ 
+            } catch (\Doctrine\DBAL\DBALException  $ex) {
+                //echo "<script>alert('::::".$ex->getMessage()."')</script>";
+                return AccesoController::inPlatCai;
+        } 
+    }
+
+ 
     
 }

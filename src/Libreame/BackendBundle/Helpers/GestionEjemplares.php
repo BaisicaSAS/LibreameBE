@@ -543,6 +543,7 @@ class GestionEjemplares {
                 if (is_null($resp)) {
                     $respuesta->setRespuesta(AccesoController::inPlatCai);
                 } else {
+                    $usrDueno = AccesoController::inDatoCer; //Default: no es el dueño
                     $respuesta->setRespuesta(AccesoController::inDatoUno);
                     $arrConversacion =  array();
                     $objConv = new LbNegociacion();
@@ -558,8 +559,10 @@ class GestionEjemplares {
                             $idconversa = $neg->getTxnegidconversacion();
                             if($neg->getInnegusuescribe() == $neg->getInnegusuduenho()){
                                 $usrrecibe = $neg->getInnegususolicita();
+                                $usrDueno = AccesoController::inDatoUno;
                             } else {
                                 $usrrecibe = $neg->getInnegusuduenho();
+                                $usrDueno = AccesoController::inDatoCer;
                             }
                             $arrConversacion[] = array('fecha' => $neg->getFenegfechamens()->format(("Y-m-d H:i:s")), 
                                'usrescribe' => $neg->getInnegusuescribe()->getInusuario(),
@@ -573,6 +576,7 @@ class GestionEjemplares {
 
                         $respuesta->setIndAcept(ManejoDataRepository::getUsAceptTrato($usuarioEnv, $idconversa));
                         $respuesta->setIndOtroAcept(ManejoDataRepository::getUsAceptTrato($usuarioDes, $idconversa));
+                        $respuesta->setBotonesMostrar(ManejoDataRepository::getBotonesMostrar($idconversa,$usrDueno));
                     }
                 }    
                 

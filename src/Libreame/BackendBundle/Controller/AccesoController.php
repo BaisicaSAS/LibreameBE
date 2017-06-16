@@ -206,9 +206,6 @@ class AccesoController extends Controller
     const txCarpWEMImgUsua = "http://ex4read.co/exservices/web/img/u/";
     const txIndCarpImgUsua = "U";
 
-    
-    
-
     //Constantes para Estado de negociación ejemplar
     const inConEjeNoNe = 0;//0: Ejemplar no está en negociacion
     const txConEjeNoNe = "Ejemplar no está en negociacion";//0: Ejemplar no está en negociacion
@@ -225,8 +222,39 @@ class AccesoController extends Controller
     const inConEjeReci = 6;//6: Recibido
     const txConEjeReci = "Recibido";//6: Recibido
     
+    //Constantes: Mensajes Discriminados según el usuario que lo lee
     const txMsgRechazoTr = " :( Otra vez será. %usuario no aceptó el trato";
     const txMsgAceptaTr = " :) Que bien !!! El trato fue aceptado por %usuario";
+    const txMsgHaceOferta = "  %usuario, ofrece %cantidad %unidadvalor ";
+    const txMsgContraoferta = "  %usuario, contraoferta: %cantidad %unidadvalor ";
+    const txMsgEntregaEjem = "  %usuario, reporta entrega del ejemplar! ";
+    const txMsgRecibeEjem = "  %usuario, reporta recibo del ejemplar! ";
+    const txMsgCalificacion = "  %usuario, realizó calificación del trato! "; //Sirve para ambos
+    const txMsgFinalizacion = "  El trato finalizó satisfactoriamente "; //Sirve para ambos
+    
+    /****** ACCIONES DE LA NEGOCIACION  ****** 
+    **[-1]**	S, D	Mensaje de texto normal (El que existe actualente para enviar un mensaje en el chat)*
+    **[0]**	S, D	Cancelar el trato actual
+    **[1]**	S, D	Aceptar el trato
+    **[2]**	S	Ofertar un valor por un ejemplar
+    **[3]**	D	Contraofertar una oferta realizada por el Solicitante
+    **[4]**	D	Entregar el ejemplar (Se informa a la plataforma que físicamente se entrego)
+    **[5]**	S	Recibir el ejemplar (Se informa a la plataforma que físicamente se recibió)
+    **[6]**	S	Calificación (El solicitante califica)
+    **[7]**	D	Calificación (El dueño califica)
+    **[10]**	S, D	TRATO FINALIZADO */
+    const inAccMsgNormal = -1;
+    const inAccMsgCancel = 0;
+    const inAccMsgAcepta = 1;
+    const inAccMsgOferta = 2;
+    const inAccMsgContra = 3;
+    const inAccMsgEntreg = 4;
+    const inAccMsgRecibe = 5;
+    const inAccMsgSCalif = 6;
+    const inAccMsgDCalif = 7;
+    const inAccMsgFinali = 10;
+    
+    
     
     var $objSolicitud;
     /*
@@ -448,6 +476,8 @@ class AccesoController extends Controller
                         $this->objSolicitud->setIdEjemplar($json_datos['idsolicitud']['idejemplar']);
                         $this->objSolicitud->setComentario($json_datos['idsolicitud']['txmensaje']);
                         $this->objSolicitud->setTratoAcep($json_datos['idsolicitud']['tratoacep']);
+                        $this->objSolicitud->setValor($json_datos['idsolicitud']['valor']);
+                        $this->objSolicitud->setUnidad($json_datos['idsolicitud']['unidad']);
                         break;
                     }
                     
@@ -663,7 +693,8 @@ class AccesoController extends Controller
                         //echo "<script>alert('VAL ENTRA CHATEAR')</script>";
                         $resp = (isset($datos['idsolicitud']['email']) and isset($datos['idsolicitud']['clave'])
                                 and isset($datos['idsolicitud']['idejemplar']) and isset($datos['idsolicitud']['txmensaje'])
-                                and isset($datos['idsolicitud']['idusrdestino']) and isset($datos['idsolicitud']['tratoacep']) );
+                                and isset($datos['idsolicitud']['idusrdestino']) and isset($datos['idsolicitud']['tratoacep'])
+                                 and isset($datos['idsolicitud']['valor']) and isset($datos['idsolicitud']['unidad']));
                         break;
                     }
                     
