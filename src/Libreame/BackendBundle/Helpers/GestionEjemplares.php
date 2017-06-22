@@ -538,7 +538,12 @@ class GestionEjemplares {
                 //Guarda la actividad de la sesion:: 
                 //ManejoDataRepository::generaActSesion($sesion,AccesoController::inDatoUno,"Recupera Feed de Ejemplares".$psolicitud->getEmail()." recuperados con éxito ",$psolicitud->getAccion(),$fecha,$fecha);
                 //echo "<script>alert('Generó actividad de sesion ')</script>";
+                
+                //Guarda la acion del usuario en una variable
+                $ultAccion = $psolicitud->getTratoAcep();
+                //Guarda el chat
                 $resp = ManejoDataRepository::setMensajeChat($psolicitud);
+                
                 //echo "respuesta ".$resp;
                 if (is_null($resp)) {
                     $respuesta->setRespuesta(AccesoController::inPlatCai);
@@ -550,7 +555,9 @@ class GestionEjemplares {
                     $objConv = ManejoDataRepository::getChatNegociacionById($resp);
                     
                     //echo "respuesta ".$resp;
-
+                   
+                    //
+                    
                     if (!empty($objConv)) {
                         $usuarioEnv = ManejoDataRepository::getUsuarioByEmail($psolicitud->getEmail());
                         $usuarioDes = ManejoDataRepository::getUsuarioById($psolicitud->getIdusuariodes());
@@ -576,7 +583,7 @@ class GestionEjemplares {
 
                         $respuesta->setIndAcept(ManejoDataRepository::getUsAceptTrato($usuarioEnv, $idconversa));
                         $respuesta->setIndOtroAcept(ManejoDataRepository::getUsAceptTrato($usuarioDes, $idconversa));
-                        $respuesta->setBotonesMostrar(ManejoDataRepository::getBotonesMostrar($idconversa,$usrDueno));
+                        $respuesta->setBotonesMostrar(ManejoDataRepository::getBotonesMostrar($idconversa,$usrDueno,$ultAccion));
                     }
                 }    
                 
