@@ -128,6 +128,7 @@ class AccesoController extends Controller
     const inMenNoEx = -6; //Mensaje no existe
     const inMenNoAc = -7; //Mensaje no activo - inactivo
     const inErrImag = -8; //Error en la carga de imágen
+    const inUsClAcI = -9; //Clave actual inválida
 
     const inIdGeneral = 1; //Id General para datos basicos :: Genero, Lugar, Grupo
     //

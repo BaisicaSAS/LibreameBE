@@ -358,27 +358,31 @@ class GestionUsuarios {
         $respuesta = new Respuesta();
         $objLogica = $this->get('logica_service');
         try {
-            //Valida que la sesión corresponda y se encuentre activa
-            $respSesionVali=  ManejoDataRepository::validaSesionUsuario($psolicitud);
-            //echo "<script>alert(' marcarMensajes :: Validez de sesion ".$respSesionVali." ')</script>";
-            if ($respSesionVali==AccesoController::inULogged) 
-            {    
-               
-                //echo 'Esta logueado';
-                $actualiza = ManejoDataRepository::setCambiarClave($psolicitud);
-                if ($actualiza == AccesoController::inFallido){
-                    //echo 'Responde fallido';
-                    $respuesta->setRespuesta(AccesoController::inFallido);
+            //Si la clave actual del usuario es válida
+            if $psolicitud->getClave()    
+                //Valida que la sesión corresponda y se encuentre activa
+                $respSesionVali=  ManejoDataRepository::validaSesionUsuario($psolicitud);
+                //echo "<script>alert(' marcarMensajes :: Validez de sesion ".$respSesionVali." ')</script>";
+                if ($respSesionVali==AccesoController::inULogged) 
+                {    
+                    //echo 'Esta logueado';
+                    $actualiza = ManejoDataRepository::setCambiarClave($psolicitud);
+                    if ($actualiza == AccesoController::inFallido){
+                        //echo 'Responde fallido';
+                        $respuesta->setRespuesta(AccesoController::inFallido);
+                    } else {
+                        //echo 'Responde sesion valida';
+                        $respuesta->setRespuesta($respSesionVali);
+                    }
+
+                    return $objLogica::generaRespuesta($respuesta, $psolicitud, NULL);
                 } else {
-                    //echo 'Responde sesion valida';
+                    //echo 'NO LOGUEADO';
                     $respuesta->setRespuesta($respSesionVali);
+                    return $objLogica::generaRespuesta($respuesta, $psolicitud, NULL);
                 }
-                
-                return $objLogica::generaRespuesta($respuesta, $psolicitud, NULL);
             } else {
-                //echo 'NO LOGUEADO';
-                $respuesta->setRespuesta($respSesionVali);
-                return $objLogica::generaRespuesta($respuesta, $psolicitud, NULL);
+                $respuesta->setRespuesta(AccesoController::inUsClAcI);
             }
         } catch (Exception $ex) {
             $respuesta->setRespuesta(AccesoController::inPlatCai);
