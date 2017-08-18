@@ -1679,6 +1679,7 @@ class ManejoDataRepository extends EntityRepository {
             if ($psolicitud->getUsuImagen() != "") {
                 //echo "setActualizaUsuario: Calcula imágen  \n" ;
                 $usuario->setTxusuimagen(ManejoDataRepository::getImportarImagenB64($psolicitud->getUsuImagen(), $usuario->getInusuario(), AccesoController::txIndCarpImgUsua));
+                $this->inImagenValida = AccesoController::inDatoUno;
             } else {
                 //echo "setActualizaUsuario: La imágen viene vacia \n" ;
                 $this->inImagenValida = AccesoController::inDatoUno;
