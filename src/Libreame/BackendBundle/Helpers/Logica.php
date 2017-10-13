@@ -200,6 +200,20 @@ class Logica {
                 } 
                 
                 
+                case AccesoController::txAccListaEdi: {//Dato:50 : Listar editoriales
+                    //echo "<script>alert('Antes de entrar a Listar idiomas Usuario-".$solicitud->getEmail()."')</script>";
+                    $objGestEjemplares = $this->get('gest_ejemplares_service');
+                    $respuesta = $objGestEjemplares::listarEditoriales($solicitud);
+                    break;
+                } 
+
+                case AccesoController::txAccListaAut: {//Dato:51 : Listar autores
+                    //echo "<script>alert('Antes de entrar a Listar idiomas Usuario-".$solicitud->getEmail()."')</script>";
+                    $objGestEjemplares = $this->get('gest_ejemplares_service');
+                    $respuesta = $objGestEjemplares::listarAutores($solicitud);
+                    break;
+                } 
+
             }
             //echo "<script>alert('ejecuta Accion: ".$respuesta."')</script>";
             return $respuesta;
@@ -318,6 +332,16 @@ class Logica {
                 
                 case AccesoController::txAccVerComEj: //Dato:43 : Ver comentarios ejemplar
                     $JSONResp = Logica::respuestaVerComentariosEjemplar($respuesta, $pSolicitud, $parreglo);
+                    break;
+                
+                case AccesoController::txAccListaEdi: //Dato:50 : Listar editoriales
+                    $JSONResp = Logica::respuestaListaEditoriales($respuesta, $pSolicitud, $parreglo);
+                    //print_r(array_values($JSONResp));
+                    break;
+                
+                case AccesoController::txAccListaAut: //Dato:51 : Listar autores
+                    $JSONResp = Logica::respuestaListaAutores($respuesta, $pSolicitud, $parreglo);
+                    //print_r(array_values($JSONResp));
                     break;
                 
                 
@@ -1276,5 +1300,39 @@ class Logica {
         } 
     }
 
+    public function respuestaListaEditoriales(Respuesta $respuesta, Solicitud $pSolicitud, $parreglo){
+        try {
+            //echo "respuesta idiomas \n";
+            //print_r(array_values($parreglo));
+            return array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
+                            'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr(), 
+                            'iddevice'=> $pSolicitud->getDeviceMac(), 'marca'=>$pSolicitud->getDeviceMarca(), 
+                            'modelo'=>$pSolicitud->getDeviceModelo(), 'so'=>$pSolicitud->getDeviceSO()), 
+                            'idrespuesta' => array('respuesta' => $respuesta->getRespuesta(), 
+                            'editoriales' => $parreglo));
+//                            'idrespuesta' => (array('respuesta' => $respuesta->getRespuesta(), 'idiomas' => array('ididioma'=>$parreglo[][0], 'nomidioma'=>$parreglo[][1]))));
+            //echo "termino armar \n" ;
+        } catch (Exception $ex) {
+                return AccesoController::inPlatCai;
+        } 
+    }    
+    
+    public function respuestaListaAutores(Respuesta $respuesta, Solicitud $pSolicitud, $parreglo){
+        try {
+            //echo "respuesta idiomas \n";
+            //print_r(array_values($parreglo));
+            return array('idsesion' => array ('idaccion' => $pSolicitud->getAccion(),
+                            'idtrx' => '', 'ipaddr'=> $pSolicitud->getIPaddr(), 
+                            'iddevice'=> $pSolicitud->getDeviceMac(), 'marca'=>$pSolicitud->getDeviceMarca(), 
+                            'modelo'=>$pSolicitud->getDeviceModelo(), 'so'=>$pSolicitud->getDeviceSO()), 
+                            'idrespuesta' => array('respuesta' => $respuesta->getRespuesta(), 
+                            'autores' => $parreglo));
+//                            'idrespuesta' => (array('respuesta' => $respuesta->getRespuesta(), 'idiomas' => array('ididioma'=>$parreglo[][0], 'nomidioma'=>$parreglo[][1]))));
+            //echo "termino armar \n" ;
+        } catch (Exception $ex) {
+                return AccesoController::inPlatCai;
+        } 
+    }    
+    
 
 }

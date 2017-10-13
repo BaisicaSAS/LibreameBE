@@ -1988,6 +1988,39 @@ class ManejoDataRepository extends EntityRepository {
         } 
     }
     
+    //Obtiene la lista de editoriales
+    public function getListaEditoriales()
+    {   
+        try{
+            $em = $this->getDoctrine()->getManager();
+            
+            $sql = "SELECT e FROM LibreameBackendBundle:LbEditoriales e ";
+            $query = $em->createQuery($sql);
+            
+            return $query->getResult();
+
+        } catch (Exception $ex) {
+                return new LbEditoriales();
+        } 
+    }
+    
+    //Obtiene la lista de autores
+    public function getListaAutores()
+    {   
+        try{
+            $em = $this->getDoctrine()->getManager();
+            
+            $sql = "SELECT a FROM LibreameBackendBundle:LbAutores a ";
+            $query = $em->createQuery($sql);
+            
+            return $query->getResult();
+            //return $idiomas;
+
+        } catch (Exception $ex) {
+                return new LbAutores();
+        } 
+    }
+    
    //Marca un Megusta en un ejemplar
     public function setMegustaEjemplar($ejemplar, $megusta, $usuario)
     {   

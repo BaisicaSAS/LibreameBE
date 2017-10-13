@@ -11,7 +11,8 @@ use Libreame\BackendBundle\Entity\LbIdiomas;
 use Libreame\BackendBundle\Entity\LbUsuarios;
 use Libreame\BackendBundle\Entity\LbEjemplares;
 use Libreame\BackendBundle\Entity\LbSesiones;
-use Libreame\BackendBundle\Entity\LbNegociacion;
+use Libreame\BackendBundle\Entity\LbEditoriales;
+use Libreame\BackendBundle\Entity\LbAutores;
 /**
  * Description of Feeds
  *
@@ -323,7 +324,7 @@ class GestionEjemplares {
                 $idioma = new LbIdiomas();
                 $arIdiomas = array();
                 
-                $contador = 0;
+                //$contador = 0;
                 foreach ($idiomas as $idioma) {
                     $arIdiomas[] = array("ididioma"=>$idioma->getInididioma(), "nomidioma"=>utf8_encode($idioma->getTxidinombre()));
                     //echo "Idioma=".$idioma->getInididioma()." - ".$idioma->getTxidinombre()." \n";
@@ -601,5 +602,115 @@ class GestionEjemplares {
         }
     }
 
+    
+    public function listarEditoriales(Solicitud $psolicitud)
+    {   
+        /*setlocale (LC_TIME, "es_CO");
+        $fecha = new \DateTime;*/
+        $respuesta = new Respuesta();   
+        $objLogica = $this->get('logica_service');
+        try {
+            //Valida que la sesión corresponda y se encuentre activa
+            $respSesionVali=  ManejoDataRepository::validaSesionUsuario($psolicitud);
+            //echo "<script>alert(' buscarEjemplares :: Validez de sesion ".$respSesionVali." ')</script>";
+            if ($respSesionVali==AccesoController::inULogged) 
+            {    
+
+                //SE INACTIVA PORQUE PUEDE GENERAR UNA GRAN CANTIDAD DE REGISTROS EN UNA SOLA SESION
+                //Busca y recupera el objeto de la sesion:: 
+                //$sesion = ManejoDataRepository::recuperaSesionUsuario($usuario,$psolicitud);
+                //echo "<script>alert('La sesion es ".$sesion->getTxsesnumero()." ')</script>";
+                //Guarda la actividad de la sesion:: 
+                //ManejoDataRepository::generaActSesion($sesion,AccesoController::inDatoUno,"Recupera Feed de Ejemplares".$psolicitud->getEmail()." recuperados con éxito ",$psolicitud->getAccion(),$fecha,$fecha);
+                //echo "<script>alert('Generó actividad de sesion ')</script>";
+                
+                $respuesta->setRespuesta(AccesoController::inExitoso);
+                
+                //echo "Respuesta Idiomas: ".$respuesta->getRespuesta()." \n";
+                
+                $editoriales = ManejoDataRepository::getListaEditoriales();  
+                $editorial = new LbEditoriales();
+                $arEditoriales = array();
+                
+                //$contador = 0;
+                foreach ($editoriales as $editorial) {
+                    $arEditoriales[] = array("ideditor"=>$editorial->getInideditorial(), "nomeditor"=>utf8_encode($editorial->getTxedinombre()));
+                    //echo "Idioma=".$idioma->getInididioma()." - ".$idioma->getTxidinombre()." \n";
+                    //$contador++;
+                }
+                //echo "esto es lo que hay en respuesta";
+                //print_r($respuesta);
+                //echo $contador." - lugares hallados";
+                //$arIdiomas = array("Español","Inglés","Frances","Alemán","Ruso","Portugues",
+                //    "Catalán","Árabe","Bosnio","Croata","Serbio","Italiano","Griego","Turco","Húngaro","Hindi");
+            
+                return $objLogica::generaRespuesta($respuesta, $psolicitud, $arEditoriales);
+            } else {
+                $respuesta->setRespuesta($respSesionVali);
+                $arEditoriales = array();
+                return $objLogica::generaRespuesta($respuesta, $psolicitud, $arEditoriales);
+            }
+        } catch (Exception $ex) {
+            $respuesta->setRespuesta(AccesoController::inPlatCai);
+            $arEditoriales = array();
+            return $objLogica::generaRespuesta($respuesta, $psolicitud, $arEditoriales);
+        }
+       
+    }
+    
+    public function listarAutores(Solicitud $psolicitud)
+    {   
+        /*setlocale (LC_TIME, "es_CO");
+        $fecha = new \DateTime;*/
+        $respuesta = new Respuesta();   
+        $objLogica = $this->get('logica_service');
+        try {
+            //Valida que la sesión corresponda y se encuentre activa
+            $respSesionVali=  ManejoDataRepository::validaSesionUsuario($psolicitud);
+            //echo "<script>alert(' buscarEjemplares :: Validez de sesion ".$respSesionVali." ')</script>";
+            if ($respSesionVali==AccesoController::inULogged) 
+            {    
+
+                //SE INACTIVA PORQUE PUEDE GENERAR UNA GRAN CANTIDAD DE REGISTROS EN UNA SOLA SESION
+                //Busca y recupera el objeto de la sesion:: 
+                //$sesion = ManejoDataRepository::recuperaSesionUsuario($usuario,$psolicitud);
+                //echo "<script>alert('La sesion es ".$sesion->getTxsesnumero()." ')</script>";
+                //Guarda la actividad de la sesion:: 
+                //ManejoDataRepository::generaActSesion($sesion,AccesoController::inDatoUno,"Recupera Feed de Ejemplares".$psolicitud->getEmail()." recuperados con éxito ",$psolicitud->getAccion(),$fecha,$fecha);
+                //echo "<script>alert('Generó actividad de sesion ')</script>";
+                
+                $respuesta->setRespuesta(AccesoController::inExitoso);
+                
+                //echo "Respuesta Idiomas: ".$respuesta->getRespuesta()." \n";
+                
+                $autores = ManejoDataRepository::getListaAutores();  
+                $autor = new LbAutores();
+                $arAutores = array();
+                
+                //$contador = 0;
+                foreach ($autores as $autor) {
+                    $arAutores[] = array("idautor"=>$autor->getInidautor(), "nomautor"=>utf8_encode($autor->getTxautnombre()));
+                    //echo "Idioma=".$idioma->getInididioma()." - ".$idioma->getTxidinombre()." \n";
+                    //$contador++;
+                }
+                //echo "esto es lo que hay en respuesta";
+                //print_r($respuesta);
+                //echo $contador." - lugares hallados";
+                //$arIdiomas = array("Español","Inglés","Frances","Alemán","Ruso","Portugues",
+                //    "Catalán","Árabe","Bosnio","Croata","Serbio","Italiano","Griego","Turco","Húngaro","Hindi");
+            
+                return $objLogica::generaRespuesta($respuesta, $psolicitud, $arAutores);
+            } else {
+                $respuesta->setRespuesta($respSesionVali);
+                $arAutores = array();
+                return $objLogica::generaRespuesta($respuesta, $psolicitud, $arAutores);
+            }
+        } catch (Exception $ex) {
+            $respuesta->setRespuesta(AccesoController::inPlatCai);
+            $arAutores= array();
+            return $objLogica::generaRespuesta($respuesta, $psolicitud, $arAutores);
+        }
+       
+    }
     
 }

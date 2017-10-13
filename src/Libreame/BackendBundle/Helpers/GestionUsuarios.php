@@ -359,7 +359,7 @@ class GestionUsuarios {
         $objLogica = $this->get('logica_service');
         try {
             //Si la clave actual del usuario es válida
-            if $psolicitud->getClave()    
+            //if $psolicitud->getClave()    
                 //Valida que la sesión corresponda y se encuentre activa
                 $respSesionVali=  ManejoDataRepository::validaSesionUsuario($psolicitud);
                 //echo "<script>alert(' marcarMensajes :: Validez de sesion ".$respSesionVali." ')</script>";
@@ -381,9 +381,9 @@ class GestionUsuarios {
                     $respuesta->setRespuesta($respSesionVali);
                     return $objLogica::generaRespuesta($respuesta, $psolicitud, NULL);
                 }
-            } else {
-                $respuesta->setRespuesta(AccesoController::inUsClAcI);
-            }
+            //} else {
+            //    $respuesta->setRespuesta(AccesoController::inUsClAcI);
+            //}
         } catch (Exception $ex) {
             $respuesta->setRespuesta(AccesoController::inPlatCai);
             return $objLogica::generaRespuesta($respuesta, $psolicitud, NULL);

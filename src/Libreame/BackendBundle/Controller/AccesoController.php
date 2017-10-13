@@ -112,6 +112,10 @@ class AccesoController extends Controller
     const txAccCommEjem =  '42'; //Realizar-editar-borrar Cometario ejemplar
     const txAccVerComEj =  '43'; //Ver comentarios ejemplar 
     
+    const txAccListaEdi =  '50'; //Listar editoriales
+    const txAccListaAut =  '51'; //Listar autores
+    
+    
     const txEjemplarPub =  'P'; //Indica que es el ejemplar a publicar de la solicitud
     const txEjemplarSol1 =  'S1'; //Indica que es el ejemplar a Solicitar de la solicitud
     const txEjemplarSol2 =  'S2'; //Indica que es el ejemplar a Solicitar de la solicitud
@@ -563,6 +567,20 @@ class AccesoController extends Controller
                     }
                     
                     
+                    case self::txAccListaEdi: { //Dato:50 : Listar Editoriales
+                        //echo "<script>alert('ENTRA POR LISTAR DE EDITORIALES')</script>";
+                        $this->objSolicitud->setEmail($json_datos['idsolicitud']['email']);
+                        $this->objSolicitud->setClave($json_datos['idsolicitud']['clave']);
+                        break;
+                    }
+
+                    case self::txAccListaAut: { //Dato:51 : Listar Autores
+                        //echo "<script>alert('ENTRA POR LISTAR DE AUTORES')</script>";
+                        $this->objSolicitud->setEmail($json_datos['idsolicitud']['email']);
+                        $this->objSolicitud->setClave($json_datos['idsolicitud']['clave']);
+                        break;
+                    }
+
 
                 }
                 //echo "<script>alert('SESION: ".$this->objSolicitud->getSession().": Finalizó')</script>"; 
@@ -762,6 +780,19 @@ class AccesoController extends Controller
                                 isset($datos['idsolicitud']['ejemplar']));
                         break;
                     }
+
+                    case self::txAccListaEdi: { //Dato:50 : LISTAR EDITORIALES
+                        //echo "<script>alert('ENTRA POR LISTAR EDITORIALES')</script>";
+                        $resp = (isset($datos['idsolicitud']['email']) and isset($datos['idsolicitud']['clave']));
+                        break;
+                    }
+
+                    case self::txAccListaAut: { //Dato:51 : LISTAR AUTORES
+                        //echo "<script>alert('ENTRA POR LISTAR AUTORES')</script>";
+                        $resp = (isset($datos['idsolicitud']['email']) and isset($datos['idsolicitud']['clave']));
+                        break;
+                    }
+
                     
                 }
             }
